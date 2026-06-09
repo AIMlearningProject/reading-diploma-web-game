@@ -1,0 +1,70 @@
+import BookService from '../services/bookService.js'
+import express from 'express'
+const booksRouter = express.Router()
+
+// for input validation
+import { z } from 'zod'
+import middleware from '../utils/middleware.js'
+
+const booktypes = z.enum(['physical', 'e-book', 'audio'])
+const bookSchema = z.object({
+    title: z.string(),
+    author: z.string(),
+    coverimage: z.string(),
+    booktype: z.string().transform(str => str.toLowerCase()).pipe(booktypes),
+    content: z.string().optional()
+}).strict()
+
+booksRouter.get('/', middleware.requireAuthentication(true), async (request, response, next) => {
+    try {
+        const books = await BookService.getAllBooks()
+        response.json(books)
+    } catch (error) {
+        next(error)
+    }
+})
+
+booksRouter.get('/:id', middleware.requireAuthentication(true), async (request, response, next) => {
+    const { id } = request.params
+    try {
+        const book = await BookService.findBookById(id)
+        response.json(book)
+    } catch (error){
+        next(error)
+    }
+})
+
+booksRouter.post('/', middleware.requireAuthentication(true), middleware.zValidate(bookSchema), async (request, response, next) => {
+    // request.validated imported from zValidate disallows unknown fields and incorrect data types
+    // and returns the validated request body
+    const { title, author, coverimage, booktype, content } = request.validated
+
+    try {
+        const newBook = {
+            title,
+            author,
+            coverimage,
+            booktype,
+            content
+        }
+
+        await BookService.addBook(newBook)
+        response.status(201).json(newBook)
+
+    } catch (error) {
+        next(error)
+    }
+})
+
+booksRouter.delete('/delete-book/:id', middleware.requireTeacherRole, async(request, response, next) => {
+    const id = request.params.id
+
+    try {
+        await BookService.deleteBook(id)
+        response.status(200).json('Book deleted successfully!')
+    } catch (error) {
+        next(error)
+    }
+})
+
+export default booksRouter

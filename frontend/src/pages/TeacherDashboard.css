@@ -1,0 +1,996 @@
+/* ── Page Shell ─────────────────────────────────────────── */
+.dashboard {
+    min-height: 100vh;
+    background-color: #EBF3FE;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* Top ocean waves — fixed so they persist while scrolling */
+.dashboard::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 200px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220'%3E%3Cpath fill='%234A90D9' fill-opacity='0.08' d='M0,110L80,98C160,86,320,62,480,74C640,86,800,130,960,142C1120,154,1280,128,1360,116L1440,104L1440,0L0,0Z'/%3E%3Cpath fill='%232c5f8a' fill-opacity='0.12' d='M0,66L80,82C160,98,320,130,480,124C640,118,800,82,960,68C1120,54,1280,72,1360,80L1440,88L1440,0L0,0Z'/%3E%3C/svg%3E") no-repeat top center;
+    background-size: cover;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Bottom earth waves — fixed */
+.dashboard::after {
+    content: '';
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 200px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220'%3E%3Cpath fill='%23C4973A' fill-opacity='0.07' d='M0,110L80,122C160,134,320,158,480,148C640,138,800,92,960,80C1120,68,1280,88,1360,98L1440,108L1440,220L0,220Z'/%3E%3Cpath fill='%239E7A2A' fill-opacity='0.09' d='M0,144L80,132C160,120,320,96,480,108C640,120,800,152,960,160C1120,168,1280,144,1360,132L1440,120L1440,220L0,220Z'/%3E%3C/svg%3E") no-repeat bottom center;
+    background-size: cover;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ── Captain's Bridge — Sticky Header ───────────────────── */
+.dashboard-header {
+    background: linear-gradient(180deg, #162d4e 0%, #1e3a5f 55%, #2c5f8a 100%);
+    border-bottom: 2px solid #C4973A;
+    padding: 1.25rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow:
+        0 4px 24px rgba(22, 45, 78, 0.45),
+        0 1px 0 rgba(196, 151, 58, 0.25) inset;
+}
+
+.dashboard-header h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: #D8B25A;
+    margin: 0;
+    letter-spacing: 0.05em;
+    text-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(196, 151, 58, 0.2);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.header-right span {
+    color: rgba(235, 243, 254, 0.68);
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    font-style: italic;
+    letter-spacing: 0.03em;
+}
+
+/* Logout — ghost brass */
+.logout-button {
+    background: transparent;
+    border: 1.5px solid rgba(196, 151, 58, 0.6);
+    color: #C4973A;
+    border-radius: 4px;
+    padding: 0.55rem 1.2rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.logout-button:hover {
+    background: rgba(196, 151, 58, 0.15);
+    border-color: #D8B25A;
+    color: #D8B25A;
+}
+
+/* ── Dashboard Content ───────────────────────────────────── */
+.dashboard-content {
+    padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 2.5rem);
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Section Cards — Cartouche Panels ────────────────────── */
+.dashboard-section {
+    background:
+        radial-gradient(ellipse 75% 50% at 10% 10%, rgba(255, 252, 225, 0.65) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 55% at 90% 90%, rgba(196, 151, 58, 0.07) 0%, transparent 65%),
+        #FDFBF4;
+    border-radius: 8px;
+    border: 2px solid #C4973A;
+    box-shadow:
+        0 6px 32px rgba(44, 30, 5, 0.13),
+        0 2px 8px rgba(44, 30, 5, 0.07);
+    padding: clamp(2rem, 4vw, 2.75rem);
+    position: relative;
+    animation: cardRise 0.55s cubic-bezier(0.34, 1.3, 0.64, 1) both;
+}
+
+.dashboard-section:nth-child(1) { animation-delay: 0.08s; }
+.dashboard-section:nth-child(2) { animation-delay: 0.22s; }
+.dashboard-section:nth-child(3) { animation-delay: 0.36s; }
+
+/* Inner decorative frame */
+.dashboard-section::before {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border: 1px solid rgba(196, 151, 58, 0.22);
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+/* Section heading */
+.dashboard-section h2 {
+    margin: 0 0 1.5rem;
+    color: #1e3a5f;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.dashboard-section h2::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #C4973A, transparent);
+    margin: 0.45rem 0 0;
+}
+
+/* ── Logbook Table ───────────────────────────────────────── */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+.data-table th {
+    color: #9E7A2A;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    padding: 0 1rem 0.75rem;
+    border-bottom: 1.5px solid rgba(196, 151, 58, 0.4);
+    text-align: left;
+}
+
+.data-table td {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid rgba(196, 151, 58, 0.12);
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    color: #3a2a10;
+    text-align: left;
+    transition: background 0.18s, box-shadow 0.18s;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tbody tr {
+    animation: rowSlideIn 0.38s ease both;
+}
+
+.data-table tbody tr:nth-child(1) { animation-delay: 0.04s; }
+.data-table tbody tr:nth-child(2) { animation-delay: 0.09s; }
+.data-table tbody tr:nth-child(3) { animation-delay: 0.14s; }
+.data-table tbody tr:nth-child(4) { animation-delay: 0.19s; }
+.data-table tbody tr:nth-child(5) { animation-delay: 0.24s; }
+.data-table tbody tr:nth-child(6) { animation-delay: 0.29s; }
+.data-table tbody tr:nth-child(7) { animation-delay: 0.34s; }
+.data-table tbody tr:nth-child(8) { animation-delay: 0.39s; }
+
+.data-table tbody tr:hover td {
+    background: rgba(196, 151, 58, 0.07);
+}
+
+.data-table tbody tr:hover td:first-child {
+    box-shadow: inset 3px 0 0 #C4973A;
+}
+
+/* ── Add Form — Logbook Entry Row ────────────────────────── */
+.add-form {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(196, 151, 58, 0.2);
+}
+
+.add-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex: 1 1 140px;
+}
+
+.add-form label {
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #9E7A2A;
+    font-weight: 700;
+}
+
+.add-form input,
+.add-form select {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid rgba(196, 151, 58, 0.45);
+    border-radius: 0;
+    padding: 0.6rem 0.1rem;
+    font-size: 1.1rem;
+    font-family: 'Nunito', sans-serif;
+    color: #1e3a5f;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-bottom-color 0.2s, background 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.add-form input:focus,
+.add-form select:focus {
+    border-bottom-color: #4A90D9;
+    background: rgba(74, 144, 217, 0.04);
+}
+
+/* ── Brass Add Button ────────────────────────────────────── */
+.add-button {
+    background: linear-gradient(180deg, #D8B25A 0%, #C4973A 48%, #A67E1E 100%);
+    color: #1e3a5f;
+    border: 1px solid #9E7A2A;
+    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+    align-self: flex-end;
+    box-shadow:
+        0 1px 0 rgba(255, 248, 200, 0.5) inset,
+        0 -1px 0 rgba(0, 0, 0, 0.16) inset,
+        0 3px 10px rgba(100, 60, 0, 0.2);
+    transition: all 0.15s ease;
+}
+
+.add-button:hover {
+    background: linear-gradient(180deg, #E0BC64 0%, #CCA040 48%, #B08826 100%);
+    box-shadow:
+        0 1px 0 rgba(255, 248, 200, 0.55) inset,
+        0 -1px 0 rgba(0, 0, 0, 0.18) inset,
+        0 5px 16px rgba(100, 60, 0, 0.28);
+    transform: translateY(-1px);
+}
+
+.add-button:active {
+    background: linear-gradient(180deg, #A67E1E 0%, #C4973A 55%, #D8B25A 100%);
+    box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.16) inset,
+        0 2px 6px rgba(100, 60, 0, 0.1);
+    transform: translateY(1px);
+}
+
+/* ── Delete Button — Red Wax Seal ────────────────────────── */
+.delete-button {
+    background: transparent;
+    border: 1px solid rgba(139, 26, 26, 0.45);
+    color: #8B1A1A;
+    border-radius: 4px;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.15s;
+}
+
+.delete-button:hover {
+    background: #8B1A1A;
+    color: #FFF8F0;
+    border-color: #8B1A1A;
+    box-shadow: 0 2px 8px rgba(139, 26, 26, 0.25);
+}
+
+/* ── Empty & Error States ────────────────────────────────── */
+.empty-message {
+    color: #9E7A2A;
+    font-style: italic;
+    font-size: 1.05rem;
+    opacity: 0.7;
+    margin: 0.5rem 0 1.5rem;
+}
+
+.section-error {
+    color: #8B1A1A;
+    font-size: 1rem;
+    margin: 0.75rem 0 0;
+    font-weight: 700;
+    font-style: italic;
+}
+
+/* ── Inline Table Edit Controls ─────────────────────────── */
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 0.3rem;
+    font-size: 1rem;
+    opacity: 0.55;
+    transition: opacity 0.15s;
+}
+
+.icon-btn:hover { opacity: 1; }
+
+/* ── Edit icon button — pen/quill variant ────────────────── */
+.icon-btn--edit {
+    background: none;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 0.2rem 0.3rem;
+    opacity: 0.75;
+    color: #9E7A2A;
+    transition: opacity 0.18s, background 0.18s;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    margin-left: 0.3rem;
+}
+
+.icon-btn--edit:hover {
+    opacity: 1;
+    background: rgba(196, 151, 58, 0.15);
+}
+
+/* ── Normal-state action button group ────────────────────── */
+.row-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.inline-edit-input {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid #C4973A;
+    color: #3a2a10;
+    font-family: 'Nunito', sans-serif;
+    font-size: inherit;
+    padding: 0.15rem 0.25rem;
+    width: 100%;
+    outline: none;
+}
+
+/* ── Cancel Button — Ghost Secondary ────────────────────── */
+.cancel-button {
+    background: transparent;
+    border: 1px solid rgba(158, 122, 42, 0.4);
+    color: #9E7A2A;
+    border-radius: 4px;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.15s;
+}
+
+.cancel-button:hover {
+    background: rgba(158, 122, 42, 0.1);
+    border-color: #C4973A;
+    color: #C4973A;
+}
+
+/* ── Student count badge ─────────────────────────────────── */
+.student-count {
+    display: inline-block;
+    background: rgba(196, 151, 58, 0.15);
+    border: 1px solid rgba(196, 151, 58, 0.4);
+    color: #9E7A2A;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    border-radius: 20px;
+    padding: 0.12rem 0.6rem;
+    margin-left: 0.75rem;
+    vertical-align: middle;
+    font-family: 'Nunito', sans-serif;
+    text-transform: uppercase;
+}
+
+/* ── Editing row highlight ───────────────────────────────── */
+.data-table tr.editing-row td {
+    background: rgba(196, 151, 58, 0.09);
+}
+
+.data-table tr.editing-row td:first-child {
+    box-shadow: inset 3px 0 0 #C4973A;
+}
+
+/* ── Lock row — password reset mode ─────────────────────── */
+.data-table tr.lock-row td {
+    background: rgba(22, 45, 78, 0.05);
+}
+
+.data-table tr.lock-row td:first-child {
+    box-shadow: inset 3px 0 0 #1e3a5f;
+}
+
+/* ── Lock icon button ────────────────────────────────────── */
+.icon-btn--lock {
+    background: none;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 0.2rem 0.35rem;
+    opacity: 0.5;
+    transition: opacity 0.2s, background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    color: #1e3a5f;
+    vertical-align: middle;
+}
+
+.icon-btn--lock:hover {
+    opacity: 1;
+    background: rgba(22, 45, 78, 0.1);
+}
+
+/* ── Password Reset Widget ───────────────────────────────── */
+.pwd-reset-widget {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 0.6rem 0.75rem;
+    background: rgba(22, 45, 78, 0.05);
+    border-radius: 4px;
+    border: 1px solid rgba(22, 45, 78, 0.12);
+    border-left: 3px solid rgba(22, 45, 78, 0.35);
+    animation: widgetExpand 0.22s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+}
+
+.pwd-reset-input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(22, 45, 78, 0.35);
+    color: #1e3a5f;
+    font-family: 'Nunito', sans-serif;
+    font-size: inherit;
+    letter-spacing: 0.12em;
+    padding: 0.25rem 0.1rem;
+    width: 100%;
+    outline: none;
+    transition: border-bottom-color 0.2s;
+}
+
+.pwd-reset-input:focus {
+    border-bottom-color: #1e3a5f;
+    background: rgba(22, 45, 78, 0.03);
+}
+
+.pwd-reset-input::placeholder {
+    letter-spacing: 0.04em;
+    color: rgba(22, 45, 78, 0.35);
+    font-style: italic;
+}
+
+.pwd-reset-actions {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.pwd-save-btn {
+    background: linear-gradient(180deg, #2c5f8a 0%, #1e3a5f 100%);
+    color: #D8B25A;
+    border: 1px solid rgba(22, 45, 78, 0.5);
+    border-radius: 4px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.85rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(22, 45, 78, 0.18);
+    transition: all 0.15s ease;
+}
+
+.pwd-save-btn:hover {
+    background: linear-gradient(180deg, #3a7ab8 0%, #2c5f8a 100%);
+    box-shadow: 0 3px 12px rgba(22, 45, 78, 0.28);
+    transform: translateY(-1px);
+}
+
+.pwd-save-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 4px rgba(22, 45, 78, 0.12);
+}
+
+.pwd-reset-error {
+    color: #8B1A1A;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-style: italic;
+    margin: 0;
+}
+
+/* ── Avatar column centering — commented out, avatar column removed ── */
+/*
+.data-table th:first-child,
+.data-table td:first-child {
+    width: 56px;
+    text-align: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+*/
+
+/* ── Gmail G badge ───────────────────────────────────────── */
+.gmail-g {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #EA4335;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+    margin-right: 0.45rem;
+    vertical-align: middle;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.gmail-empty {
+    color: rgba(158, 122, 42, 0.5);
+    font-style: italic;
+}
+
+/* ── Animations ──────────────────────────────────────────── */
+@keyframes cardRise {
+    from { opacity: 0; transform: translateY(14px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes rowSlideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes widgetExpand {
+    from { opacity: 0; transform: scaleY(0.65); transform-origin: top; }
+    to   { opacity: 1; transform: scaleY(1); }
+}
+
+/* ── Progress Row ───────────────────────────────────────── */
+.progress-row td {
+    padding: 0 1rem 0.85rem !important;
+    border-bottom: 1px solid rgba(196, 151, 58, 0.18);
+    background: rgba(253, 251, 244, 0.5);
+}
+
+.progress-row:hover td {
+    background: rgba(253, 251, 244, 0.5) !important;
+    box-shadow: none !important;
+}
+
+.progress-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.level-badges {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+}
+
+.progress-level-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 0.72rem;
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    border: 1.5px solid #ccc;
+    color: #999;
+    background: transparent;
+    transition: all 0.2s;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    margin-top: 0.2rem;
+}
+
+.level-status-select {
+    font-size: 1em;
+    padding: 0.3em 1.8em 0.3em 0.8em;
+    font-family: inherit;
+    cursor: pointer;
+    border: 1.5px solid #C4973A;
+    border-radius: 6px;
+}
+
+.level-status-select option {
+    background: #F5EFE0;
+    color: #1e3a5f;
+}
+
+.progress-level-badge--complete {
+    background: linear-gradient(145deg, #D8B25A, #C4973A); 
+    border-color: #9E7A2A;
+    color: #fff;
+    box-shadow: 0 1px 4px rgba(158, 122, 42, 0.3);
+}
+
+.level-status-select.status-complete {
+    background: linear-gradient(145deg, #D8B25A, #C4973A) !important;
+    border-color: #9E7A2A;
+    color: #fff;
+}
+
+.progress-level-badge--reviewed {
+    background: linear-gradient(145deg, #7BCF8A, #5BAF6C);
+    border-color: #4A965A;
+    color: #fff;
+}
+
+.level-status-select.status-reviewed {
+    background-color: #eafbea;
+    border-color: #3c763d;
+    color: #3c763d !important;
+}
+
+.status-incomplete {
+    color: #888 !important;
+}
+
+.level-status-select.status-incomplete {
+    background: #ededed !important;
+    border-color: #888;
+    color: #888;
+}
+
+.progress-summary {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #9E7A2A;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.expand-btn {
+    background: none;
+    border: 1px solid rgba(196, 151, 58, 0.35);
+    border-radius: 4px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.78rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    color: #9E7A2A;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-left: auto;
+    transition: all 0.15s;
+    letter-spacing: 0.04em;
+}
+
+.expand-btn:hover {
+    background: rgba(196, 151, 58, 0.1);
+    border-color: #C4973A;
+    color: #C4973A;
+}
+
+.expand-chevron {
+    transition: transform 0.2s ease;
+}
+
+.expand-chevron--open {
+    transform: rotate(180deg);
+}
+
+.submissions-detail {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: rgba(253, 251, 244, 0.7);
+    border-left: 3px solid #C4973A;
+    border-radius: 0 4px 4px 0;
+    animation: widgetExpand 0.22s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+}
+
+.submission-group {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(196, 151, 58, 0.12);
+}
+
+.submission-group:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.submission-level-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.9rem;
+    color: #1e3a5f;
+    margin: 0 0 0.5rem;
+    font-weight: 700;
+}
+
+.submission-qa {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.submission-qa p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: #3a2a10;
+    line-height: 1.5;
+}
+
+.submission-qa strong {
+    color: #9E7A2A;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+}
+
+.submission-answer {
+    padding-left: 1.5rem;
+    margin-bottom: 0.35rem !important;
+    color: #4a3a1a;
+}
+
+/* ── Mobile: Compact Nav Bar ───────────────────────────── */
+@media (max-width: 600px) {
+    .dashboard-header {
+        padding: 0.75rem 1rem;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+    }
+    .dashboard-header h1 {
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+    }
+    .header-right {
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+    .header-right span {
+        display: none;
+    }
+    .logout-button {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* ── Mobile: Table → Card Layout ───────────────────────── */
+/*@media (max-width: 600px) {
+    .dashboard-section {
+        padding: 1rem;
+    }
+    .data-table thead { display: none; }
+    .data-table, .data-table tbody, .data-table tr, .data-table td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .data-table tr {
+        border: 1.5px solid rgba(196,151,58,0.3);
+        border-radius: 6px;
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        background: rgba(253,251,244,0.5);
+    }
+    .data-table td {
+        padding: 0.35rem 0;
+        border-bottom: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .data-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #9E7A2A;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        min-width: 5rem;
+    }
+    .data-table td:first-child::before { content: ''; min-width: 0; }
+    .progress-row {
+        border: none !important;
+        padding: 0 0.75rem 0.75rem !important;
+        margin-bottom: 0 !important;
+        margin-top: -0.5rem;
+    }
+    .progress-row td {
+        padding: 0 !important;
+    }
+    .progress-row td::before {
+        content: '' !important;
+        min-width: 0 !important;
+    }
+    .progress-bar-row {
+        flex-wrap: wrap;
+    }
+    .level-badges {
+        flex-wrap: wrap;
+    }
+    .expand-btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+    .submissions-detail {
+        padding: 0.5rem 0.75rem;
+    }
+}*/
+
+/* ── Mobile: Convert Progress Row Into Card ───────────────────────── */
+@media (max-width: 600px) {
+    .dashboard-section {
+        padding: 0.75rem !important;
+    }
+    .data-table thead { display: none; }
+    .data-table, .data-table tbody, .data-table tr, .data-table td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .data-table tr {
+        border: 1.5px solid rgba(196,151,58,0.3);
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        background: rgba(253,251,244,0.5);
+
+        padding-bottom: 1rem;
+        padding-top: 1rem;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+    .data-table td {
+        padding-bottom: 1rem;
+        padding-top: 1rem;
+        padding-left: 0rem !important;
+        padding-right: 0rem !important;
+    }
+    .data-table td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #9E7A2A;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        min-width: 5rem;
+    }
+    .data-table td:first-child::before { content: ''; min-width: 0; }
+    
+    .add-form select {
+        max-width: 100vw;
+        font-size: 1rem;
+        padding: 0.4rem 0.5rem;
+        box-sizing: border-box;
+        min-width: 0;
+        width: 100%;
+    }
+    .submission-group,
+    .submission-level-title {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .progress-row {
+        border: 1.5px solid rgba(196,151,58,0.3);
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: rgba(253,251,244,0.7);
+    }
+
+    .expand-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.6rem 1rem;
+        margin-top: 0.5rem;
+        border-radius: 6px;
+        font-size: 0.95rem;
+    }
+
+    .submissions-detail {
+        overflow-x: hidden;
+        margin-top: 1rem;
+        padding: 0.75rem;
+        background: #fff;
+        border-radius: 8px;
+        border: 1px solid rgba(196,151,58,0.25);
+    }
+
+    .submission-level-title {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .level-status-select {
+        width: 100%;
+        border-radius: 6px;
+        max-width: 100vw;
+        font-size: 1rem;
+        padding: 0.4rem 0.5rem;
+        box-sizing: border-box;
+        min-width: 0;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .submission-qa p {
+        margin: 0.4rem 0;
+        line-height: 1.35;
+    }
+
+    .submission-answer {
+        margin-bottom: 0.75rem;
+        padding-left: 0.5rem;
+        border-left: 3px solid rgba(196,151,58,0.4);
+    }
+}
