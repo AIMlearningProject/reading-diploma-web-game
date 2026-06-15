@@ -5,6 +5,7 @@ import BookManager from '../components/BookManager'
 import TeacherProfileCard from '../components/TeacherProfileCard'
 import homeBG from '../assets/HomeBG1.jpg'
 import './TeacherDashboard.css'
+import { BooksProvider } from '../contexts/BooksContext'
 
 function TeacherDashboard() {
     const { user, logout } = useAuth()
@@ -29,8 +30,10 @@ function TeacherDashboard() {
 
             <div className="dashboard-content">
                 <TeacherProfileCard />
-                <StudentManager />
-                <BookManager />
+                <BooksProvider>
+                    <StudentManager />
+                    <BookManager />
+                </BooksProvider>
             </div>
         </div>
     )

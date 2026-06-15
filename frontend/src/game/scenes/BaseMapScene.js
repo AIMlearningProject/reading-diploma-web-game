@@ -1,14 +1,14 @@
 import Phaser from 'phaser';
-import ReadingState from '../state.js';
-import { COLORS, DEPTHS, FONTS, uiScale as calcUiScale } from '../ui/constants.js';
-import { preloadIcons, ICON_KEYS } from '../ui/icons.js';
-import WaypointRenderer from '../managers/WaypointRenderer.js';
+import BookFetcher from '../managers/BookFetcher.js';
 import PathRenderer from '../managers/PathRenderer.js';
 import TokenManager from '../managers/TokenManager.js';
-import BookFetcher from '../managers/BookFetcher.js';
+import WaypointRenderer from '../managers/WaypointRenderer.js';
 import BookListModal from '../modals/BookListModal.js';
-import VideoPopupModal from '../modals/VideoPopupModal.js';
 import CelebrationModal from '../modals/CelebrationModal.js';
+import VideoPopupModal from '../modals/VideoPopupModal.js';
+import ReadingState from '../state.js';
+import { COLORS, DEPTHS, FONTS, uiScale as calcUiScale } from '../ui/constants.js';
+import { ICON_KEYS } from '../ui/icons.js';
 
 class BaseMapScene extends Phaser.Scene {
 
@@ -279,7 +279,9 @@ class BaseMapScene extends Phaser.Scene {
         const mapKey = this.scene.key;
         const result = this.bookListModal.show(mapKey, async (book, key, mapCfg, isCompleted) => {
             if (!isCompleted) {
-                ReadingState.mapSelectedBook[key] = book.id;
+                const bookId = Number(book.id) 
+                ReadingState.mapSelectedBook[key] = bookId;
+                await ReadingState.saveBookSelection(key, bookId);
             }
             const bookData = await BookFetcher.fetchAndLaunch(
                 this, book, mapCfg, isCompleted, this.bookIconContainer

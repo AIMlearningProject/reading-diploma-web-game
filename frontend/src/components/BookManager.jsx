@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getCsrfToken } from '../services/api'
+import { fetchBooks, createBook } from '../services/api'
 
 function BookManager() {
     const [books, setBooks] = useState([])
@@ -9,47 +9,31 @@ function BookManager() {
     const [booktype, setBooktype] = useState('physical')
     const [error, setError] = useState('')
 
-    const fetchBooks = async () => {
+    const fetchMyBooks = async () => {
         try {
-            const res = await fetch('/api/books')
-            if (res.ok) {
-                setBooks(await res.json())
-            }
-        } catch {
-            setError('Kirjojen haku epäonnistui')
+            const res = await fetchBooks()
+            setBooks(res)
+        } catch (err) {
+            setError(err?.message || 'Yhteysvirhe')
         }
     }
 
     useEffect(() => {
-        fetchBooks()
+        fetchMyBooks()
     }, [])
 
     const handleAdd = async (e) => {
         e.preventDefault()
         setError('')
         try {
-            const csrfToken = getCsrfToken()
-            const res = await fetch('/api/books', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({ title, author, coverimage, booktype })
-            })
-            if (!res.ok) {
-                const data = await res.json()
-                setError(data.error || 'Kirjan lisäys epäonnistui')
-                return
-            }
+            const res = await createBook({ title, author, coverimage, booktype })
             setTitle('')
             setAuthor('')
             setCoverimage('')
             setBooktype('physical')
-            fetchBooks()
-        } catch {
-            setError('Yhteysvirhe')
+            fetchMyBooks()
+        } catch (err) {
+            setError(err?.message || 'Yhteysvirhe')
         }
     }
 
@@ -81,7 +65,10 @@ function BookManager() {
 
             <form className="add-form" onSubmit={handleAdd}>
                 <div className="form-group">
-                    <label>Nimi</label>
+                    <label>
+                        Nimi
+                        <span className="section-error">*</span>
+                    </label>
                     <input
                         type="text"
                         value={title}
@@ -90,7 +77,10 @@ function BookManager() {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Kirjoittaja</label>
+                    <label>
+                        Kirjoittaja
+                        <span className="section-error">*</span>
+                    </label>
                     <input
                         type="text"
                         value={author}
@@ -99,7 +89,10 @@ function BookManager() {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Kansikuva URL</label>
+                    <label>
+                        Kansikuva URL
+                        <span className="section-error">*</span>
+                    </label>
                     <input
                         type="text"
                         value={coverimage}
@@ -108,7 +101,10 @@ function BookManager() {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Tyyppi</label>
+                    <label>
+                        Tyyppi
+                        <span className="section-error">*</span>
+                    </label>
                     <select value={booktype} onChange={(e) => setBooktype(e.target.value)}>
                         <option value="physical">Fyysinen</option>
                         <option value="e-book">E-kirja</option>

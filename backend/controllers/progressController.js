@@ -1,5 +1,5 @@
-import ProgressService from '../services/progressService.js'
 import express from 'express'
+import ProgressService from '../services/progressService.js'
 const progressRouter = express.Router()
 
 
@@ -7,7 +7,7 @@ const progressRouter = express.Router()
 import { z } from 'zod'
 import middleware from '../utils/middleware.js'
 
-const statusTypes = z.enum(['incomplete', 'complete', 'reviewed'])
+const statusTypes = z.enum(['incomplete', 'complete', 'reviewed', 'resubmit'])
 
 const ProgressSchema = z.object({
     level: z.number(),

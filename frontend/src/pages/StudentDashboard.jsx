@@ -7,7 +7,7 @@ import './StudentDashboard.css'
 import { getCsrfToken, fetchSubmissions } from '../services/api'
 
 const LEVELS = [
-    { level: 1, name: 'Arktis' },
+    { level: 1, name: 'Pohjoisnapa' },
     { level: 2, name: 'Eurooppa' },
     { level: 3, name: 'Aasia' },
     { level: 4, name: 'Pohjois-Amerikka' },
@@ -83,14 +83,6 @@ function StudentDashboard() {
     const getStatus = (level) => {
         const entry = progress.find(p => p.level === level)
         return entry?.level_status ?? 'incomplete'
-    }
-
-    const progressIdsByLevel = new Map(progress.map((entry) => [entry.level, entry.id]))
-    const submissionProgressIds = new Set(submissions.map((s) => Number(s.completedLevel)))
-    const isResubmittableCheck = (level) => {
-        const status = getStatus(level)
-        const progressId = progressIdsByLevel.get(level)
-        return status === 'incomplete' && progressId != null && submissionProgressIds.has(progressId)
     }
 
     const completedCount = progress.filter(p => p.level_status !== 'incomplete').length
@@ -194,27 +186,21 @@ function StudentDashboard() {
                             </p>
                             <div className="level-grid">
                                 {LEVELS.map(({ level, name }) => {
-                                    const done = getStatus(level) !== 'incomplete'
-                                    const isResubmittable = isResubmittableCheck(level)
+                                    const levelStat = getStatus(level)
+                                    const done = (levelStat === 'complete' || levelStat === 'reviewed')
                                     return (
-                                        <div key={level} className={`level-card ${
-                                            isResubmittable
-                                                ? 'level-resubmit'
-                                                : done
-                                                    ? 'level-done'
-                                                    : 'level-pending'
-                                        }`}>
+                                        <div key={level} className={`level-card ${done
+                                                ? 'level-done'
+                                                : `level-${levelStat}`
+                                            }`}>
                                             <span className="level-number">{level}</span>
                                             <span className="level-name">{name}</span>
-                                            <span className={`level-badge ${
-                                                isResubmittable
-                                                    ? 'badge-resubmit'
-                                                    : done
-                                                        ? 'badge-done'
-                                                        : 'badge-pending'
-                                            }`}>
-                                                {isResubmittable
-                                                    ? 'Korjaa vastaukset !!!'
+                                            <span className={`level-badge ${done
+                                                    ? 'badge-done'
+                                                    : `badge-${levelStat}`
+                                                }`}>
+                                                {levelStat === 'resubmit'
+                                                    ? 'X Hylätty'
                                                     : done
                                                         ? '✓ Suoritettu'
                                                         : 'Kesken'

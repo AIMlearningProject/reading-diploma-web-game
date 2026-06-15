@@ -44,7 +44,7 @@ class WorldMapScene extends Phaser.Scene {
 
         // --- 2. Point Setting ---
         const continentPositions = {
-            arctic: { x: 450, y: 120, name: 'ARKTIS', mapKey: 'ArcticMap' }, 
+            arctic: { x: 450, y: 120, name: 'POHJOISNAPA', mapKey: 'ArcticMap' }, 
             europe: { x: 700, y: 250, name: 'EUROOPPA', mapKey: 'EuropeMap' },
             asia: { x: 1000, y: 250, name: 'AASIA', mapKey: 'AsiaMap' },
             africa: { x: 650, y: 450, name: 'AFRIKKA', mapKey: 'AfricaMap' },

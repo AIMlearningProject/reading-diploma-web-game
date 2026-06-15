@@ -4,19 +4,19 @@ import {
     bookArctic,
     bookAsia,
     bookNorthAmerica,
-    bookSouthAmerica,
-    bookOceania
+    bookOceania,
+    bookSouthAmerica
 } from './data/index.js';
 
 import {
-    fetchSubmissions,
-    fetchProgress,
-    fetchBooks,
-    completeLevel,
     addBookToLevel,
-    submitQuiz,
+    addReward,
+    completeLevel,
+    fetchBooks,
+    fetchProgress,
+    fetchSubmissions,
     reSubmitQuiz,
-    addReward
+    submitQuiz
 } from '../services/api.js';
 
 const ReadingState = {
@@ -229,21 +229,21 @@ const ReadingState = {
                     // [Key Change 2]: Core unlocking logic
                     // Unlock next level only if:
                     // 1. Level is complete/reviewed, OR
-                    // 2. Level is incomplete but has a submission (resubmission case)
-                    const hasSubmission = !!submissionEntry;
-                    const isLevelComplete = progressEntry.level_status !== 'incomplete';
+                    // 2. Level is pending resubmission
+                    const isLevelComplete = progressEntry.level_status === 'complete' || progressEntry.level_status === 'reviewed';
+                    const isLevelPendingResubmit = progressEntry.level_status === 'resubmit';
 
-                    if (isLevelComplete || hasSubmission) {
+                    if (isLevelComplete || isLevelPendingResubmit) {
                         if (!this._continentCompletedFlags) this._continentCompletedFlags = {};
 
-                        // Only mark as completed if truly complete; pending resubmission if incomplete + has submission
+                        // Only mark as completed if truly complete
                         if (isLevelComplete) {
                             this._continentCompletedFlags[mapKey] = true;
                             this.booksRead = Math.max(this.booksRead, level);
                         }
 
                         // Mark if pending resubmission
-                        if (progressEntry.level_status === 'incomplete' && hasSubmission) {
+                        if (isLevelPendingResubmit) {
                             this.levelsPendingResubmission[mapKey] = true;
                         }
                         
@@ -251,7 +251,7 @@ const ReadingState = {
                         if (i + 1 < this.mapOrder.length) {
                             const nextMapKey = this.mapOrder[i + 1];
                             this.mapUnlock[nextMapKey] = true; 
-                            console.log(`Detected level ${level} completed (has submission), auto-unlocking: ${nextMapKey}`);
+                            console.log(`Detected level ${level} completed or pending resubmission, auto-unlocking: ${nextMapKey}`);
                         }
                     }
                 }

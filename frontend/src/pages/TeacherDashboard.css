@@ -666,18 +666,29 @@
     background: linear-gradient(145deg, #D8B25A, #C4973A); 
     border-color: #9E7A2A;
     color: #fff;
-    box-shadow: 0 1px 4px rgba(158, 122, 42, 0.3);
-}
-
-.level-status-select.status-complete {
-    background: linear-gradient(145deg, #D8B25A, #C4973A) !important;
-    border-color: #9E7A2A;
-    color: #fff;
 }
 
 .progress-level-badge--reviewed {
     background: linear-gradient(145deg, #7BCF8A, #5BAF6C);
     border-color: #4A965A;
+    color: #fff;
+}
+
+.progress-level-badge--resubmit {
+    background: linear-gradient(145deg, #ad87ff, #865fd9);
+     border-color: #7141d7;
+    color: #fff;
+}
+
+.level-status-select.status-incomplete {
+    background: #ededed !important;
+    border-color: #888;
+    color: #888;
+}
+
+.level-status-select.status-complete {
+    background: linear-gradient(145deg, #D8B25A, #C4973A) !important;
+    border-color: #9E7A2A;
     color: #fff;
 }
 
@@ -687,14 +698,10 @@
     color: #3c763d !important;
 }
 
-.status-incomplete {
-    color: #888 !important;
-}
-
-.level-status-select.status-incomplete {
-    background: #ededed !important;
-    border-color: #888;
-    color: #888;
+.level-status-select.status-resubmit {
+    background: rgba(155, 115, 245, 0.35) !important;
+    border-color: #7b4ce2;
+    color: #2a1f4d;
 }
 
 .progress-summary {
@@ -735,6 +742,20 @@
 
 .expand-chevron--open {
     transform: rotate(180deg);
+}
+
+.book-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+    color: #3a2a10;
+}
+
+.book-title strong {
+    color: #9E7A2A;
+    letter-spacing: 0.06em;
 }
 
 .submissions-detail {
@@ -983,7 +1004,7 @@
         margin-right: 0;
     }
 
-    .submission-qa p {
+    .submission-qa p, .book-title p {
         margin: 0.4rem 0;
         line-height: 1.35;
     }

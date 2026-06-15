@@ -22,13 +22,16 @@ async function request(path, options = {}) {
     });
     if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new ApiError(res.status, body.message || res.statusText);
+        const msg = body.error || body.message || res.statusText;
+        throw new ApiError(res.status, msg);
     }
-    return res.json();
+    if (res.statusText === 'No Content' || res.status === 204) return res
+    else return res.json();
 }
 
-export function fetchSubmissions() { return request(`/api/submissions`); }
+// Progress endpoints
 export function fetchProgress() { return request('/api/progress'); }
+export function fetchStudentProgress(id) { return request(`/api/progress/student/${id}`); }
 export function fetchCurrentLevel() { return request('/api/progress/current-level'); }
 export function completeLevel(level, userId) {
     return request(`/api/progress/${level}/completed`, {
@@ -42,8 +45,20 @@ export function addBookToLevel(level, bookId) {
         body: JSON.stringify({ book: bookId }),
     });
 }
+
+// Book endpoints
 export function fetchBooks() { return request('/api/books'); }
 export function fetchBook(id) { return request(`/api/books/${id}`); }
+export function createBook(body) {
+    return request('/api/books', {
+        method: 'POST',
+        body: JSON.stringify(body),
+    });
+}
+
+// Submissions endpoints
+export function fetchSubmissions() { return request(`/api/submissions`); }
+export function fetchStudentSubmissions(id) { return request(`/api/submissions/student/${id}`); }
 export function submitQuiz(data, progressId) {
     return request('/api/submissions/add-submission', {
         method: 'POST',
@@ -56,20 +71,52 @@ export function reSubmitQuiz(data, progressId) {
         body: JSON.stringify({ ...data, completedLevel: progressId }),
     });
 }
-export function addReward(owner, type, name) {
-    return request('/api/rewards/add-reward', {
-        method: 'POST',
-        body: JSON.stringify({ owner, type, name }),
-    });
-}
-export function fetchRewards() { return request('/api/rewards'); }
-export function fetchStudentProgress(id) { return request(`/api/progress/student/${id}`); }
-export function fetchStudentSubmissions(id) { return request(`/api/submissions/student/${id}`); }
-
 export function updateSubmissionStatus(level, userId, status) {
     return request(`/api/progress/${level}/status`, {
         method: 'PUT',
         body: JSON.stringify({ user: userId, status}),
     });
 }
+
+// Rewards endpoints
+export function fetchRewards() { return request('/api/rewards'); }
+export function addReward(owner, type, name) {
+    return request('/api/rewards/add-reward', {
+        method: 'POST',
+        body: JSON.stringify({ owner, type, name }),
+    });
+}
+
+// Teacher / student management endpoints
+export function fetchMyStudents() { return request('/api/users/my-students'); }
+export function createStudent(body) {
+    return request('/api/users/students', {
+        method: 'POST',
+        body: JSON.stringify(body),
+    });
+}
+export function updateUserName(id, name) {
+    return request(`/api/users/profile/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ name }),
+    });
+}
+export function updateUserEmail(id, email) {
+    return request(`/api/users/profile/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ email }),
+    });
+}
+export function resetStudentPassword(id, password) {
+    return request(`/api/users/students/${id}/password`, {
+        method: 'PATCH',
+        body: JSON.stringify({ password }),
+    });
+}
+export function deleteStudent(id) {
+    return request(`/api/users/students/${id}`, {
+        method: 'DELETE',
+    });
+}
+
 export { ApiError };

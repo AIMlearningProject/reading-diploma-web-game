@@ -41,6 +41,7 @@ const UserService = {
         const users = await User.getAll()
         if (!users) {
             const err = new Error('No users found')
+            err.userDetails = 'Käyttäjiä ei löytynyt'
             err.status = 404
             throw err
         }
@@ -52,7 +53,8 @@ const UserService = {
         const user = await User.findByName(name)
         if (!user) {
             const err = new Error(`Could not find user by the name: ${name}`)
-            err.name = 'userNotFound'
+            err.userDetails = 'Käyttäjää ei löytynyt'
+            err.status = 404
             throw err
         }
         return user
@@ -62,7 +64,8 @@ const UserService = {
         const user = await User.findByEmail(email)
         if (!user) {
             const err = new Error(`Could not find user by the email: ${email}`)
-            err.name = 'userNotFound'
+            err.userDetails = 'Käyttäjää ei löytynyt'
+            err.status = 404
             throw err
         }
         return user
@@ -72,7 +75,8 @@ const UserService = {
         const user = await User.findUserById(id)
         if (!user) {
             const err = new Error(`Could not find user by the id: ${id}`)
-            err.name = 'userNotFound'
+            err.userDetails = 'Käyttäjää ei löytynyt'
+            err.status = 404
             throw err
         }
         return user
@@ -167,7 +171,7 @@ const UserService = {
         const existing = await User.findStudentByNameAndTeacher(name, teacherId)
         if (existing) {
             const err = new Error('Student name already taken for this teacher')
-            err.userDetails = 'Tällä opettajalla on jo tämän niminen oppilas'
+            err.userDetails = 'Oppilaan nimi varattu, valitse toinen'
             err.status = 400
             throw err
         }
@@ -176,7 +180,7 @@ const UserService = {
             const existingEmail = await User.findByEmail(email)
             if (existingEmail) {
                 const err = new Error('Email already taken')
-                err.userDetails = 'Tämä sähköposti on jo jollain käytössä'
+                err.userDetails = 'Sähköposti varattu, valitse toinen'
                 err.status = 400
                 throw err
             }
@@ -221,7 +225,7 @@ const UserService = {
             const existingName = await User.findByName(name)
             if (existingName) {
                 const err = new Error('Name already taken')
-                err.userDetails = 'Nimi on varatattu, valitse toinen'
+                err.userDetails = 'Nimi varattu, valitse toinen'
                 err.status = 400
                 throw err
             }

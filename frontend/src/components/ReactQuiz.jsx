@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import ReadingState from '../game/state.js';
-import { useAuth } from '../contexts/AuthContext'
 
 export default function ReactQuiz({ mapKey, onClose }) {
     const { user } = useAuth()
