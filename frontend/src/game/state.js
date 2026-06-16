@@ -231,9 +231,9 @@ const ReadingState = {
                     // 1. Level is complete/reviewed, OR
                     // 2. Level is pending resubmission
                     const isLevelComplete = progressEntry.level_status === 'complete' || progressEntry.level_status === 'reviewed';
-                    const isLevelPendingResubmit = progressEntry.level_status === 'resubmit';
+                    const hasSubmission = !!submissionEntry;
 
-                    if (isLevelComplete || isLevelPendingResubmit) {
+                    if (progressEntry.level_status !== 'incomplete' || hasSubmission) {
                         if (!this._continentCompletedFlags) this._continentCompletedFlags = {};
 
                         // Only mark as completed if truly complete
@@ -243,7 +243,7 @@ const ReadingState = {
                         }
 
                         // Mark if pending resubmission
-                        if (isLevelPendingResubmit) {
+                        if (hasSubmission && !isLevelComplete) {
                             this.levelsPendingResubmission[mapKey] = true;
                         }
                         
@@ -272,7 +272,6 @@ const ReadingState = {
     async saveBookSelection(mapKey, bookId) {
         const level = this.mapOrder.indexOf(mapKey) + 1;
         if (level < 1) return;
-        this.mapSelectedBook[mapKey] = bookId;
         try {
             await addBookToLevel(level, bookId);
         } catch (err) {

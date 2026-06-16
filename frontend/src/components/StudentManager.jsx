@@ -20,7 +20,7 @@ const LEVELS = [
     { level: 5, name: 'Etelä-Amerikka' },
     { level: 6, name: 'Afrikka' },
     { level: 7, name: 'Oseania' },
-    { level: 8, name: 'Antarktis' },
+    { level: 8, name: 'Etelämanner' },
 ]
 
 function StudentManager() {
@@ -354,20 +354,18 @@ function StudentManager() {
                                                                                 <option value="reviewed">Hyväksytty</option>
                                                                             </select>
                                                                         </h4>
+                                                                        <div className="book-title">
+                                                                            <span><strong>KIRJA: </strong>{title}</span>
+                                                                        </div>
                                                                         {sub ? (
-                                                                            <>
-                                                                                <div className="book-title">
-                                                                                    <span><strong>KIRJA: </strong>{title}</span>
-                                                                                </div>
-                                                                                <div className="submission-qa">
-                                                                                    <p><strong>K1:</strong> {sub.question1}</p>
-                                                                                    <p className="submission-answer"><strong>V1:</strong> {sub.answer1}</p>
-                                                                                    <p><strong>K2:</strong> {sub.question2}</p>
-                                                                                    <p className="submission-answer"><strong>V2:</strong> {sub.answer2}</p>
-                                                                                    <p><strong>K3:</strong> {sub.question3}</p>
-                                                                                    <p className="submission-answer"><strong>V3:</strong> {sub.answer3}</p>
-                                                                                </div>
-                                                                            </>
+                                                                            <div className="submission-qa">
+                                                                                <p><strong>K1:</strong> {sub.question1}</p>
+                                                                                <p className="submission-answer"><strong>V1:</strong> {sub.answer1}</p>
+                                                                                <p><strong>K2:</strong> {sub.question2}</p>
+                                                                                <p className="submission-answer"><strong>V2:</strong> {sub.answer2}</p>
+                                                                                <p><strong>K3:</strong> {sub.question3}</p>
+                                                                                <p className="submission-answer"><strong>V3:</strong> {sub.answer3}</p>
+                                                                            </div>
                                                                         ) : null}
                                                                     </div>
                                                                 )

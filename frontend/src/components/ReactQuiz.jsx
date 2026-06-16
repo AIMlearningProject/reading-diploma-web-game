@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import ReadingState from '../game/state.js';
 
@@ -59,10 +59,19 @@ export default function ReactQuiz({ mapKey, onClose }) {
         }
     };
 
+    const bookTitle = useMemo(() => {
+        const bookId = ReadingState.mapSelectedBook?.[mapKey];
+        const title = ReadingState.globalBooks?.find(b => String(b.id) === String(bookId))?.title;
+        return title
+    }, [mapKey]);
+
     if (!mapKey) return null;
 
     return (
         <div style={styles.overlay}>
+            <div style={styles.titleBox}>
+                <span style={styles.title}>{bookTitle}</span>
+            </div>
             <div style={styles.box} onClick={(e) => e.stopPropagation()}>
                 <h2 style={styles.title}>{isReadOnly ? "OMAT VASTAUKSET" : "TARINAKYSELY"}</h2>
                 <div style={styles.divider}></div>
@@ -109,7 +118,15 @@ const styles = {
     overlay: {
         position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
         backgroundColor: 'rgba(10, 25, 47, 0.9)',
-        display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 100000
+        display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 100000,
+        flexDirection: 'column'
+    },
+    titleBox: {
+        width: '92%', maxWidth: '420px', maxHeight: '90vh',
+        backgroundColor: '#1e3a5f', border: '3px solid #c4973a',
+        borderRadius: '12px', padding: '20px', textAlign: 'center',
+        color: 'white', fontFamily: 'Nunito, sans-serif', boxSizing: 'border-box',
+        overflowY: 'auto', marginBottom: '5px',
     },
     box: {
         width: '92%', maxWidth: '420px', maxHeight: '90vh',

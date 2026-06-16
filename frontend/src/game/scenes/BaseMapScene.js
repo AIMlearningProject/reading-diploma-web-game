@@ -279,9 +279,8 @@ class BaseMapScene extends Phaser.Scene {
         const mapKey = this.scene.key;
         const result = this.bookListModal.show(mapKey, async (book, key, mapCfg, isCompleted) => {
             if (!isCompleted) {
-                const bookId = Number(book.id) 
-                ReadingState.mapSelectedBook[key] = bookId;
-                await ReadingState.saveBookSelection(key, bookId);
+                ReadingState.mapSelectedBook[key] = book.id;
+                await ReadingState.saveBookSelection(key, Number(book.id));
             }
             const bookData = await BookFetcher.fetchAndLaunch(
                 this, book, mapCfg, isCompleted, this.bookIconContainer

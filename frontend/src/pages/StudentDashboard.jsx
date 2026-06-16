@@ -14,7 +14,7 @@ const LEVELS = [
     { level: 5, name: 'Etelä-Amerikka' },
     { level: 6, name: 'Afrikka' },
     { level: 7, name: 'Oseania' },
-    { level: 8, name: 'Antarktis' },
+    { level: 8, name: 'Etelämanner' },
 ]
 
 function StudentDashboard() {
