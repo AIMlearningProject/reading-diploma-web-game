@@ -348,7 +348,7 @@ function StudentManager() {
                                                                                 value={status}
                                                                                 onChange={e => handleLevelStatusChange(s.id, level, e.target.value)}
                                                                             >
-                                                                                <option value="incomplete">Suorittamaton</option>
+                                                                                <option value="incomplete">Suorittamatta</option>
                                                                                 <option value="complete">Suoritettu</option>
                                                                                 <option value="resubmit">Hylätty</option>
                                                                                 <option value="reviewed">Hyväksytty</option>

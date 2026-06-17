@@ -37,6 +37,12 @@ function BookManager() {
         }
     }
 
+    const typeFi = {
+        "physical": "Fyysinen",
+        "e-book": "E-kirja",
+        "audio": "Äänikirja"
+    }
+
     return (
         <div className="dashboard-section">
             <h2>Kirjat</h2>
@@ -54,7 +60,9 @@ function BookManager() {
                             <tr key={b.id}>
                                 <td data-label="Nimi"> {b.title}</td>
                                 <td data-label="Kirjoittaja"> {b.author}</td>
-                                <td data-label="Tyyppi"> {b.booktype}</td>
+                                <td data-label="Tyyppi">
+                                    {typeFi[b.booktype] ?? b.booktype}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -101,11 +109,11 @@ function BookManager() {
                     />
                 </div>
                 <div className="form-group">
-                    <label>
-                        Tyyppi
-                        <span className="section-error">*</span>
-                    </label>
-                    <select value={booktype} onChange={(e) => setBooktype(e.target.value)}>
+                    <label>Tyyppi</label>
+                    <select
+                        value={booktype}
+                        onChange={(e) => setBooktype(e.target.value)}
+                    >
                         <option value="physical">Fyysinen</option>
                         <option value="e-book">E-kirja</option>
                         <option value="audio">Äänikirja</option>

@@ -11,7 +11,7 @@ const bookSchema = z.object({
     title: z.string(),
     author: z.string(),
     coverimage: z.string(),
-    booktype: z.string().transform(str => str.toLowerCase()).pipe(booktypes),
+    booktype: z.string().transform(str => str.toLowerCase()).pipe(booktypes).optional(),
     content: z.string().optional()
 }).strict()
 
