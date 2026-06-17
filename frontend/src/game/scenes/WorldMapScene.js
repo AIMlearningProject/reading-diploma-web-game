@@ -5,6 +5,7 @@ import { COLORS, FONTS, uiScale as calcUiScale } from '../ui/constants.js';
 import worldmapImg from '../../assets/worldmap.png';
 import worldmapSimpleImg from '../../assets/worldmap_simple.png';
 import pandaWorldImg from '../../assets/buddyAvatar/panda/panda_world.png';
+import continentRegistry from './continentRegistry.js';
 
 class WorldMapScene extends Phaser.Scene {
     constructor() {
@@ -28,7 +29,14 @@ class WorldMapScene extends Phaser.Scene {
         // --- 1. Background layer ---
         const bg = this.add.image(0, 0, 'worldMap').setOrigin(0);
         const bgSimple = this.add.image(0, 0, 'worldMapSimple').setOrigin(0);
-        
+
+        // Prefetch unlocked continent backgrounds so entering them is faster
+        // Doesn't increase initial load time, since this in done in the background
+        // But WorldMapScene may be a bit laggy while this happens
+        const toPrefetch = continentRegistry.filter(c => ReadingState.mapUnlock[c.key] && !this.textures.exists(c.assetKey));
+        toPrefetch.forEach(cfg => this.load.image(cfg.assetKey, cfg.assetPath));
+        this.load.start();
+
         const setupBackgrounds = () => {
             if (!this.cameras || !this.cameras.main || !bg.active) return;
             const { width: currentW, height: currentH } = this.scale;
@@ -44,7 +52,7 @@ class WorldMapScene extends Phaser.Scene {
 
         // --- 2. Point Setting ---
         const continentPositions = {
-            arctic: { x: 450, y: 120, name: 'POHJOISNAPA', mapKey: 'ArcticMap' }, 
+            arctic: { x: 450, y: 120, name: 'POHJOISNAPA', mapKey: 'ArcticMap' },
             europe: { x: 700, y: 250, name: 'EUROOPPA', mapKey: 'EuropeMap' },
             asia: { x: 1000, y: 250, name: 'AASIA', mapKey: 'AsiaMap' },
             africa: { x: 650, y: 450, name: 'AFRIKKA', mapKey: 'AfricaMap' },
@@ -56,7 +64,7 @@ class WorldMapScene extends Phaser.Scene {
 
         // ⭐ Modification: Change to a class attribute to ensure it is always accessible throughout the class's lifetime.
         this.pointGroup = this.add.group();
-        
+
         // Find the latest unlocked continent (highest index in mapOrder)
         const getLatestUnlockedMapKey = () => {
             let latest = null;
@@ -204,7 +212,7 @@ class WorldMapScene extends Phaser.Scene {
         // --- 4. Minimap Configuration ---
         const getLayoutConfig = (isMaximized) => {
             const { width: currentW, height: currentH } = this.scale;
-            if (!bg || !bg.active) return { x:0, y:0, w:100, h:100 };
+            if (!bg || !bg.active) return { x: 0, y: 0, w: 100, h: 100 };
             const mapRatio = bg.width / bg.height;
             const safePaddingBottom = 25;
             const sidePadding = 20;
@@ -221,7 +229,7 @@ class WorldMapScene extends Phaser.Scene {
                 targetX = (currentW - targetW) / 2; targetY = (currentH - targetH) / 2;
             } else {
                 targetW = currentW * 0.22;
-                if (targetW < 140) targetW = 140; 
+                if (targetW < 140) targetW = 140;
                 targetH = targetW / mapRatio;
                 targetX = currentW - targetW - sidePadding;
                 targetY = currentH - targetH - safePaddingBottom;
@@ -231,14 +239,14 @@ class WorldMapScene extends Phaser.Scene {
 
         const initial = getLayoutConfig(false);
         this.minimapCamera = this.cameras.add(initial.x, initial.y, initial.w, initial.h).setBackgroundColor(0x000000);
-        
+
         this.cameras.main.ignore(bgSimple);
         this.minimapCamera.ignore(bg);
 
         this.viewRectGraphics = this.add.graphics().setDepth(1005).setScrollFactor(0);
         this.miniFrame = this.add.graphics().setScrollFactor(0).setDepth(1001);
         this.interactiveRegion = this.add.rectangle(initial.x, initial.y, initial.w, initial.h, 0, 0).setOrigin(0).setScrollFactor(0).setDepth(1002).setInteractive({ useHandCursor: true });
-        
+
         const toggleIconSize = 28;
         const togglePadH = 10;
         const togglePadV = 6;
@@ -294,7 +302,7 @@ class WorldMapScene extends Phaser.Scene {
             const ratio = this.minimapCamera.width / bg.displayWidth;
             this.minimapCamera.setZoom(ratio);
             this.minimapCamera.centerOn(bg.displayWidth / 2, bg.displayHeight / 2);
-            
+
             this.miniFrame.clear();
             // Shadow
             this.miniFrame.fillStyle(0x000000, 0.3).fillRoundedRect(this.minimapCamera.x + 3, this.minimapCamera.y + 3, this.minimapCamera.width, this.minimapCamera.height, 6);
@@ -303,7 +311,7 @@ class WorldMapScene extends Phaser.Scene {
             this.miniFrame.lineStyle(1, 0x1A237E, 1).strokeRoundedRect(this.minimapCamera.x - 1, this.minimapCamera.y - 1, this.minimapCamera.width + 2, this.minimapCamera.height + 2, 7);
             this.interactiveRegion.setPosition(this.minimapCamera.x, this.minimapCamera.y).setDisplaySize(this.minimapCamera.width, this.minimapCamera.height);
             this.toggleBtn.setPosition(this.minimapCamera.x, this.minimapCamera.y - this.toggleBtn.height - 8);
-            
+
             if (this.tipText && this.tipText.active) {
                 const tipW = this.tipText.width || 200;
                 const tipH = this.tipText.height || 30;
@@ -333,9 +341,9 @@ class WorldMapScene extends Phaser.Scene {
 
             currentZoomScale = setupBackgrounds();
             renderPoints();
-            
+
             const layout = getLayoutConfig(this.isMinimapMaximized);
-            
+
             if (this.backBtn && this.backBtn.active) {
                 this.backBtn.setX(this.scale.width - margin - this.backBtn._badgeWidth);
             }
@@ -370,11 +378,11 @@ class WorldMapScene extends Phaser.Scene {
         this.toggleBtn.on('pointerdown', (p) => { p.event.stopPropagation(); toggleMinimap(); });
 
         let pressX, pressY;
-        this.interactiveRegion.on('pointerdown', (p) => { 
-            pressX = p.x; pressY = p.y; 
+        this.interactiveRegion.on('pointerdown', (p) => {
+            pressX = p.x; pressY = p.y;
             if (this.tipText && this.tipText.active) this.tipText.destroy();
         });
-        
+
         this.interactiveRegion.on('pointerup', (p) => {
             const dist = Phaser.Math.Distance.Between(pressX, pressY, p.x, p.y);
             if (dist < 10) {
