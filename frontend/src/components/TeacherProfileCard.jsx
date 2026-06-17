@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import './TeacherProfileCard.css'
-import { getCsrfToken } from '../services/api'
+import { getCsrfToken, updateTeacherName } from '../services/api'
 
 /* ── TeacherProfileCard ────────────────────────────────────── */
 function TeacherProfileCard() {
@@ -30,24 +30,10 @@ function TeacherProfileCard() {
 
         setSaving(true)
         try {
-            const csrfToken = getCsrfToken()
-            const res = await fetch(`/api/users/profile/${user.id}`, {
-                method: 'PATCH',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify(body),
-            })
-            if (!res.ok) {
-                const data = await res.json()
-                showToast(data.error || 'Tallennus epäonnistui', 'error')
-            } else {
-                showToast('Profiili päivitetty!')
-            }
-        } catch {
-            showToast('Yhteysvirhe', 'error')
+            await updateTeacherName(user.id, name.trim())
+            showToast('Profiili päivitetty!')
+        } catch (err) {
+            showToast(err?.message || 'Yhteysvirhe')
         } finally {
             setSaving(false)
         }

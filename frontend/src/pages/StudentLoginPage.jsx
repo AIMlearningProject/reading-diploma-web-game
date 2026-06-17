@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import './StudentLoginPage.css'
 import homeBG from '../assets/HomeBG1.jpg'
-import { getCsrfToken } from '../services/api'
+import { fetchLogin } from '../services/api'
 
 function StudentLoginPage() {
     const navigate = useNavigate()
@@ -18,37 +18,12 @@ function StudentLoginPage() {
         e.preventDefault()
         setError('')
         setSubmitting(true)
-
         try {
-            // ∨∨ this fetch('/auth/csrf-token') is required only in the login route, because the logout route clears cookies
-            // ∨∨ and no requests are made between logout and login, so the CSRF-token wont be set.
-            await fetch('/auth/csrf-token')
-            const csrfToken = getCsrfToken()
-            const res = await fetch('/auth/login', {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({
-                    identifier: studentName,
-                    password,
-                    teacher_name: teacherName
-                })
-            })
-
-            if (!res.ok) {
-                const data = await res.json()
-                setError(data.error || 'Kirjautuminen epäonnistui')
-                setSubmitting(false)
-                return
-            }
-
+            await fetchLogin(studentName, password, teacherName)
             await checkAuth()
             navigate('/game')
-        } catch {
-            //setError('Yhteysvirhe. Yritä uudelleen.')
+        } catch (err) {
+            setError(err?.message || 'Yhteysvirhe')
             setSubmitting(false)
         }
     }

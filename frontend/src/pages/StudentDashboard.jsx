@@ -4,7 +4,12 @@ import { useAuth } from '../contexts/AuthContext'
 import { BUDDIES, BuddySprite, BuddyIcon } from '../components/BuddyAvatar'
 import homeBG from '../assets/HomeBG1.jpg'
 import './StudentDashboard.css'
-import { getCsrfToken, fetchSubmissions } from '../services/api'
+import {
+    fetchProgress,
+    fetchRewards,
+    fetchSubmissions,
+    updateUserAvatar,
+} from '../services/api'
 
 const LEVELS = [
     { level: 1, name: 'Pohjoisnapa' },
@@ -31,8 +36,8 @@ function StudentDashboard() {
 
     useEffect(() => {
         Promise.all([
-            fetch('/api/progress').then(r => r.ok ? r.json() : []),
-            fetch('/api/rewards').then(r => r.ok ? r.json() : []),
+            fetchProgress().catch(() => []),
+            fetchRewards().catch(() => []),
             fetchSubmissions().catch(() => []),
         ]).then(([prog, rew, subs]) => {
             setProgress(prog)
@@ -56,25 +61,11 @@ function StudentDashboard() {
         setBuddySaving(true)
         setBuddyError('')
         try {
-            const csrfToken = getCsrfToken()
-            const res = await fetch(`/api/users/profile/${user.id}`, {
-                method: 'PATCH',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({ avatar: selectedBuddy }),
-            })
-            if (!res.ok) {
-                const data = await res.json()
-                setBuddyError(data.error || 'Tallennus epäonnistui')
-            } else {
-                await checkAuth()
-                setBuddySelecting(false)
-            }
-        } catch {
-            setBuddyError('Yhteysvirhe')
+            await updateUserAvatar(user.id, selectedBuddy)
+            await checkAuth()
+            setBuddySelecting(false)
+        } catch (err) {
+            setError(err?.message || 'Yhteysvirhe')
         } finally {
             setBuddySaving(false)
         }

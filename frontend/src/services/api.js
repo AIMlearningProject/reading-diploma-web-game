@@ -11,7 +11,12 @@ export const getCsrfToken = () => {
 }
 
 async function request(path, options = {}) {
-    const csrfToken = getCsrfToken()
+    let csrfToken = ''
+
+    if (!!options?.method) {
+        csrfToken = getCsrfToken()
+    }
+
     const res = await fetch(path, {
         credentials: 'same-origin',
         headers: {
@@ -27,6 +32,21 @@ async function request(path, options = {}) {
     }
     if (res.statusText === 'No Content' || res.status === 204) return res
     else return res.json();
+}
+
+// Auth endpoints
+export async function fetchLogin(identifier, password, teacher_name) {
+    // ∨∨ this fetch('/auth/csrf-token') is required only in the login route, because the logout route clears cookies
+    // ∨∨ and no requests are made between logout and login, so the CSRF-token wont be set.
+    await fetch('/auth/csrf-token')
+    return request('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({
+            identifier,
+            password,
+            teacher_name
+        })
+    })
 }
 
 // Progress endpoints
@@ -74,7 +94,7 @@ export function reSubmitQuiz(data, progressId) {
 export function updateSubmissionStatus(level, userId, status) {
     return request(`/api/progress/${level}/status`, {
         method: 'PUT',
-        body: JSON.stringify({ user: userId, status}),
+        body: JSON.stringify({ user: userId, status }),
     });
 }
 
@@ -88,6 +108,12 @@ export function addReward(owner, type, name) {
 }
 
 // Teacher / student management endpoints
+export function updateTeacherName(id, name) {
+    return request(`/api/users/profile/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ name }),
+    });
+}
 export function fetchMyStudents() { return request('/api/users/my-students'); }
 export function createStudent(body) {
     return request('/api/users/students', {
@@ -105,6 +131,12 @@ export function updateUserEmail(id, email) {
     return request(`/api/users/profile/${id}`, {
         method: 'PATCH',
         body: JSON.stringify({ email }),
+    });
+}
+export function updateUserAvatar(id, avatar) {
+    return request(`/api/users/profile/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ avatar }),
     });
 }
 export function resetStudentPassword(id, password) {
