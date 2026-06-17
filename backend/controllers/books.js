@@ -1,19 +1,51 @@
 import BookService from '../services/bookService.js'
 import express from 'express'
-const booksRouter = express.Router()
-
-// for input validation
 import { z } from 'zod'
+import multer from 'multer'
 import middleware from '../utils/middleware.js'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const booksRouter = express.Router()
 
 const booktypes = z.enum(['physical', 'e-book', 'audio'])
 const bookSchema = z.object({
     title: z.string(),
     author: z.string(),
-    coverimage: z.string(),
     booktype: z.string().transform(str => str.toLowerCase()).pipe(booktypes).optional(),
     content: z.string().optional()
 }).strict()
+// Note: file uploads are handled by multer (upload.single('coverimage')).
+// We do NOT validate the file with zod here because multer parses multipart
+// bodies and places the file on `request.file`.
+
+// ∨∨∨ For uploading cover images
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const coverUploadDir = path.resolve(__dirname, '../public/uploads/book-covers')
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, coverUploadDir),
+    filename: (req, file, cb) => {
+        const safeName = file.originalname.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9.-]/g, '')
+        cb(null, `${Date.now()}-${safeName}`)
+    }
+})
+
+const allowedImageTypes = ['image/jpeg', 'image/png', 'image/jfif', 'image/webp']
+const upload = multer({
+    storage,
+    limits: { fileSize: 2 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        if (!allowedImageTypes.includes(file.mimetype)) {
+            const err = new multer.MulterError('LIMIT_UNEXPECTED_FILE', file.fieldname)
+            err.message = 'Vain kuvatiedostot ovat sallittuja (jpg, png, jfif, webp).'
+            err.name = 'MulterError'
+            return cb(err, false)
+        }
+        cb(null, true)
+    }
+})
 
 booksRouter.get('/', middleware.requireAuthentication(true), async (request, response, next) => {
     try {
@@ -29,34 +61,43 @@ booksRouter.get('/:id', middleware.requireAuthentication(true), async (request, 
     try {
         const book = await BookService.findBookById(id)
         response.json(book)
-    } catch (error){
-        next(error)
-    }
-})
-
-booksRouter.post('/', middleware.requireAuthentication(true), middleware.zValidate(bookSchema), async (request, response, next) => {
-    // request.validated imported from zValidate disallows unknown fields and incorrect data types
-    // and returns the validated request body
-    const { title, author, coverimage, booktype, content } = request.validated
-
-    try {
-        const newBook = {
-            title,
-            author,
-            coverimage,
-            booktype,
-            content
-        }
-
-        await BookService.addBook(newBook)
-        response.status(201).json(newBook)
-
     } catch (error) {
         next(error)
     }
 })
 
-booksRouter.delete('/delete-book/:id', middleware.requireTeacherRole, async(request, response, next) => {
+booksRouter.post('/',
+    middleware.requireAuthentication(true),
+    upload.single('coverimage'),
+    middleware.zValidate(bookSchema),
+    async (request, response, next) => {
+        // request.validated imported from zValidate disallows unknown fields and incorrect data types
+        // and returns the validated request body
+        const { title, author, booktype, content } = request.validated
+
+        if (!request.file) {
+            return response.status(400).json({ error: 'No cover image uploaded' })
+        }
+
+        try {
+            const newBook = {
+                title,
+                author,
+                coverimage: `/uploads/book-covers/${request.file.filename}`,
+                booktype,
+                content
+            }
+
+            await BookService.addBook(newBook)
+            response.status(201).json(newBook)
+
+        } catch (error) {
+            next(error)
+        }
+    }
+)
+
+booksRouter.delete('/delete-book/:id', middleware.requireTeacherRole, async (request, response, next) => {
     const id = request.params.id
 
     try {

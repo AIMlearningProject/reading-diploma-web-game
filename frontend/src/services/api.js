@@ -17,12 +17,17 @@ async function request(path, options = {}) {
         csrfToken = getCsrfToken()
     }
 
+    const headers = {
+        'X-CSRF-TOKEN': csrfToken
+    }
+
+    if (!(options?.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json'
+    }
+
     const res = await fetch(path, {
         credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        },
+        headers,
         ...options,
     });
     if (!res.ok) {
@@ -72,7 +77,7 @@ export function fetchBook(id) { return request(`/api/books/${id}`); }
 export function createBook(body) {
     return request('/api/books', {
         method: 'POST',
-        body: JSON.stringify(body),
+        body: body,
     });
 }
 

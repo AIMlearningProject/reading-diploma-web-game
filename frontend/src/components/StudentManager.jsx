@@ -354,9 +354,10 @@ function StudentManager() {
                                                                                 <option value="reviewed">Hyväksytty</option>
                                                                             </select>
                                                                         </h4>
+                                                                        {title && 
                                                                         <div className="book-title">
                                                                             <span><strong>KIRJA: </strong>{title}</span>
-                                                                        </div>
+                                                                        </div>}
                                                                         {sub ? (
                                                                             <div className="submission-qa">
                                                                                 <p><strong>K1:</strong> {sub.question1}</p>

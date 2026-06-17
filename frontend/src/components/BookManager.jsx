@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { fetchBooks, createBook } from '../services/api'
 
 function BookManager() {
     const [books, setBooks] = useState([])
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
-    const [coverimage, setCoverimage] = useState('')
+    const [coverimage, setCoverimage] = useState(null)
     const [booktype, setBooktype] = useState('physical')
     const [error, setError] = useState('')
+    const formRef = useRef(null)
+    const fileInputRef = useRef(null)
 
     const fetchMyBooks = async () => {
         try {
@@ -25,12 +27,25 @@ function BookManager() {
     const handleAdd = async (e) => {
         e.preventDefault()
         setError('')
+
+        if (!coverimage) {
+            setError("Lisää kuva kirjan kannesta");
+            return;
+        }
+
+        const formData = new FormData()
+        formData.append('title', title)
+        formData.append('author', author)
+        formData.append('coverimage', coverimage)
+        formData.append('booktype', booktype)
+
         try {
-            const res = await createBook({ title, author, coverimage, booktype })
+            await createBook(formData)
             setTitle('')
             setAuthor('')
-            setCoverimage('')
+            setCoverimage(null)
             setBooktype('physical')
+            formRef.current?.reset()
             fetchMyBooks()
         } catch (err) {
             setError(err?.message || 'Yhteysvirhe')
@@ -50,6 +65,7 @@ function BookManager() {
                 <table className="data-table">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Nimi</th>
                             <th>Kirjoittaja</th>
                             <th>Tyyppi</th>
@@ -58,6 +74,16 @@ function BookManager() {
                     <tbody>
                         {books.map((b) => (
                             <tr key={b.id}>
+                                <td>
+                                    <img
+                                        className="book-cover-thumb"
+                                        src={b.coverimage}
+                                        alt={b.title}
+                                        onError={(e) => {
+                                            e.currentTarget.style.display = "none";
+                                        }}
+                                    />
+                                </td>
                                 <td data-label="Nimi"> {b.title}</td>
                                 <td data-label="Kirjoittaja"> {b.author}</td>
                                 <td data-label="Tyyppi">
@@ -71,7 +97,7 @@ function BookManager() {
                 <p className="empty-message">Ei kirjoja vielä.</p>
             )}
 
-            <form className="add-form" onSubmit={handleAdd}>
+            <form className="add-form" encType="multipart/form-data" onSubmit={handleAdd} ref={formRef}>
                 <div className="form-group">
                     <label>
                         Nimi
@@ -96,17 +122,25 @@ function BookManager() {
                         required
                     />
                 </div>
-                <div className="form-group">
+                <div className="form-group upload-field-group">
                     <label>
-                        Kansikuva URL
+                        Kansikuva
                         <span className="section-error">*</span>
                     </label>
                     <input
-                        type="text"
-                        value={coverimage}
-                        onChange={(e) => setCoverimage(e.target.value)}
-                        required
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setCoverimage(e.target.files?.[0] ?? null)}
+                        hidden
                     />
+                    <button
+                        className="upload-button"
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                    >
+                        {coverimage ? coverimage.name : 'Lisää kuva'}
+                    </button>
                 </div>
                 <div className="form-group">
                     <label>Tyyppi</label>

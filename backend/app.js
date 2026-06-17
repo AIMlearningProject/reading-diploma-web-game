@@ -19,6 +19,10 @@ import { rateLimit, ipKeyGenerator } from 'express-rate-limit'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+// derive __filename and __dirname in ESM
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
 const app = express()
 
 logger.info('Connecting')
@@ -163,6 +167,9 @@ const indexLimiter = makeLimiter({
     max: 250,
 })
 
+const uploadPath = path.resolve(__dirname, 'public', 'uploads')
+app.use('/uploads', express.static(uploadPath))
+
 app.use('/auth', authLimiter, authRouter)
 app.use('/api/users', userLimiter, usersRouter)
 app.use('/api/books', apiLimiter, booksRouter)
@@ -171,10 +178,6 @@ app.use('/api/rewards', apiLimiter, rewardsRouter)
 app.use('/api/submissions', apiLimiter, submissionsRouter)
 
 if (environmentMode === 'production') {
-    // derive __filename and __dirname in ESM
-    const __filename = fileURLToPath(import.meta.url)
-    const __dirname = path.dirname(__filename)
-
     const distPath = path.resolve(__dirname, '../frontend/dist')
 
     // Servers the frontend statically from the dist build folder
