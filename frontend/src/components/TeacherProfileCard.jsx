@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import './TeacherProfileCard.css'
-import { getCsrfToken, updateTeacherName } from '../services/api'
+import { updateTeacherName } from '../services/api'
 
 /* ── TeacherProfileCard ────────────────────────────────────── */
 function TeacherProfileCard() {
@@ -54,17 +54,7 @@ function TeacherProfileCard() {
 
             <h2>Oma profiili</h2>
 
-            {!editing ? (
-                <div className="profile-view">
-                    <div className="profile-info">
-                        <p className="profile-name">{user?.name}</p>
-                        <p className="profile-email">{user?.email}</p>
-                        <button className="edit-profile-button" onClick={() => setEditing(true)}>
-                            Muokkaa
-                        </button>
-                    </div>
-                </div>
-            ) : (
+            {editing ? (
                 <div className="profile-edit">
                     <div className="profile-field">
                         <label>Nimi</label>
@@ -82,6 +72,16 @@ function TeacherProfileCard() {
                         </button>
                         <button className="cancel-button" onClick={handleCancel} disabled={saving}>
                             Peruuta
+                        </button>
+                    </div>
+                </div>
+            ) : (
+                <div className="profile-view">
+                    <div className="profile-info">
+                        <p className="profile-name">{user?.name}</p>
+                        <p className="profile-email">{user?.email}</p>
+                        <button className="edit-profile-button" onClick={() => setEditing(true)}>
+                            Muokkaa
                         </button>
                     </div>
                 </div>

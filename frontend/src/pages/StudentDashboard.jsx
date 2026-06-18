@@ -26,7 +26,7 @@ function StudentDashboard() {
     const { user, logout, checkAuth } = useAuth()
     const navigate = useNavigate()
     const [progress, setProgress] = useState([])
-    const [submissions, setSubmissions] = useState([])
+    const [submissions, setSubmissions] = useState([]) // Submissions not yet used in the student dashboard
     const [rewards, setRewards] = useState([])
     const [loading, setLoading] = useState(true)
     const [buddySelecting, setBuddySelecting] = useState(false)
@@ -35,16 +35,23 @@ function StudentDashboard() {
     const [buddyError, setBuddyError] = useState('')
 
     useEffect(() => {
-        Promise.all([
-            fetchProgress().catch(() => []),
-            fetchRewards().catch(() => []),
-            fetchSubmissions().catch(() => []),
-        ]).then(([prog, rew, subs]) => {
-            setProgress(prog)
-            setRewards(Array.isArray(rew) ? rew : [])
-            setSubmissions(Array.isArray(subs) ? subs : [])
-            setLoading(false)
-        }).catch(() => setLoading(false))
+        const load = async () => {
+            try {
+                const [prog, rew, subs] = await Promise.all([
+                    fetchProgress(),
+                    fetchRewards(),
+                    fetchSubmissions(),
+                ])
+
+                setProgress(prog)
+                setRewards(Array.isArray(rew) ? rew : [])
+                setSubmissions(Array.isArray(subs) ? subs : [])
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        load()
     }, [])
 
     const handleLogout = async () => {
@@ -65,7 +72,7 @@ function StudentDashboard() {
             await checkAuth()
             setBuddySelecting(false)
         } catch (err) {
-            setError(err?.message || 'Yhteysvirhe')
+            setBuddyError(err?.message || 'Yhteysvirhe')
         } finally {
             setBuddySaving(false)
         }
@@ -97,7 +104,7 @@ function StudentDashboard() {
                         className="play-button"
                         onClick={hasBuddy ? handlePlay : undefined}
                         disabled={!hasBuddy}
-                        title={!hasBuddy ? 'Valitse ensin seikkailukaveri' : undefined}
+                        title={hasBuddy ? undefined : 'Valitse ensin seikkailukaveri'}
                     >
                         ▶ Pelaa
                     </button>
@@ -112,28 +119,9 @@ function StudentDashboard() {
                     <p className="loading-text">Ladataan...</p>
                 ) : (
                     <>
-                        <section className={`dashboard-section buddy-selection-section${!hasBuddy ? ' buddy-selection-section--prominent' : ''}`}>
+                        <section className={`dashboard-section buddy-selection-section${hasBuddy ? '' : ' buddy-selection-section--prominent'}`}>
                             <h2>Seikkailukaveri</h2>
-                            {!showPicker ? (
-                                <div className="buddy-current">
-                                    <div className="buddy-current-showcase">
-                                        <div className="buddy-current-glow" />
-                                        <BuddySprite buddyId={user.avatar} size={150} />
-                                    </div>
-                                    <p className="buddy-current-name">
-                                        {BUDDIES.find(b => b.id === user.avatar)?.name ?? user.avatar}
-                                    </p>
-                                    <button
-                                        className="change-avatar-button"
-                                        onClick={() => {
-                                            setSelectedBuddy(user.avatar)
-                                            setBuddySelecting(true)
-                                        }}
-                                    >
-                                        Vaihda kaveria
-                                    </button>
-                                </div>
-                            ) : (
+                            {showPicker ? (
                                 <div className="buddy-picker">
                                     <div className="char-grid">
                                         {BUDDIES.map(({ id, name }) => (
@@ -167,6 +155,25 @@ function StudentDashboard() {
                                         )}
                                     </div>
                                 </div>
+                            ) : (
+                                <div className="buddy-current">
+                                    <div className="buddy-current-showcase">
+                                        <div className="buddy-current-glow" />
+                                        <BuddySprite buddyId={user.avatar} size={150} />
+                                    </div>
+                                    <p className="buddy-current-name">
+                                        {BUDDIES.find(b => b.id === user.avatar)?.name ?? user.avatar}
+                                    </p>
+                                    <button
+                                        className="change-avatar-button"
+                                        onClick={() => {
+                                            setSelectedBuddy(user.avatar)
+                                            setBuddySelecting(true)
+                                        }}
+                                    >
+                                        Vaihda kaveria
+                                    </button>
+                                </div>
                             )}
                         </section>
 
@@ -178,23 +185,23 @@ function StudentDashboard() {
                             <div className="level-grid">
                                 {LEVELS.map(({ level, name }) => {
                                     const levelStat = getStatus(level)
-                                    const done = (levelStat === 'complete' || levelStat === 'reviewed')
+                                    const isDone = (levelStat === 'complete' || levelStat === 'reviewed')
                                     return (
-                                        <div key={level} className={`level-card ${done
+                                        <div key={level} className={`level-card ${isDone
                                                 ? 'level-done'
                                                 : `level-${levelStat}`
                                             }`}>
                                             <span className="level-number">{level}</span>
                                             <span className="level-name">{name}</span>
-                                            <span className={`level-badge ${done
+                                            <span className={`level-badge ${isDone
                                                     ? 'badge-done'
                                                     : `badge-${levelStat}`
                                                 }`}>
                                                 {levelStat === 'resubmit'
                                                     ? 'X Hylätty'
-                                                    : done
+                                                    : (isDone
                                                         ? '✓ Suoritettu'
-                                                        : 'Kesken'
+                                                        : 'Kesken')
                                                 }
                                             </span>
                                         </div>

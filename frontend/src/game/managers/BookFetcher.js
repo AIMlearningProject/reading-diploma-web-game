@@ -22,7 +22,7 @@ export default class BookFetcher {
         ];
         const targetUrl = `https://www.gutenberg.org/cache/epub/${book.id}/pg${book.id}.txt`;
 
-        let success = false;
+        let wasSuccess = false;
         let fetchedText = "";
 
         for (const proxy of proxies) {
@@ -33,7 +33,7 @@ export default class BookFetcher {
                 if (response.ok) {
                     fetchedText = await response.text();
                     if (fetchedText.length > 1000) {
-                        success = true;
+                        wasSuccess = true;
                         break;
                     }
                 }
@@ -43,7 +43,7 @@ export default class BookFetcher {
         }
 
         let bookData;
-        if (success) {
+        if (wasSuccess) {
             const startMarkers = ["*** START OF", "CHAPTER I", "Title:"];
             let cleanText = fetchedText;
             for (const m of startMarkers) {

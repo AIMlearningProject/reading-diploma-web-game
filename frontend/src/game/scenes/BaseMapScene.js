@@ -325,19 +325,15 @@ class BaseMapScene extends Phaser.Scene {
         });
     }
 
-    updateTokenPosition(animate = true) {
+    updateTokenPosition(shouldAnimate = true) {
         const config = ReadingState.mapConfig[this.scene.key];
         const storageKey = config ? config.storage : 'progress';
 
         const mapSelectedBook = ReadingState.mapSelectedBook || {};
         const currentBookId = mapSelectedBook[this.scene.key];
 
-        let currentProg = 0;
-        if (currentBookId) {
-            currentProg = ReadingState.bookProgress[currentBookId] || 0;
-        } else {
-            currentProg = ReadingState[storageKey] || 0;
-        }
+        let currentProg;
+        currentProg = currentBookId ? ReadingState.bookProgress[currentBookId] || 0 : ReadingState[storageKey] || 0;
 
         let targetIndex = Math.floor((currentProg / 100) * (this.pointPositions.length - 1));
         targetIndex = Phaser.Math.Clamp(targetIndex, 0, this.pointPositions.length - 1);
@@ -345,7 +341,7 @@ class BaseMapScene extends Phaser.Scene {
         // Draw path
         this.pathRenderer.draw(this.pathGraphics, this.pointPositions, targetIndex, this.themeColor);
 
-        if (animate) {
+        if (shouldAnimate) {
             const currentIndex = this.tokenManager.lastPointIndex;
             this.tokenManager.animateAlongPath(
                 this, this.pointPositions, currentIndex, targetIndex, this.scene.key,

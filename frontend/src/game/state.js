@@ -124,7 +124,7 @@ const ReadingState = {
             if (!this.mapUnlock[mapKey]) continue;
             if (!this._continentCompletedFlags?.[mapKey]) return mapKey;
         }
-        return this.mapOrder[this.mapOrder.length - 1];
+        return this.mapOrder.at(-1);
     },
 
     /**
@@ -153,8 +153,7 @@ const ReadingState = {
             ]);
 
             // --- 1. Prioritize handling the book list (ensure Book List does not disappear due to progress errors) ---
-            if (booksData.status === 'fulfilled' && Array.isArray(booksData.value)) {
-                if (booksData.value.length > 0) {
+            if (booksData.status === 'fulfilled' && Array.isArray(booksData.value) && booksData.value.length > 0) {
                     this.globalBooks = booksData.value.map(b => ({
                         title: b.title,
                         author: b.author,
@@ -162,16 +161,11 @@ const ReadingState = {
                         dbId: b.id
                     }));
                 }
-            }
 
             // --- 2. Handle progress and unlocking logic ---
             if (progressData.status === 'fulfilled' && Array.isArray(progressData.value)) {
                 const progressEntries = progressData.value;
-
-                let submissionEntries = []
-                if (submissionsData.status === 'fulfilled' && Array.isArray(submissionsData.value)) {
-                    submissionEntries = submissionsData.value;
-                }
+                const submissionEntries = submissionsData.status === 'fulfilled' && Array.isArray(submissionsData.value) ? submissionsData.value : []
                 
                 // If the backend returns no data at all, skip directly and keep the current frontend state
                 if (progressEntries.length === 0) return;

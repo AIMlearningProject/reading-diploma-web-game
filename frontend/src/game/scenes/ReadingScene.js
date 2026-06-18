@@ -46,11 +46,9 @@ class ReadingScene extends Phaser.Scene {
         const isLandscape = width > height && height < 600;
         const isDesktop = width >= 1024;
 
-        let paperWidth = width * 0.94;
-        if (width >= 768 && width < 1024) paperWidth = width * 0.85;
-        if (isDesktop) paperWidth = Math.min(width * 0.7, 800);
+        const paperWidth = isDesktop ? Math.min(width * 0.7, 800) : width * (width >= 768 && width < 1024 ? 0.85 : 0.94);
 
-        const paperHeight = isLandscape ? height * 0.98 : height * 0.92;
+        const paperHeight = height * (isLandscape ? 0.98 : 0.92);
         const centerX = width / 2;
         const centerY = height / 2;
         const paperTop = centerY - paperHeight / 2;
@@ -197,7 +195,7 @@ class ReadingScene extends Phaser.Scene {
     }
 
     // Not used (already happens in saveLevelComplete), but keeping the logic here in case we want to trigger map unlock immediately after reading completion in the future
-    handleMapUnlock() {
+    /*handleMapUnlock() {
         if (!ReadingState.completedBookIds[this.bookData.id]) {
             ReadingState.completedBookIds[this.bookData.id] = true;
             ReadingState.booksRead += 1;
@@ -212,7 +210,7 @@ class ReadingScene extends Phaser.Scene {
         // Save level completion to backend (fire-and-forget)
         const userId = this.game.registry.get('userId');
         ReadingState.saveLevelComplete(this.sourceMap, userId);
-    }
+    }*/
 
     exitScene() {
         this.scale.off('resize', this.initializeUI, this);

@@ -88,10 +88,7 @@ export default class VideoPopupModal {
         btnBg.on('pointerout', () => btnBg.setFillStyle(0xc4973a));
 
         btnBg.on('pointerdown', () => {
-            let targetVideoId = 'TZoNz-2rk8c';
-            if (String(index) === '7') {
-                targetVideoId = 'jDZcdgDgM48';
-            }
+            const targetVideoId = String(index) === '7' ? 'jDZcdgDgM48' : 'TZoNz-2rk8c';
 
             const embedUrl = `https://www.youtube.com/embed/${targetVideoId}?autoplay=1&rel=0&modestbranding=1`;
 
@@ -126,10 +123,10 @@ export default class VideoPopupModal {
                     </div>
                 </div>
             `;
-            document.body.appendChild(videoOverlay);
+            document.body.append(videoOverlay);
             document.getElementById('close-dom-video').onclick = () => {
                 const el = document.getElementById('video-dom-layer');
-                if (el) document.body.removeChild(el);
+                if (el) el.remove();
             };
             cleanup();
         });
@@ -140,7 +137,7 @@ export default class VideoPopupModal {
         this._escHandler = (e) => {
             if (e.key === 'Escape') {
                 const domLayer = document.getElementById('video-dom-layer');
-                if (domLayer) document.body.removeChild(domLayer);
+                if (domLayer) domLayer.remove();
                 cleanup();
             }
         };

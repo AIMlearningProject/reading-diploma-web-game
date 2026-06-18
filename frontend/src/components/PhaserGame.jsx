@@ -1,5 +1,5 @@
 // src/components/PhaserGame.jsx
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Phaser from 'phaser';
@@ -21,12 +21,12 @@ export default function PhaserGame() {
     const parentEl = containerRef.current;
     if (!parentEl) return;
 
-    let cancelled = false;
+    let isCancelled = false;
 
     const init = async () => {
       // Load progress from backend before Phaser starts
       await ReadingState.loadFromBackend();
-      if (cancelled) return;
+      if (isCancelled) return;
 
       const initW = parentEl.clientWidth;
       const initH = parentEl.clientHeight;
@@ -66,7 +66,7 @@ export default function PhaserGame() {
     init();
 
     return () => {
-      cancelled = true;
+      isCancelled = true;
       window.openReactQuiz = null;
       if (gameRef.current) {
         if (gameRef.current._resizeObserver) {

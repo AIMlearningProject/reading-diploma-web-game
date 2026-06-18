@@ -54,7 +54,7 @@ export default class TokenManager {
         const moveStep = (current) => {
             if (current === toIndex) {
                 this.token.lastPointIndex = toIndex;
-                ReadingState.tokenPositions = ReadingState.tokenPositions || {};
+                ReadingState.tokenPositions ||= {};
                 ReadingState.tokenPositions[sceneKey] = toIndex;
                 if (onComplete) onComplete(toIndex);
                 return;
@@ -84,7 +84,7 @@ export default class TokenManager {
         const pos = pointPositions[index];
         this.token.setPosition(pos.x, pos.y);
         this.token.lastPointIndex = index;
-        ReadingState.tokenPositions = ReadingState.tokenPositions || {};
+        ReadingState.tokenPositions ||= {};
         ReadingState.tokenPositions[sceneKey] = index;
         scene.cameras.main.startFollow(this.token, true, 1, 1);
     }

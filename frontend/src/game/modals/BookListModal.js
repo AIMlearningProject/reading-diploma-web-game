@@ -124,14 +124,14 @@ export default class BookListModal {
         const contentH = availableBooks.length * (100 * uiScale);
         const maxY = listY;
         const minY = contentH <= viewH ? maxY : listY - (contentH - viewH);
-        let dragging = false, startY = 0, lastD = 0, vel = 0, touchStartTime = 0, rawStartY = 0;
+        let isDragging = false, startY = 0, lastD = 0, vel = 0, touchStartTime = 0, rawStartY = 0;
 
         scrollHitArea.on('wheel', (pointer, deltaX, deltaY) => {
             scrollContainer.y = Phaser.Math.Clamp(scrollContainer.y - deltaY * 0.5, minY, maxY);
         });
 
         scrollHitArea.on('pointerdown', p => {
-            dragging = true;
+            isDragging = true;
             startY = p.y;
             rawStartY = p.y;
             touchStartTime = Date.now();
@@ -139,7 +139,7 @@ export default class BookListModal {
         });
 
         scrollHitArea.on('pointermove', p => {
-            if (!dragging) return;
+            if (!isDragging) return;
             const d = (p.y - startY) * (isMobile ? 1.5 : 1);
             startY = p.y;
             scrollContainer.y = Phaser.Math.Clamp(scrollContainer.y + d, minY, maxY);
@@ -147,7 +147,7 @@ export default class BookListModal {
         });
 
         scrollHitArea.on('pointerup', p => {
-            dragging = false;
+            isDragging = false;
             const duration = Date.now() - touchStartTime;
             const totalDist = Math.abs(p.y - rawStartY);
 

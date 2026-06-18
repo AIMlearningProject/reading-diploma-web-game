@@ -1,7 +1,7 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import { fetchBooks } from '../services/api';
 
-const BooksContext = createContext({ books: [], setBooks: () => { } });
+const BooksContext = createContext({ books: [], setBooks: () => {} });
 
 export function BooksProvider({ children }) {
     const [books, setBooks] = useState([]);

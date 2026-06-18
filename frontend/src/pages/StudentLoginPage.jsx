@@ -72,7 +72,7 @@ function StudentLoginPage() {
                     </button>
                 </form>
                 <div className="login-divider"><span>tai</span></div>
-                <button type="button" className="google-button" onClick={() => window.location.href = '/auth/google'}>
+                <button type="button" className="google-button" onClick={() => window.location.assign('/auth/google')}>
                     Kirjaudu Google-tilillä
                 </button>
             </div>

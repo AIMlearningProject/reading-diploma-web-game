@@ -6,16 +6,12 @@ class ApiError extends Error {
 }
 
 export const getCsrfToken = () => {
-    const match = document.cookie.match(new RegExp('(^| )' + 'X-CSRF-TOKEN' + '=([^;]+)'))
-    return match ? decodeURIComponent(match[2]) : null
+    const match = document.cookie.match(new RegExp('(^| )X-CSRF-TOKEN=([^;]+)'))
+    return match ? decodeURIComponent(match[2]) : undefined
 }
 
 async function request(path, options = {}) {
-    let csrfToken = ''
-
-    if (!!options?.method) {
-        csrfToken = getCsrfToken()
-    }
+    const csrfToken = options?.method ? getCsrfToken() : ''
 
     const headers = {
         'X-CSRF-TOKEN': csrfToken
@@ -31,12 +27,11 @@ async function request(path, options = {}) {
         ...options,
     });
     if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
+        const body = await res.json();
         const msg = body.error || body.message || res.statusText;
         throw new ApiError(res.status, msg);
     }
-    if (res.statusText === 'No Content' || res.status === 204) return res
-    else return res.json();
+    return res.statusText === 'No Content' || res.status === 204 ? res : res.json();
 }
 
 // Auth endpoints

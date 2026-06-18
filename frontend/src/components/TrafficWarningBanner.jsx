@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './TrafficWarningBanner.css';
 
 const LOCAL_STORAGE_KEY = 'trafficWarningBannerDismissed';

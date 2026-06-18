@@ -6,7 +6,7 @@ function TeacherLoginPage() {
     const navigate = useNavigate()
 
     const handleGoogleLogin = () => {
-        window.location.href = '/auth/google'
+        window.location.assign('/auth/google')
     }
 
     return (

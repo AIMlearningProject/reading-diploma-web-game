@@ -86,10 +86,10 @@ class WorldMapScene extends Phaser.Scene {
 
             const latestMapKey = getLatestUnlockedMapKey();
 
-            Object.entries(continentPositions).forEach(([key, pos]) => {
+            Object.entries(continentPositions).forEach(([_key, pos]) => {
                 const finalX = pos.x * currentZoomScale;
                 const finalY = pos.y * currentZoomScale;
-                const unlocked = ReadingState.mapUnlock[pos.mapKey] === true;
+                const isUnlocked = ReadingState.mapUnlock[pos.mapKey] === true;
                 const isCurrent = pos.mapKey === latestMapKey;
 
                 // Don't draw a circle dot for the current continent — panda replaces it
@@ -100,21 +100,21 @@ class WorldMapScene extends Phaser.Scene {
                         finalX,
                         finalY,
                         40 * currentZoomScale,
-                        unlocked
-                            ? isResubmittable
+                        isUnlocked
+                            ? (isResubmittable
                                 ? 0x9a73f5
-                                : 0x00ff00
+                                : 0x00ff00)
                             : 0x555555,
                         0.4
                     );
-                    if (unlocked) btn.setInteractive({ useHandCursor: true }).on('pointerdown', () => this.scene.start(pos.mapKey));
+                    if (isUnlocked) btn.setInteractive({ useHandCursor: true }).on('pointerdown', () => this.scene.start(pos.mapKey));
                     this.pointGroup.add(btn);
                 }
 
                 const labelFontSize = Math.round(16 * currentZoomScale);
                 const txt = this.add.text(0, 0, pos.name, {
                     fontFamily: '"Cinzel", serif', fontSize: `${labelFontSize}px`,
-                    color: unlocked ? '#ffffff' : '#bbbbbb', fontStyle: 'bold',
+                    color: isUnlocked ? '#ffffff' : '#bbbbbb', fontStyle: 'bold',
                 }).setOrigin(0.5);
 
                 // Background behind label
@@ -123,7 +123,7 @@ class WorldMapScene extends Phaser.Scene {
                 const pillW = txt.width + pillPadH * 2;
                 const pillH = txt.height + pillPadV * 2;
                 const pillBg = this.add.graphics();
-                pillBg.fillStyle(0x000000, unlocked ? 0.55 : 0.4).fillRect(-pillW / 2, -pillH / 2, pillW, pillH);
+                pillBg.fillStyle(0x000000, isUnlocked ? 0.55 : 0.4).fillRect(-pillW / 2, -pillH / 2, pillW, pillH);
 
                 const labelContainer = this.add.container(finalX, finalY + (55 * currentZoomScale), [pillBg, txt])
                     .setDepth(5);
