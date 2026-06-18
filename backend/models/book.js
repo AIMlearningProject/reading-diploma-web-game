@@ -7,10 +7,10 @@ const Book = {
             .returning('*')
     },
 
-    async findByTitle(title, dbConn = db) {
+    async findByTitleAndAuthor(title, author, dbConn = db) {
         return dbConn('books')
             .select('title', 'author', 'coverimage', 'booktype', 'content')
-            .where({ title })
+            .where({ title, author })
             .first()
     },
 

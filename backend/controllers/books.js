@@ -5,6 +5,7 @@ import multer from 'multer'
 import middleware from '../utils/middleware.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { promises as fs } from 'fs'
 
 const booksRouter = express.Router()
 
@@ -23,18 +24,9 @@ const bookSchema = z.object({
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const coverUploadDir = path.resolve(__dirname, '../public/uploads/book-covers')
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, coverUploadDir),
-    filename: (req, file, cb) => {
-        const safeName = file.originalname.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9.-]/g, '')
-        cb(null, `${Date.now()}-${safeName}`)
-    }
-})
-
 const allowedImageTypes = ['image/jpeg', 'image/png', 'image/jfif', 'image/webp']
 const upload = multer({
-    storage,
+    storage: multer.memoryStorage(),
     limits: { fileSize: 2 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         if (!allowedImageTypes.includes(file.mimetype)) {
@@ -71,8 +63,6 @@ booksRouter.post('/',
     upload.single('coverimage'),
     middleware.zValidate(bookSchema),
     async (request, response, next) => {
-        // request.validated imported from zValidate disallows unknown fields and incorrect data types
-        // and returns the validated request body
         const { title, author, booktype, content } = request.validated
 
         if (!request.file) {
@@ -80,17 +70,26 @@ booksRouter.post('/',
         }
 
         try {
+            // Generate a safe filename
+            const safeName = request.file.originalname.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9.-]/g, '')
+            const filename = `${Date.now()}-${safeName}`
+
             const newBook = {
                 title,
                 author,
-                coverimage: `/uploads/book-covers/${request.file.filename}`,
+                coverimage: `/uploads/book-covers/${filename}`,
                 booktype,
                 content
             }
 
             await BookService.addBook(newBook)
-            response.status(201).json(newBook)
 
+            // Write file to disk only after all validations have passed
+            const coverUploadDir = path.resolve(__dirname, '../public/uploads/book-covers')
+            const filepath = path.join(coverUploadDir, filename)
+            await fs.writeFile(filepath, request.file.buffer)
+
+            response.status(201).json(newBook)
         } catch (error) {
             next(error)
         }

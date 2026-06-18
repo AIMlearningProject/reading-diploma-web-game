@@ -2,9 +2,10 @@ import Book from '../models/book.js'
 
 const BookService = {
     async addBook({ title, author, coverimage, booktype, content }) {
-        const existing = await Book.findByTitle(title)
+        const existing = await Book.findByTitleAndAuthor(title, author)
         if (existing) {
-            const err = new Error(`A book with the title '${title}' already exists`)
+            const err = new Error(`A book with the title and author '${title}' - '${author}' already exists`)
+            err.userDetails = `Kirjoittajan: '${author}' kirjoittama kirja: '${title}' on jo lisätty`
             err.status = 400
             throw err
         }
@@ -22,6 +23,7 @@ const BookService = {
         const books = await Book.getAll()
         if (!books) {
             const err = new Error(`No books were found`)
+            err.userDetails = 'Kirjoja ei vielä lisätty'
             err.status = 404
             throw err
         }
@@ -32,6 +34,7 @@ const BookService = {
         const book = await Book.findBookById(id)
         if (!book) {
             const err = new Error(`Book not found`)
+            err.userDetails = 'Kirjaa ei löytynyt'
             err.status = 404
             throw err
         }
@@ -42,6 +45,7 @@ const BookService = {
         const book = await Book.findBookById(id)
         if (!book) {
             const err = new Error(`Book not found`)
+            err.userDetails = 'Kirjaa ei löytynyt'
             err.status = 404
             throw err
         }
