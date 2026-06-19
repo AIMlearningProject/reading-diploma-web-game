@@ -229,7 +229,8 @@ const styles = {
 
     list: {
         maxHeight: '60vh',
-        overflowY: 'auto'
+        overflowY: 'auto',
+        padding: '0px 4px',
     },
 
     bookRow: {
@@ -277,7 +278,8 @@ const styles = {
 
     bookProgress: {
         fontWeight: 'bold',
-        color: '#d4af37'
+        color: '#d4af37',
+        marginLeft: 5
     },
 
     bookProgressDone: {
