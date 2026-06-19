@@ -156,19 +156,19 @@ const ReadingState = {
 
             // --- 1. Prioritize handling the book list (ensure Book List does not disappear due to progress errors) ---
             if (booksData.status === 'fulfilled' && Array.isArray(booksData.value) && booksData.value.length > 0) {
-                    this.globalBooks = booksData.value.map(b => ({
-                        title: b.title,
-                        author: b.author,
-                        id: String(b.id),
-                        dbId: b.id
-                    }));
-                }
+                this.globalBooks = booksData.value.map(b => ({
+                    title: b.title,
+                    author: b.author,
+                    id: String(b.id),
+                    dbId: b.id
+                }));
+            }
 
             // --- 2. Handle progress and unlocking logic ---
             if (progressData.status === 'fulfilled' && Array.isArray(progressData.value)) {
                 const progressEntries = progressData.value;
                 const submissionEntries = submissionsData.status === 'fulfilled' && Array.isArray(submissionsData.value) ? submissionsData.value : []
-                
+
                 // If the backend returns no data at all, skip directly and keep the current frontend state
                 if (progressEntries.length === 0) return;
 
@@ -194,7 +194,7 @@ const ReadingState = {
                     const mapKey = this.mapOrder[i]; // Name of level
                     const progressEntry = progressByLevel[level]; // Progress data for this level
                     const submissionEntry = submissionByLevelId[progressEntry.id]; // Submission data for this level
-                    
+
                     if (!progressEntry) continue;
 
                     // Restore book binding
@@ -205,15 +205,17 @@ const ReadingState = {
                     // Save level progress for each map (id is needed in submitQuizAnswers)
                     this.progressEntriesByMapKey[mapKey] = progressEntry || {};
 
+                    if (progressEntry.current_progress === 100 || progressEntry.level_status !== 'incomplete') {
+                        this.completedBookIds[String(progressEntry.book)] = true;
+                    }
+
                     // Restore progress percentage
-                    if (progressEntry.current_progress != null) {
-                        const cfg = this.mapConfig[mapKey];
-                        if (cfg) {
-                            this[cfg.storage] = progressEntry.current_progress;
-                        }
-                        if (progressEntry.book) {
-                            this.bookProgress[String(progressEntry.book)] = progressEntry.current_progress;
-                        }
+                    const cfg = this.mapConfig[mapKey];
+                    if (cfg) {
+                        this[cfg.storage] = progressEntry.current_progress;
+                    }
+                    if (progressEntry.book) {
+                        this.bookProgress[String(progressEntry.book)] = progressEntry.current_progress;
                     }
 
                     if (submissionEntry) {
@@ -242,16 +244,16 @@ const ReadingState = {
                         if (hasSubmission && !isLevelComplete) {
                             this.levelsPendingResubmission[mapKey] = true;
                         }
-                        
+
                         // Unlock the next level
                         if (i + 1 < this.mapOrder.length) {
                             const nextMapKey = this.mapOrder[i + 1];
-                            this.mapUnlock[nextMapKey] = true; 
+                            this.mapUnlock[nextMapKey] = true;
                             console.log(`Detected level ${level} completed or pending resubmission, auto-unlocking: ${nextMapKey}`);
                         }
                     }
                 }
-                
+
                 // [Note]: Directly modifying properties of this.mapUnlock is sufficient,
                 // no need to reassign a newUnlocks object,
                 // this avoids assignment failure caused by variable scope issues.
@@ -289,7 +291,7 @@ const ReadingState = {
         if (level < this.mapOrder.length) {
             this.mapUnlock[this.mapOrder[level]] = true;
         }
-        
+
         try {
             await completeLevel(level, userId);
             // Mark the bound book as completed when a level is completed
@@ -337,7 +339,7 @@ const ReadingState = {
     async submitQuizAnswers(mapKey, questions, answers) {
         const progressId = this.progressEntriesByMapKey[mapKey].id;
         const isResubmission = this.isLevelPendingResubmission(mapKey)
-            
+
         try {
             if (!progressId) {
                 console.warn(`No progressId found for ${mapKey}`);

@@ -6,14 +6,16 @@ import Phaser from 'phaser';
 import createGameConfig from '../game/config.js';
 import ReadingState from '../game/state.js';
 import ReactQuiz from './ReactQuiz';
+import BookListPanel from './BookListPanel';
 
 export default function PhaserGame() {
   const containerRef = useRef(null);
-  const gameRef      = useRef(null);
-  const navigate     = useNavigate();
-  const { user }     = useAuth();
+  const gameRef = useRef(null);
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [quizInfo, setQuizInfo] = useState({ visible: false, mapKey: null });
+  const [bookListInfo, setBookListInfo] = useState({ visible: false, mapKey: null });
 
   useEffect(() => {
     if (gameRef.current) return;
@@ -32,7 +34,7 @@ export default function PhaserGame() {
       const initH = parentEl.clientHeight;
 
       const config = createGameConfig(parentEl, initW, initH);
-      const game   = new Phaser.Game(config);
+      const game = new Phaser.Game(config);
 
       // Pass userId for backend API calls in Phaser scenes
       game.registry.set('userId', user?.id);
@@ -41,12 +43,24 @@ export default function PhaserGame() {
       // Return navigation logic
       game.handleBackNavigation = () => {
         if (user?.role === 'teacher') navigate('/teacher/dashboard');
-        else                          navigate('/student/dashboard');
+        else navigate('/student/dashboard');
       };
 
       // React wake-up logic for quiz overlay
       window.openReactQuiz = (mapKey) => {
         setQuizInfo({ visible: true, mapKey: mapKey });
+      };
+      // React wake-up logic for book list overlay
+      window.openReactBookList = (mapKey) => {
+        if (ReadingState._continentCompletedFlags?.[mapKey] === true) {
+          return 'completed';
+        }
+        if (ReadingState.isLevelPendingResubmission(mapKey)) {
+          window.openReactQuiz(mapKey);
+          return;
+        }
+        setBookListInfo({ visible: true, mapKey });
+        return;
       };
 
       gameRef.current = game;
@@ -68,6 +82,7 @@ export default function PhaserGame() {
     return () => {
       isCancelled = true;
       window.openReactQuiz = null;
+      window.openReactBookList = null;
       if (gameRef.current) {
         if (gameRef.current._resizeObserver) {
           gameRef.current._resizeObserver.disconnect();
@@ -94,6 +109,20 @@ export default function PhaserGame() {
             if (gameRef.current) {
               const activeScenes = gameRef.current.scene.getScenes(true);
               if (activeScenes.length > 0) activeScenes[0].isDoingQuiz = false;
+            }
+          }}
+        />
+      )}
+
+      {bookListInfo.visible && (
+        <BookListPanel
+          mapKey={bookListInfo.mapKey}
+          onClose={() => setBookListInfo({ visible: false, mapKey: null })}
+          onSelect={(book) => {
+            setBookListInfo({ visible: false, mapKey: null });
+            if (gameRef.current) {
+              const activeScenes = gameRef.current.scene.getScenes(true);
+              if (activeScenes.length > 0) activeScenes[0].events.emit('book-selected', book);
             }
           }}
         />

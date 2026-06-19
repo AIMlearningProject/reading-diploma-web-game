@@ -277,10 +277,12 @@ class BaseMapScene extends Phaser.Scene {
 
     showBookList() {
         const mapKey = this.scene.key;
+        /*
+        // Booklist using the BookListModal system.
         const result = this.bookListModal.show(mapKey, async (book, key, mapCfg, isCompleted) => {
             if (!isCompleted) {
-                ReadingState.mapSelectedBook[key] = book.id;
-                await ReadingState.saveBookSelection(key, Number(book.id));
+                ReadingState.mapSelectedBook[mapKey] = book.id;
+                await ReadingState.saveBookSelection(mapKey, Number(book.id));
             }
             const bookData = await BookFetcher.fetchAndLaunch(
                 this, book, mapCfg, isCompleted, this.bookIconContainer
@@ -290,7 +292,37 @@ class BaseMapScene extends Phaser.Scene {
         const isResubmittable = ReadingState.isLevelPendingResubmission(mapKey)
         if (result === 'completed' || isResubmittable) {
             this.showStoryQuiz();
+        }*/
+        // New booklist using the BooListPanel React component
+        const result = window.openReactBookList ? window.openReactBookList(mapKey) : undefined;
+
+        const isResubmittable = ReadingState.isLevelPendingResubmission(mapKey)
+        if (result === 'completed' || isResubmittable) {
+            this.showStoryQuiz();
         }
+
+        const onBookSelected = async (book) => {
+            // Clean up handler immediately on selection
+            this.events.off('book-selected', onBookSelected);
+            
+            if (!book) return;
+
+            const mapCfg = ReadingState.mapConfig[mapKey];
+            const isCompleted = !!(ReadingState.completedBookIds || {})[book.id];
+
+            if (!isCompleted) {
+                ReadingState.mapSelectedBook[mapKey] = book.id;
+                await ReadingState.saveBookSelection(mapKey, Number(book.id));
+            }
+
+            const bookData = await BookFetcher.fetchAndLaunch(
+                this, book, mapCfg, isCompleted, this.bookIconContainer
+            );
+            this.launchReading(mapCfg, bookData);
+        };
+
+        // Use once so it auto-cleans up if user selects a book
+        this.events.once('book-selected', onBookSelected);
     }
 
     showVideoPopup(videoData, index, isManual) {
