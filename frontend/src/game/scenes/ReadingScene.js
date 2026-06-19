@@ -78,7 +78,9 @@ class ReadingScene extends Phaser.Scene {
         // --- 4. Progress Bar (New location: below the author) ---
         const savedPct = ReadingState.bookProgress[this.bookData.id] || 0;
         const barY = authorTxt.y + authorTxt.height + (isLandscape ? 15 : 25);
-        this.barW = paperWidth * 0.7; 
+        this.barW = paperWidth * 0.7;
+        this.lastSavedBucket = Math.floor(savedPct / 10);
+        this.lastSavedBucketSavedAt = Date.now();
         
         const barBg = this.add.rectangle(centerX, barY, this.barW, 6, 0xe6e0d0).setOrigin(0.5);
         this.barFill = this.add.rectangle(centerX - this.barW / 2, barY, (savedPct / 100) * this.barW, 6, 0x1e3a5f).setOrigin(0, 0.5);
@@ -160,6 +162,7 @@ class ReadingScene extends Phaser.Scene {
             scrollDiv.addEventListener('scroll', () => {
                 const maxScroll = scrollDiv.scrollHeight - scrollDiv.clientHeight;
                 const currentPct = maxScroll > 0 ? Math.round((scrollDiv.scrollTop / maxScroll) * 100) : 0;
+                const currentBucket = Math.floor(currentPct / 10);
                 
                 // Real-time UI synchronization
                 this.barFill.width = (currentPct / 100) * this.barW;
@@ -168,6 +171,15 @@ class ReadingScene extends Phaser.Scene {
                 // Real-time synchronization to ReadingState (preserving original logic)
                 ReadingState.progress = currentPct;
                 ReadingState.bookProgress[this.bookData.id] = currentPct;
+
+                // Save progress to backend on 10% increments, but only once every 5 seconds.
+                const now = Date.now();
+                const elapsedMs = now - (this.lastSavedBucketSavedAt || 0);
+                if (!this.readOnly && this.sourceMap && currentBucket !== this.lastSavedBucket && elapsedMs >= 5000) {
+                    this.lastSavedBucket = currentBucket;
+                    this.lastSavedBucketSavedAt = now;
+                    ReadingState.saveCurrentProgress(this.sourceMap, currentPct);
+                }
             });
         }
 
@@ -189,6 +201,7 @@ class ReadingScene extends Phaser.Scene {
                     // if (finalPct >= 100) this.handleMapUnlock();
                     // Call handleMapUnlock after the quiz has been submitted 
                 }
+                ReadingState.saveCurrentProgress(this.sourceMap, finalPct);
             }
         }
         this.exitScene();

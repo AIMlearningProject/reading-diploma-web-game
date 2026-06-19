@@ -56,6 +56,14 @@ const Progress = {
             .update({ level_status: 'complete' })
             .returning('*')
     },
+    async updateCurrentProgress(level, user, current_progress, dbConn = db) {
+        level = Number(level)
+        user = Number(user)
+        return dbConn('progress')
+            .where({ level, user })
+            .update({ current_progress: current_progress })
+            .returning('*')
+    },
     async changeLevelStatus(level, user, status, dbConn = db) {
         level = Number(level)
         user = Number(user)

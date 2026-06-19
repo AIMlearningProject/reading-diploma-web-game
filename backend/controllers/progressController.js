@@ -27,6 +27,10 @@ const addBookToEntrySchema = z.object({
     book: z.number()
 }).strict()
 
+const CurrentProgressSchema = z.object({
+    current_progress: z.number().min(0).max(100)
+}).strict()
+
 progressRouter.get('/', middleware.requireAuthentication(true), async (request, response, next) => {
     try {
         const progress = await ProgressService.findByUser(request.user.id)
@@ -90,6 +94,18 @@ progressRouter.put('/:level/completed', middleware.requireAuthentication(true), 
     try {
         await ProgressService.completeLevel(level, { user })
         response.status(200).json('Level marked as completed successfully!')
+    } catch (error) {
+        next(error)
+    }
+})
+
+progressRouter.put('/:level/current-progress', middleware.requireAuthentication(true), middleware.zValidate(CurrentProgressSchema), async (request, response, next) => {
+    const level = request.params.level
+    const { current_progress } = request.validated
+
+    try {
+        const progressEntry = await ProgressService.updateCurrentProgress(level, { user: request.user.id, current_progress })
+        response.status(200).json(progressEntry)
     } catch (error) {
         next(error)
     }

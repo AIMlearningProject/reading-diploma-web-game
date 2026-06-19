@@ -33,6 +33,17 @@ const ProgressService = {
         return Progress.completeLevel(level, user)
     },
 
+    async updateCurrentProgress(level, { user, current_progress }) {
+        const found = await Progress.findSpecificEntry(level, user)
+        if (!found) {
+            const err = new Error(`Level: ${level} has no entry for this user`)
+            err.userDetails = 'Sinulla ei ole tätä tasoa'
+            err.status = 404
+            throw err
+        }
+        return Progress.updateCurrentProgress(level, user, current_progress)
+    },
+
     async changeLevelStatus(level, { user, status, teacherId }) {
         // Check that the teacher is the teacher of the student for this level
         const entry = await Progress.findSpecificEntryByUserAndTeacher(level, user, teacherId)

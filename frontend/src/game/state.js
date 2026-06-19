@@ -12,6 +12,7 @@ import {
     addBookToLevel,
     addReward,
     completeLevel,
+    updateLevelProgress,
     fetchBooks,
     fetchProgress,
     fetchSubmissions,
@@ -49,7 +50,8 @@ const ReadingState = {
 
     // Tracks which levels need resubmission (incomplete but have existing submission)
     levelsPendingResubmission: {},
-    progressIdsByMapKey: {},
+
+    progressEntriesByMapKey: {},
 
     /**
      * A global list of 10 books (from your original main.js's globalBooks).
@@ -195,13 +197,13 @@ const ReadingState = {
                     
                     if (!progressEntry) continue;
 
-                    // Store the progress ID for later use in submitQuizAnswers
-                    this.progressIdsByMapKey[mapKey] = progressEntry.id;
-
                     // Restore book binding
                     if (progressEntry.book) {
                         this.mapSelectedBook[mapKey] = String(progressEntry.book);
                     }
+
+                    // Save level progress for each map (id is needed in submitQuizAnswers)
+                    this.progressEntriesByMapKey[mapKey] = progressEntry || {};
 
                     // Restore progress percentage
                     if (progressEntry.current_progress != null) {
@@ -266,6 +268,7 @@ const ReadingState = {
     async saveBookSelection(mapKey, bookId) {
         const level = this.mapOrder.indexOf(mapKey) + 1;
         if (level < 1) return;
+        this.progressEntriesByMapKey[mapKey].book = bookId
         try {
             await addBookToLevel(level, bookId);
         } catch (err) {
@@ -281,6 +284,7 @@ const ReadingState = {
         if (level < 1) return;
         if (!this._continentCompletedFlags) this._continentCompletedFlags = {};
         this._continentCompletedFlags[mapKey] = true;
+        this.progressEntriesByMapKey[mapKey].level_status = 'complete'
         // Unlock next level
         if (level < this.mapOrder.length) {
             this.mapUnlock[this.mapOrder[level]] = true;
@@ -303,10 +307,35 @@ const ReadingState = {
     },
 
     /**
+     * Update level progress (percentage)
+     */
+    async saveCurrentProgress(mapKey, currentProgress) {
+        const level = this.mapOrder.indexOf(mapKey) + 1;
+        if (level < 1) return;
+        this.progressEntriesByMapKey[mapKey].current_progress = currentProgress;
+
+        const cfg = this.mapConfig[mapKey];
+        if (cfg) {
+            this[cfg.storage] = currentProgress;
+        }
+
+        const boundBookId = this.mapSelectedBook[mapKey];
+        if (boundBookId) {
+            this.bookProgress[String(boundBookId)] = currentProgress;
+        }
+
+        try {
+            await updateLevelProgress(level, currentProgress);
+        } catch (err) {
+            console.warn(`Failed to save current progress for ${mapKey}:`, err);
+        }
+    },
+
+    /**
      * Submit quiz answers to backend.
      */
     async submitQuizAnswers(mapKey, questions, answers) {
-        const progressId = this.progressIdsByMapKey[mapKey];
+        const progressId = this.progressEntriesByMapKey[mapKey].id;
         const isResubmission = this.isLevelPendingResubmission(mapKey)
             
         try {

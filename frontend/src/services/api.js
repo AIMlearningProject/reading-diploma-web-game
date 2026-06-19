@@ -59,6 +59,12 @@ export function completeLevel(level, userId) {
         body: JSON.stringify({ user: userId }),
     });
 }
+export function updateLevelProgress(level, currentProgress) {
+    return request(`/api/progress/${level}/current-progress`, {
+        method: 'PUT',
+        body: JSON.stringify({ current_progress: currentProgress }),
+    });
+}
 export function addBookToLevel(level, bookId) {
     return request(`/api/progress/${level}/add-book`, {
         method: 'PUT',
