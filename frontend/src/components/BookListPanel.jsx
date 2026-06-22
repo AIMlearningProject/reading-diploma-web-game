@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import ReadingState from '../game/state.js';
+import BookSearchBar from './BookSearchBar';
 
 export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10 }) {
     const allBooks = ReadingState.globalBooks || [];
@@ -60,30 +61,18 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
                 <button onClick={onClose} style={styles.cancelButton}>X Peruuta</button>
             </div>
             <div style={styles.container}>
-                <div style={styles.searchRow}>
-                    <input
-                        value={query}
-                        onChange={e => setQuery(e.target.value)}
-                        placeholder="Hae kirjaa tai tekijää"
-                        style={styles.searchInput}
-                    />
-                </div>
-
-                <div style={styles.pager}>
-                    <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} style={styles.pagerButton}>{'<'}</button>
-                    <div style={styles.pagerStatus}>{page + 1}/{totalPages}</div>
-                    <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} style={styles.pagerButton}>{'>'}</button>
-
-                    <label style={styles.hideReadLabel}>
-                        <input
-                            type="checkbox"
-                            checked={hideRead}
-                            onChange={e => setHideRead(e.target.checked)}
-                            style={styles.hideReadCheckbox}
-                        />
-                        <span style={styles.hideReadText}>Piilota luetut</span>
-                    </label>
-                </div>
+                <BookSearchBar
+                    query={query}
+                    onQueryChange={setQuery}
+                    role={"student"}
+                    page={page}
+                    totalPages={totalPages}
+                    onPrevPage={() => setPage(p => Math.max(0, p - 1))}
+                    onNextPage={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                    hideRead={hideRead}
+                    onToggleHideRead={setHideRead}
+                    styles={styles}
+                />
 
                 <div style={styles.list}>
                     {pageSlice.map(book => (

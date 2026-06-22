@@ -7,6 +7,7 @@ CLAUDE.md
 .claude/
 learn.md
 bash.exe.stackdump
+backend/public/uploads/
 
 # Node.js specific ignores
 # backend/pnpm-lock.yaml

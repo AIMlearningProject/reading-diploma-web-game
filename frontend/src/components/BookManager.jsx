@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { fetchBooks, createBook } from '../services/api'
+import BookSearchBar from './BookSearchBar'
 
 function BookManager() {
     const [books, setBooks] = useState([])
@@ -10,6 +11,27 @@ function BookManager() {
     const [error, setError] = useState('')
     const formRef = useRef(null)
     const fileInputRef = useRef(null)
+
+    const [query, setQuery] = useState('');
+    const [page, setPage] = useState(0);
+    const pageSize = 10;
+
+    const sorted = useMemo(() => {
+        // Sorts books alphabetically by title
+        return books.slice().toSorted((a, b) => {
+            return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
+        });
+    }, [books]);
+
+    const filtered = sorted.filter(b =>
+        `${b.title} ${b.author}`.toLowerCase().includes(query.toLowerCase())
+    );
+
+    const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+    const pageSlice = filtered.slice(page * pageSize, (page + 1) * pageSize);
+
+    const isPrevPagerBtnDisabled = page === 0;
+    const isNextPagerBtnDisabled = page >= totalPages - 1;
 
     const fetchMyBooks = async () => {
         try {
@@ -62,37 +84,111 @@ function BookManager() {
         <div className="dashboard-section">
             <h2>Kirjat</h2>
             {books.length > 0 ? (
-                <table className="data-table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Nimi</th>
-                            <th>Kirjoittaja</th>
-                            <th>Tyyppi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {books.map((b) => (
-                            <tr key={b.id}>
-                                <td>
-                                    <img
-                                        className="book-cover-thumb"
-                                        src={b.coverimage}
-                                        alt={b.title}
-                                        onError={(e) => {
-                                            e.currentTarget.style.display = "none";
-                                        }}
-                                    />
-                                </td>
-                                <td data-label="Nimi"> {b.title}</td>
-                                <td data-label="Kirjoittaja"> {b.author}</td>
-                                <td data-label="Tyyppi">
-                                    {typeFi[b.booktype] ?? b.booktype}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <>
+                    <BookSearchBar
+                        query={query}
+                        onQueryChange={(q) => {
+                            setQuery(q);
+                            setPage(0);
+                        }}
+                        role={"teacher"}
+                        page={page}
+                        totalPages={totalPages}
+                        onPrevPage={() => setPage(p => Math.max(0, p - 1))}
+                        onNextPage={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                        styles={styles}
+                    />
+                    {pageSlice.length > 0 ? (
+                        <>
+                            <table className="data-table">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Nimi</th>
+                                        <th>Kirjoittaja</th>
+                                        <th>Tyyppi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {pageSlice.map((b) => (
+                                        <tr key={b.id}>
+                                            <td>
+                                                <img
+                                                    className="book-cover-thumb"
+                                                    src={b.coverimage}
+                                                    alt={b.title}
+                                                    onError={(e) => {
+                                                        e.currentTarget.style.display = "none";
+                                                        e.currentTarget.style.width = "0";
+                                                        e.currentTarget.style.height = "0";
+                                                    }}
+                                                />
+                                            </td>
+                                            <td data-label="Nimi"> {b.title}</td>
+                                            <td data-label="Kirjoittaja"> {b.author}</td>
+                                            <td data-label="Tyyppi"> {typeFi[b.booktype] ?? b.booktype}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {/* Pager buttons < X/X > */}
+                            <div style={styles.pager}>
+                                <button
+                                    onClick={() => setPage(p => Math.max(0, p - 1))}
+                                    disabled={page === 0}
+                                    style={isPrevPagerBtnDisabled ? ({
+                                        ...styles.pagerButton,
+                                        cursor: 'default'
+                                    }) : ({
+                                        ...styles.pagerButton,
+                                        cursor: 'pointer',
+                                        backgroundColor: 'transparent',
+                                        color: '#9E7A2A',
+                                        borderColor: '#9E7A2A',
+                                    })}
+                                >
+                                    {'<'}
+                                </button>
+
+                                <div style={styles.pagerStatus}>
+                                    {page + 1}/{totalPages}
+                                </div>
+
+                                <button
+                                    onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                                    disabled={page >= totalPages - 1}
+                                    style={isNextPagerBtnDisabled ? ({
+                                        ...styles.pagerButton,
+                                        cursor: 'default'
+                                    }) : ({
+                                        ...styles.pagerButton,
+                                        cursor: 'pointer',
+                                        backgroundColor: 'transparent',
+                                        color: '#9E7A2A',
+                                        borderColor: '#9E7A2A',
+                                    })}
+                                >
+                                    {'>'}
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <table className="data-table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colSpan={4} style={{ textAlign: 'center', padding: '20px' }}>
+                                        Ei hakutuloksia.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    )}
+                </>
             ) : (
                 <p className="empty-message">Ei kirjoja vielä.</p>
             )}
@@ -161,3 +257,40 @@ function BookManager() {
 }
 
 export default BookManager
+
+const styles = {
+    container: {
+        position: 'relative',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        pointerEvents: 'auto',
+        marginBottom: 12,
+        gap: 12,
+    },
+    searchRow: {
+        position: 'relative',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        pointerEvents: 'auto',
+        marginBottom: 12,
+        gap: 12,
+    },
+    searchInput: {
+        width: '100%',
+        padding: '6px 8px',
+        borderRadius: 6,
+        border: '1px solid #ccc'
+    },
+    pager: { display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 },
+    pagerStatus: { minWidth: 30, textAlign: 'center' },
+    pagerButton: {
+        padding: '4px 8px',
+        color: '#9c9c9c',
+        border: '1px solid #9c9c9c',
+        borderRadius: 4,
+        textAlign: 'center',
+        fontWeight: 'bold',
+    },
+}
