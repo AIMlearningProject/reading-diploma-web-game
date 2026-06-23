@@ -25,8 +25,9 @@ try {
     }
 
     const entries = Object.entries(envVariables)
+    const values = Object.values(envVariables)
 
-    if (Object.values(envVariables).includes(undefined)) {
+    if (values.includes(undefined) || values.includes('')) {
         //logger.info(`Env variables expected: ${Object.keys(envVariables)}\n`)
         //logger.info(`Env variables found: ${entries.map(e => !e[1] ? '-undefined-' : e[0])}\n`)
         logger.error(`Missing env variables required in ${process.env.NODE_ENV} environment`)
