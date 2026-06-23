@@ -6,11 +6,13 @@ const Progress = {
             .insert({ level, user, book, current_progress, level_status })
             .returning('*')
     },
+
     async findByUser(user, dbConn = db) {
         return dbConn('progress')
             .select('id', 'level', 'user', 'book', 'current_progress', 'level_status')
             .where({ user: user })
     },
+
     async findSpecificEntry(level, user, dbConn = db) {
         level = Number(level)
         user = Number(user)
@@ -19,6 +21,7 @@ const Progress = {
             .where({ level, user })
             .first()
     },
+
     async findSpecificEntryByUserAndTeacher(level, userId, teacherId, dbConn = db) {
         level = Number(level)
         userId = Number(userId)
@@ -32,6 +35,8 @@ const Progress = {
             .andWhere('users.role', 'student')
             .first()
     },
+
+    // Unused (used only in unused services)
     async getCurrentLevel(user, dbConn = db) {
         user = Number(user)
         return dbConn('progress')
@@ -40,6 +45,8 @@ const Progress = {
             .orderBy('level', 'asc')
             .first()
     },
+
+    // Unused
     async findLatestCompletedLevel(user, dbConn = db) {
         user = Number(user)
         return dbConn('progress')
@@ -48,6 +55,7 @@ const Progress = {
             .orderBy('level', 'desc')
             .first()
     },
+
     async completeLevel(level, user, dbConn = db) {
         level = Number(level)
         user = Number(user)
@@ -56,6 +64,7 @@ const Progress = {
             .update({ level_status: 'complete' })
             .returning('*')
     },
+
     async updateCurrentProgress(level, user, current_progress, dbConn = db) {
         level = Number(level)
         user = Number(user)
@@ -64,6 +73,7 @@ const Progress = {
             .update({ current_progress: current_progress })
             .returning('*')
     },
+
     async changeLevelStatus(level, user, status, dbConn = db) {
         level = Number(level)
         user = Number(user)
@@ -72,6 +82,7 @@ const Progress = {
             .update({ level_status: status })
             .returning('*')
     },
+
     async changeBookinEntry(level, user, book, dbConn = db) {
         level = Number(level)
         user = Number(user)
@@ -80,10 +91,13 @@ const Progress = {
             .update({ book: book })
             .returning('*')
     },
+
+    // Unused (used only in unused services)
     async getAll(dbConn = db) {
         return dbConn('progress')
             .select('*')
     },
+
     async findByUserAndTeacher(userId, teacherId, dbConn = db) {
         userId = Number(userId)
         teacherId = Number(teacherId)
@@ -93,7 +107,7 @@ const Progress = {
             .where('progress.user', userId)
             .andWhere('users.teacher_id', teacherId)
             .andWhere('users.role', 'student')
-    }
+    },
 }
 
 export default Progress

@@ -19,7 +19,6 @@ const Reward = {
             .select('reward_type', 'reward')
             .where({ owner: owner })
     }
-
 }
 
 export default Reward

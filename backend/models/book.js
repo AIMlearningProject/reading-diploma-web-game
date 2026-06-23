@@ -19,18 +19,19 @@ const Book = {
             .select('*')
     },
 
+    async deleteBook(id, dbConn = db){
+        return dbConn('books')
+            .where({ id })
+            .del()
+    },
+
+    // Unused (used only in unused services)
     async findBookById(id, dbConn = db){
         return dbConn('books')
             .select('title', 'author', 'coverimage', 'booktype', 'content')
             .where({ id })
             .first()
     },
-
-    async deleteBook(id, dbConn = db){
-        return dbConn('books')
-            .where({ id })
-            .del()
-    }
 }
 
 export default Book

@@ -30,6 +30,7 @@ const BookService = {
         return books
     },
 
+    // Unused (used only in unused endpoint)
     async findBookById(id) {
         const book = await Book.findBookById(id)
         if (!book) {
@@ -41,6 +42,7 @@ const BookService = {
         return book
     },
 
+    // Unused (used only in unused endpoint)
     async deleteBook(id) {
         const book = await Book.findBookById(id)
         if (!book) {

@@ -5,6 +5,7 @@ import middleware from '../utils/middleware.js'
 
 const progressRouter = express.Router()
 
+// Gets progress entries for the user making the request
 progressRouter.get('/', middleware.requireAuthentication(true), async (request, response, next) => {
     try {
         const progress = await ProgressService.findByUser(request.user.id)

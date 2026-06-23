@@ -18,11 +18,13 @@ const Submission = {
             .returning('*')
     },
 
+    // Unused
     async getAll(dbConn = db) {
         return dbConn('submissions')
             .select('id', 'user', 'question1', 'answer1', 'completedLevel', 'question2', 'answer2', 'question3', 'answer3')
     },
 
+    // Unused
     async getAllBasedOnUser(user, dbConn = db) {
         return dbConn('submissions')
             .select('user', 'question1', 'answer1', 'completedLevel', 'question2', 'answer2', 'question3', 'answer3')
@@ -36,6 +38,7 @@ const Submission = {
             .first()
     },
 
+    // Unused (used only in unused services)
     async getById(id, teacher_id, dbConn = db) {
         return dbConn('submissions')
             .innerJoin('users', 'submissions.user', 'users.id')
@@ -45,12 +48,14 @@ const Submission = {
             .first()
     },
 
+    // Unused (used only in unused services)
     async remove(id, dbConn = db) {
         return dbConn('submissions')
             .where({ id })
             .del()
     },
 
+    // Unused
     async findByUser(userId, dbConn = db) {
         userId = Number(userId)
         return dbConn('submissions')
@@ -69,6 +74,7 @@ const Submission = {
             .andWhere('users.role', 'student')
     },
 
+    // Unused (used only in unused services)
     async getSubmissionsForTeacher(id, dbConn = db) {
         return dbConn('submissions')
             .innerJoin('users', 'submissions.user', 'users.id')

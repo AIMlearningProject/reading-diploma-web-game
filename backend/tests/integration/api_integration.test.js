@@ -9,7 +9,7 @@ import { resetDB } from '../testConfig/cleanTestDB.js'
 
 const booksRouter = (await import('../../controllers/books.js')).default
 const rewardsRouter = (await import('../../controllers/rewards.js')).default
-const progressRouter = (await import('../../controllers/progressController.js')).default
+const progressRouter = (await import('../../controllers/progresses.js')).default
 const submissionsRouter = (await import('../../controllers/submissions.js')).default
 
 

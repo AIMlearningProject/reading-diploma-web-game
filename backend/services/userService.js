@@ -4,66 +4,10 @@ import bcrypt from 'bcrypt'
 const saltRounds = 12
 
 const UserService = {
-    async register({ email, name, password, avatar, currently_reading, grade, role }) {
-        const existingName = await User.findByName(name)
-        if (existingName) {
-            const err = new Error('Username already taken')
-            err.userDetails = 'Nimi varattu, valitse toinen'
-            err.status = 400
-            throw err
-        }
-        const existingEmail = await User.findByEmail(email)
-        if (existingEmail) {
-            const err = new Error('Email already taken')
-            err.userDetails = 'Sähköposti varattu, valitse toinen'
-            err.status = 400
-            throw err
-        }
-        const password_hash = await bcrypt.hash(password, saltRounds)
-        if (!grade) {
-            grade = 1
-        }
-        if (!role) {
-            role = 'student'
-        }
-        return User.create({
-            email,
-            name,
-            password_hash,
-            avatar,
-            currently_reading,
-            grade,
-            role
-        })
-    },
-
-    async getAllUsers() {
-        const users = await User.getAll()
-        if (!users) {
-            const err = new Error('No users found')
-            err.userDetails = 'Käyttäjiä ei löytynyt'
-            err.status = 404
-            throw err
-        }
-        return users
-        // This could include role based filtering
-    },
-
     async findByName(name) {
         const user = await User.findByName(name)
         if (!user) {
             const err = new Error(`Could not find user by the name: ${name}`)
-            err.userDetails = 'Käyttäjää ei löytynyt'
-            err.status = 404
-            throw err
-        }
-        return user
-    },
-
-    async findByEmail(email) {
-        const user = await User.findByEmail(email)
-        if (!user) {
-            const err = new Error(`Could not find user by the email: ${email}`)
             err.userDetails = 'Käyttäjää ei löytynyt'
             err.status = 404
             throw err
@@ -80,20 +24,6 @@ const UserService = {
             throw err
         }
         return user
-    },
-    /*
-    async findStudentsByTeacherID(teacherID){
-        return await User.findByRole(role)
-    },
-    */
-    async updateUserRole(id, role) {
-        if (role === 'student') {
-            role = 'teacher'
-        } else if (role === 'teacher') {
-            role = 'student'
-        }
-        // This also returns password_hash to client!
-        return await User.updateUserRole(id, role)
     },
 
     async updateUserPassword(id, password) {
@@ -203,7 +133,14 @@ const UserService = {
     },
 
     async deleteStudent(id) {
-        return await User.deleteUser(id)
+        const user = await User.deleteUser(id)
+        if (!user) {
+            const err = new Error(`Could not find user with id ${id}`)
+            err.userDetails = 'Oppilasta ei löytynyt'
+            err.status = 404
+            throw err
+        }
+        return user
     },
 
     async updateProfile({ reqId, id, name, avatar, role, grade, email }) {
@@ -250,14 +187,84 @@ const UserService = {
         const emailUpdate = email === undefined ? undefined : (email === '' ? null : email)
 
         // if editing own profile or teacher editing
-        return await User.completeUserProfile(
+        return await User.updateUserProfile(
             id,
             name ?? user.name,
             avatar ?? user.avatar,
             grade,
             emailUpdate
         )
-    }
+    },
+
+    // Unused (used only in unused endpoint)
+    async register({ email, name, password, avatar, currently_reading, grade, role }) {
+        const existingName = await User.findByName(name)
+        if (existingName) {
+            const err = new Error('Username already taken')
+            err.userDetails = 'Nimi varattu, valitse toinen'
+            err.status = 400
+            throw err
+        }
+        const existingEmail = await User.findByEmail(email)
+        if (existingEmail) {
+            const err = new Error('Email already taken')
+            err.userDetails = 'Sähköposti varattu, valitse toinen'
+            err.status = 400
+            throw err
+        }
+        const password_hash = await bcrypt.hash(password, saltRounds)
+        if (!grade) {
+            grade = 1
+        }
+        if (!role) {
+            role = 'student'
+        }
+        return User.create({
+            email,
+            name,
+            password_hash,
+            avatar,
+            currently_reading,
+            grade,
+            role
+        })
+    },
+
+    // Unused
+    async getAllUsers() {
+        const users = await User.getAll()
+        if (!users) {
+            const err = new Error('No users found')
+            err.userDetails = 'Käyttäjiä ei löytynyt'
+            err.status = 404
+            throw err
+        }
+        return users
+        // This could include role based filtering
+    },
+
+    // Unused
+    async findByEmail(email) {
+        const user = await User.findByEmail(email)
+        if (!user) {
+            const err = new Error(`Could not find user by the email: ${email}`)
+            err.userDetails = 'Käyttäjää ei löytynyt'
+            err.status = 404
+            throw err
+        }
+        return user
+    },
+
+    // Unused (used only in unused endpoint)
+    async updateUserRole(id, role) {
+        if (role === 'student') {
+            role = 'teacher'
+        } else if (role === 'teacher') {
+            role = 'student'
+        }
+        // This also returns password_hash to client!
+        return await User.updateUserRole(id, role)
+    },
 }
 
 export default UserService

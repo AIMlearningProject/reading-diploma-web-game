@@ -91,6 +91,17 @@ const ProgressService = {
         return found
     },
 
+    async changeBookinEntry(level, user, { book }) {
+        const found = await Progress.findSpecificEntry(level, user)
+        if (!found) {
+            const err = new Error(`Level:  ${level} has no entry for this user`)
+            err.status = 404
+            throw err
+        }
+        return Progress.changeBookinEntry(level, user, book)
+    },
+
+    // Unused (used only in unused endpoint)
     async findSpecificEntry(level, user) {
         const found = await Progress.findSpecificEntry(level, user)
         if (!found) {
@@ -101,6 +112,7 @@ const ProgressService = {
         return found
     },
 
+    // Unused (used only in unused endpoint)
     async getCurrentLevel(user) {
         const found = await Progress.getCurrentLevel(user)
         if (!found) {
@@ -111,6 +123,7 @@ const ProgressService = {
         return found
     },
 
+    // Unused
     async getLatestCompletedLevel(user) {
         const found = await Progress.findLatestCompletedLevel(user)
         if (!found) {
@@ -122,16 +135,7 @@ const ProgressService = {
         return found
     },
 
-    async changeBookinEntry(level, user, { book }) {
-        const found = await Progress.findSpecificEntry(level, user)
-        if (!found) {
-            const err = new Error(`Level:  ${level} has no entry for this user`)
-            err.status = 404
-            throw err
-        }
-        return Progress.changeBookinEntry(level, user, book)
-    },
-
+    // Unused (used only in unused endpoint)
     async getAllProgress() {
         return Progress.getAll()
     }

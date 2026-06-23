@@ -23,7 +23,7 @@ vi.doMock('../../../services/progressService.js', async (importOriginal) => {
     }
 })
 
-const progressRouter = (await import('../../../controllers/progressController.js')).default
+const progressRouter = (await import('../../../controllers/progresses.js')).default
 const ProgressService = (await import('../../../services/progressService.js')).default
 
 const app = express()

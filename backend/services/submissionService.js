@@ -41,17 +41,6 @@ const SubmissionService = {
         }
     },
 
-    //apparently not used anywhere yet
-    async getSpecificUser(user) {
-        const submissions = await Submission.getAllBasedOnUser(user)
-        if (!submissions) {
-            const err = new Error('User has no submissions')
-            err.status = 404
-            throw err
-        }
-        return submissions
-    },
-
     async findByUserAndTeacher({ userId, teacherId }) {
         const submissions = await Submission.getSubmissionsForTeacherByStudent(userId, teacherId)
         if (!submissions || submissions.length === 0) {
@@ -74,6 +63,18 @@ const SubmissionService = {
         return submissions
     },
 
+    // Unused
+    async getSpecificUser(user) {
+        const submissions = await Submission.getAllBasedOnUser(user)
+        if (!submissions) {
+            const err = new Error('User has no submissions')
+            err.status = 404
+            throw err
+        }
+        return submissions
+    },
+
+    // Unused (used only in unused endpoint)
     async getById(id, teacher_id) {
         const submission = await Submission.getById(id, teacher_id)
         if (!submission) {
@@ -84,6 +85,7 @@ const SubmissionService = {
         return submission
     },
 
+    // Unused (used only in unused endpoint)
     async deleteSubmission(id, teacher_id) {
         const submission = await Submission.getById(id, teacher_id)
         if (!submission) {
@@ -94,6 +96,7 @@ const SubmissionService = {
         await Submission.remove(id)
     },
 
+    // Unused (used only in unused endpoint)
     async getSubmissionsForTeacher(id) {
         const submissions = await Submission.getSubmissionsForTeacher(id)
         if (!submissions) {

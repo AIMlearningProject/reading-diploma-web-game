@@ -13,30 +13,28 @@ const User = {
             .where({ name })
             .first()
     },
+
     async findByEmail(email, dbConn = db) {
         return dbConn('users')
             .select('id', 'email', 'name', 'password_hash', 'avatar', 'currently_reading', 'grade', 'role')
             .where({ email })
             .first()
     },
+
     async findUserById(id, dbConn = db) {
         return dbConn('users')
             .select('id', 'email', 'name', 'password_hash', 'avatar', 'currently_reading', 'grade', 'role', 'teacher_id')
             .where({ id })
             .first()
     },
-    /*
-    async findStudentsByTeacherID(teacherID){
-        return db('users')
-            .select('id', 'email', 'name', 'avatar', 'currently_reading', 'grade', 'role')
-            .where({  })
-    },
-    */
+
+    // Unused (used only in unused services)
     async getAll(dbConn = db) {
         return dbConn('users')
             .select('id', 'email', 'name', 'avatar', 'currently_reading', 'grade', 'role', 'teacher_id')
     },
 
+    // Unused (used only in unused services)
     async updateUserRole(id, role, dbConn = db) {
         return dbConn('users')
             .where({ id })
@@ -97,7 +95,7 @@ const User = {
             .del()
     },
 
-    async completeUserProfile(id, name, avatar, grade, email, dbConn = db) {
+    async updateUserProfile(id, name, avatar, grade, email, dbConn = db) {
         const updates = { name, avatar, grade }
         if (email !== undefined) updates.email = email
         return dbConn('users')

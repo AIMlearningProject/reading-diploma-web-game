@@ -72,9 +72,9 @@ describe('Submissions controller unit tests', () => {
 
         const expectedOutcome = {
             user: 1,
+            completedLevel: 1,
             question1: 'Test question1',
             answer1: 'Test answer1',
-            completedLevel: 1,
             question2: 'Test question2',
             answer2: 'Test answer2',
             question3: 'Test question3',
