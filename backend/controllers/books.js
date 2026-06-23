@@ -63,7 +63,16 @@ booksRouter.post('/',
     upload.single('coverimage'),
     middleware.zValidate(bookSchema),
     async (request, response, next) => {
-        const { title, author, booktype, content } = request.validated
+        const normalize = (string) => {
+            return string
+                .normalize('NFKC') // Normalize Unicode characters to a standard form
+                .replace(/\u00AD/g, '') // Remove soft hyphens
+                .replace(/\u200B/g, '') // remove zero‑width spaces
+                .replace(/[^\S\r\n]+/g, ' ') // Replace all whitespace (except newlines) with a single space
+                .trim()
+        }
+
+        const { title: rawTitle, author: rawAuthor, booktype, content } = request.validated
 
         if (!request.file) {
             return response.status(400).json({ error: 'No cover image uploaded' })
@@ -75,8 +84,8 @@ booksRouter.post('/',
             const filename = `${Date.now()}-${safeName}`
 
             const newBook = {
-                title,
-                author,
+                title: normalize(rawTitle),
+                author: normalize(rawAuthor),
                 coverimage: `/uploads/book-covers/${filename}`,
                 booktype,
                 content

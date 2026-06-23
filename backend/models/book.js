@@ -10,7 +10,7 @@ const Book = {
     async findByTitleAndAuthor(title, author, dbConn = db) {
         return dbConn('books')
             .select('title', 'author', 'coverimage', 'booktype', 'content')
-            .where({ title, author })
+            .whereRaw('LOWER(title) = LOWER(?) AND LOWER(author) = LOWER(?)', [title, author]) // Used raw SQL here since knex doesn't have support for functional unique indexes
             .first()
     },
 

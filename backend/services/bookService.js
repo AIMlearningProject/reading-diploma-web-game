@@ -41,7 +41,7 @@ const BookService = {
         return book
     },
 
-    async deleteBook(id){
+    async deleteBook(id) {
         const book = await Book.findBookById(id)
         if (!book) {
             const err = new Error(`Book not found`)
