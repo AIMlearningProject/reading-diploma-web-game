@@ -1,39 +1,11 @@
 import express from 'express'
-const usersRouter = express.Router()
 import UserService from '../services/userService.js'
 import { z } from 'zod'
 import middleware from '../utils/middleware.js'
 import bcrypt from 'bcrypt'
 import ProgressService from '../services/progressService.js'
 
-const userRegisterSchema = z.object({
-    email: z.email(),
-    name: z.string(),
-    password: z.string().min(8),
-    avatar: z.string(),
-    grade: z.number(),
-}).strict()
-
-const userUpdatePasswordSchema = z.object({
-    currentPassword: z.string().min(8),
-    password: z.string().min(8)
-}).strict()
-//.strict() means that anything not defined here causes an error.
-// The missing values should be filled by default values in the service.
-// We still need to figure out how the password should be when a user signs up with a Google
-
-const studentCreateSchema = z.object({
-    email: z.email().optional(),
-    name: z.string().min(3),
-    password: z.string().min(3),
-}).strict()
-
-const profileUpdateSchema = z.object({
-    name: z.string().optional(),
-    avatar: z.string().optional(),
-    grade: z.string().optional(),
-    email: z.union([z.email(), z.literal('')]).optional(),
-}).strict()
+const usersRouter = express.Router()
 
 // Must be defined BEFORE /:id route
 usersRouter.get('/my-students', middleware.requireTeacherRole, async (request, response, next) => {
@@ -44,6 +16,12 @@ usersRouter.get('/my-students', middleware.requireTeacherRole, async (request, r
         next(error)
     }
 })
+
+const studentCreateSchema = z.object({
+    email: z.email().optional(),
+    name: z.string().min(3),
+    password: z.string().min(3),
+}).strict()
 
 usersRouter.post('/students', middleware.requireTeacherRole, middleware.zValidate(studentCreateSchema), async (request, response, next) => {
     try {
@@ -98,18 +76,48 @@ usersRouter.patch('/students/:id/password', middleware.requireTeacherRole, middl
     }
 })
 
-/*
-// ∨∨∨ NEEDS to be removed from final version (allows anyone logged in to get all the users info)
-usersRouter.get('/', middleware.requireAuthentication(true), async (request, response, next) => {
-    try {
-        const users = await UserService.getAllUsers()
-        response.json(users)
-    } catch (error) {
-        next(error)
+const profileUpdateSchema = z.object({
+    name: z.string().optional(),
+    avatar: z.string().optional(),
+    grade: z.string().optional(),
+    email: z.union([z.email(), z.literal('')]).optional(),
+}).strict()
+
+usersRouter.patch('/profile/:id',
+    middleware.zValidate(profileUpdateSchema),
+    middleware.requireAuthentication(true),
+    async (request, response, next) => {
+        const { name, avatar, grade, email } = request.validated
+
+        try {
+            const userToUpdate = {
+                reqId: request.user.id,
+                id: Number(request.params.id),
+                name,
+                avatar,
+                role: request.user.role,
+                grade,
+                email,
+            }
+
+            const updatedUser = await UserService.updateProfile(userToUpdate)
+
+            response.status(204).json(updatedUser)
+        } catch (error) {
+            next(error)
+        }
     }
-})
-*/
-// ∨∨∨ Currently not in use
+)
+
+const userRegisterSchema = z.object({
+    email: z.email(),
+    name: z.string(),
+    password: z.string().min(8),
+    avatar: z.string(),
+    grade: z.number(),
+}).strict()
+
+// Unused
 usersRouter.post('/register', middleware.requireAuthentication(false), middleware.zValidate(userRegisterSchema), async (request, response, next) => {
     const { email, name, password, avatar, currently_reading, grade, role } = request.validated
 
@@ -137,6 +145,7 @@ usersRouter.post('/register', middleware.requireAuthentication(false), middlewar
     }
 })
 
+// Unused
 usersRouter.patch('/:id/role', middleware.requireTeacherRole, async (request, response, next) => {
     try {
         const { id } = request.params
@@ -148,6 +157,12 @@ usersRouter.patch('/:id/role', middleware.requireTeacherRole, async (request, re
     }
 })
 
+const userUpdatePasswordSchema = z.object({
+    currentPassword: z.string().min(8),
+    password: z.string().min(8)
+}).strict()
+
+// Unused
 usersRouter.patch('/:id/change-password', middleware.requireAuthentication(true), middleware.zValidate(userUpdatePasswordSchema), async (request, response, next) => {
     try {
         const { id } = request.params
@@ -169,6 +184,7 @@ usersRouter.patch('/:id/change-password', middleware.requireAuthentication(true)
     }
 })
 
+// Unused
 usersRouter.get('/profile/:id',
     middleware.requireAuthentication(true),
     async (request, response, next) => {
@@ -195,34 +211,6 @@ usersRouter.get('/profile/:id',
         } else {
             // students can edit their own avatar
             return response.json({ avatar: request.user.avatar })
-        }
-    }
-)
-
-usersRouter.patch('/profile/:id',
-    middleware.zValidate(profileUpdateSchema),
-    middleware.requireAuthentication(true),
-    async (request, response, next) => {
-        const { name, avatar, grade, email } = request.validated
-
-        try {
-            const userToUpdate = {
-                reqId: request.user.id,
-                id: Number(request.params.id),
-                name,
-                avatar,
-                role: request.user.role,
-                grade,
-                email,
-            }
-
-            const updatedUser = await UserService.updateProfile(userToUpdate)
-
-            response.status(204).json(updatedUser)
-            // Redirect to teacher dashboard after updating profile information
-            //return response.redirect(302, 'http://localhost:5173/teacher/dashboard')
-        } catch (error) {
-            next(error)
         }
     }
 )

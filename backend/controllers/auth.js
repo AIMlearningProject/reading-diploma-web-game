@@ -42,21 +42,6 @@ const meLimiter = makeLimiter({
     }
 })
 
-const loginLimiter = makeLimiter({
-    windowMs: 2 * 60 * 1000, // 2 minutes,
-    max: 5,
-    handler: (req, res) => {
-        // Gives the remaining time for retrying login in response.error
-        const resetTime = req.rateLimit && req.rateLimit.resetTime
-        let secondsLeft = 0
-        if (resetTime) {
-            secondsLeft = Math.ceil((resetTime.getTime() - Date.now()) / 1000)
-        }
-
-        return res.status(429).json({ error: `Liian monta kirjautumisyritystä. Yritä uudelleen ${Math.ceil(secondsLeft / 60)} minuutin kuluttua.` })
-    }
-})
-
 // Returns the current user session for the frontend auth check
 authRouter.get('/me', meLimiter, (request, response) => {
     if (request.isAuthenticated()) {
@@ -80,6 +65,21 @@ authRouter.get('/csrf-token', async (req, res) => {
         return res.json({ csrf: token })
     }
     res.status(204).end()
+})
+
+const loginLimiter = makeLimiter({
+    windowMs: 2 * 60 * 1000, // 2 minutes,
+    max: 5,
+    handler: (req, res) => {
+        // Gives the remaining time for retrying login in response.error
+        const resetTime = req.rateLimit && req.rateLimit.resetTime
+        let secondsLeft = 0
+        if (resetTime) {
+            secondsLeft = Math.ceil((resetTime.getTime() - Date.now()) / 1000)
+        }
+
+        return res.status(429).json({ error: `Liian monta kirjautumisyritystä. Yritä uudelleen ${Math.ceil(secondsLeft / 60)} minuutin kuluttua.` })
+    }
 })
 
 // Basic authentication without google

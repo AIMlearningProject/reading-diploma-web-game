@@ -1,8 +1,9 @@
 import express from 'express'
-const rewardsRouter = express.Router()
 import RewardService from '../services/rewardService.js'
 import { z } from 'zod'
 import middleware from '../utils/middleware.js'
+
+const rewardsRouter = express.Router()
 
 const rewardAddSchema = z.object({
     owner: z.number(),
@@ -26,20 +27,21 @@ rewardsRouter.post('/add-reward', middleware.requireAuthentication(true), middle
     }
 })
 
-rewardsRouter.get('/:id', middleware.requireTeacherRole, async(request, response, next) => {
-    const id = request.params.id
-
-    try{
-        const rewards = await RewardService.getUserRewards(id)
+rewardsRouter.get('/', middleware.requireAuthentication(true), async(request, response, next) => {
+    try {
+        const rewards = await RewardService.getUserRewards(request.user.id)
         response.status(200).json(rewards)
     } catch(error){
         next(error)
     }
 })
 
-rewardsRouter.get('/', middleware.requireAuthentication(true), async(request, response, next) => {
-    try {
-        const rewards = await RewardService.getUserRewards(request.user.id)
+// Unused
+rewardsRouter.get('/:id', middleware.requireTeacherRole, async(request, response, next) => {
+    const id = request.params.id
+
+    try{
+        const rewards = await RewardService.getUserRewards(id)
         response.status(200).json(rewards)
     } catch(error){
         next(error)

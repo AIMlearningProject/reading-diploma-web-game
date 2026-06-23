@@ -49,10 +49,20 @@ export async function fetchLogin(identifier, password, teacher_name) {
     })
 }
 
+// Book endpoints
+export function fetchBooks() { return request('/api/books'); }
+export function fetchBook(id) { return request(`/api/books/${id}`); } // Unused
+export function createBook(body) {
+    return request('/api/books', {
+        method: 'POST',
+        body: body,
+    });
+}
+
 // Progress endpoints
 export function fetchProgress() { return request('/api/progress'); }
 export function fetchStudentProgress(id) { return request(`/api/progress/student/${id}`); }
-export function fetchCurrentLevel() { return request('/api/progress/current-level'); }
+export function fetchCurrentLevel() { return request('/api/progress/current-level'); } // Unused
 export function completeLevel(level, userId) {
     return request(`/api/progress/${level}/completed`, {
         method: 'PUT',
@@ -69,16 +79,6 @@ export function addBookToLevel(level, bookId) {
     return request(`/api/progress/${level}/add-book`, {
         method: 'PUT',
         body: JSON.stringify({ book: bookId }),
-    });
-}
-
-// Book endpoints
-export function fetchBooks() { return request('/api/books'); }
-export function fetchBook(id) { return request(`/api/books/${id}`); }
-export function createBook(body) {
-    return request('/api/books', {
-        method: 'POST',
-        body: body,
     });
 }
 

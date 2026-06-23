@@ -9,6 +9,15 @@ import { promises as fs } from 'fs'
 
 const booksRouter = express.Router()
 
+booksRouter.get('/', middleware.requireAuthentication(true), async (request, response, next) => {
+    try {
+        const books = await BookService.getAllBooks()
+        response.json(books)
+    } catch (error) {
+        next(error)
+    }
+})
+
 const booktypes = z.enum(['physical', 'e-book', 'audio'])
 const bookSchema = z.object({
     title: z.string(),
@@ -36,25 +45,6 @@ const upload = multer({
             return cb(err, false)
         }
         cb(null, true)
-    }
-})
-
-booksRouter.get('/', middleware.requireAuthentication(true), async (request, response, next) => {
-    try {
-        const books = await BookService.getAllBooks()
-        response.json(books)
-    } catch (error) {
-        next(error)
-    }
-})
-
-booksRouter.get('/:id', middleware.requireAuthentication(true), async (request, response, next) => {
-    const { id } = request.params
-    try {
-        const book = await BookService.findBookById(id)
-        response.json(book)
-    } catch (error) {
-        next(error)
     }
 })
 
@@ -105,6 +95,18 @@ booksRouter.post('/',
     }
 )
 
+// Unused
+booksRouter.get('/:id', middleware.requireAuthentication(true), async (request, response, next) => {
+    const { id } = request.params
+    try {
+        const book = await BookService.findBookById(id)
+        response.json(book)
+    } catch (error) {
+        next(error)
+    }
+})
+
+// Not used, but will likely be used in the future
 booksRouter.delete('/delete-book/:id', middleware.requireTeacherRole, async (request, response, next) => {
     const id = request.params.id
 
