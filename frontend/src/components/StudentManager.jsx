@@ -210,7 +210,7 @@ function StudentManager() {
                                                 </>
                                             )}
                                         </td>
-                                        <td data-label="Gmail">
+                                        <td data-label="Sähköposti">
                                             {editEmailId === s.id ? (
                                                 <>
                                                     <input

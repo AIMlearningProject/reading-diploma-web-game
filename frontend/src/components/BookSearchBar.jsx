@@ -44,7 +44,7 @@ export default function SearchBar({
                             cursor: 'pointer',
                             backgroundColor: 'transparent',
                             color: '#9E7A2A',
-                            borderColor: '#9E7A2A',
+                            border: '1px solid #9E7A2A',
                         }) : ({
                             ...styles.pagerButton,
                             cursor: 'pointer'
@@ -69,7 +69,7 @@ export default function SearchBar({
                             cursor: 'pointer',
                             backgroundColor: 'transparent',
                             color: '#9E7A2A',
-                            borderColor: '#9E7A2A',
+                            border: '1px solid #9E7A2A',
                         }) : ({
                             ...styles.pagerButton,
                             cursor: 'pointer'

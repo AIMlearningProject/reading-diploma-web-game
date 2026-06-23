@@ -100,7 +100,7 @@ function BookManager() {
                     />
                     {pageSlice.length > 0 ? (
                         <>
-                            <table className="data-table">
+                            <table className="data-table desktop-book-list">
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -131,7 +131,27 @@ function BookManager() {
                                     ))}
                                 </tbody>
                             </table>
-                            {/* Pager buttons < X/X > */}
+                            <div className="mobile-book-list">
+                                {pageSlice.map((b) => (
+                                    <div className="mobile-book-item" key={b.id}>
+                                        <img
+                                            className="mobile-book-cover"
+                                            src={b.coverimage}
+                                            alt={b.title}
+                                            onError={(e) => {
+                                                e.currentTarget.style.display = "none";
+                                            }}
+                                        />
+
+                                        <div className="mobile-book-info">
+                                            <div className="mobile-book-title">{b.title}</div>
+                                            <div className="mobile-book-author">{b.author}</div>
+                                            <div className="mobile-book-type">{typeFi[b.booktype] ?? b.booktype}</div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            {/* Bottom pager buttons < X/X > */}
                             <div style={styles.pager}>
                                 <button
                                     onClick={() => setPage(p => Math.max(0, p - 1))}
@@ -144,7 +164,7 @@ function BookManager() {
                                         cursor: 'pointer',
                                         backgroundColor: 'transparent',
                                         color: '#9E7A2A',
-                                        borderColor: '#9E7A2A',
+                                        border: '1px solid #9E7A2A',
                                     })}
                                 >
                                     {'<'}
@@ -165,7 +185,7 @@ function BookManager() {
                                         cursor: 'pointer',
                                         backgroundColor: 'transparent',
                                         color: '#9E7A2A',
-                                        borderColor: '#9E7A2A',
+                                        border: '1px solid #9E7A2A',
                                     })}
                                 >
                                     {'>'}
