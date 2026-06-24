@@ -83,7 +83,7 @@ function StudentDashboard() {
         return entry?.level_status ?? 'incomplete'
     }
 
-    const completedCount = progress.filter(p => p.level_status !== 'incomplete').length
+    const completedCount = progress.filter(p => p.level_status === 'complete' || p.level_status === 'reviewed').length
     const hasBuddy = !!user?.avatar
     const showPicker = !hasBuddy || buddySelecting
 
