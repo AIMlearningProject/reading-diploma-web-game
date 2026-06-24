@@ -100,6 +100,7 @@ function BookManager() {
                     />
                     {pageSlice.length > 0 ? (
                         <>
+                            {/* Desktop view of book list */}
                             <table className="data-table desktop-book-list">
                                 <thead>
                                     <tr>
@@ -131,6 +132,7 @@ function BookManager() {
                                     ))}
                                 </tbody>
                             </table>
+                            {/* Mobile view of book list */}
                             <div className="mobile-book-list">
                                 {pageSlice.map((b) => (
                                     <div className="mobile-book-item" key={b.id}>
@@ -140,6 +142,8 @@ function BookManager() {
                                             alt={b.title}
                                             onError={(e) => {
                                                 e.currentTarget.style.display = "none";
+                                                e.currentTarget.style.width = "0";
+                                                e.currentTarget.style.height = "0";
                                             }}
                                         />
 

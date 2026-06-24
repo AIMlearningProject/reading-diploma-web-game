@@ -163,6 +163,12 @@
     display: none;
 }
 
+.desktop-book-list th:first-child,
+.desktop-book-list td:first-child {
+    width: 48px;
+    min-width: 48px;
+}
+
 td[data-label="Toiminnot"] {
     white-space: nowrap;
 }
