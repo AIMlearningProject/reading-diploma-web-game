@@ -6,6 +6,7 @@ import middleware from '../utils/middleware.js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { promises as fs } from 'fs'
+import crypto from 'crypto'
 
 const booksRouter = express.Router()
 
@@ -70,8 +71,15 @@ booksRouter.post('/',
 
         try {
             // Generate a safe filename
-            const safeName = request.file.originalname.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9.-]/g, '')
-            const filename = `${Date.now()}-${safeName}`
+            const extensionMap = {
+                'image/jpeg': '.jpg',
+                'image/png': '.png',
+                'image/jfif': '.jfif',
+                'image/webp': '.webp'
+            }
+
+            const extension = extensionMap[request.file.mimetype]
+            const filename = `${Date.now()}-${crypto.randomUUID() + extension}`
 
             const newBook = {
                 title: normalize(rawTitle),
