@@ -159,6 +159,7 @@ const ReadingState = {
                 this.globalBooks = booksData.value.map(b => ({
                     title: b.title,
                     author: b.author,
+                    coverimage: b.coverimage,
                     id: String(b.id),
                     dbId: b.id
                 }));

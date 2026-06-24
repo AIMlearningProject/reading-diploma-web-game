@@ -85,6 +85,14 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
                             }}
                             onClick={() => onSelect && onSelect(book)}
                         >
+                            <img
+                                src={book.coverimage}
+                                alt={book.title}
+                                style={styles.bookImg}
+                                onError={(e) => {
+                                    e.currentTarget.style.display = "none"
+                                }}
+                            />
                             <div style={styles.bookInfo}>
                                 <div style={styles.bookTitle}>{book.title}</div>
                                 <div style={styles.bookAuthor}>{book.author}</div>
@@ -233,6 +241,7 @@ const styles = {
         transition: 'background 0.2s',
         border: '2px solid #d4af37',
         cursor: 'pointer',
+        gap: '12px',
     },
 
     bookRowCurrent: {
@@ -243,6 +252,13 @@ const styles = {
     bookRowCompleted: {
         opacity: 0.7,
         border: '2px solid #4a5568'
+    },
+
+    bookImg: {
+        width: '45px',
+        height: '60px',
+        objectFit: 'cover',
+        borderRadius: '4px',
     },
 
     bookInfo: {
@@ -262,13 +278,11 @@ const styles = {
     bookActions: {
         display: 'flex',
         alignItems: 'center',
-        gap: 12
     },
 
     bookProgress: {
         fontWeight: 'bold',
         color: '#d4af37',
-        marginLeft: 5
     },
 
     bookProgressDone: {
