@@ -7,6 +7,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { promises as fs } from 'fs'
 import crypto from 'crypto'
+import sharp from 'sharp'
 
 const booksRouter = express.Router()
 
@@ -34,14 +35,13 @@ const bookSchema = z.object({
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const allowedImageTypes = ['image/jpeg', 'image/png', 'image/jfif', 'image/webp']
+const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp']
 const upload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 2 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         if (!allowedImageTypes.includes(file.mimetype)) {
             const err = new multer.MulterError('LIMIT_UNEXPECTED_FILE', file.fieldname)
-            err.message = 'Vain kuvatiedostot ovat sallittuja (jpg, png, jfif, webp).'
+            err.message = 'Vain kuvatiedostot ovat sallittuja (jpg, png, webp).'
             err.name = 'MulterError'
             return cb(err, false)
         }
@@ -70,11 +70,22 @@ booksRouter.post('/',
         }
 
         try {
+            // Compress image and check file size
+            const optimizedBuffer = await sharp(request.file.buffer)
+                .resize(600, 900, { fit: 'inside' })
+                .jpeg({ quality: 75 })
+                .toBuffer()
+
+            const maxCompressedSize = 1 * 1024 * 1024 // 1 MB
+
+            if (optimizedBuffer.length > maxCompressedSize) {
+                return response.status(400).json({ error: 'Image too large' })
+            }
+
             // Generate a safe filename
             const extensionMap = {
                 'image/jpeg': '.jpg',
                 'image/png': '.png',
-                'image/jfif': '.jfif',
                 'image/webp': '.webp'
             }
 
@@ -94,7 +105,7 @@ booksRouter.post('/',
             // Write file to disk only after all validations have passed
             const coverUploadDir = path.resolve(__dirname, '../public/uploads/book-covers')
             const filepath = path.join(coverUploadDir, filename)
-            await fs.writeFile(filepath, request.file.buffer)
+            await fs.writeFile(filepath, optimizedBuffer)
 
             response.status(201).json(newBook)
         } catch (error) {
