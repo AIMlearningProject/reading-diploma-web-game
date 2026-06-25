@@ -48,9 +48,16 @@ const ReadingState = {
     booksRead: 0,
     targetBooks: 8,
 
-    // Tracks which levels need resubmission (incomplete but have existing submission)
+    // Tracks which levels need resubmission
     levelsPendingResubmission: {},
 
+    /**
+     * Tracks which levels that need resubmission have been completed
+     * in order to know when a book has been read on a resubmittable level
+     */
+    levelsCompletedResubmission: {},
+
+    // Progress id is needed for submitQuiz endpoints
     progressEntriesByMapKey: {},
 
     /**
@@ -133,7 +140,7 @@ const ReadingState = {
      * Check if a level needs resubmission (incomplete but has existing submission).
      */
     isLevelPendingResubmission(mapKey) {
-        return this.levelsPendingResubmission[mapKey] === true;
+        return this.levelsPendingResubmission[mapKey]?.pending === true;
     },
 
     // ── Backend sync methods ──
@@ -198,15 +205,23 @@ const ReadingState = {
 
                     if (!progressEntry) continue;
 
+                    const isLevelComplete = progressEntry.level_status === 'complete' || progressEntry.level_status === 'reviewed';
+                    const hasSubmission = !!submissionEntry;
+
                     // Restore book binding
                     if (progressEntry.book) {
                         this.mapSelectedBook[mapKey] = String(progressEntry.book);
                     }
 
+                    // Mark if level is pending resubmission
+                    if (hasSubmission && !isLevelComplete) {
+                        this.levelsPendingResubmission[mapKey] = { pending: true, book: progressEntry.book };
+                    }
+
                     // Save level progress for each map (id is needed in submitQuizAnswers)
                     this.progressEntriesByMapKey[mapKey] = progressEntry || {};
 
-                    if (progressEntry.current_progress === 100 || progressEntry.level_status !== 'incomplete') {
+                    if (!this.levelsPendingResubmission[mapKey]?.pending && progressEntry.current_progress === 100) {
                         this.completedBookIds[String(progressEntry.book)] = true;
                     }
 
@@ -229,9 +244,6 @@ const ReadingState = {
                     // Unlock next level only if:
                     // 1. Level is complete/reviewed, OR
                     // 2. Level is pending resubmission
-                    const isLevelComplete = progressEntry.level_status === 'complete' || progressEntry.level_status === 'reviewed';
-                    const hasSubmission = !!submissionEntry;
-
                     if (progressEntry.level_status !== 'incomplete' || hasSubmission) {
                         if (!this._continentCompletedFlags) this._continentCompletedFlags = {};
 
@@ -239,11 +251,6 @@ const ReadingState = {
                         if (isLevelComplete) {
                             this._continentCompletedFlags[mapKey] = true;
                             this.booksRead = Math.max(this.booksRead, level);
-                        }
-
-                        // Mark if pending resubmission
-                        if (hasSubmission && !isLevelComplete) {
-                            this.levelsPendingResubmission[mapKey] = true;
                         }
 
                         // Unlock the next level

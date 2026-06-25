@@ -55,10 +55,6 @@ export default function PhaserGame() {
         if (ReadingState._continentCompletedFlags?.[mapKey] === true) {
           return 'completed';
         }
-        if (ReadingState.isLevelPendingResubmission(mapKey)) {
-          window.openReactQuiz(mapKey);
-          return;
-        }
         setBookListInfo({ visible: true, mapKey });
         return;
       };

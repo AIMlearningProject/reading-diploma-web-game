@@ -6,13 +6,16 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
     const allBooks = ReadingState.globalBooks || [];
     const completedBookIds = ReadingState.completedBookIds || {};
     const currentBookId = (ReadingState.mapSelectedBook || {})[mapKey] || null;
+    const failedQuizBookIds = new Set(Object.values(ReadingState.levelsPendingResubmission || {}).filter(e => e?.pending).map(e => String(e.book)))
 
     const books = useMemo(() => allBooks.map(b => ({
         ...b,
         isCompleted: !!completedBookIds[b.id],
         isCurrent: b.id === currentBookId,
-        progress: ReadingState.bookProgress[b.id] || 0
-    })), [allBooks, completedBookIds, currentBookId]);
+        progress: ReadingState.bookProgress[b.id] || 0,
+        isFailedQuizBook: failedQuizBookIds.has(String(b.id))
+    }
+    )), [allBooks, completedBookIds, currentBookId]);
 
     const sorted = useMemo(() => {
         // Sorts the books by progress and current selection.
@@ -81,7 +84,13 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
                             style={{
                                 ...styles.bookRow,
                                 ...(book.isCurrent && styles.bookRowCurrent),
-                                ...(book.isCompleted && styles.bookRowCompleted)
+                                ...(book.isCompleted && styles.bookRowCompleted),
+                                ...(book.isFailedQuizBook &&
+                                    (book.isCurrent
+                                        ? styles.bookRowResubmit
+                                        : { ...styles.bookRowResubmit, opacity: 0.7 }
+                                    )
+                                ),
                             }}
                             onClick={() => onSelect && onSelect(book)}
                         >
@@ -101,9 +110,13 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
                             <div style={styles.bookActions}>
                                 <div style={{
                                     ...styles.bookProgress,
-                                    ...(book.isCompleted && styles.bookProgressDone)
+                                    ...(book.isCompleted && styles.bookProgressDone),
+                                    ...(book.isFailedQuizBook && styles.bookProgressResubmit)
                                 }}>
-                                    {book.isCompleted ? 'LUETTU' : `${book.progress} %`}
+                                    {book.isFailedQuizBook && book.progress >= 100
+                                        ? 'EI LUETTU'
+                                        : (book.isCompleted ? 'LUETTU' : `${book.progress} %`)
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -254,6 +267,10 @@ const styles = {
         border: '2px solid #4a5568'
     },
 
+    bookRowResubmit: {
+        background: '#7041d7b5',
+    },
+
     bookImg: {
         width: '45px',
         height: '60px',
@@ -287,5 +304,9 @@ const styles = {
 
     bookProgressDone: {
         color: '#00ff88'
+    },
+
+    bookProgressResubmit: {
+        color: '#ffffff',
     },
 };

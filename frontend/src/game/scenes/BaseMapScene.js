@@ -296,15 +296,14 @@ class BaseMapScene extends Phaser.Scene {
         // New booklist using the BooListPanel React component
         const result = window.openReactBookList ? window.openReactBookList(mapKey) : undefined;
 
-        const isResubmittable = ReadingState.isLevelPendingResubmission(mapKey)
-        if (result === 'completed' || isResubmittable) {
+        if (result === 'completed') {
             this.showStoryQuiz();
         }
 
         const onBookSelected = async (book) => {
             // Clean up handler immediately on selection
             this.events.off('book-selected', onBookSelected);
-            
+
             if (!book) return;
 
             const mapCfg = ReadingState.mapConfig[mapKey];
@@ -395,7 +394,9 @@ class BaseMapScene extends Phaser.Scene {
                 ReadingState._continentCompletedFlags = {};
             }
             const mapKey = this.scene.key;
-            if (!ReadingState._continentCompletedFlags[mapKey] && !this.isDoingQuiz) {
+            if (!ReadingState._continentCompletedFlags[mapKey]
+                && !this.isDoingQuiz
+                && !!ReadingState.isLevelPendingResubmission(mapKey) === !!ReadingState.levelsCompletedResubmission[mapKey]) {
                 this.showStoryQuiz();
             }
         }

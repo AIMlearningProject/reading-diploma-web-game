@@ -202,6 +202,9 @@ class ReadingScene extends Phaser.Scene {
                     // Call handleMapUnlock after the quiz has been submitted 
                 }
                 ReadingState.saveCurrentProgress(this.sourceMap, finalPct);
+                if (ReadingState.isLevelPendingResubmission(this.sourceMap) && finalPct >= 100) {
+                    ReadingState.levelsCompletedResubmission[this.sourceMap] = true;
+                }
             }
         }
         this.exitScene();

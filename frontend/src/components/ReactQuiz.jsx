@@ -13,8 +13,8 @@ export default function ReactQuiz({ mapKey, onClose }) {
         return ["", "", ""];
     });
 
-    const resubmittable = ReadingState.isLevelPendingResubmission(mapKey)
-    const isReadOnly = !!(!resubmittable && ReadingState?.quizAnswers && ReadingState.quizAnswers[mapKey]);
+    const isResubmittable = ReadingState.isLevelPendingResubmission(mapKey)
+    const isReadOnly = !!(!isResubmittable && ReadingState?.quizAnswers && ReadingState.quizAnswers[mapKey]);
 
     const questions = [
         "Mikä on tämän tarinan juoni?",
@@ -30,6 +30,7 @@ export default function ReactQuiz({ mapKey, onClose }) {
                 // Submit quiz answers to backend and wait for result
                 const quizError = await ReadingState.submitQuizAnswers(mapKey, questions, answers);
                 if (quizError) {
+                    // Assumes the error is caused by answers that are too short
                     setError('Vastauksien lähettäminen epäonnistui. Tarkistathan että vastaukset ovat vähintään 3 merkkiä pitkiä.');
                     setStep(0);
                     return;
@@ -47,7 +48,11 @@ export default function ReactQuiz({ mapKey, onClose }) {
                 }
 
                 // clear pending resubmission flag after re-submit
-                if (resubmittable) ReadingState.levelsPendingResubmission[mapKey] = false;
+                if (isResubmittable && ReadingState.levelsPendingResubmission[mapKey]) {
+                    ReadingState.levelsPendingResubmission[mapKey].pending = false;
+                } else if (isResubmittable) {
+                    ReadingState.levelsPendingResubmission[mapKey] = { pending: false, book: ReadingState.mapSelectedBook?.[mapKey] };
+                }
             }
             onClose();
         }
