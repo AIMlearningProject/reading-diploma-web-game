@@ -167,6 +167,7 @@ const ReadingState = {
                     title: b.title,
                     author: b.author,
                     coverimage: b.coverimage,
+                    type: b.booktype,
                     id: String(b.id),
                     dbId: b.id
                 }));

@@ -3,6 +3,11 @@ import ReadingState from '../game/state.js';
 import BookSearchBar from './BookSearchBar';
 
 export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10 }) {
+    const [query, setQuery] = useState('');
+    const [queryBooktype, setQueryBooktype] = useState('');
+    const [page, setPage] = useState(0);
+    const [hideRead, setHideRead] = useState(false);
+
     const allBooks = ReadingState.globalBooks || [];
     const completedBookIds = ReadingState.completedBookIds || {};
     const currentBookId = (ReadingState.mapSelectedBook || {})[mapKey] || null;
@@ -35,22 +40,21 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
         });
     }, [books]);
 
-    const [query, setQuery] = useState('');
-    const [page, setPage] = useState(0);
+    useEffect(() => setPage(0), [query, queryBooktype]);
 
-    const [hideRead, setHideRead] = useState(false);
-
-    useEffect(() => setPage(0), [query]);
-
+    // Returns the books found based on the search query
     const filtered = useMemo(() => {
+        let base
         const q = (query || '').toLowerCase().trim();
-        const base = q ? sorted.filter(b => (`${b.title} ${b.author}`).toLowerCase().includes(q)) : sorted;
+        base = q ? sorted.filter(b => (`${b.title} ${b.author}`).toLowerCase().includes(q)) : sorted;
 
-        if (!hideRead) return base;
+        if (queryBooktype) base = base.filter(b => b.type === queryBooktype);
 
         // Exclude books that are completed OR have progress >= 100
-        return base.filter(b => !(b.isCompleted || (Number(b.progress) >= 100)));
-    }, [sorted, query, hideRead]);
+        if (hideRead) base = base.filter(b => !(b.isCompleted || (Number(b.progress) >= 100)));;
+
+        return base
+    }, [sorted, query, queryBooktype, hideRead]);
 
     const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
     const pageSlice = filtered.slice(page * pageSize, (page + 1) * pageSize);
@@ -68,6 +72,8 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
                     query={query}
                     onQueryChange={setQuery}
                     role={"student"}
+                    booktype={queryBooktype}
+                    setBooktype={setQueryBooktype}
                     page={page}
                     totalPages={totalPages}
                     onPrevPage={() => setPage(p => Math.max(0, p - 1))}
@@ -196,11 +202,22 @@ const styles = {
         border: '1px solid #ccc'
     },
 
+    pagerRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        gap: 12,
+        marginBottom: 12,
+        flexWrap: 'wrap',
+    },
+
     pager: {
         display: 'flex',
-        gap: 8,
+        flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 12,
+        gap: 8,
+        flexWrap: 'nowrap',
     },
 
     pagerButton: {
@@ -217,6 +234,14 @@ const styles = {
     pagerStatus: {
         minWidth: 30,
         textAlign: 'center'
+    },
+
+    booktypeSelect: {
+        padding: '4px 6px',
+        borderRadius: 6,
+        border: '1px solid #9c9c9c',
+        //color: '#fff',
+        //backgroundColor: '#1e3a5f'
     },
 
     hideReadLabel: {

@@ -13,6 +13,7 @@ function BookManager() {
     const fileInputRef = useRef(null)
 
     const [query, setQuery] = useState('');
+    const [queryBooktype, setQueryBooktype] = useState('');
     const [page, setPage] = useState(0);
     const pageSize = 10;
 
@@ -23,15 +24,23 @@ function BookManager() {
         });
     }, [books]);
 
-    const filtered = sorted.filter(b =>
-        `${b.title} ${b.author}`.toLowerCase().includes(query.toLowerCase())
-    );
+    // Returns the books found based on the search query
+    const filtered = useMemo(() => {
+        const q = (query || '').toLowerCase().trim();
+        const base = q ? sorted.filter(b => (`${b.title} ${b.author}`).toLowerCase().includes(q)) : sorted;
+
+        if (queryBooktype) return base.filter(b => b.booktype === queryBooktype);
+
+        return base
+    }, [sorted, query, queryBooktype]);
 
     const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
     const pageSlice = filtered.slice(page * pageSize, (page + 1) * pageSize);
 
     const isPrevPagerBtnDisabled = page === 0;
     const isNextPagerBtnDisabled = page >= totalPages - 1;
+
+    useEffect(() => setPage(0), [query, queryBooktype]);
 
     const fetchMyBooks = async () => {
         try {
@@ -92,11 +101,13 @@ function BookManager() {
                             setPage(0);
                         }}
                         role={"teacher"}
+                        booktype={queryBooktype}
+                        setBooktype={setQueryBooktype}
                         page={page}
                         totalPages={totalPages}
                         onPrevPage={() => setPage(p => Math.max(0, p - 1))}
                         onNextPage={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-                        styles={styles}
+                        styles={searchBarStyles}
                     />
                     {pageSlice.length > 0 ? (
                         <>
@@ -156,15 +167,15 @@ function BookManager() {
                                 ))}
                             </div>
                             {/* Bottom pager buttons < X/X > */}
-                            <div style={styles.pager}>
+                            <div style={searchBarStyles.pager}>
                                 <button
                                     onClick={() => setPage(p => Math.max(0, p - 1))}
                                     disabled={page === 0}
                                     style={isPrevPagerBtnDisabled ? ({
-                                        ...styles.pagerButton,
+                                        ...searchBarStyles.pagerButton,
                                         cursor: 'default'
                                     }) : ({
-                                        ...styles.pagerButton,
+                                        ...searchBarStyles.pagerButton,
                                         cursor: 'pointer',
                                         backgroundColor: 'transparent',
                                         color: '#9E7A2A',
@@ -174,7 +185,7 @@ function BookManager() {
                                     {'<'}
                                 </button>
 
-                                <div style={styles.pagerStatus}>
+                                <div style={searchBarStyles.pagerStatus}>
                                     {page + 1}/{totalPages}
                                 </div>
 
@@ -182,10 +193,10 @@ function BookManager() {
                                     onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
                                     disabled={page >= totalPages - 1}
                                     style={isNextPagerBtnDisabled ? ({
-                                        ...styles.pagerButton,
+                                        ...searchBarStyles.pagerButton,
                                         cursor: 'default'
                                     }) : ({
-                                        ...styles.pagerButton,
+                                        ...searchBarStyles.pagerButton,
                                         cursor: 'pointer',
                                         backgroundColor: 'transparent',
                                         color: '#9E7A2A',
@@ -282,7 +293,7 @@ function BookManager() {
 
 export default BookManager
 
-const styles = {
+const searchBarStyles = {
     container: {
         position: 'relative',
         display: 'flex',
@@ -307,7 +318,22 @@ const styles = {
         borderRadius: 6,
         border: '1px solid #ccc'
     },
-    pager: { display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 },
+    pagerRow: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        gap: 12,
+        marginBottom: 12,
+        flexWrap: 'wrap',
+    },
+    pager: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 8,
+        alignItems: 'center',
+        flexWrap: 'nowrap',
+    },
     pagerStatus: { minWidth: 30, textAlign: 'center' },
     pagerButton: {
         padding: '4px 8px',
@@ -316,5 +342,13 @@ const styles = {
         borderRadius: 4,
         textAlign: 'center',
         fontWeight: 'bold',
+    },
+    booktypeSelect: {
+        cursor: 'pointer',
+        padding: '4px 6px',
+        borderRadius: 6,
+        border: '1px solid #9E7A2A',
+        //color: '#fff',
+        background: 'transparent'
     },
 }
