@@ -205,9 +205,17 @@ class BaseMapScene extends Phaser.Scene {
         bookBg.lineStyle(2, 0xffffff, 0.5).strokeCircle(0, 0, radius * 0.88);
         this.bookIconContainer.add(bookBg);
 
+        const mapKey = this.scene.key;
+        const isContinentCompleted = ReadingState._continentCompletedFlags?.[mapKey];
+
         const bookImg = this.add.image(0, 0, ICON_KEYS.BOOK)
             .setDisplaySize(radius * 1.3, radius * 1.3).setOrigin(0.5);
         this.bookIconContainer.add(bookImg);
+
+        const readBookImg = this.add.image(0, 0, ICON_KEYS.CHECKMARK)
+            .setDisplaySize(radius * 1.2, radius * 1.2).setOrigin(0.5).setVisible(isContinentCompleted);
+        readBookImg.name = 'readBookIcon';
+        this.bookIconContainer.add(readBookImg);
 
         const loadingIcon = this.add.image(0, 0, ICON_KEYS.HOURGLASS)
             .setDisplaySize(radius * 1.2, radius * 1.2).setOrigin(0.5).setVisible(false);
@@ -397,6 +405,8 @@ class BaseMapScene extends Phaser.Scene {
             if (!ReadingState._continentCompletedFlags[mapKey]
                 && !this.isDoingQuiz
                 && !!ReadingState.isLevelPendingResubmission(mapKey) === !!ReadingState.levelsCompletedResubmission[mapKey]) {
+                const readBookG = this.bookIconContainer?.getByName('readBookIcon');
+                readBookG.setVisible(true);
                 this.showStoryQuiz();
             }
         }
