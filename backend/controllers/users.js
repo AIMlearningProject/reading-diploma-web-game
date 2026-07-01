@@ -1,9 +1,9 @@
 import express from 'express'
 import UserService from '../services/userService.js'
+import ProgressService from '../services/progressService.js'
 import { z } from 'zod'
 import middleware from '../utils/middleware.js'
 import bcrypt from 'bcrypt'
-import ProgressService from '../services/progressService.js'
 
 const usersRouter = express.Router()
 
@@ -12,6 +12,21 @@ usersRouter.get('/my-students', middleware.requireTeacherRole, async (request, r
     try {
         const students = await UserService.getStudentsByTeacher(request.user.id)
         response.json(students)
+    } catch (error) {
+        next(error)
+    }
+})
+
+// Deletes all students and student transfer requests from this teacher
+usersRouter.delete('/my-students', middleware.requireTeacherRole, async (request, response, next) => {
+    try {
+        const requesterId = request.user.id
+        const students = await UserService.getStudentsByTeacher(requesterId)
+        if (!students) {
+            return response.status(403).json({ error: 'Ei poistettavia oppilaita' })
+        }
+        await UserService.deleteAllStudents(requesterId)
+        response.status(204).end()
     } catch (error) {
         next(error)
     }
@@ -40,7 +55,7 @@ usersRouter.post('/students', middleware.requireTeacherRole, middleware.zValidat
                 user: student[0].id
             })
         }
-        response.status(201).json(student)
+        response.status(201).json(student) // Why does this return the student's password_hash?
     } catch (error) {
         next(error)
     }
@@ -52,8 +67,41 @@ usersRouter.delete('/students/:id', middleware.requireTeacherRole, async (reques
         if (!student || student.teacher_id !== request.user.id) {
             return response.status(403).json({ error: 'Forbidden' })
         }
-        await UserService.deleteStudent(request.params.id)
+        await UserService.deleteStudent(request.user.id, request.params.id)
         response.status(204).end()
+    } catch (error) {
+        next(error)
+    }
+})
+
+usersRouter.delete('/', middleware.requireTeacherRole, async (request, response, next) => {
+    try {
+        const userId = request.user.id
+        const user = await UserService.findById(userId)
+        if (!user) {
+            return response.status(403).json({ error: 'Forbidden' })
+        }
+
+        await new Promise((resolve, reject) => {
+            request.logout((logoutError) => {
+                if (logoutError) {
+                    return reject(logoutError)
+                }
+
+                request.session.destroy((sessionError) => {
+                    if (sessionError) {
+                        return reject(sessionError)
+                    }
+
+                    response.clearCookie('connect.sid')
+                    response.clearCookie('X-CSRF-TOKEN')
+                    resolve()
+                })
+            })
+        })
+
+        await UserService.deleteUser(user.id)
+        return response.status(204).end()
     } catch (error) {
         next(error)
     }
@@ -114,6 +162,7 @@ const userRegisterSchema = z.object({
     name: z.string(),
     password: z.string().min(8),
     avatar: z.string(),
+    //role: z.string(),
     grade: z.number(),
 }).strict()
 

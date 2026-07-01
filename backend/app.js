@@ -9,6 +9,7 @@ import authRouter from './controllers/auth.js'
 import progressRouter from './controllers/progresses.js'
 import rewardsRouter from './controllers/rewards.js'
 import submissionsRouter from './controllers/submissions.js'
+import transferRequestsRouter from './controllers/transferRequests.js'
 import session from 'express-session'
 // Memorystore ∨∨∨ is good for single instance apps (dev/small app), Redis might be better for scaling,
 // because it provides multi-instance rate limit counters. Whomever it may consern: Consider this before scaling.
@@ -176,6 +177,7 @@ app.use('/api/books', apiLimiter, booksRouter)
 app.use('/api/progress', apiLimiter, progressRouter)
 app.use('/api/rewards', apiLimiter, rewardsRouter)
 app.use('/api/submissions', apiLimiter, submissionsRouter)
+app.use('/api/transfer-requests', userLimiter, transferRequestsRouter)
 
 if (environmentMode === 'production') {
     const distPath = path.resolve(__dirname, '../frontend/dist')

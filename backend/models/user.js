@@ -89,6 +89,18 @@ const User = {
             .where({ teacher_id: teacherId, role: 'student' })
     },
 
+    async deleteStudent(teacherId, id, dbConn = db) {
+        return dbConn('users')
+            .where({ role: 'student', teacher_id: teacherId, id })
+            .del()
+    },
+
+    async deleteAllStudents(teacherId, dbConn = db) {
+        return dbConn('users')
+            .where({ teacher_id: teacherId, role: 'student' })
+            .del()
+    },
+
     async deleteUser(id, dbConn = db) {
         return dbConn('users')
             .where({ id })
@@ -101,6 +113,13 @@ const User = {
         return dbConn('users')
             .where({ id })
             .update(updates)
+            .returning('*')
+    },
+
+    async transferStudentsToTeacher(studentIds, toTeacherId, dbConn = db) {
+        return dbConn('users')
+            .whereIn('id', studentIds)
+            .update({ teacher_id: toTeacherId })
             .returning('*')
     }
 }

@@ -1,3 +1,4 @@
+import TransferRequest from '../models/transferRequest.js'
 import User from '../models/user.js'
 import bcrypt from 'bcrypt'
 
@@ -132,11 +133,34 @@ const UserService = {
         return await User.findStudentsByTeacher(teacherId)
     },
 
-    async deleteStudent(id) {
+    async deleteStudent(teacherId, id) {
+        const student = await User.deleteStudent(teacherId, id)
+        if (!student) {
+            const err = new Error(`Could not find user with id ${id}`)
+            err.userDetails = 'Oppilasta ei löytynyt'
+            err.status = 404
+            throw err
+        }
+        return student
+    },
+
+    async deleteAllStudents(teacherId) {
+        const students = await User.deleteAllStudents(teacherId)
+        if (!students) {
+            const err = new Error(`Could not find students for teacher with id ${teacherId}`)
+            err.userDetails = 'Oppilaita ei löytynyt'
+            err.status = 404
+            throw err
+        }
+        await TransferRequest.deleteAllRequests(teacherId)
+        return students
+    },
+
+    async deleteUser(id) {
         const user = await User.deleteUser(id)
         if (!user) {
             const err = new Error(`Could not find user with id ${id}`)
-            err.userDetails = 'Oppilasta ei löytynyt'
+            err.userDetails = 'Käyttäjää ei löytynyt'
             err.status = 404
             throw err
         }
@@ -194,6 +218,19 @@ const UserService = {
             grade,
             emailUpdate
         )
+    },
+
+    async transferStudentsToTeacher({ fromTeacherId, toTeacherId }) {
+        const students = await User.findStudentsByTeacher(fromTeacherId)
+        const studentIds = students.map(s => s.id)
+        const updatedStudents = await User.transferStudentsToTeacher(studentIds, toTeacherId)
+        if (!updatedStudents) {
+            const err = new Error('No students were transferred (likely no students were found)')
+            err.userDetails = 'Oppilaita ei siirretty'
+            err.status = 404
+            throw err
+        }
+        return updatedStudents
     },
 
     // Unused (used only in unused endpoint)
