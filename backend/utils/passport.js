@@ -4,6 +4,8 @@ import { Strategy as LocalStrategy } from 'passport-local'
 import UserService from '../services/userService.js'
 import bcrypt from 'bcrypt'
 
+const DUMMY_BCRYPT_HASH = '$2b$12$FYjC1oNXGVavNcrWAixpY.VpQDc8Rs2hYQJJ3rA8519NlrAacdEqq'
+
 // !! vv !!
 // After Google login, passport gets the user profile unsing findById
 // On every request the deserializeUser function loads the full user from the database into request.user <---
@@ -31,22 +33,23 @@ passport.use(new LocalStrategy(
             let user
             const teacherName = req.body.teacher_name
 
+            const User = (await import('../models/user.js')).default
             if (teacherName) {
                 // Student login: look up teacher by name, then find student under that teacher
-                const User = (await import('../models/user.js')).default
                 const teacher = await User.findTeacherByName(teacherName)
-                if (!teacher) {
-                    return done(null, false, { message: 'Väärä nimi tai salasana' })
+                if (teacher) {
+                    user = await User.findStudentByNameAndTeacher(identifier, teacher.id)
                 }
-                user = await User.findStudentByNameAndTeacher(identifier, teacher.id)
             } else {
-                user = await UserService.findByName(identifier)
+                user = await User.findByName(identifier)
             }
 
-            if (!user) return done(null, false, { message: 'Väärä nimi tai salasana' })
+            const storedHash = user?.password_hash ?? DUMMY_BCRYPT_HASH
+            const valid = await bcrypt.compare(password, storedHash)
 
-            const valid = await bcrypt.compare(password, user.password_hash)
-            if (!valid) return done(null, false, { message: 'Väärä nimi tai salasana' })
+            if (!user || !valid) {
+                return done(null, false, { message: 'Väärä nimi tai salasana' })
+            }
 
             return done(null, user) // user still contains password_hash here
         } catch (error) {
