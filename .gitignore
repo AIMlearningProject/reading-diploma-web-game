@@ -10,8 +10,7 @@ bash.exe.stackdump
 backend/public/uploads/
 
 # Node.js specific ignores
-# backend/pnpm-lock.yaml
-frontend/pnpm-lock.yaml
+pnpm-lock.yaml
 yarn.lock
 
 # Logs
