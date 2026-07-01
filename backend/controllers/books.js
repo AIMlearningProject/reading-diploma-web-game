@@ -65,49 +65,58 @@ booksRouter.post('/',
 
         const { title: rawTitle, author: rawAuthor, booktype, content } = request.validated
 
-        if (!request.file) {
-            return response.status(400).json({ error: 'No cover image uploaded' })
-        }
-
         try {
-            // Compress image and check file size
-            const optimizedBuffer = await sharp(request.file.buffer)
-                .resize(600, 900, { fit: 'inside' })
-                .jpeg({ quality: 75 })
-                .toBuffer()
+            if (request.file) {
+                // Compress image and check file size
+                const optimizedBuffer = await sharp(request.file.buffer)
+                    .resize(600, 900, { fit: 'inside' })
+                    .jpeg({ quality: 75 })
+                    .toBuffer()
 
-            const maxCompressedSize = 1 * 1024 * 1024 // 1 MB
+                const maxCompressedSize = 1 * 1024 * 1024 // 1 MB
 
-            if (optimizedBuffer.length > maxCompressedSize) {
-                return response.status(400).json({ error: 'Image too large' })
+                if (optimizedBuffer.length > maxCompressedSize) {
+                    return response.status(400).json({ error: 'Image too large' })
+                }
+
+                // Generate a safe filename
+                const extensionMap = {
+                    'image/jpeg': '.jpg',
+                    'image/png': '.png',
+                    'image/webp': '.webp'
+                }
+
+                const extension = extensionMap[request.file.mimetype]
+                const filename = `${Date.now()}-${crypto.randomUUID() + extension}`
+
+                const newBook = {
+                    title: normalize(rawTitle),
+                    author: normalize(rawAuthor),
+                    coverimage: `/uploads/book-covers/${filename}`,
+                    booktype,
+                    content
+                }
+
+                await BookService.addBook(newBook)
+
+                // Write file to disk only after all validations have passed
+                const coverUploadDir = path.resolve(__dirname, '../public/uploads/book-covers')
+                const filepath = path.join(coverUploadDir, filename)
+                await fs.writeFile(filepath, optimizedBuffer)
+
+                response.status(201).json(newBook)
+            } else {
+                const newBook = {
+                    title: normalize(rawTitle),
+                    author: normalize(rawAuthor),
+                    coverimage: '/uploads/book-covers/defaultNoImg.ico',
+                    booktype,
+                    content
+                }
+
+                await BookService.addBook(newBook)
+                response.status(201).json(newBook)
             }
-
-            // Generate a safe filename
-            const extensionMap = {
-                'image/jpeg': '.jpg',
-                'image/png': '.png',
-                'image/webp': '.webp'
-            }
-
-            const extension = extensionMap[request.file.mimetype]
-            const filename = `${Date.now()}-${crypto.randomUUID() + extension}`
-
-            const newBook = {
-                title: normalize(rawTitle),
-                author: normalize(rawAuthor),
-                coverimage: `/uploads/book-covers/${filename}`,
-                booktype,
-                content
-            }
-
-            await BookService.addBook(newBook)
-
-            // Write file to disk only after all validations have passed
-            const coverUploadDir = path.resolve(__dirname, '../public/uploads/book-covers')
-            const filepath = path.join(coverUploadDir, filename)
-            await fs.writeFile(filepath, optimizedBuffer)
-
-            response.status(201).json(newBook)
         } catch (error) {
             next(error)
         }

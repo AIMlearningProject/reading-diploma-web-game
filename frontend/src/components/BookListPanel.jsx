@@ -103,7 +103,7 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
                             <img
                                 src={book.coverimage}
                                 alt={book.title}
-                                style={styles.bookImg}
+                                style={book.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? styles.emptyBookImg : styles.bookImg}
                                 onError={(e) => {
                                     e.currentTarget.style.display = "none"
                                 }}
@@ -270,13 +270,10 @@ const styles = {
 
     bookRow: {
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
         padding: 12,
         background: '#1e3a5f',
         marginBottom: 8,
         borderRadius: 6,
-        transition: 'background 0.2s',
         border: '2px solid #d4af37',
         cursor: 'pointer',
         gap: '12px',
@@ -300,6 +297,13 @@ const styles = {
         width: '45px',
         height: '60px',
         objectFit: 'cover',
+        borderRadius: '4px',
+    },
+
+    emptyBookImg: {
+        alignSelf: 'flex-start',
+        justifySelf: 'center',
+        objectFit: 'contain',
         borderRadius: '4px',
     },
 

@@ -207,6 +207,14 @@ td[data-label="Toiminnot"] {
     display: block;
 }
 
+.empty-book-cover-thumb {
+    align-self: flex-start;
+    justify-self: center;
+    object-fit: contain;
+    border-radius: 6px;
+    display: block;
+}
+
 .data-table tbody tr:last-child td {
     border-bottom: none;
 }
@@ -734,7 +742,7 @@ td[data-label="Toiminnot"] {
 
 .progress-level-badge--resubmit {
     background: linear-gradient(145deg, #ad87ff, #865fd9);
-     border-color: #7141d7;
+    border-color: #7141d7;
     color: #fff;
 }
 
@@ -1114,6 +1122,13 @@ td[data-label="Toiminnot"] {
         width: 50px;
         height: 70px;
         object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .empty-mobile-book-cover {
+        align-self: flex-start;
+        justify-self: center;
+        object-fit: contain;
         border-radius: 4px;
     }
 

@@ -59,15 +59,10 @@ function BookManager() {
         e.preventDefault()
         setError('')
 
-        if (!coverimage) {
-            setError("Lisää kuva kirjan kannesta");
-            return;
-        }
-
         const formData = new FormData()
         formData.append('title', title)
         formData.append('author', author)
-        formData.append('coverimage', coverimage)
+        if (coverimage) formData.append('coverimage', coverimage)
         formData.append('booktype', booktype)
 
         try {
@@ -123,10 +118,11 @@ function BookManager() {
                                 </thead>
                                 <tbody>
                                     {pageSlice.map((b) => (
+                                        //const coverImgClass = b.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? "empty-book-cover-thumb" : "book-cover-thumb"
                                         <tr key={b.id}>
                                             <td>
                                                 <img
-                                                    className="book-cover-thumb"
+                                                    className={b.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? "empty-book-cover-thumb" : "book-cover-thumb"}
                                                     src={b.coverimage}
                                                     alt={b.title}
                                                     onError={(e) => {
@@ -148,7 +144,7 @@ function BookManager() {
                                 {pageSlice.map((b) => (
                                     <div className="mobile-book-item" key={b.id}>
                                         <img
-                                            className="mobile-book-cover"
+                                            className={b.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? "empty-mobile-book-cover" : "mobile-book-cover"}
                                             src={b.coverimage}
                                             alt={b.title}
                                             onError={(e) => {
@@ -256,7 +252,6 @@ function BookManager() {
                 <div className="form-group upload-field-group">
                     <label>
                         Kansikuva
-                        <span className="section-error">*</span>
                     </label>
                     <input
                         ref={fileInputRef}

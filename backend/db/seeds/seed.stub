@@ -11,7 +11,7 @@ export async function seed(knex) {
                 name: 'kalle'
             })
             /* -- For inserting entries all at once --
-            return await knex('users').insert([
+            return await knex('table_name').insert([
                 { id: 1, name: 'Kalle' },
                 { id: 2, name: 'Alice' },
             ])*/
