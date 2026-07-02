@@ -188,6 +188,14 @@
     flex-wrap: wrap;
 }
 
+.divider {
+    width: 2px;
+    height: 28px;
+    background: rgba(196, 151, 58, 0.45);
+    border-radius: 2px;
+    align-self: center;
+}
+
 .cancel-button {
     background: transparent;
     border: 1.5px solid rgba(196, 151, 58, 0.55);
@@ -252,4 +260,14 @@
 @keyframes toastIn {
     from { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.96); }
     to   { opacity: 1; transform: translateX(-50%) translateY(0)      scale(1);   }
+}
+
+@media (max-width: 600px) {
+    .divider {
+        width: 100%;
+        height: 2px;
+        background: #c4973a73;
+        margin: 0.3rem 0;
+        border-radius: 2px;
+    }
 }

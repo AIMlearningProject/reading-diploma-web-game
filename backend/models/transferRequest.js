@@ -1,15 +1,15 @@
 import db from '../db/db.js'
 
 const TransferRequest = {
-    async create({ requester_teacher_id, recipient_teacher_id, status, message }, dbConn = db) {
+    async create({ requester_teacher_id, recipient_teacher_id, status, message, student_count }, dbConn = db) {
         return dbConn('transfer_requests')
-            .insert({ requester_teacher_id, recipient_teacher_id, status, message })
+            .insert({ requester_teacher_id, recipient_teacher_id, status, message, student_count })
             .returning('*')
     },
 
     async findRequestById(id, dbConn = db) {
         return dbConn('transfer_requests')
-            .select('id', 'requester_teacher_id', 'recipient_teacher_id', 'status', 'message', 'created_at', 'updated_at')
+            .select('id', 'requester_teacher_id', 'recipient_teacher_id', 'status', 'message', 'student_count', 'created_at', 'updated_at')
             .where({ id })
             .first()
     },
@@ -24,21 +24,21 @@ const TransferRequest = {
             .first()
     },
 
-    // Returns the transfer requests for a specific recipient along with recipient email.
-    async findPendingRequest(rquesterTeacherId, dbConn = db) {
+    // Returns the pending transfer requests for a specific requester.
+    async findPendingRequestsByRequester(requesterTeacherId, dbConn = db) {
         return dbConn('transfer_requests as tr')
             .join('users as recipient', 'recipient.id', 'tr.recipient_teacher_id')
             .select(
                 'tr.id',
                 'tr.requester_teacher_id',
-                'tr.recipient_teacher_id',
                 'tr.status',
                 'tr.message',
+                'tr.student_count',
                 'tr.created_at',
                 'tr.updated_at',
                 'recipient.email as recipient_email'
             )
-            .where('tr.requester_teacher_id', rquesterTeacherId)
+            .where('tr.requester_teacher_id', requesterTeacherId)
             .where({ status: 'pending' })
             .orderBy('tr.created_at', 'desc')
     },
@@ -53,6 +53,7 @@ const TransferRequest = {
                 'tr.recipient_teacher_id',*/
                 'tr.status',
                 'tr.message',
+                'tr.student_count',
                 'tr.created_at',
                 'tr.updated_at',
                 'requester.name as requester_name',

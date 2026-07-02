@@ -251,7 +251,6 @@ function StudentManager() {
                                                     <button className="add-button" style={{ padding: '0.35rem 0.75rem', alignSelf: 'unset', fontSize: '0.85rem' }} onClick={() => handleEmailSave(s.id)}>Tallenna</button>
                                                     <button className="cancel-button" style={{ padding: '0.35rem 0.75rem', fontSize: '0.85rem', marginLeft: '0.5rem' }} onClick={() => { setEditEmailId(null); setEditEmailError('') }}>Peruuta</button>
                                                 </>
-                                            // eslint-disable-next-line unicorn/no-nested-ternary
                                             ) : resetPwdId === s.id ? (
                                                 <div className="pwd-reset-widget">
                                                     <input

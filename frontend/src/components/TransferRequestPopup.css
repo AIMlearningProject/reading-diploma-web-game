@@ -1,0 +1,317 @@
+/* ── Tabs ───────────────────────────────────────────────── */
+.transfer-tabs {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1.5px solid rgba(212, 175, 55, 0.25);
+    padding-bottom: 0.5rem;
+}
+
+.transfer-tab {
+    flex: 1;
+    text-align: center;
+    padding: 0.6rem 0.8rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #9E7A2A;
+    transition: all 0.25s ease;
+}
+
+.transfer-tab.active {
+    color: #1e3a5f;
+    background: rgba(212, 175, 55, 0.12);
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(22, 45, 78, 0.12);
+}
+
+/* ── Sent request preview ───────────────────────────────── */
+.sent-item {
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.sent-email {
+    font-weight: 700;
+    color: #C4973A;
+    font-size: 0.95rem;
+}
+
+.sent-date {
+    font-size: 0.82rem;
+    color: #5c6877;
+}
+
+.sent-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+/* ── Transfer Request Section ───────────────────────────── */
+.transfer-request-section {
+    background: linear-gradient(135deg, rgba(216, 178, 90, 0.08) 0%, rgba(196, 151, 58, 0.05) 100%);
+    border: 1.5px solid rgba(212, 175, 55, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.transfer-request-section h2 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    margin: 0 0 1.25rem 0;
+    letter-spacing: 0.03em;
+}
+
+.transfer-requests-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.transfer-request-item {
+    background: rgb(255, 255, 255);
+    border: 1px solid rgba(196, 151, 58, 0.2);
+    border-radius: 6px;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.7rem;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+}
+
+.transfer-request-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.transfer-request-text {
+    font-size: 0.95rem;
+    color: #1e3a5f;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.transfer-request-text span {
+    margin-right: 4px;
+}
+
+.transfer-request-name {
+    font-weight: 700;
+    color: #C4973A;
+}
+
+.transfer-request-message {
+    font-size: 0.85rem;
+    color: #9E7A2A;
+    font-style: italic;
+    margin: 0;
+    padding: 0.75rem;
+    background: rgba(196, 151, 58, 0.08);
+    border-left: 2px solid rgba(196, 151, 58, 0.3);
+    border-radius: 3px;
+}
+
+.transfer-request-date {
+    font-size: 0.85rem;
+    color: #5c6877;
+}
+
+.transfer-request-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.transfer-request-status {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    text-decoration: overline;
+}
+
+.transfer-request-status--pending {
+    /*background: rgba(212, 175, 55, 0.16);*/
+    color: #9E7A2A;
+    /*border: 1px solid rgba(212, 175, 55, 0.3);*/
+}
+
+.transfer-request-status--accepted {
+    /*background: rgba(125, 176, 133, 0.16);*/
+    color: #3f6f4b;
+    /*border: 1px solid rgba(125, 176, 133, 0.28);*/
+}
+
+.transfer-request-status--rejected {
+    /*background: rgba(217, 119, 119, 0.16);*/
+    color: #a64b4b;
+    /*border: 1px solid rgba(217, 119, 119, 0.28);*/
+}
+
+.transfer-request-status--cancelled {
+    /*background: rgba(116, 125, 140, 0.16);*/
+    color: #5c6877;
+    /*border: 1px solid rgba(116, 125, 140, 0.24);*/
+}
+
+.accept-button,
+.reject-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Nunito', sans-serif;
+}
+
+.accept-button {
+    background: linear-gradient(135deg, #90C695 0%, #7DB085 100%);
+    color: white;
+    border: 1.5px solid #7DB085;
+}
+
+.accept-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(125, 176, 133, 0.3);
+}
+
+.accept-button:disabled,
+.reject-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.reject-button {
+    background: linear-gradient(135deg, #E8A0A0 0%, #D97777 100%);
+    color: white;
+    border: 1.5px solid #D97777;
+}
+
+.reject-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(217, 119, 119, 0.3);
+}
+
+.transfer-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+}
+
+.transfer-toast--success {
+    background: linear-gradient(135deg, #90C695 0%, #7DB085 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(125, 176, 133, 0.3);
+}
+
+.transfer-toast--error {
+    background: linear-gradient(135deg, #E8A0A0 0%, #D97777 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(217, 119, 119, 0.3);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .transfer-tabs {
+        gap: 0.35rem;
+        padding-bottom: 0.4rem;
+    }
+
+    .transfer-tab {
+        padding: 0.55rem 0.6rem;
+        font-size: 0.85rem;
+    }
+
+    .transfer-tab.active {
+        box-shadow: 0 2px 5px rgba(22, 45, 78, 0.18);
+    }
+
+    .sent-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+    }
+
+    .sent-email {
+        font-size: 1rem;
+    }
+
+    .sent-date {
+        font-size: 0.85rem;
+        opacity: 0.85;
+    }
+
+    .transfer-request-message {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        padding: 0.65rem;
+    }
+
+    .transfer-request-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .transfer-request-actions {
+        width: 100%;
+    }
+
+    .accept-button,
+    .reject-button {
+        flex: 1;
+    }
+
+    .transfer-toast {
+        left: 20px;
+        right: 20px;
+        top: auto;
+        bottom: 20px;
+    }
+}

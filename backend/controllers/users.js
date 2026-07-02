@@ -22,10 +22,9 @@ usersRouter.delete('/my-students', middleware.requireTeacherRole, async (request
     try {
         const requesterId = request.user.id
         const students = await UserService.getStudentsByTeacher(requesterId)
-        if (!students) {
-            return response.status(403).json({ error: 'Ei poistettavia oppilaita' })
+        if (students || students.length > 0) {
+            await UserService.deleteAllStudents(requesterId)
         }
-        await UserService.deleteAllStudents(requesterId)
         response.status(204).end()
     } catch (error) {
         next(error)

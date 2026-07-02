@@ -4,7 +4,7 @@ import './TeacherProfileCard.css'
 import { updateTeacherName } from '../services/api'
 
 /* ── TeacherProfileCard ────────────────────────────────────── */
-function TeacherProfileCard() {
+function TeacherProfileCard({ setShowTransferPopup, setShowAccountDeletionPopup }) {
     const { user } = useAuth()
     const [editing, setEditing] = useState(false)
     const [name, setName] = useState(user?.name || '')
@@ -72,6 +72,13 @@ function TeacherProfileCard() {
                         </button>
                         <button className="cancel-button" onClick={handleCancel} disabled={saving}>
                             Peruuta
+                        </button>
+                        <div className='divider'></div>
+                        <button className="open-transfer-requests-button" onClick={() => setShowTransferPopup(true)}>
+                            Avaa siirtopyynnöt
+                        </button>
+                        <button className="delete-profile-button" onClick={() => setShowAccountDeletionPopup(true)} disabled={saving}>
+                            Poista Käyttäjä
                         </button>
                     </div>
                 </div>

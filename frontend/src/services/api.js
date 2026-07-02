@@ -120,6 +120,16 @@ export function updateTeacherName(id, name) {
         body: JSON.stringify({ name }),
     });
 }
+export function deleteCurrentTeacher() {
+    return request(`/api/users`, {
+        method: 'DELETE',
+    });
+}
+export function deleteAllMyStudents() {
+    return request('/api/users/my-students', {
+        method: 'DELETE',
+    });
+}
 export function fetchMyStudents() { return request('/api/users/my-students'); }
 export function createStudent(body) {
     return request('/api/users/students', {
@@ -154,6 +164,35 @@ export function resetStudentPassword(id, password) {
 export function deleteStudent(id) {
     return request(`/api/users/students/${id}`, {
         method: 'DELETE',
+    });
+}
+
+// Transfer request endpoints
+export function fetchTransferRequestsInbox() {
+    return request('/api/transfer-requests/inbox');
+}
+export function fetchTransferRequestsOutbox() {
+    return request('/api/transfer-requests/outbox');
+}
+export function sendTransferRequest(body) {
+    return request(`/api/transfer-requests`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+    });
+}
+export function deleteTransferRequest(id) {
+    return request(`/api/transfer-requests/${id}`, {
+        method: 'DELETE',
+    });
+}
+export function acceptTransferRequest(id) {
+    return request(`/api/transfer-requests/${id}/accept`, {
+        method: 'PATCH',
+    });
+}
+export function rejectTransferRequest(id) {
+    return request(`/api/transfer-requests/${id}/reject`, {
+        method: 'PATCH',
     });
 }
 

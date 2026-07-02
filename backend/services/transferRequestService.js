@@ -2,7 +2,7 @@ import TransferRequest from '../models/transferRequest.js'
 import User from '../models/user.js'
 
 const TransferRequestService = {
-    async createTransferRequest({ requesterTeacherId, recipientEmail, message }) {
+    async createTransferRequest({ requesterTeacherId, recipientEmail, message, student_count }) {
         if (!recipientEmail) {
             const err = new Error('Recipient email is required')
             err.userDetails = 'Vastaanottajan sähköposti vaaditaan'
@@ -51,13 +51,15 @@ const TransferRequestService = {
             requester_teacher_id: requesterTeacherId,
             recipient_teacher_id: recipient.id,
             status: 'pending',
-            message: message ?? null
+            message: message ?? null,
+            student_count
         })
 
         const cleanedRequest = {
             email: recipientEmail,
-            status: transferRequest.status,
+            status: 'pending',
             message: transferRequest.message,
+            student_count,
             created_at: transferRequest.created_at,
             updated_at: transferRequest.updated_at,
         }
@@ -83,6 +85,11 @@ const TransferRequestService = {
 
     async listRequestsByTeacher(teacherId) {
         const requests = await TransferRequest.findByRequester(teacherId)
+        return requests || []
+    },
+
+    async listPendingRequestsByTeacher(teacherId) {
+        const requests = await TransferRequest.findPendingRequestsByRequester(teacherId)
         return requests || []
     },
 

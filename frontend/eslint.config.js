@@ -57,6 +57,7 @@ export default defineConfig([
             'unicorn/no-static-only-class': 'off',
             'unicorn/no-empty-file': 'off',
             'unicorn/prefer-spread': 'off',
+            'unicorn/no-nested-ternary': 'off',
 
             // Unsure if this should be allowed
             'unicorn/no-global-object-property-assignment': 'off',

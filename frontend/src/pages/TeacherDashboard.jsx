@@ -1,8 +1,11 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import StudentManager from '../components/StudentManager'
 import BookManager from '../components/BookManager'
 import TeacherProfileCard from '../components/TeacherProfileCard'
+import TransferRequestPopup from '../components/TransferRequestPopup'
+import AccountDeletionPopup from '../components/AccountDeletionPopup'
 import homeBG from '../assets/HomeBG1.jpg'
 import './TeacherDashboard.css'
 import { BooksProvider } from '../contexts/BooksContext'
@@ -10,6 +13,8 @@ import { BooksProvider } from '../contexts/BooksContext'
 function TeacherDashboard() {
     const { user, logout } = useAuth()
     const navigate = useNavigate()
+    const [showTransferPopup, setShowTransferPopup] = useState(false)
+    const [showAccountDeletionPopup, setShowAccountDeletionPopup] = useState(false)
 
     const handleLogout = async () => {
         await logout()
@@ -29,7 +34,19 @@ function TeacherDashboard() {
             </header>
 
             <div className="dashboard-content">
-                <TeacherProfileCard />
+                <AccountDeletionPopup
+                    open={showAccountDeletionPopup}
+                    onClose={() => setShowAccountDeletionPopup(false)}
+                    setShowTransferPopup={setShowTransferPopup}
+                />
+                <TransferRequestPopup
+                    open={showTransferPopup}
+                    onClose={() => setShowTransferPopup(false)}
+                />
+                <TeacherProfileCard
+                    setShowTransferPopup={setShowTransferPopup}
+                    setShowAccountDeletionPopup={setShowAccountDeletionPopup}
+                />
                 <BooksProvider>
                     <StudentManager />
                     <BookManager />

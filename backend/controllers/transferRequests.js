@@ -15,15 +15,21 @@ const transferStudentsSchema = z.object({
 transferRequestsRouter.post('/', middleware.requireTeacherRole, middleware.zValidate(transferStudentsSchema), async (request, response, next) => {
     const { recipientEmail, message } = request.validated
     try {
-        const students = UserService.getStudentsByTeacher(request.user.id)
-        if (!students) {
+        const students = await UserService.getStudentsByTeacher(request.user.id)
+        if (!students || students.length === 0) {
             return response.status(400).json({ error: 'Ei siirrettäviä oppilaita' })
+        }
+
+        const transferRequests = await TransferRequestService.listPendingRequestsByTeacher(request.user.id)
+        if (transferRequests.length >= 3) {
+            return response.status(400).json({ error: 'Voit lähettää enintään 3 pyyntöä kerralla' })
         }
 
         const transferRequest = await TransferRequestService.createTransferRequest({
             requesterTeacherId: request.user.id,
             recipientEmail,
-            message
+            message,
+            student_count: students.length
         })
 
         response.status(201).json(transferRequest)
@@ -82,7 +88,7 @@ transferRequestsRouter.patch('/:id/reject', middleware.requireTeacherRole, async
     }
 })
 
-// Delete transfer request
+// Delete sent transfer request
 transferRequestsRouter.delete('/:id', middleware.requireTeacherRole, async (request, response, next) => {
     try {
         const requesterId = request.user.id

@@ -43,7 +43,7 @@
     gap: 0.75rem;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: auto;
     box-shadow:
         0 4px 24px rgba(22, 45, 78, 0.45),
         0 1px 0 rgba(196, 151, 58, 0.25) inset;
@@ -385,6 +385,51 @@ td[data-label="Toiminnot"] {
     color: #FFF8F0;
     border-color: #8B1A1A;
     box-shadow: 0 2px 8px rgba(139, 26, 26, 0.25);
+}
+
+.delete-profile-button {
+    background: transparent;
+    border: 1px solid rgba(139, 26, 26, 0.45);
+    color: #8B1A1A;
+    border-radius: 4px;
+    padding: 0.45rem 0.9rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.15s;
+}
+
+.delete-profile-button:hover {
+    background: #8B1A1A;
+    color: #FFF8F0;
+    border-color: #8B1A1A;
+    box-shadow: 0 2px 8px rgba(139, 26, 26, 0.25);
+}
+
+/* ── Open transfer requests button ────────────────────────── */
+.open-transfer-requests-button {
+    background: transparent;
+    border: 2px solid rgba(212, 175, 55, 0.55);
+    color: #C4973A;
+
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.open-transfer-requests-button:hover {
+    background: rgba(212, 175, 55, 0.12);
+    transform: translateY(-1px);
 }
 
 /* ── Empty & Error States ────────────────────────────────── */
@@ -1153,5 +1198,93 @@ td[data-label="Toiminnot"] {
     .mobile-book-type {
         font-size: 12px;
         opacity: 0.7;
+    }
+}
+
+/* ── Popup Window ───────────────────────────────────────── */
+.tr-popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(22, 45, 78, 0.45); /* matches your blue shadow tones */
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.tr-popup-window {
+    width: 92%;
+    max-width: 760px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    z-index: 450;
+}
+
+.popup-view-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.popup-view-label {
+    font-size: 0.97rem;
+    color: #9E7A2A;
+    font-style: italic;
+    margin: 0;
+    opacity: 0.85;
+}
+
+.tr-popup-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    background: rgb(255, 255, 255);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 50%;
+
+    width: 32px;
+    height: 32px;
+
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e3a5f;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 500;
+}
+
+.tr-popup-close:hover {
+    background: rgb(255, 255, 255);
+    transform: scale(1.08);
+}
+
+@keyframes trPopupIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ── Mobile Responsive popup ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .tr-popup-window {
+        padding: 1.25rem;
+        max-height: 95vh;
+    }
+
+    .tr-popup-close {
+        top: 10px;
+        right: 10px;
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
     }
 }

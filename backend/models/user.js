@@ -116,11 +116,24 @@ const User = {
             .returning('*')
     },
 
-    async transferStudentsToTeacher(studentIds, toTeacherId, dbConn = db) {
-        return dbConn('users')
-            .whereIn('id', studentIds)
-            .update({ teacher_id: toTeacherId })
-            .returning('*')
+    async transferStudentsToTeacher(studentUpdates, toTeacherId, dbConn = db) {
+        return dbConn.transaction(async (trx) => {
+            const updatedStudents = []
+
+            for (const student of studentUpdates) {
+                const [updatedStudent] = await trx('users')
+                    .where({ id: student.id })
+                    .update({
+                        teacher_id: toTeacherId,
+                        name: student.name
+                    })
+                    .returning('*')
+
+                updatedStudents.push(updatedStudent)
+            }
+
+            return updatedStudents
+        })
     }
 }
 

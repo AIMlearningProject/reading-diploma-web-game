@@ -1,4 +1,3 @@
-import TransferRequest from '../models/transferRequest.js'
 import User from '../models/user.js'
 import bcrypt from 'bcrypt'
 
@@ -145,15 +144,8 @@ const UserService = {
     },
 
     async deleteAllStudents(teacherId) {
-        const students = await User.deleteAllStudents(teacherId)
-        if (!students) {
-            const err = new Error(`Could not find students for teacher with id ${teacherId}`)
-            err.userDetails = 'Oppilaita ei löytynyt'
-            err.status = 404
-            throw err
-        }
-        await TransferRequest.deleteAllRequests(teacherId)
-        return students
+        // await TransferRequest.deleteAllRequests(teacherId)
+        return await User.deleteAllStudents(teacherId)
     },
 
     async deleteUser(id) {
@@ -221,10 +213,32 @@ const UserService = {
     },
 
     async transferStudentsToTeacher({ fromTeacherId, toTeacherId }) {
-        const students = await User.findStudentsByTeacher(fromTeacherId)
-        const studentIds = students.map(s => s.id)
-        const updatedStudents = await User.transferStudentsToTeacher(studentIds, toTeacherId)
-        if (!updatedStudents) {
+        const studentsFromTeacher = await User.findStudentsByTeacher(fromTeacherId)
+        if (!studentsFromTeacher || studentsFromTeacher.length === 0) {
+            const err = new Error('No students were found to transfer')
+            err.userDetails = 'Ei siirrettäviä oppilaita'
+            err.status = 404
+            throw err
+        }
+
+        const studentsToTeacher = await User.findStudentsByTeacher(toTeacherId)
+        const usedNames = new Set((studentsToTeacher || []).map((student) => student.name?.trim().toLowerCase()))
+        const studentsToTransfer = studentsFromTeacher.map((student) => {
+            const baseName = student.name?.trim() || 'Opiskelija'
+            let finalName = baseName
+            let counter = 1
+
+            while (usedNames.has(finalName.toLowerCase())) {
+                finalName = `${baseName}${counter}`
+                counter += 1
+            }
+
+            usedNames.add(finalName.toLowerCase())
+            return { id: student.id, name: finalName }
+        })
+
+        const updatedStudents = await User.transferStudentsToTeacher(studentsToTransfer, toTeacherId)
+        if (!updatedStudents || updatedStudents.length === 0) {
             const err = new Error('No students were transferred (likely no students were found)')
             err.userDetails = 'Oppilaita ei siirretty'
             err.status = 404
