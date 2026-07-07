@@ -94,7 +94,8 @@ booksRouter.post('/',
                     author: normalize(rawAuthor),
                     coverimage: `/uploads/book-covers/${filename}`,
                     booktype,
-                    content
+                    content,
+                    added_by: request.user.id
                 }
 
                 await BookService.addBook(newBook)
@@ -111,7 +112,8 @@ booksRouter.post('/',
                     author: normalize(rawAuthor),
                     coverimage: '/uploads/book-covers/defaultNoImg.ico',
                     booktype,
-                    content
+                    content,
+                    added_by: request.user.id
                 }
 
                 await BookService.addBook(newBook)

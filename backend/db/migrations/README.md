@@ -12,7 +12,11 @@
 
 - npm run db:make migration_name_here --> to create a new migration file (fit with the ES module)
 
-- npm run db:seed seed_name_here --> to create a new seed file (fit with the ES module) for filling tables with data. (Useful in testing)
+- npm run db:seed seed_name_here --> to create a new seed file (fit with the ES module) for filling tables with data.
+
+- npx knex seed:run --> runs seed files in alphabetical order.
+
+- npx knex seed:run --specific=seed-filename.js --specific=another-seed-filename.js --> to run specific seed files.
 
 >Quide for building table creationg schemas
 https://knexjs.org/guide/schema-builder.html#integer

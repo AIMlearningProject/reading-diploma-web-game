@@ -1,7 +1,7 @@
 import Book from '../models/book.js'
 
 const BookService = {
-    async addBook({ title, author, coverimage, booktype, content }) {
+    async addBook({ title, author, coverimage, booktype, content, added_by }) {
         const existing = await Book.findByTitleAndAuthor(title, author)
         if (existing) {
             const err = new Error(`A book with the title and author '${title}' - '${author}' already exists`)
@@ -10,12 +10,21 @@ const BookService = {
             throw err
         }
 
+        const addedBooks = await Book.getByAdder(added_by)
+        if (addedBooks.length >= 30) {
+            const err = new Error(`One user can add a maximum of ${addedBooks.length} books`)
+            err.userDetails = `Voit lisätä enintään ${addedBooks.length} kirjaa`
+            err.status = 403
+            throw err
+        }
+
         return Book.create({
             title,
             author,
             coverimage,
             booktype,
-            content
+            content,
+            added_by
         })
     },
 

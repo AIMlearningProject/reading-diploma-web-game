@@ -1,9 +1,9 @@
 import db from '../db/db.js'
 
 const Book = {
-    async create({ title, author, coverimage, booktype, content }, dbConn = db) {
+    async create({ title, author, coverimage, booktype, content, added_by }, dbConn = db) {
         return dbConn('books')
-            .insert({ title, author, coverimage, booktype, content })
+            .insert({ title, author, coverimage, booktype, content, added_by })
             .returning('*')
     },
 
@@ -16,7 +16,15 @@ const Book = {
 
     async getAll(dbConn = db) {
         return dbConn('books')
-            .select('*')
+            .select('id', 'title', 'author', 'coverimage', 'booktype', 'content'/*, 'added_by'*/)
+            //.select('*')
+    },
+
+    async getByAdder(added_by, dbConn = db) {
+        return dbConn('books')
+            .select('id', 'title', 'author', 'coverimage', 'booktype', 'content'/*, 'added_by'*/)
+            .where({ added_by })
+            //.select('*')
     },
 
     async deleteBook(id, dbConn = db){
