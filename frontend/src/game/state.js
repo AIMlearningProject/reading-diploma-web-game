@@ -13,7 +13,7 @@ import {
     addReward,
     completeLevel,
     updateLevelProgress,
-    fetchBooks,
+    fetchMyBooks,
     fetchProgress,
     fetchSubmissions,
     reSubmitQuiz,
@@ -158,7 +158,7 @@ const ReadingState = {
             const [submissionsData, progressData, booksData] = await Promise.allSettled([
                 fetchSubmissions(),
                 fetchProgress(),
-                fetchBooks()
+                fetchMyBooks()
             ]);
 
             // --- 1. Prioritize handling the book list (ensure Book List does not disappear due to progress errors) ---

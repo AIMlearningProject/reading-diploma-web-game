@@ -50,12 +50,17 @@ export async function fetchLogin(identifier, password, teacher_name) {
 }
 
 // Book endpoints
-export function fetchBooks() { return request('/api/books'); }
-export function fetchBook(id) { return request(`/api/books/${id}`); } // Unused
+export function fetchBooks() { return request('/api/books'); } // Unused
+export function fetchMyBooks() { return request('/api/books/my-books'); }
 export function createBook(body) {
     return request('/api/books', {
         method: 'POST',
         body: body,
+    });
+}
+export function deleteBook(id) {
+    return request(`/api/books/${id}`, {
+        method: 'DELETE',
     });
 }
 

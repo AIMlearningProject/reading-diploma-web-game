@@ -1,14 +1,14 @@
 import { createContext, useState, useEffect } from 'react';
-import { fetchBooks } from '../services/api';
+import { fetchMyBooks } from '../services/api';
 
 const BooksContext = createContext({ books: [], setBooks: () => {} });
 
 export function BooksProvider({ children }) {
     const [books, setBooks] = useState([]);
 
-    const fetchMyBooks = async () => {
+    const fetchBookList = async () => {
         try {
-            const res = await fetchBooks()
+            const res = await fetchMyBooks()
             setBooks(res)
         } catch {
             setBooks([])
@@ -16,7 +16,7 @@ export function BooksProvider({ children }) {
     }
 
     useEffect(() => {
-        fetchMyBooks()
+        fetchBookList()
     }, []);
     
     return (

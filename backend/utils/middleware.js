@@ -74,7 +74,7 @@ const errorHandler = (error, request, response, _next) => {
     and prints the actual error to backend console/terminal for developers to see
     */
 
-    logger.error(error.message)
+    if (process.env.NODE_ENV !== 'production') logger.error(error.message)
     if (error.name === 'userNotFound') {
         return response.status(404).send({ error: 'Käyttäjää ei löytynyt' })
     } else if (error.name === 'MulterError') {
@@ -97,6 +97,7 @@ const errorHandler = (error, request, response, _next) => {
         // For unhandled errors
         // Doesn't reveal specific internal server errors to client (e.g. Cannot read properties of undefined (reading 'role'))
         // The client gets 'Internal server error' and the actual error is printed to the backend console by logger.error
+        logger.error(error.message)
         return response.status(500).json({ error: 'Internal server error' })
     } else {
         // for more specific errors (error with status and no name or details)

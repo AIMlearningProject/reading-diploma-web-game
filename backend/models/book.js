@@ -14,17 +14,16 @@ const Book = {
             .first()
     },
 
-    async getAll(dbConn = db) {
-        return dbConn('books')
-            .select('id', 'title', 'author', 'coverimage', 'booktype', 'content'/*, 'added_by'*/)
-            //.select('*')
-    },
-
     async getByAdder(added_by, dbConn = db) {
         return dbConn('books')
-            .select('id', 'title', 'author', 'coverimage', 'booktype', 'content'/*, 'added_by'*/)
+            .select('*')
             .where({ added_by })
-            //.select('*')
+    },
+
+    async getByTeacher(addedByIds, dbConn = db) {
+        return dbConn('books')
+            .select('id', 'title', 'author', 'coverimage', 'booktype', 'content')
+            .whereIn('added_by', addedByIds)
     },
 
     async deleteBook(id, dbConn = db){
@@ -33,12 +32,17 @@ const Book = {
             .del()
     },
 
-    // Unused (used only in unused services)
     async findBookById(id, dbConn = db){
         return dbConn('books')
-            .select('title', 'author', 'coverimage', 'booktype', 'content')
+            .select('*')
             .where({ id })
             .first()
+    },
+
+    // Unused (used only in unused services)
+    async getAll(dbConn = db) {
+        return dbConn('books')
+            .select('*')
     },
 }
 

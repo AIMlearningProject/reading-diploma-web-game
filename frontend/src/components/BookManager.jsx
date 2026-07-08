@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { fetchBooks, createBook } from '../services/api'
+import { fetchMyBooks, createBook, deleteBook } from '../services/api'
 import BookSearchBar from './BookSearchBar'
+import { createPortal } from 'react-dom'
 
 function BookManager() {
     const [books, setBooks] = useState([])
@@ -9,13 +10,14 @@ function BookManager() {
     const [coverimage, setCoverimage] = useState(null)
     const [booktype, setBooktype] = useState('physical')
     const [error, setError] = useState('')
-    const formRef = useRef(null)
-    const fileInputRef = useRef(null)
-
+    const [zoomSrc, setZoomSrc] = useState(null);
     const [query, setQuery] = useState('');
     const [queryBooktype, setQueryBooktype] = useState('');
     const [page, setPage] = useState(0);
     const pageSize = 10;
+
+    const formRef = useRef(null)
+    const fileInputRef = useRef(null)
 
     const sorted = useMemo(() => {
         // Sorts books alphabetically by title
@@ -42,9 +44,9 @@ function BookManager() {
 
     useEffect(() => setPage(0), [query, queryBooktype]);
 
-    const fetchMyBooks = async () => {
+    const fetchBookList = async () => {
         try {
-            const res = await fetchBooks()
+            const res = await fetchMyBooks()
             setBooks(res)
         } catch (err) {
             setError(err?.message || 'Yhteysvirhe')
@@ -52,7 +54,7 @@ function BookManager() {
     }
 
     useEffect(() => {
-        fetchMyBooks()
+        fetchBookList()
     }, [])
 
     const handleAdd = async (e) => {
@@ -72,7 +74,17 @@ function BookManager() {
             setCoverimage(null)
             setBooktype('physical')
             formRef.current?.reset()
-            fetchMyBooks()
+            fetchBookList()
+        } catch (err) {
+            setError(err?.message || 'Yhteysvirhe')
+        }
+    }
+
+    const handleDelete = async (id, bookTitle) => {
+        if (!window.confirm(`Haluatko varmasti poistaa Kirjan "${bookTitle}"?`)) return
+        try {
+            await deleteBook(id)
+            fetchBookList()
         } catch (err) {
             setError(err?.message || 'Yhteysvirhe')
         }
@@ -114,17 +126,18 @@ function BookManager() {
                                         <th>Nimi</th>
                                         <th>Kirjoittaja</th>
                                         <th>Tyyppi</th>
+                                        <th>Toiminnot</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {pageSlice.map((b) => (
-                                        //const coverImgClass = b.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? "empty-book-cover-thumb" : "book-cover-thumb"
                                         <tr key={b.id}>
                                             <td>
                                                 <img
                                                     className={b.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? "empty-book-cover-thumb" : "book-cover-thumb"}
                                                     src={b.coverimage}
                                                     alt={b.title}
+                                                    onClick={() => setZoomSrc(b.coverimage)}
                                                     onError={(e) => {
                                                         e.currentTarget.style.display = "none";
                                                         e.currentTarget.style.width = "0";
@@ -135,10 +148,27 @@ function BookManager() {
                                             <td data-label="Nimi"> {b.title}</td>
                                             <td data-label="Kirjoittaja"> {b.author}</td>
                                             <td data-label="Tyyppi"> {typeFi[b.booktype] ?? b.booktype}</td>
+                                            <td data-label="Toiminnot">
+                                                <div className="row-actions">
+                                                    <button
+                                                        className="delete-button"
+                                                        onClick={() => handleDelete(b.id, b.title)}
+                                                    >
+                                                        Poista
+                                                    </button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+                            {zoomSrc &&
+                                createPortal(
+                                    <div className="zoom-overlay" onClick={() => setZoomSrc(null)}>
+                                        <img src={zoomSrc} className="zoom-img" alt="" />
+                                    </div>,
+                                    document.body
+                                )}
                             {/* Mobile view of book list */}
                             <div className="mobile-book-list">
                                 {pageSlice.map((b) => (
@@ -147,6 +177,7 @@ function BookManager() {
                                             className={b.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? "empty-mobile-book-cover" : "mobile-book-cover"}
                                             src={b.coverimage}
                                             alt={b.title}
+                                            onClick={() => setZoomSrc(b.coverimage)}
                                             onError={(e) => {
                                                 e.currentTarget.style.display = "none";
                                                 e.currentTarget.style.width = "0";
@@ -158,6 +189,14 @@ function BookManager() {
                                             <div className="mobile-book-title">{b.title}</div>
                                             <div className="mobile-book-author">{b.author}</div>
                                             <div className="mobile-book-type">{typeFi[b.booktype] ?? b.booktype}</div>
+                                        </div>
+                                        <div className="row-actions mobile-delete-book">
+                                            <button
+                                                className="delete-button"
+                                                onClick={() => handleDelete(b.id, b.title)}
+                                            >
+                                                ✕
+                                            </button>
                                         </div>
                                     </div>
                                 ))}

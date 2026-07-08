@@ -11,10 +11,12 @@ import sharp from 'sharp'
 
 const booksRouter = express.Router()
 
-booksRouter.get('/', middleware.requireAuthentication(true), async (request, response, next) => {
+// Gets all the books added by the user's "class" (teacher + students)
+booksRouter.get('/my-books', middleware.requireAuthentication(true), async (request, response, next) => {
     try {
-        const books = await BookService.getAllBooks()
-        response.json(books)
+        const teacherId = request.user.role === 'teacher' ? request.user.id : request.user.teacher_id
+        const books = await BookService.getBooksByTeacher(teacherId)
+        response.status(200).json(books)
     } catch (error) {
         next(error)
     }
@@ -89,7 +91,7 @@ booksRouter.post('/',
                 const extension = extensionMap[request.file.mimetype]
                 const filename = `${Date.now()}-${crypto.randomUUID() + extension}`
 
-                const newBook = {
+                const bookToCreate = {
                     title: normalize(rawTitle),
                     author: normalize(rawAuthor),
                     coverimage: `/uploads/book-covers/${filename}`,
@@ -97,17 +99,16 @@ booksRouter.post('/',
                     content,
                     added_by: request.user.id
                 }
-
-                await BookService.addBook(newBook)
+                const createdBook = await BookService.addBook(bookToCreate)
 
                 // Write file to disk only after all validations have passed
                 const coverUploadDir = path.resolve(__dirname, '../public/uploads/book-covers')
                 const filepath = path.join(coverUploadDir, filename)
                 await fs.writeFile(filepath, optimizedBuffer)
 
-                response.status(201).json(newBook)
+                response.status(201).json(createdBook)
             } else {
-                const newBook = {
+                const bookToCreate = {
                     title: normalize(rawTitle),
                     author: normalize(rawAuthor),
                     coverimage: '/uploads/book-covers/defaultNoImg.ico',
@@ -116,8 +117,8 @@ booksRouter.post('/',
                     added_by: request.user.id
                 }
 
-                await BookService.addBook(newBook)
-                response.status(201).json(newBook)
+                const createdBook = await BookService.addBook(bookToCreate)
+                response.status(201).json(createdBook)
             }
         } catch (error) {
             next(error)
@@ -125,24 +126,33 @@ booksRouter.post('/',
     }
 )
 
+booksRouter.delete('/:id', middleware.requireTeacherRole, async (request, response, next) => {
+    const bookId = request.params.id
+    const teacherId = request.user.id
+    try {
+        await BookService.deleteBook(teacherId, bookId)
+        return response.status(204).end()
+    } catch (error) {
+        next(error)
+    }
+})
+
+// Unused
+booksRouter.get('/', middleware.requireAuthentication(true), async (request, response, next) => {
+    try {
+        const books = await BookService.getAllBooks()
+        response.json(books)
+    } catch (error) {
+        next(error)
+    }
+})
+
 // Unused
 booksRouter.get('/:id', middleware.requireAuthentication(true), async (request, response, next) => {
     const { id } = request.params
     try {
         const book = await BookService.findBookById(id)
         response.json(book)
-    } catch (error) {
-        next(error)
-    }
-})
-
-// Not used, but will likely be used in the future
-booksRouter.delete('/delete-book/:id', middleware.requireTeacherRole, async (request, response, next) => {
-    const id = request.params.id
-
-    try {
-        await BookService.deleteBook(id)
-        response.status(200).json('Book deleted successfully!')
     } catch (error) {
         next(error)
     }

@@ -5,9 +5,10 @@ A web-based reading diploma game. The goal is to encourage the youth to read mor
 
 | Method | Endpoint                             | Description                                                    |
 |--------|--------------------------------------|----------------------------------------------------------------|
-| GET    | `/api/books`                         | Get all books                                                  |
+| GET    | `/api/books`                         | **Unused** Get all books                                       |
+| GET    | `/api/books/my-books`                | Get all books added by the user's "class" (teacher + students) |
 | POST   | `/api/books`                         | Add new book                                                   |
-| DELETE | `/api/books/delete-book/:id`         | **Unused** Deletes book       |
+| DELETE | `/api/books/:id`                     | Deletes book                                                   |
 ||||
 | GET    | `/api/users`                         | **Unused** Get all users      |
 | DELETE | `/api/users`                         | Deletes the teacher account making the request                 |
