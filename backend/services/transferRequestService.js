@@ -128,15 +128,16 @@ const TransferRequestService = {
         return deletedRequest
     },
 
-    async deleteAllRequests(requesterId) {
-        const deletedRequests = await TransferRequest.deleteAllRequests(requesterId)
-        if (!deletedRequests) {
+    async cancelAllPendingRequests(requesterId) {
+        const updated_at = new Date().toISOString()
+        const cancelledRequests = await TransferRequest.cancelAllPendingRequests(requesterId, updated_at)
+        if (!cancelledRequests) {
             const err = new Error(`Could not find requests for teacher with id ${requesterId}`)
             err.userDetails = 'Siirtopyyntöjä ei löytynyt'
             err.status = 404
             throw err
         }
-        return await TransferRequest.deleteAllRequests(requesterId)
+        return cancelledRequests
     },
 }
 

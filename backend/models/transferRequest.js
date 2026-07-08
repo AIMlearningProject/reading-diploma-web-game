@@ -94,10 +94,11 @@ const TransferRequest = {
             .del()
     },
 
-    async deleteAllRequests(teacherId, dbConn = db) {
+    async cancelAllPendingRequests(teacherId, updated_at, dbConn = db) {
         return dbConn('transfer_requests')
-            .where({ requester_teacher_id: teacherId })
-            .del()
+            .where({ requester_teacher_id: teacherId, status: 'pending' })
+            .update({ status: 'cancelled', updated_at })
+            .returning('*')
     },
 }
 

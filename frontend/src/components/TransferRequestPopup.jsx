@@ -19,6 +19,7 @@ function TransferRequestPopup({ open, onClose }) {
     const [toggleOutbox, setToggleOutbox] = useState(true)
     const [recipientEmail, setRecipientEmail] = useState('')
     const [message, setMessage] = useState('')
+    const [showAnswered, setShowAnswered] = useState(false)
 
     const showToast = (message, type = 'success') => {
         setToast({ message, type })
@@ -129,7 +130,7 @@ function TransferRequestPopup({ open, onClose }) {
     const convertDateFormat = (iso) => {
         const d = new Date(iso);
         return `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
-        /*${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}*/
+        /*${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}*/ // <-- time 00:00
     };
 
     const pendingIncomingRequests = incomingRequests.filter(r => r.status === 'pending')
@@ -142,7 +143,7 @@ function TransferRequestPopup({ open, onClose }) {
                 <button className="tr-popup-close" onClick={onClose}>
                     ✕
                 </button>
-                <div className="dashboard-section transfer-request-section">
+                <div className="dashboard-section tr-section">
                     {toast && (
                         <div className={`transfer-toast transfer-toast--${toast.type}`}>
                             {toast.message}
@@ -151,7 +152,7 @@ function TransferRequestPopup({ open, onClose }) {
 
                     <h2>Oppilaiden siirtopyynnöt</h2>
 
-                    <div className="transfer-requests-list">
+                    <div className="tr-list">
                         <div className="transfer-tabs">
                             <button
                                 className={`transfer-tab ${toggleOutbox ? 'active' : ''}`}
@@ -168,84 +169,125 @@ function TransferRequestPopup({ open, onClose }) {
                             </button>
                         </div>
 
-                        {/*loading ? (
-                            <p className="empty-message">Ladataan...</p>
-                        ) : (*/
-                            toggleOutbox ? (
-                                <>
-                                    {sentRequests.length > 0 ?
-                                        sentRequests.map((request) => (
-                                            <div key={request.id} className="transfer-request-item sent-item">
-                                                <div className="sent-header">
-                                                    <span className="sent-email">{request.recipient_email}</span>
-                                                    <span className="sent-date">{convertDateFormat(request.created_at)}</span>
-                                                </div>
-                                                <div className="sent-options">
-                                                    <span className={`transfer-request-status transfer-request-status--${request.status}`}>
-                                                        {statusFi[request.status] ?? request.status}
-                                                    </span>
-                                                    <button
-                                                        className='delete-button'
-                                                        onClick={() => handleDelete(request.id, request.recipient_email)}
-                                                    >
-                                                        Poista
-                                                    </button>
-                                                </div>
+                        {toggleOutbox ? (
+                            <>
+                                {sentRequests.length > 0 ? (
+                                    <>
+                                        {/* Desktop view of sent transfer request list */}
+                                        <div className="desktop-tr-list">
+                                            {sentRequests.map((request) => (
+                                                <div key={request.id} className="tr-item">
+                                                    <div className="sent-item sent-header">
+                                                        <span className="sent-email">{request.recipient_email}</span>
 
+                                                        <span className={`tr-status tr-status--${request.status}`}>
+                                                            {statusFi[request.status] ?? request.status}
+                                                        </span>
+                                                        <span className="desktop-sent-date">{convertDateFormat(request.created_at)}</span>
 
-
-                                                {request.message && (
-                                                    <div className="transfer-request-message">
-                                                        {request.message}
+                                                        <button
+                                                            className="delete-button"
+                                                            onClick={() => handleDelete(request.id, request.recipient_email)}
+                                                        >
+                                                            Poista
+                                                        </button>
                                                     </div>
-                                                )}
+                                                    <div className="sent-item">
+                                                        {request.message && (
+                                                            <div className="tr-message">
+                                                                "{request.message}"
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        {/* Mobile view of sent transfer request list */}
+                                        <div className="mobile-tr-list">
+                                            {sentRequests.map((request) => (
+                                                <div key={request.id} className="tr-item">
+                                                    <div className='sent-item'>
+                                                        <span className="sent-email">{request.recipient_email}</span>
+                                                        <div className="mobile-sent-tr-header">
+                                                            <span className={`tr-status tr-status--${request.status}`}>
+                                                                {statusFi[request.status] ?? request.status}
+                                                            </span>
+                                                            <span className="sent-date">{convertDateFormat(request.created_at)}</span>
+                                                        </div>
 
-                                            </div>
-                                        )) : (
-                                            <div className="empty-message">Ei lähetettyjä siirtopyyntöjä.</div>
-                                        )}
-                                    <form className="add-form" encType="multipart/form-data" onSubmit={handleSend}>
-                                        <div className="form-group">
-                                            <label>
-                                                Vastaanottaja
-                                                <span className="section-error">*</span>
-                                            </label>
-                                            <input
-                                                type="email"
-                                                value={recipientEmail}
-                                                onChange={(e) => setRecipientEmail(e.target.value)}
-                                                required
-                                                placeholder='Sähköposti'
-                                            />
+                                                        {request.message && (
+                                                            <div className="tr-message">
+                                                                "{request.message}"
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className='sent-item delete-tr'>
+                                                        <button
+                                                            className='delete-button'
+                                                            onClick={() => handleDelete(request.id, request.recipient_email)}
+                                                        >
+                                                            Poista
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
-                                        <div className="form-group">
-                                            <label>Viesti</label>
-                                            <input
-                                                type="text"
-                                                value={message}
-                                                onChange={(e) => setMessage(e.target.value)}
-                                            />
-                                        </div>
-                                        <button type="submit" className="add-button">Lähetä pyyntö</button>
-                                    </form>
-                                </>
-                            ) : (
-                                pendingIncomingRequests.length > 0 ? (
+                                    </>
+                                ) : (
+                                    <div className="empty-message">Ei lähetettyjä siirtopyyntöjä.</div>
+                                )}
+                                <form className="add-form" encType="multipart/form-data" onSubmit={handleSend}>
+                                    <div className="form-group">
+                                        <label>
+                                            Vastaanottaja
+                                            <span className="section-error">*</span>
+                                        </label>
+                                        <input
+                                            type="email"
+                                            value={recipientEmail}
+                                            onChange={(e) => setRecipientEmail(e.target.value)}
+                                            required
+                                            placeholder='Sähköposti'
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Viesti</label>
+                                        <input
+                                            type="text"
+                                            value={message}
+                                            onChange={(e) => setMessage(e.target.value)}
+                                        />
+                                    </div>
+                                    <button type="submit" className="add-button">Lähetä pyyntö</button>
+                                </form>
+                            </>
+                        ) : (
+                            <>
+                                <label className="tr-history-label">
+                                    <input
+                                        className="tr-history-checkbox"
+                                        type="checkbox"
+                                        checked={showAnswered}
+                                        onChange={e => setShowAnswered(e.target.checked)}
+                                    />
+                                    Näytä historia
+                                </label>
+                                {pendingIncomingRequests.length > 0 ? (
                                     incomingRequests.map((request) => (
-                                        request.status === 'pending' && (
-                                            <div key={request.id} className="transfer-request-item">
-                                                <div className="transfer-request-info">
-                                                    <p className="transfer-request-text">
+                                        request.status === 'pending' ? (
+                                            <div key={request.id} className="tr-item">
+                                                <div className="tr-info">
+                                                    <p className="tr-text">
                                                         Opettaja
-                                                        <span className="transfer-request-name"> {request.requester_name}</span>
+                                                        <span className="tr-name"> {request.requester_name} </span>
                                                         ({request.requester_email}) haluaa siirtää {request?.student_count} opiskelijaa sinulle.
                                                     </p>
                                                     {request.message && (
-                                                        <p className="transfer-request-message">"{request.message}"</p>
+                                                        <p className="tr-message">"{request.message}"</p>
                                                     )}
                                                 </div>
 
-                                                <div className="transfer-request-actions">
+                                                <div className="tr-actions">
                                                     <button
                                                         className="accept-button"
                                                         onClick={() => handleAccept(request.id)}
@@ -262,13 +304,56 @@ function TransferRequestPopup({ open, onClose }) {
                                                     </button>
                                                 </div>
                                             </div>
-                                        )
+                                        ) : (showAnswered && (
+                                            <div key={request.id} className="tr-item sent-item">
+                                                <div className="sent-header tr-text">
+                                                    <span className="tr-name">{request.requester_name}</span>
+                                                    <span>{request.requester_email}</span>
+                                                    <div className="tr-options">
+                                                        <span className={`tr-status tr-status--${request.status}`}>
+                                                            {statusFi[request.status] ?? request.status}
+                                                        </span>
+                                                        <span className="sent-date">{convertDateFormat(request.created_at)}</span>
+                                                    </div>
+                                                </div>
+
+                                                {request.message && (
+                                                    <div className="tr-message">
+                                                        "{request.message}"
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))
                                     ))
                                 ) : (
-                                    <div className="empty-message">Ei odottavia siirtopyyntöjä.</div>
-                                )
-                            )
-                        /*)*/}
+                                    <>
+                                        <div className="empty-message">Ei odottavia siirtopyyntöjä.</div>
+                                        {showAnswered && (
+                                            incomingRequests.map((request) => (
+                                                <div key={request.id} className="tr-item sent-item">
+                                                    <div className="sent-header tr-text">
+                                                        <span className="tr-name">{request.requester_name}</span>
+                                                        <span>{request.requester_email}</span>
+                                                        <div className="tr-options">
+                                                            <span className={`tr-status tr-status--${request.status}`}>
+                                                                {statusFi[request.status] ?? request.status}
+                                                            </span>
+                                                            <span className="sent-date">{convertDateFormat(request.created_at)}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {request.message && (
+                                                        <div className="tr-message">
+                                                            "{request.message}"
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))
+                                        )}
+                                    </>
+                                )}
+                            </>
+                        )}
                     </div>
                     {error && <p className="section-error">{error}</p>}
                 </div>

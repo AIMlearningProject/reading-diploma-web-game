@@ -65,6 +65,7 @@ transferRequestsRouter.patch('/:id/accept', middleware.requireTeacherRole, async
         const requestId = request.params.id
 
         const updatedTransferRequest = await TransferRequestService.acceptRequestForTeacher(recipientId, requestId)
+        await TransferRequestService.cancelAllPendingRequests(updatedTransferRequest.requester_teacher_id)
         await UserService.transferStudentsToTeacher({
             fromTeacherId: updatedTransferRequest.requester_teacher_id,
             toTeacherId: recipientId
