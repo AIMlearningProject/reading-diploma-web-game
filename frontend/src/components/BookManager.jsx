@@ -131,7 +131,7 @@ function BookManager() {
                                 </thead>
                                 <tbody>
                                     {pageSlice.map((b) => (
-                                        <tr key={b.id}>
+                                        <tr key={b.id} className="book-item-row">
                                             <td>
                                                 <img
                                                     className={b.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? "empty-book-cover-thumb" : "book-cover-thumb"}

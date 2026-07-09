@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import BooksContext from '../contexts/BooksContext'
+import InfoButton from './InfoButton'
 import {
     createStudent,
     deleteStudent,
@@ -41,6 +42,9 @@ function StudentManager() {
     const [submissionsMap, setSubmissionsMap] = useState({})
     const [expandedId, setExpandedId] = useState(null)
     const [loadingSubs, setLoadingSubs] = useState(false)
+
+    // CSS hover for student rows
+    const [hoveredStudentId, setHoveredStudentId] = useState(null);
 
     const { books } = useContext(BooksContext)
 
@@ -185,7 +189,11 @@ function StudentManager() {
                             const isExpanded = expandedId === s.id
                             return (
                                 <React.Fragment key={s.id}>
-                                    <tr className={resetPwdId === s.id ? 'editing-row lock-row' : (editingId === s.id || editEmailId === s.id ? 'editing-row' : '')}>
+                                    <tr
+                                        className={`${resetPwdId === s.id ? 'editing-row lock-row' : (editingId === s.id || editEmailId === s.id ? 'editing-row' : '')} ${hoveredStudentId === s.id && !isExpanded ? 'highlight-student-row' : ''}`}
+                                        onMouseEnter={() => setHoveredStudentId(s.id)}
+                                        onMouseLeave={() => setHoveredStudentId(null)}
+                                    >
                                         <td data-label="Nimi">
                                             {editingId === s.id ? (
                                                 <input
@@ -292,7 +300,11 @@ function StudentManager() {
                                         </td>
                                     </tr>
                                     {/* Progress row */}
-                                    <tr className="progress-row">
+                                    <tr
+                                        className={`progress-row ${hoveredStudentId === s.id && !isExpanded ? 'highlight-student-row' : ''}`}
+                                        onMouseEnter={() => setHoveredStudentId(s.id)}
+                                        onMouseLeave={() => setHoveredStudentId(null)}
+                                    >
                                         <td colSpan={3}>
                                             <div className="progress-bar-row">
                                                 <div className="level-badges">
@@ -343,21 +355,24 @@ function StudentManager() {
                                                                     <div key={level} className="submission-group">
                                                                         <h4 className="submission-level-title" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                                                                             <span>Taso {level} — {levelName}</span>
-                                                                            <select
-                                                                                className={`level-status-select status-${status}`}
-                                                                                value={status}
-                                                                                onChange={e => handleLevelStatusChange(s.id, level, e.target.value)}
-                                                                            >
-                                                                                <option value="incomplete">Suorittamatta</option>
-                                                                                <option value="complete">Suoritettu</option>
-                                                                                <option value="resubmit">Hylätty</option>
-                                                                                <option value="reviewed">Hyväksytty</option>
-                                                                            </select>
+                                                                            <div className="info-button-row">
+                                                                                <select
+                                                                                    className={`level-status-select status-${status}`}
+                                                                                    value={status}
+                                                                                    onChange={e => handleLevelStatusChange(s.id, level, e.target.value)}
+                                                                                >
+                                                                                    <option value="incomplete">Suorittamatta</option>
+                                                                                    <option value="complete">Suoritettu</option>
+                                                                                    <option value="resubmit">Hylätty</option>
+                                                                                    <option value="reviewed">Hyväksytty</option>
+                                                                                </select>
+                                                                                {level === 1 && <InfoButton positionStyle={{ left: "-90px" }} info={'Suorittamatta: Oppilaan täytyy lukea kirja loppuun tällä tasolla ja vastata avoimiin kysymyksiin suorittaakseen tason.\n\n Suoritettu: Oppilas on lukenut kirjan loppuun ja vastannut avoimiin kysymyksiin tällä tasolla.\n\n Hylätty: Opettaja on tarkistanut ja EI hyväksynyt tasolla annettuja vastauksia. Oppilas voi suorittaa tason uudestaan.\n\n Hyväksytty: Opettaja on tarkistanut ja hyväksynyt tasolla annetut, luettuun kirjaan liittyvät vastaukset.'} />}
+                                                                            </div>
                                                                         </h4>
-                                                                        {title && 
-                                                                        <div className="book-title">
-                                                                            <span><strong>KIRJA: </strong>{title}</span>
-                                                                        </div>}
+                                                                        {title &&
+                                                                            <div className="book-title">
+                                                                                <span><strong>KIRJA: </strong>{title}</span>
+                                                                            </div>}
                                                                         {sub ? (
                                                                             <div className="submission-qa">
                                                                                 <p><strong>K1:</strong> {sub.question1}</p>

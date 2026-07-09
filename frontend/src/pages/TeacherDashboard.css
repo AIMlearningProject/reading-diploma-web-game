@@ -255,13 +255,22 @@ td[data-label="Toiminnot"] {
 .data-table tbody tr:nth-child(7) { animation-delay: 0.34s; }
 .data-table tbody tr:nth-child(8) { animation-delay: 0.39s; }
 
-.data-table tbody tr:hover td {
+.data-table tbody tr.book-item-row:hover td {
     background: rgba(196, 151, 58, 0.07);
 }
 
-.data-table tbody tr:hover td:first-child {
+.data-table tbody tr.book-item-row:hover td:first-child {
     box-shadow: inset 3px 0 0 #C4973A;
 }
+
+.data-table tbody tr.highlight-student-row td {
+    background: rgba(196, 151, 58, 0.07);
+}
+
+.data-table tbody tr.highlight-student-row td:first-child {
+    box-shadow: inset 3px 0 0 #C4973A;
+}
+
 
 /* ── Add Form — Logbook Entry Row ────────────────────────── */
 .add-form {
@@ -740,11 +749,6 @@ td[data-label="Toiminnot"] {
     background: rgba(253, 251, 244, 0.5);
 }
 
-.progress-row:hover td {
-    background: rgba(253, 251, 244, 0.5) !important;
-    box-shadow: none !important;
-}
-
 .progress-bar-row {
     display: flex;
     align-items: center;
@@ -782,20 +786,6 @@ td[data-label="Toiminnot"] {
     margin-top: 0.2rem;
 }
 
-.level-status-select {
-    font-size: 1em;
-    padding: 0.3em 1.8em 0.3em 0.8em;
-    font-family: inherit;
-    cursor: pointer;
-    border: 1.5px solid #C4973A;
-    border-radius: 6px;
-}
-
-.level-status-select option {
-    background: #F5EFE0;
-    color: #1e3a5f;
-}
-
 .progress-level-badge--complete {
     background: linear-gradient(145deg, #D8B25A, #C4973A); 
     border-color: #9E7A2A;
@@ -812,30 +802,6 @@ td[data-label="Toiminnot"] {
     background: linear-gradient(145deg, #ad87ff, #865fd9);
     border-color: #7141d7;
     color: #fff;
-}
-
-.level-status-select.status-incomplete {
-    background: #ededed !important;
-    border-color: #888;
-    color: #888;
-}
-
-.level-status-select.status-complete {
-    background: linear-gradient(145deg, #D8B25A, #C4973A) !important;
-    border-color: #9E7A2A;
-    color: #fff;
-}
-
-.level-status-select.status-reviewed {
-    background-color: #eafbea;
-    border-color: #3c763d;
-    color: #3c763d !important;
-}
-
-.level-status-select.status-resubmit {
-    background: rgba(155, 115, 245, 0.35) !important;
-    border-color: #7b4ce2;
-    color: #2a1f4d;
 }
 
 .progress-summary {
@@ -860,6 +826,7 @@ td[data-label="Toiminnot"] {
     align-items: center;
     gap: 0.35rem;
     margin-left: auto;
+    margin-right: auto;
     transition: all 0.15s;
     letter-spacing: 0.04em;
 }
@@ -876,6 +843,50 @@ td[data-label="Toiminnot"] {
 
 .expand-chevron--open {
     transform: rotate(180deg);
+}
+
+.info-button-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.level-status-select {
+    font-size: 1em;
+    padding: 0.3em 1.8em 0.3em 0.8em;
+    font-family: inherit;
+    cursor: pointer;
+    border: 1.5px solid #C4973A;
+    border-radius: 6px;
+}
+
+.level-status-select option {
+    background: #F5EFE0;
+    color: #1e3a5f;
+}
+
+.level-status-select.status-incomplete {
+    background: #ededed !important;
+    border-color: #888;
+    color: #888;
+}
+
+.level-status-select.status-complete {
+    background: linear-gradient(145deg, #D8B25A, #C4973A) !important;
+    border-color: #9E7A2A;
+    color: #fff;
+}
+
+.level-status-select.status-reviewed {
+    background-color: #eafbea;
+    border-color: #3c763d;
+    color: #3c763d !important;
+}
+
+.level-status-select.status-resubmit {
+    background: rgba(155, 115, 245, 0.35) !important;
+    border-color: #7b4ce2;
+    color: #2a1f4d;
 }
 
 .book-title {
@@ -1110,7 +1121,7 @@ td[data-label="Toiminnot"] {
     }
 
     .submissions-detail {
-        overflow-x: hidden;
+        overflow-x: visible;
         margin-top: 1rem;
         padding: 0.75rem;
         background: #fff;
@@ -1127,7 +1138,7 @@ td[data-label="Toiminnot"] {
     }
 
     .level-status-select {
-        width: 100%;
+        width: fit-content;
         border-radius: 6px;
         max-width: 100vw;
         font-size: 1rem;
