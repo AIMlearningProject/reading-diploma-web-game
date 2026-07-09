@@ -744,7 +744,7 @@ td[data-label="Toiminnot"] {
 
 /* ── Progress Row ───────────────────────────────────────── */
 .progress-row td {
-    padding: 0 1rem 0.85rem !important;
+    padding: 0 1rem 0.85rem;
     border-bottom: 1px solid rgba(196, 151, 58, 0.18);
     background: rgba(253, 251, 244, 0.5);
 }
@@ -925,6 +925,7 @@ td[data-label="Toiminnot"] {
 }
 
 .submission-level-title {
+    align-items: center;
     font-family: 'Cinzel Decorative', serif;
     font-size: 0.9rem;
     color: #1e3a5f;
@@ -985,70 +986,6 @@ td[data-label="Toiminnot"] {
     }
 }
 
-/* ── Mobile: Table → Card Layout ───────────────────────── */
-/*@media (max-width: 600px) {
-    .dashboard-section {
-        padding: 1rem;
-    }
-    .data-table thead { display: none; }
-    .data-table, .data-table tbody, .data-table tr, .data-table td {
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
-    }
-    .data-table tr {
-        border: 1.5px solid rgba(196,151,58,0.3);
-        border-radius: 6px;
-        padding: 0.75rem;
-        margin-bottom: 0.75rem;
-        background: rgba(253,251,244,0.5);
-    }
-    .data-table td {
-        padding: 0.35rem 0;
-        border-bottom: none;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    .data-table td::before {
-        content: attr(data-label);
-        font-weight: 700;
-        color: #9E7A2A;
-        font-size: 0.78rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        min-width: 5rem;
-    }
-    .data-table td:first-child::before { content: ''; min-width: 0; }
-    .progress-row {
-        border: none !important;
-        padding: 0 0.75rem 0.75rem !important;
-        margin-bottom: 0 !important;
-        margin-top: -0.5rem;
-    }
-    .progress-row td {
-        padding: 0 !important;
-    }
-    .progress-row td::before {
-        content: '' !important;
-        min-width: 0 !important;
-    }
-    .progress-bar-row {
-        flex-wrap: wrap;
-    }
-    .level-badges {
-        flex-wrap: wrap;
-    }
-    .expand-btn {
-        width: 100%;
-        justify-content: center;
-        margin-top: 0.5rem;
-    }
-    .submissions-detail {
-        padding: 0.5rem 0.75rem;
-    }
-}*/
-
 /* ── Mobile: Convert Progress Row Into Card ───────────────────────── */
 @media (max-width: 600px) {
     .dashboard-section {
@@ -1066,16 +1003,10 @@ td[data-label="Toiminnot"] {
         margin-bottom: 0.75rem;
         background: rgba(253,251,244,0.5);
 
-        padding-bottom: 1rem;
-        padding-top: 1rem;
-        padding-left: 0.75rem !important;
-        padding-right: 0.75rem !important;
+        padding: 0.5rem;
     }
     .data-table td {
-        padding-bottom: 1rem;
-        padding-top: 1rem;
-        padding-left: 0rem !important;
-        padding-right: 0rem !important;
+        padding: 1rem 0rem;
     }
     .data-table td::before {
         content: attr(data-label);
@@ -1098,17 +1029,40 @@ td[data-label="Toiminnot"] {
     }
     .submission-group,
     .submission-level-title {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
+        padding: 0 !important;
     }
-    .progress-row {
-        border: 1.5px solid rgba(196,151,58,0.3);
-        border-radius: 10px;
-        padding: 1rem;
+    tr.student-info-row {
+        border-bottom: none;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    tr.student-info-row td {
+        padding-left: 4px;
+    }
+    .data-table tbody tr.highlight-student-row td {
+        box-shadow: inset 3px 0 0 #C4973A;
+    }
+    tr.progress-row {
+        border-top: none;
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        padding-top: 0;
+        padding-bottom: 0.5rem;
         margin-bottom: 1rem;
-        background: rgba(253,251,244,0.7);
+    }
+    tr.progress-row td {
+        border: none;
+        padding-top: 0
+    }
+    .progress-bar-row {
+        padding: 0 0.7rem;
+    }
+
+    .level-badges {
+        justify-content: center;
     }
 
     .expand-btn {
@@ -1135,6 +1089,7 @@ td[data-label="Toiminnot"] {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
+        align-items: flex-start;
     }
 
     .level-status-select {

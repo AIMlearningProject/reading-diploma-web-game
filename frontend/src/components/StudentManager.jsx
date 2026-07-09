@@ -190,7 +190,11 @@ function StudentManager() {
                             return (
                                 <React.Fragment key={s.id}>
                                     <tr
-                                        className={`${resetPwdId === s.id ? 'editing-row lock-row' : (editingId === s.id || editEmailId === s.id ? 'editing-row' : '')} ${hoveredStudentId === s.id && !isExpanded ? 'highlight-student-row' : ''}`}
+                                        className={`
+                                            ${resetPwdId === s.id ? 'editing-row lock-row' : (editingId === s.id || editEmailId === s.id ? 'editing-row' : '')}
+                                            ${hoveredStudentId === s.id && !isExpanded ? 'highlight-student-row' : ''}
+                                            student-info-row
+                                        `}
                                         onMouseEnter={() => setHoveredStudentId(s.id)}
                                         onMouseLeave={() => setHoveredStudentId(null)}
                                     >
@@ -353,7 +357,7 @@ function StudentManager() {
                                                                 const title = book?.title
                                                                 return (
                                                                     <div key={level} className="submission-group">
-                                                                        <h4 className="submission-level-title" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                                                        <h4 className="submission-level-title" style={{ display: 'flex', gap: 12 }}>
                                                                             <span>Taso {level} — {levelName}</span>
                                                                             <div className="info-button-row">
                                                                                 <select
