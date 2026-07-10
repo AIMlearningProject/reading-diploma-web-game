@@ -2,12 +2,17 @@ import Phaser from 'phaser';
 import ReadingState from '../state.js';
 import { INLINE_SVGS } from '../ui/icons.js';
 
+import { createElement } from 'react';
+import { createRoot } from 'react-dom/client';
+import InfoButton from '../../components/InfoButton.jsx'
+
 class ReadingScene extends Phaser.Scene {
     constructor() {
         super('ReadingScene');
         this.uiContainer = null;
         this.domElement = null;
         this.isRendering = false;
+        this.infoButtonRoot = null;
     }
 
     init(data) {
@@ -109,10 +114,16 @@ class ReadingScene extends Phaser.Scene {
 
         this.domElement = this.add.dom(centerX, contentStartY).createFromHTML(`
             <div style="position: relative; width: ${paperWidth}px; display: flex; flex-direction: column; align-items: center;">
+                <div id="reading-info-button-root" style="
+                    position: absolute;
+                    left: ${isLandscape ? '20px' : '15px'};
+                    top: -${isLandscape ? '45px' : '85px'};
+                    z-index: 10002;
+                "></div>
                 <button id="close-book-btn" style="
                     position: absolute;
                     right: ${isLandscape ? '10px' : '20px'};
-                    top: -${isLandscape ? '50px' : '90px'}; 
+                    top: -${isLandscape ? '50px' : '90px'};
                     background: #1e3a5f;
                     color: white;
                     border: none;
@@ -144,6 +155,22 @@ class ReadingScene extends Phaser.Scene {
                 ">${cleanedContent}</div>
             </div>
         `).setOrigin(0.5, 0);
+
+        if (this.readOnly) {
+            const infoButtonMountNode = document.getElementById('reading-info-button-root');
+            if (infoButtonMountNode) {
+                if (this.infoButtonRoot) {
+                    this.infoButtonRoot.unmount();
+                }
+                this.infoButtonRoot = createRoot(infoButtonMountNode);
+                this.infoButtonRoot.render(
+                    createElement(InfoButton, {
+                        info: 'Jos olet jo lukenut kirjan yhdellä tasolla, et voi lukea samaa kirjaa uudelleen toisella tasolla.',
+                        textboxStyle: { left: '110px' }
+                    })
+                );
+            }
+        }
 
         // --- 7. Event Binding (Preserve Original Scrolling Logic) ---
         const htmlBtn = document.getElementById('close-book-btn');
@@ -229,6 +256,11 @@ class ReadingScene extends Phaser.Scene {
     }*/
 
     exitScene() {
+        if (this.infoButtonRoot) {
+            this.infoButtonRoot.unmount();
+            this.infoButtonRoot = null;
+        }
+
         this.scale.off('resize', this.initializeUI, this);
         this.scene.resume(this.sourceMap);
         const mapScene = this.scene.get(this.sourceMap);

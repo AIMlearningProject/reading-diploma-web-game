@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import "./InfoButton.css"
 
-function InfoButton({ positionStyle, info }) {
+function InfoButton({ buttonStyle, textboxStyle, info }) {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef(null);
 
@@ -18,12 +18,17 @@ function InfoButton({ positionStyle, info }) {
 
     return (
         <div className="info-container" ref={containerRef}>
-            <button className="info-button" aria-label="Info" onClick={() => setIsOpen(!isOpen)}>
+            <button
+                className="info-button"
+                aria-label="Info"
+                onClick={() => setIsOpen(!isOpen)}
+                style={buttonStyle}
+            >
                 i
             </button>
             <div
                 className={`info-text-wrapper ${isOpen ? "open" : ""}`}
-                style={positionStyle}
+                style={textboxStyle}
             >
                 <p className="info-text">
                     {info}
