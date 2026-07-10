@@ -257,12 +257,18 @@
     box-shadow: 0 4px 16px rgba(123, 76, 226, 0.18);
 }
 
-.level-done {
+.level-complete {
     border-color: #C4973A;
     background:
         radial-gradient(ellipse 80% 60% at 20% 20%, rgba(255, 248, 200, 0.6) 0%, transparent 65%),
         #FDF6E3;
     box-shadow: 0 4px 16px rgba(196, 151, 58, 0.2);
+}
+
+.level-reviewed {
+    border-color: #549963b9;
+    background: #eafbea;
+    box-shadow: 0 4px 16px rgba(84, 153, 99, 0.2);
 }
 
 .level-number {
@@ -272,9 +278,10 @@
     line-height: 1;
 }
 
-.level-done .level-number { color: #C4973A; }
+.level-complete .level-number { color: #C4973A; }
 .level-resubmit .level-number { color: #7b4ce2; }
 .level-incomplete .level-number { color: rgba(158, 122, 42, 0.35); }
+.level-reviewed .level-number { color: #3c763d; }
 
 .level-name {
     font-size: 0.95rem;
@@ -283,7 +290,8 @@
     text-transform: uppercase;
 }
 
-.level-done .level-name { color: #1e3a5f; }
+.level-complete .level-name,
+.level-reviewed .level-name { color: #1e3a5f; }
 .level-resubmit .level-name { color: #2a1f4d; }
 .level-incomplete .level-name { color: rgba(30, 58, 95, 0.45); }
 
@@ -310,11 +318,16 @@
     border: 1px solid rgba(123, 76, 226, 0.35);
 }
 
-
-.badge-done {
+.badge-complete {
     background: rgba(196, 151, 58, 0.15);
     color: #9E7A2A;
     border: 1px solid rgba(196, 151, 58, 0.4);
+}
+
+.badge-reviewed {
+    background: rgba(101, 209, 101, 0.15);
+    color: #3c763d;
+    border: 1px solid rgba(60, 118, 61, 0.318);
 }
 
 /* ── Rewards Grid ────────────────────────────────────────── */

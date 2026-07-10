@@ -87,6 +87,13 @@ function StudentDashboard() {
     const hasBuddy = !!user?.avatar
     const showPicker = !hasBuddy || buddySelecting
 
+    const statusFi = {
+        "incomplete": "Kesken",
+        "complete": "Suoritettu",
+        "resubmit": "X Hylätty",
+        "reviewed": "✓ Hyväksytty"
+    }
+
     return (
         <div
             className="student-dashboard"
@@ -185,24 +192,12 @@ function StudentDashboard() {
                             <div className="level-grid">
                                 {LEVELS.map(({ level, name }) => {
                                     const levelStat = getStatus(level)
-                                    const isDone = (levelStat === 'complete' || levelStat === 'reviewed')
                                     return (
-                                        <div key={level} className={`level-card ${isDone
-                                                ? 'level-done'
-                                                : `level-${levelStat}`
-                                            }`}>
+                                        <div key={level} className={`level-card level-${levelStat}`}>
                                             <span className="level-number">{level}</span>
                                             <span className="level-name">{name}</span>
-                                            <span className={`level-badge ${isDone
-                                                    ? 'badge-done'
-                                                    : `badge-${levelStat}`
-                                                }`}>
-                                                {levelStat === 'resubmit'
-                                                    ? 'X Hylätty'
-                                                    : (isDone
-                                                        ? '✓ Suoritettu'
-                                                        : 'Kesken')
-                                                }
+                                            <span className={`level-badge badge-${levelStat}`}>
+                                                {statusFi[levelStat] ?? levelStat}
                                             </span>
                                         </div>
                                     )
