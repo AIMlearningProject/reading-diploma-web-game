@@ -168,6 +168,12 @@ const indexLimiter = makeLimiter({
     max: 250,
 })
 
+const trLimiter = makeLimiter({
+    // 50 requests per minute allowed for transfer requests
+    windowMs: 60 * 1000,
+    max: 50,
+})
+
 const uploadPath = path.resolve(__dirname, 'public', 'uploads')
 app.use('/uploads', express.static(uploadPath))
 
@@ -177,7 +183,7 @@ app.use('/api/books', apiLimiter, booksRouter)
 app.use('/api/progress', apiLimiter, progressRouter)
 app.use('/api/rewards', apiLimiter, rewardsRouter)
 app.use('/api/submissions', apiLimiter, submissionsRouter)
-app.use('/api/transfer-requests', userLimiter, transferRequestsRouter)
+app.use('/api/transfer-requests', trLimiter, transferRequestsRouter)
 
 if (environmentMode === 'production') {
     const distPath = path.resolve(__dirname, '../frontend/dist')
