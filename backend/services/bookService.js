@@ -92,6 +92,10 @@ const BookService = {
         return deletedRows
     },
 
+    async getBookReaders(bookId) {
+        return await Book.findCurrentBookReaders(bookId)
+    },
+
     // Unused (used only in unused endpoint)
     async getAllBooks() {
         const books = await Book.getAll()

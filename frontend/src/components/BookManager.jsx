@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { fetchMyBooks, createBook, deleteBook } from '../services/api'
+import { fetchMyBooks, fetchBookReaders, createBook, deleteBook } from '../services/api'
 import BookSearchBar from './BookSearchBar'
 import { createPortal } from 'react-dom'
 
@@ -81,6 +81,17 @@ function BookManager() {
     }
 
     const handleDelete = async (id, bookTitle) => {
+        const bookReaders = await fetchBookReaders(id)
+        if (bookReaders.length > 0) {
+            const studentNames = bookReaders.map(r => r.name).join(', ')
+            if (!window.confirm(`HUOM! ${bookReaders.length} oppilasta lukee tätä kirjaa.
+
+Jos poistat kirjan, he joilla lukeminen on kesken, joutuvat valitsemaan uuden kirjan.
+
+Kirjaa lukevat oppilaat:
+${studentNames}`)) return
+        }
+
         if (!window.confirm(`Haluatko varmasti poistaa Kirjan "${bookTitle}"?`)) return
         try {
             await deleteBook(id)

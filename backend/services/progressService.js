@@ -1,4 +1,5 @@
 import Progress from '../models/progress.js'
+import Book from '../models/book.js'
 
 const ProgressService = {
     async addNewProgress({ level, user, book }) {
@@ -91,14 +92,22 @@ const ProgressService = {
         return found
     },
 
-    async changeBookinEntry(level, user, { book }) {
+    async changeBookinEntry(level, user, bookId) {
         const found = await Progress.findSpecificEntry(level, user)
         if (!found) {
-            const err = new Error(`Level:  ${level} has no entry for this user`)
+            const err = new Error(`Level: ${level} has no entry for this user`)
+            err.userDetails = 'Käyttäjällä ei ole merkintää tälle tasolle'
             err.status = 404
             throw err
         }
-        return Progress.changeBookinEntry(level, user, book)
+        const book = await Book.findBookById(bookId)
+        if (!book) {
+            const err = new Error(`Book with the id ${bookId} was not found. The book might have been deleted.`)
+            err.userDetails = 'Kirjaa ei löydetty. Kirja voi olla poistettu.'
+            err.status = 404
+            throw err
+        }
+        return Progress.changeBookinEntry(level, user, bookId, book.title)
     },
 
     // Unused (used only in unused endpoint)

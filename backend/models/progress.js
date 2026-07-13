@@ -9,7 +9,7 @@ const Progress = {
 
     async findByUser(user, dbConn = db) {
         return dbConn('progress')
-            .select('id', 'level', 'user', 'book', 'current_progress', 'level_status')
+            .select('id', 'level', 'user', 'book', 'current_progress', 'level_status', 'book_title')
             .where({ user: user })
     },
 
@@ -33,26 +33,6 @@ const Progress = {
             .andWhere('progress.user', userId)
             .andWhere('users.teacher_id', teacherId)
             .andWhere('users.role', 'student')
-            .first()
-    },
-
-    // Unused (used only in unused services)
-    async getCurrentLevel(user, dbConn = db) {
-        user = Number(user)
-        return dbConn('progress')
-            .select('id', 'level', 'user', 'book', 'current_progress', 'level_status')
-            .where({ user: user, level_status: 'incomplete' })
-            .orderBy('level', 'asc')
-            .first()
-    },
-
-    // Unused
-    async findLatestCompletedLevel(user, dbConn = db) {
-        user = Number(user)
-        return dbConn('progress')
-            .select('id', 'level', 'user', 'book', 'current_progress', 'level_status')
-            .where({ user: user, level_status: 'complete' })
-            .orderBy('level', 'desc')
             .first()
     },
 
@@ -83,30 +63,50 @@ const Progress = {
             .returning('*')
     },
 
-    async changeBookinEntry(level, user, book, dbConn = db) {
+    async changeBookinEntry(level, user, bookId, bookTitle, dbConn = db) {
         level = Number(level)
         user = Number(user)
         return dbConn('progress')
             .where({ level, user })
-            .update({ book: book })
+            .update({ book: bookId, book_title: bookTitle })
             .returning('*')
-    },
-
-    // Unused (used only in unused services)
-    async getAll(dbConn = db) {
-        return dbConn('progress')
-            .select('*')
     },
 
     async findByUserAndTeacher(userId, teacherId, dbConn = db) {
         userId = Number(userId)
         teacherId = Number(teacherId)
         return dbConn('progress')
-            .select('progress.id', 'level', 'user', 'book', 'current_progress', 'level_status')
+            .select('progress.id', 'level', 'user', 'book', 'current_progress', 'level_status', 'book_title')
             .innerJoin('users', 'users.id', 'progress.user')
             .where('progress.user', userId)
             .andWhere('users.teacher_id', teacherId)
             .andWhere('users.role', 'student')
+    },
+
+    // Unused (used only in unused services)
+    async getCurrentLevel(user, dbConn = db) {
+        user = Number(user)
+        return dbConn('progress')
+            .select('id', 'level', 'user', 'book', 'current_progress', 'level_status')
+            .where({ user: user, level_status: 'incomplete' })
+            .orderBy('level', 'asc')
+            .first()
+    },
+
+    // Unused
+    async findLatestCompletedLevel(user, dbConn = db) {
+        user = Number(user)
+        return dbConn('progress')
+            .select('id', 'level', 'user', 'book', 'current_progress', 'level_status')
+            .where({ user: user, level_status: 'complete' })
+            .orderBy('level', 'desc')
+            .first()
+    },
+
+    // Unused (used only in unused services)
+    async getAll(dbConn = db) {
+        return dbConn('progress')
+            .select('*')
     },
 }
 

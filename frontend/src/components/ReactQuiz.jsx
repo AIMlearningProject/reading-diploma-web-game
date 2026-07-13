@@ -66,8 +66,9 @@ export default function ReactQuiz({ mapKey, onClose }) {
 
     const bookTitle = useMemo(() => {
         const bookId = ReadingState.mapSelectedBook?.[mapKey];
-        const title = ReadingState.globalBooks?.find(b => String(b.id) === String(bookId))?.title;
-        return title
+        const progressEntry = ReadingState.progressEntriesByMapKey?.[mapKey];
+        const titleFromBookList = ReadingState.globalBooks?.find(b => String(b.id) === String(bookId))?.title;
+        return titleFromBookList || progressEntry?.book_title || '';
     }, [mapKey]);
 
     if (!mapKey) return null;

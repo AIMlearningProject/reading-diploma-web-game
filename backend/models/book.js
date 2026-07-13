@@ -26,17 +26,33 @@ const Book = {
             .whereIn('added_by', addedByIds)
     },
 
-    async deleteBook(id, dbConn = db){
+    async deleteBook(id, dbConn = db) {
         return dbConn('books')
             .where({ id })
             .del()
     },
 
-    async findBookById(id, dbConn = db){
+    async findBookById(id, dbConn = db) {
         return dbConn('books')
             .select('*')
             .where({ id })
             .first()
+    },
+
+    async findCurrentBookReaders(bookId, dbConn = db) {
+        return dbConn('users')
+            .select('users.id', 'users.name')
+            .join('progress', 'progress.user', 'users.id')
+            .where('progress.book', bookId)
+            .whereIn('progress.level_status', ['incomplete', 'Resubmit'])
+    },
+
+    // Unused (used only in unused services)
+    async findBookReaders(bookId, dbConn = db) {
+        return dbConn('users')
+            .select('users.id', 'users.name')
+            .join('progress', 'progress.user', 'users.id')
+            .where('progress.book', bookId)
     },
 
     // Unused (used only in unused services)

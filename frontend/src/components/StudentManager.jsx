@@ -354,7 +354,7 @@ function StudentManager() {
                                                                 const status = progressEntry?.level_status || 'incomplete'
 
                                                                 const book = books.find(b => b?.id === progressEntry?.book)
-                                                                const title = book?.title
+                                                                const title = book?.title || progressEntry.book_title
                                                                 return (
                                                                     <div key={level} className="submission-group">
                                                                         <h4 className="submission-level-title" style={{ display: 'flex', gap: 12 }}>

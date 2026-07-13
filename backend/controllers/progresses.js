@@ -85,7 +85,7 @@ progressRouter.put('/:level/add-book', middleware.requireAuthentication(true), m
     const { book } = request.validated
 
     try {
-        await ProgressService.changeBookinEntry(level, request.user.id, { book })
+        await ProgressService.changeBookinEntry(level, request.user.id, book)
         response.status(200).json('Book added to entry successfully!')
     } catch (error) {
         next(error)

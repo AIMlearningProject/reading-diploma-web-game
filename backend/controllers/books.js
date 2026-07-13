@@ -11,6 +11,16 @@ import sharp from 'sharp'
 
 const booksRouter = express.Router()
 
+booksRouter.get('/book-readers/:id', middleware.requireTeacherRole, async (request, response, next) => {
+    try {
+        const bookId = request.params.id
+        const readers = await BookService.getBookReaders(bookId)
+        response.status(200).json(readers)
+    } catch (error) {
+        next(error)
+    }
+})
+
 // Gets all the books added by the user's "class" (teacher + students)
 booksRouter.get('/my-books', middleware.requireAuthentication(true), async (request, response, next) => {
     try {
