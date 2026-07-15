@@ -181,6 +181,8 @@ const ReadingState = {
                 // If the backend returns no data at all, skip directly and keep the current frontend state
                 if (progressEntries.length === 0) return;
 
+                this.booksRead = progressEntries.filter(p => p.level_status === 'complete' || p.level_status === 'reviewed').length;
+
                 // Normalize Level indexing
                 const progressByLevel = {};
                 for (const entry of progressEntries) {
@@ -251,7 +253,6 @@ const ReadingState = {
                         // Only mark as completed if truly complete
                         if (isLevelComplete) {
                             this._continentCompletedFlags[mapKey] = true;
-                            this.booksRead = Math.max(this.booksRead, level);
                         }
 
                         // Unlock the next level
