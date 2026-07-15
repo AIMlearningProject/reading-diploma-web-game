@@ -3,7 +3,6 @@ import BookFetcher from '../managers/BookFetcher.js';
 import PathRenderer from '../managers/PathRenderer.js';
 import TokenManager from '../managers/TokenManager.js';
 import WaypointRenderer from '../managers/WaypointRenderer.js';
-import BookListModal from '../modals/BookListModal.js';
 import CelebrationModal from '../modals/CelebrationModal.js';
 import VideoPopupModal from '../modals/VideoPopupModal.js';
 import ReadingState from '../state.js';
@@ -41,7 +40,6 @@ class BaseMapScene extends Phaser.Scene {
         this.waypointRenderer = new WaypointRenderer(this);
         this.pathRenderer = new PathRenderer();
         this.tokenManager = new TokenManager();
-        this.bookListModal = new BookListModal(this);
         this.videoPopupModal = new VideoPopupModal(this);
         this.celebrationModal = new CelebrationModal(this);
 
@@ -133,10 +131,11 @@ class BaseMapScene extends Phaser.Scene {
 
         // Scene resume listener
         this.events.on('resume', () => {
-            this.bookListModal.destroy();
             this.time.delayedCall(100, () => {
                 this.updateTokenPosition(true);
             });
+            // Reload the continent background texture.
+            this.bg = this.add.image(0, 0, this.assetKey).setOrigin(0);
         });
 
         // Init layout
@@ -147,9 +146,18 @@ class BaseMapScene extends Phaser.Scene {
         this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
             this.scale.off('resize', this.handleResize, this);
             this.waypointRenderer.destroy();
-            this.bookListModal.destroy();
             this.videoPopupModal.destroy();
             this.celebrationModal.destroy();
+
+            // Release the continent background texture after leaving the scene.
+            try {
+                if (this.assetKey && this.textures.exists(this.assetKey)) {
+                    this.bg.destroy();
+                    this.textures.remove(this.assetKey);
+                }
+            } catch (e) {
+                console.warn('Failed to remove continent texture', this.assetKey, e);
+            }
         });
 
         this.time.delayedCall(50, () => {
@@ -338,7 +346,6 @@ class BaseMapScene extends Phaser.Scene {
 
     showStoryQuiz() {
         const mapKey = this.scene.key;
-        this.bookListModal.destroy();
         this.isDoingQuiz = true;
 
         if (window.openReactQuiz) {

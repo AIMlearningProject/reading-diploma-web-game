@@ -2,10 +2,9 @@ import Phaser from 'phaser';
 import ReadingState from '../state.js';
 import { preloadIcons, ICON_KEYS } from '../ui/icons.js';
 import { COLORS, FONTS, uiScale as calcUiScale } from '../ui/constants.js';
-import worldmapImg from '../../assets/worldmap.png';
+// import worldmapImg from '../../assets/worldmap.png';
 import worldmapSimpleImg from '../../assets/worldmap_simple.png';
 import pandaWorldImg from '../../assets/buddyAvatar/panda/panda_world.png';
-import continentRegistry from './continentRegistry.js';
 
 class WorldMapScene extends Phaser.Scene {
     constructor() {
@@ -19,7 +18,7 @@ class WorldMapScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('worldMap', worldmapImg);
+        // this.load.image('worldMap', worldmapImg);
         this.load.image('worldMapSimple', worldmapSimpleImg);
         this.load.image('pandaWorld', pandaWorldImg);
         preloadIcons(this);
@@ -27,25 +26,18 @@ class WorldMapScene extends Phaser.Scene {
 
     create() {
         // --- 1. Background layer ---
-        const bg = this.add.image(0, 0, 'worldMap').setOrigin(0);
-        const bgSimple = this.add.image(0, 0, 'worldMapSimple').setOrigin(0);
-
-        // Prefetch unlocked continent backgrounds so entering them is faster
-        // Doesn't increase initial load time, since this in done in the background
-        // But WorldMapScene may be a bit laggy while this happens
-        const toPrefetch = continentRegistry.filter(c => ReadingState.mapUnlock[c.key] && !this.textures.exists(c.assetKey));
-        toPrefetch.forEach(cfg => this.load.image(cfg.assetKey, cfg.assetPath));
-        this.load.start();
+        // const bg = this.add.image(0, 0, 'worldMap').setOrigin(0);
+        const bgSimple = this.add.image(0, 0, 'worldMapSimple').setOrigin(0)
 
         const setupBackgrounds = () => {
-            if (!this.cameras || !this.cameras.main || !bg.active) return;
+            if (!this.cameras || !this.cameras.main || !bgSimple.active) return;
             const { width: currentW, height: currentH } = this.scale;
-            const fillScale = Math.max(currentW / bg.width, currentH / bg.height);
+            const fillScale = Math.max(currentW / bgSimple.width, currentH / bgSimple.height);
             const mainScale = fillScale * 1.5;
-            bg.setScale(mainScale);
-            bgSimple.setDisplaySize(bg.displayWidth, bg.displayHeight);
-            this.cameras.main.setBounds(0, 0, bg.displayWidth, bg.displayHeight);
-            return bg.displayWidth / this.ORIGINAL_MAP_WIDTH;
+            bgSimple.setScale(mainScale);
+            bgSimple.setDisplaySize(bgSimple.displayWidth, bgSimple.displayHeight);
+            this.cameras.main.setBounds(0, 0, bgSimple.displayWidth, bgSimple.displayHeight);
+            return bgSimple.displayWidth / this.ORIGINAL_MAP_WIDTH;
         };
 
         let currentZoomScale = setupBackgrounds();
@@ -212,8 +204,8 @@ class WorldMapScene extends Phaser.Scene {
         // --- 4. Minimap Configuration ---
         const getLayoutConfig = (isMaximized) => {
             const { width: currentW, height: currentH } = this.scale;
-            if (!bg || !bg.active) return { x: 0, y: 0, w: 100, h: 100 };
-            const mapRatio = bg.width / bg.height;
+            if (!bgSimple || !bgSimple.active) return { x: 0, y: 0, w: 100, h: 100 };
+            const mapRatio = bgSimple.width / bgSimple.height;
             const safePaddingBottom = 25;
             const sidePadding = 20;
             let targetW, targetH, targetX, targetY;
@@ -240,8 +232,8 @@ class WorldMapScene extends Phaser.Scene {
         const initial = getLayoutConfig(false);
         this.minimapCamera = this.cameras.add(initial.x, initial.y, initial.w, initial.h).setBackgroundColor(0x000000);
 
-        this.cameras.main.ignore(bgSimple);
-        this.minimapCamera.ignore(bg);
+        // this.cameras.main.ignore(bgSimple);
+        // this.minimapCamera.ignore(bg);
 
         this.viewRectGraphics = this.add.graphics().setDepth(1005).setScrollFactor(0);
         this.miniFrame = this.add.graphics().setScrollFactor(0).setDepth(1001);
@@ -297,11 +289,11 @@ class WorldMapScene extends Phaser.Scene {
         this.minimapCamera.ignore([this.bookCountText, this.backBtn, this.miniFrame, this.interactiveRegion, this.toggleBtn, this.viewRectGraphics]);
 
         const syncUI = () => {
-            if (!this.scene.isActive() || !this.minimapCamera || !this.minimapCamera.scene || !bg || !bg.active) return;
+            if (!this.scene.isActive() || !this.minimapCamera || !this.minimapCamera.scene || !bgSimple || !bgSimple.active) return;
 
-            const ratio = this.minimapCamera.width / bg.displayWidth;
+            const ratio = this.minimapCamera.width / bgSimple.displayWidth;
             this.minimapCamera.setZoom(ratio);
-            this.minimapCamera.centerOn(bg.displayWidth / 2, bg.displayHeight / 2);
+            this.minimapCamera.centerOn(bgSimple.displayWidth / 2, bgSimple.displayHeight / 2);
 
             this.miniFrame.clear();
             // Shadow
@@ -337,7 +329,7 @@ class WorldMapScene extends Phaser.Scene {
 
         const onResize = () => {
             // ⭐ Core Defense: Never run logic if the scenario is not in an Active state.
-            if (!this.scene.isActive() || !bg || !bg.active) return;
+            if (!this.scene.isActive() || !bgSimple || !bgSimple.active) return;
 
             currentZoomScale = setupBackgrounds();
             renderPoints();
@@ -393,7 +385,7 @@ class WorldMapScene extends Phaser.Scene {
                     this.tweens.add({ targets: r, scale: 12, alpha: 0, duration: 300, onComplete: () => r.destroy() });
                     const relX = (p.x - this.minimapCamera.x) / this.minimapCamera.width;
                     const relY = (p.y - this.minimapCamera.y) / this.minimapCamera.height;
-                    this.cameras.main.pan(relX * bg.displayWidth, relY * bg.displayHeight, 500, 'Power2');
+                    this.cameras.main.pan(relX * bgSimple.displayWidth, relY * bgSimple.displayHeight, 500, 'Power2');
                 }
             }
         });
@@ -427,7 +419,7 @@ class WorldMapScene extends Phaser.Scene {
             }
         });
 
-        this.cameras.main.centerOn(bg.displayWidth / 2, bg.displayHeight / 2);
+        this.cameras.main.centerOn(bgSimple.displayWidth / 2, bgSimple.displayHeight / 2);
     }
 }
 

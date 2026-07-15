@@ -165,7 +165,7 @@ class ReadingScene extends Phaser.Scene {
                 this.infoButtonRoot = createRoot(infoButtonMountNode);
                 this.infoButtonRoot.render(
                     createElement(InfoButton, {
-                        info: 'Jos olet jo lukenut kirjan yhdellä tasolla, et voi lukea samaa kirjaa uudelleen toisella tasolla.',
+                        info: 'Olet jo lukenut tämän kirjan, et voi lukea samaa kirjaa uudelleen monella tasolla.',
                         textboxStyle: { left: '110px' }
                     })
                 );
