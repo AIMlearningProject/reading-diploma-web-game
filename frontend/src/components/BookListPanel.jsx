@@ -60,7 +60,12 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
     const pageSlice = filtered.slice(page * pageSize, (page + 1) * pageSize);
 
     return (
-        <div style={styles.overlay}>
+        <div
+            style={styles.overlay}
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
+        >
             <div style={styles.header}>
                 <h3 style={styles.headerTitle}>Valitse kirja</h3>
             </div>

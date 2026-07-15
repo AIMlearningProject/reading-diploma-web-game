@@ -48,12 +48,18 @@ export default function PhaserGame() {
 
       // React wake-up logic for quiz overlay
       window.openReactQuiz = (mapKey) => {
+        if (gameRef.current?.input) {
+          gameRef.current.input.enabled = false;
+        }
         setQuizInfo({ visible: true, mapKey: mapKey });
       };
       // React wake-up logic for book list overlay
       window.openReactBookList = (mapKey) => {
         if (ReadingState._continentCompletedFlags?.[mapKey] === true) {
           return 'completed';
+        }
+        if (gameRef.current?.input) {
+          gameRef.current.input.enabled = false;
         }
         setBookListInfo({ visible: true, mapKey });
         return;
@@ -105,6 +111,9 @@ export default function PhaserGame() {
             if (gameRef.current) {
               const activeScenes = gameRef.current.scene.getScenes(true);
               if (activeScenes.length > 0) activeScenes[0].isDoingQuiz = false;
+              if (gameRef.current.input) {
+                gameRef.current.input.enabled = true;
+              }
             }
           }}
         />
@@ -113,9 +122,17 @@ export default function PhaserGame() {
       {bookListInfo.visible && (
         <BookListPanel
           mapKey={bookListInfo.mapKey}
-          onClose={() => setBookListInfo({ visible: false, mapKey: null })}
+          onClose={() => {
+            setBookListInfo({ visible: false, mapKey: null });
+            if (gameRef.current.input) {
+              gameRef.current.input.enabled = true;
+            }
+          }}
           onSelect={(book) => {
             setBookListInfo({ visible: false, mapKey: null });
+            if (gameRef.current.input) {
+              gameRef.current.input.enabled = true;
+            }
             if (gameRef.current) {
               const activeScenes = gameRef.current.scene.getScenes(true);
               if (activeScenes.length > 0) activeScenes[0].events.emit('book-selected', book);

@@ -74,7 +74,12 @@ export default function ReactQuiz({ mapKey, onClose }) {
     if (!mapKey) return null;
 
     return (
-        <div style={styles.overlay}>
+        <div
+            style={styles.overlay}
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
+        >
             <div style={styles.titleBox}>
                 <span style={styles.title}>{bookTitle}</span>
             </div>
