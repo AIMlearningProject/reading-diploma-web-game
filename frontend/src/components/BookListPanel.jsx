@@ -1,12 +1,14 @@
 import { useState, useMemo, useEffect } from 'react';
 import ReadingState from '../game/state.js';
 import BookSearchBar from './BookSearchBar';
+import AddBookPopup from './popups/AddBookPopup.jsx';
 
 export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10 }) {
     const [query, setQuery] = useState('');
     const [queryBooktype, setQueryBooktype] = useState('');
     const [page, setPage] = useState(0);
     const [hideRead, setHideRead] = useState(false);
+    const [showAddBookPopup, setShowAddBookPopup] = useState(false)
 
     const allBooks = ReadingState.globalBooks || [];
     const completedBookIds = ReadingState.completedBookIds || {};
@@ -33,7 +35,7 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
             const pb = Number(b.progress) || 0;
 
             if (pa === 0 && pb === 0) {
-                return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
+                return a.title.localeCompare(b.title, 'fin', { sensitivity: 'base' });
             }
 
             return pb - pa;
@@ -58,6 +60,14 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
 
     const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
     const pageSlice = filtered.slice(page * pageSize, (page + 1) * pageSize);
+
+    if (showAddBookPopup) return (
+        <AddBookPopup
+            open={showAddBookPopup}
+            onClose={() => setShowAddBookPopup(false)}
+            mapKey={mapKey}
+        />
+    )
 
     return (
         <div
@@ -85,6 +95,7 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
                     onNextPage={() => setPage(p => Math.min(totalPages - 1, p + 1))}
                     hideRead={hideRead}
                     onToggleHideRead={setHideRead}
+                    onAddBook={() => setShowAddBookPopup(true)}
                     styles={styles}
                 />
 
@@ -244,9 +255,10 @@ const styles = {
     booktypeSelect: {
         padding: '4px 6px',
         borderRadius: 6,
-        border: '1px solid #9c9c9c',
-        //color: '#fff',
-        //backgroundColor: '#1e3a5f'
+        border: '2px solid #9c9c9c',
+        cursor: 'pointer',
+        color: '#fff',
+        backgroundColor: '#1e3a5f'
     },
 
     hideReadLabel: {
@@ -265,6 +277,15 @@ const styles = {
 
     hideReadText: {
         fontSize: 14
+    },
+
+    addBookBtn: {
+        padding: '4px 6px',
+        borderRadius: 6,
+        border: '2px solid #9c9c9c',
+        cursor: 'pointer',
+        color: '#fff',
+        backgroundColor: '#1e3a5f'
     },
 
     list: {

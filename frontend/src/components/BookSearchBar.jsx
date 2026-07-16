@@ -14,6 +14,7 @@ export default function SearchBar({
     // Optional hide-read toggle (only BookListPanel uses this)
     hideRead,
     onToggleHideRead,
+    onAddBook,
 
     styles
 }) {
@@ -95,8 +96,8 @@ export default function SearchBar({
                     <option value="audio">Äänikirjat</option>
                 </select>
 
-                {/* Hide-read only if props exist */}
-                {hideRead !== undefined && (
+                {role === 'student' && <>
+                    {/* Hide-read checkbox */}
                     <label style={styles.hideReadLabel}>
                         <input
                             type="checkbox"
@@ -106,7 +107,13 @@ export default function SearchBar({
                         />
                         <span style={styles.hideReadText}>Piilota luetut</span>
                     </label>
-                )}
+
+                    {/* Add book button */}
+                    <button style={styles.addBookBtn} onClick={onAddBook}>
+                        Lisää kirja
+                    </button>
+                </>}
+
             </div>
         </div>
     );

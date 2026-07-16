@@ -169,7 +169,7 @@ const ReadingState = {
                     coverimage: b.coverimage,
                     type: b.booktype,
                     id: String(b.id),
-                    dbId: b.id
+                    pageCount: b.page_count
                 }));
             }
 

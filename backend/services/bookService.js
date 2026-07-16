@@ -6,7 +6,7 @@ import { promises as fs } from 'fs'
 import logger from '../utils/logger.js'
 
 const BookService = {
-    async addBook({ title, author, coverimage, booktype, content, added_by }) {
+    async addBook({ title, author, coverimage, booktype, page_count, added_by }) {
         const existing = await Book.findByTitleAndAuthor(title, author)
         if (existing) {
             const err = new Error(`A book with the title and author '${title}' - '${author}' already exists`)
@@ -30,7 +30,7 @@ const BookService = {
             author,
             coverimage,
             booktype,
-            content,
+            page_count,
             added_by
         })
         return newBook

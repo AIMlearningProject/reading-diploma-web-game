@@ -9,6 +9,7 @@ function BookManager() {
     const [author, setAuthor] = useState('')
     const [coverimage, setCoverimage] = useState(null)
     const [booktype, setBooktype] = useState('physical')
+    const [pageCount, setPageCount] = useState('');
     const [error, setError] = useState('')
     const [zoomSrc, setZoomSrc] = useState(null);
     const [query, setQuery] = useState('');
@@ -66,6 +67,7 @@ function BookManager() {
         formData.append('author', author)
         if (coverimage) formData.append('coverimage', coverimage)
         formData.append('booktype', booktype)
+        if (booktype === 'physical') formData.append('page_count', pageCount)
 
         try {
             await createBook(formData)
@@ -73,6 +75,7 @@ function BookManager() {
             setAuthor('')
             setCoverimage(null)
             setBooktype('physical')
+            setPageCount('')
             formRef.current?.reset()
             fetchBookList()
         } catch (err) {
@@ -329,6 +332,21 @@ ${studentNames}`)) return
                         <option value="audio">Äänikirja</option>
                     </select>
                 </div>
+
+                {booktype === "physical" && (
+                    <div className="form-group">
+                        <label>
+                            Sivumäärä <span className="section-error">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            min="1"
+                            value={pageCount}
+                            onChange={(e) => setPageCount(e.target.value)}
+                            required
+                        />
+                    </div>
+                )}
                 <button type="submit" className="add-button">Lisää kirja</button>
             </form>
             {error && <p className="section-error">{error}</p>}

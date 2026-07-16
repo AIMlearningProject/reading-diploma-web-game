@@ -6,7 +6,7 @@ import {
     rejectTransferRequest,
     sendTransferRequest,
     deleteTransferRequest
-} from '../services/api'
+} from '../../services/api'
 import './TransferRequestPopup.css'
 
 function TransferRequestPopup({ open, onClose }) {
@@ -134,6 +134,7 @@ function TransferRequestPopup({ open, onClose }) {
     };
 
     const pendingIncomingRequests = incomingRequests.filter(r => r.status === 'pending')
+    const incomingRequestHistory = incomingRequests.filter(r => r.status !== 'pending')
 
     if (!open) return null;
 
@@ -263,15 +264,17 @@ function TransferRequestPopup({ open, onClose }) {
                             </>
                         ) : (
                             <>
-                                <label className="tr-history-label">
-                                    <input
-                                        className="tr-history-checkbox"
-                                        type="checkbox"
-                                        checked={showAnswered}
-                                        onChange={e => setShowAnswered(e.target.checked)}
-                                    />
-                                    Näytä historia
-                                </label>
+                                {incomingRequestHistory.length > 0 &&
+                                    <label className="tr-history-label">
+                                        <input
+                                            className="tr-history-checkbox"
+                                            type="checkbox"
+                                            checked={showAnswered}
+                                            onChange={e => setShowAnswered(e.target.checked)}
+                                        />
+                                        Näytä historia
+                                    </label>
+                                }
                                 {pendingIncomingRequests.length > 0 ? (
                                     incomingRequests.map((request) => (
                                         request.status === 'pending' ? (

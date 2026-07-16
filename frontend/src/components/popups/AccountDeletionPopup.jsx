@@ -2,8 +2,7 @@ import { useState } from 'react'
 import {
     deleteCurrentTeacher,
     deleteAllMyStudents
-} from '../services/api'
-import './TransferRequestPopup.css'
+} from '../../services/api'
 
 function AccountDeletionPopup({ open, onClose, setShowTransferPopup }) {
     const [toast, setToast] = useState(null)

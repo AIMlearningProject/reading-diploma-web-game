@@ -37,7 +37,7 @@ const bookSchema = z.object({
     title: z.string(),
     author: z.string(),
     booktype: z.string().transform(str => str.toLowerCase()).pipe(booktypes).optional(),
-    content: z.string().optional()
+    page_count: z.coerce.number().int().min(1).optional()
 }).strict()
 // Note: file uploads are handled by multer (upload.single('coverimage')).
 // We do NOT validate the file with zod here because multer parses multipart
@@ -75,7 +75,7 @@ booksRouter.post('/',
                 .trim()
         }
 
-        const { title: rawTitle, author: rawAuthor, booktype, content } = request.validated
+        const { title: rawTitle, author: rawAuthor, booktype, page_count } = request.validated
 
         try {
             if (request.file) {
@@ -106,7 +106,7 @@ booksRouter.post('/',
                     author: normalize(rawAuthor),
                     coverimage: `/uploads/book-covers/${filename}`,
                     booktype,
-                    content,
+                    page_count,
                     added_by: request.user.id
                 }
                 const createdBook = await BookService.addBook(bookToCreate)
@@ -123,7 +123,7 @@ booksRouter.post('/',
                     author: normalize(rawAuthor),
                     coverimage: '/uploads/book-covers/defaultNoImg.ico',
                     booktype,
-                    content,
+                    page_count,
                     added_by: request.user.id
                 }
 
