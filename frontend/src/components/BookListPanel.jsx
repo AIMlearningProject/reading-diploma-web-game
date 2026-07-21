@@ -22,7 +22,7 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
         progress: ReadingState.bookProgress[b.id] || 0,
         isFailedQuizBook: failedQuizBookIds.has(String(b.id))
     }
-    )), [allBooks, completedBookIds, currentBookId]);
+    )), [allBooks, completedBookIds, currentBookId, onSelect]);
 
     const sorted = useMemo(() => {
         // Sorts the books by progress and current selection.

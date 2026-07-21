@@ -6,6 +6,8 @@ import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
 import InfoButton from '../../components/InfoButton.jsx'
 
+// This File is currently not in use!!! The ReadingScene was replaced by manual progress update popup,
+// Since the book content can't be fetched or saved server-side
 class ReadingScene extends Phaser.Scene {
     constructor() {
         super('ReadingScene');

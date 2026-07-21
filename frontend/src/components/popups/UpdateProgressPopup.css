@@ -1,0 +1,224 @@
+/* === Overlay === */
+.progress-popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a192fcc;
+    pointer-events: auto;
+}
+
+/* === Popup container === */
+.progress-popup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    max-width: 80%;
+    max-height: 84vh;
+    overflow-y: auto;
+    background: #fdf6e3;
+    border: 3px solid #c4973a;
+    border-radius: 12px;
+    padding: 24px 28px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    animation: popupFadeIn 180ms ease-out;
+}
+
+@keyframes popupFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* === Book Header === */
+.popup-book-title {
+    font-family: "Cinzel Decorative", serif;
+    font-size: 24px;
+    color: #1e3a5f;
+    margin: 10px 0 0 0;
+    padding: 0;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.popup-book-author {
+    font-family: Nunito, sans-serif;
+    font-size: 16px;
+    color: #8d6e63;
+    margin-top: 6px;
+    text-align: center;
+}
+
+.progress-popup-info-wrapper {
+    position: sticky;
+    top: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 500;
+    margin-right: auto;
+}
+
+.progress-popup-info-btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: -20px;
+    left: -20px;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 500;
+}
+
+.progress-popup-close-wrapper {
+    position: sticky;
+    top: 0;
+    height: 0;
+    pointer-events: none;
+    z-index: 500;
+    margin-left: auto;
+}
+
+.progress-popup-close-btn {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: -20px;
+    right: -20px;
+    transition: all 0.2s ease;
+    z-index: 500;
+    pointer-events: auto;
+    cursor: pointer;
+
+    background: rgb(255, 255, 255);
+    color: #1e3a5f;
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.progress-popup-close-btn:hover {
+    background: rgb(255, 255, 255);
+    transform: scale(1.08);
+}
+
+/* === Cover Image === */
+.popup-cover-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.popup-cover-image {
+    aspect-ratio: 3 / 4;
+    min-width: 225px;
+    min-height: 300px;
+    height: auto;
+    width: auto;
+    max-width: 90%;
+    max-height: calc(84vh - 290px); /* 290px = approximate space for title, author, buttons, progress field */
+    object-fit: cover;
+
+    border: 3px solid #c4973a;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    background: #fff;
+}
+
+.empty-popup-cover-image {
+    width: 225px;
+    height: 300px;
+    object-fit: none;
+    border: 3px solid #c4973a;
+    border-radius: 8px;
+    display: block;
+}
+
+/* === Update Progress Form === */
+.progress-popup h2 {
+    font-family: "Cinzel Decorative", serif;
+    font-size: 26px;
+    color: #1e3a5f;
+    margin-top: 0;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.progress-update-form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    gap: 6px;
+    width: 100%;
+}
+
+.editable-field {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: Nunito, sans-serif;
+    font-size: 18px;
+    color: #1e3a5f;
+}
+
+.editable-field input {
+    font-size: 18px;
+    font-family: Nunito, sans-serif;
+    color: #1e3a5f;
+
+    border: none;
+    border-bottom: 2px solid #c4973a;
+
+    background: transparent;
+    padding: 2px 4px;
+    width: 48px;
+    text-align: center;
+
+    outline: none;
+    transition: border-color 120ms ease, background-color 120ms ease;
+    text-align: end;
+}
+
+.editable-field input:focus {
+    border-bottom-color: #1e3a5f;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.progress-slider-bar {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.save-progress-button {
+    padding: 10px 20px;
+    margin-top: 8px;
+    font-size: 18px;
+    font-family: Nunito, sans-serif;
+    background: #c4973a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 120ms ease, background 120ms ease;
+}
+
+.save-progress-button:hover {
+    background: #a07c2f;
+    transform: translateY(-2px);
+}

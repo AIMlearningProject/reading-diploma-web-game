@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import BookFetcher from '../managers/BookFetcher.js';
 import PathRenderer from '../managers/PathRenderer.js';
 import TokenManager from '../managers/TokenManager.js';
 import WaypointRenderer from '../managers/WaypointRenderer.js';
@@ -293,9 +292,9 @@ class BaseMapScene extends Phaser.Scene {
 
     showBookList() {
         const mapKey = this.scene.key;
-        /*
+        
         // Booklist using the BookListModal system.
-        const result = this.bookListModal.show(mapKey, async (book, key, mapCfg, isCompleted) => {
+        /*const result = this.bookListModal.show(mapKey, async (book, key, mapCfg, isCompleted) => {
             if (!isCompleted) {
                 ReadingState.mapSelectedBook[mapKey] = book.id;
                 await ReadingState.saveBookSelection(mapKey, Number(book.id));
@@ -330,10 +329,7 @@ class BaseMapScene extends Phaser.Scene {
                 await ReadingState.saveBookSelection(mapKey, Number(book.id));
             }
 
-            const bookData = await BookFetcher.fetchAndLaunch(
-                this, book, mapCfg, isCompleted, this.bookIconContainer
-            );
-            this.launchReading(mapCfg, bookData);
+            this.launchReading(mapCfg, book, isCompleted);
         };
 
         // Use once so it auto-cleans up if user selects a book
@@ -359,16 +355,50 @@ class BaseMapScene extends Phaser.Scene {
         this.celebrationModal.show(this.scene.key);
     }
 
-    launchReading(config, bookData) {
-        ReadingState.progress = ReadingState[config.storage] || 0;
-        this.scene.pause();
+    launchReading(config, book, readOnly) {
+        // API Reading scene using Phaser
+        /*this.scene.pause();
         this.scene.launch('ReadingScene', {
             prevScene: this.scene.key,
             mapTitle: this.title,
             bookContent: bookData,
             bookId: bookData.id,
             readOnly: bookData.readOnly || false
+        });*/
+
+        // React reading scene with manual progress updating
+        window.openReactUpdateProgress(
+            this.scene.key,
+            book,
+            ReadingState.bookProgress[book.id] || 0,
+            readOnly
+        );
+
+        this.events.once('manual-progress-updated', (newPct) => {
+            this.handleManualProgressSave(newPct, config, book, readOnly);
         });
+    }
+
+    handleManualProgressSave(pct, config, book, readOnly) {
+        ReadingState.bookProgress[book.id] = pct;
+
+        if (!readOnly && config.storage) {
+            ReadingState[config.storage] = pct;
+            ReadingState.saveCurrentProgress(this.scene.key, pct);
+
+            if (ReadingState.isLevelPendingResubmission(this.scene.key) && pct >= 100) {
+                ReadingState.levelsCompletedResubmission[this.scene.key] = true;
+            }
+        }
+
+        // Manual scene resume, since scene was never paused
+        // Pausing the scene caused the handleResize to not work,
+        // if portrait/landscape mode on mobile was changed while the UpdateProgressPopup was open
+        this.time.delayedCall(100, () => {
+            this.updateTokenPosition(true);
+        });
+        // Reload the continent background texture.
+        this.bg = this.add.image(0, 0, this.assetKey).setOrigin(0);
     }
 
     updateTokenPosition(shouldAnimate = true) {

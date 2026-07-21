@@ -7,6 +7,7 @@ import createGameConfig from '../game/config.js';
 import ReadingState from '../game/state.js';
 import ReactQuiz from './ReactQuiz';
 import BookListPanel from './BookListPanel';
+import UpdateProgressPopup from './popups/UpdateProgressPopup'
 
 export default function PhaserGame() {
   const containerRef = useRef(null);
@@ -16,6 +17,13 @@ export default function PhaserGame() {
 
   const [quizInfo, setQuizInfo] = useState({ visible: false, mapKey: null });
   const [bookListInfo, setBookListInfo] = useState({ visible: false, mapKey: null });
+  const [updateProgressInfo, setUpdateProgressInfo] = useState({
+    visible: false,
+    mapKey: null,
+    book: null,
+    currentPct: null,
+    readOnly: false
+  });
 
   useEffect(() => {
     if (gameRef.current) return;
@@ -53,6 +61,7 @@ export default function PhaserGame() {
         }
         setQuizInfo({ visible: true, mapKey: mapKey });
       };
+
       // React wake-up logic for book list overlay
       window.openReactBookList = (mapKey) => {
         if (ReadingState._continentCompletedFlags?.[mapKey] === true) {
@@ -63,6 +72,20 @@ export default function PhaserGame() {
         }
         setBookListInfo({ visible: true, mapKey });
         return;
+      };
+
+      // React wake-up logic for reading scene
+      window.openReactUpdateProgress = (mapKey, book, currentPct, readOnly) => {
+        if (gameRef.current?.input) {
+          gameRef.current.input.enabled = false;
+        }
+        setUpdateProgressInfo({
+          visible: true,
+          mapKey,
+          book,
+          currentPct,
+          readOnly
+        });
       };
 
       gameRef.current = game;
@@ -136,6 +159,32 @@ export default function PhaserGame() {
             if (gameRef.current) {
               const activeScenes = gameRef.current.scene.getScenes(true);
               if (activeScenes.length > 0) activeScenes[0].events.emit('book-selected', book);
+            }
+          }}
+        />
+      )}
+
+      {updateProgressInfo.visible && (
+        <UpdateProgressPopup
+          book={updateProgressInfo.book}
+          currentPct={updateProgressInfo.currentPct}
+          readOnly={updateProgressInfo.readOnly}
+          onClose={(newPct) => {
+            const mapKey = updateProgressInfo.mapKey;
+            const readOnly = updateProgressInfo.readOnly;
+            setUpdateProgressInfo({
+              visible: false,
+              mapKey: null,
+              book: null,
+              currentPct: null,
+              readOnly: false
+            });
+            if (gameRef.current.input) {
+              gameRef.current.input.enabled = true;
+            }
+            if (gameRef.current && !readOnly) {
+                const scene = gameRef.current.scene.getScene(mapKey);
+                scene.events.emit('manual-progress-updated', newPct);
             }
           }}
         />

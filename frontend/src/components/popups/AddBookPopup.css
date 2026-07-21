@@ -23,6 +23,17 @@
     border-radius: 8px;
     padding: 16px;
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+    animation: popupFadeIn 180ms ease-out;
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 /* --- Header --- */
