@@ -171,7 +171,6 @@ export default function PhaserGame() {
           readOnly={updateProgressInfo.readOnly}
           onClose={(newPct) => {
             const mapKey = updateProgressInfo.mapKey;
-            const readOnly = updateProgressInfo.readOnly;
             setUpdateProgressInfo({
               visible: false,
               mapKey: null,
@@ -182,9 +181,9 @@ export default function PhaserGame() {
             if (gameRef.current.input) {
               gameRef.current.input.enabled = true;
             }
-            if (gameRef.current && !readOnly) {
-                const scene = gameRef.current.scene.getScene(mapKey);
-                scene.events.emit('manual-progress-updated', newPct);
+            if (gameRef.current) {
+              const scene = gameRef.current.scene.getScene(mapKey);
+              scene.events.emit('book-closed', newPct);
             }
           }}
         />

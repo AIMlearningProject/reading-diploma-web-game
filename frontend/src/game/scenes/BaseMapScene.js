@@ -374,8 +374,9 @@ class BaseMapScene extends Phaser.Scene {
             readOnly
         );
 
-        this.events.once('manual-progress-updated', (newPct) => {
-            this.handleManualProgressSave(newPct, config, book, readOnly);
+        this.events.once('book-closed', (newPct) => {
+            if (readOnly) this.showBookList();
+            else this.handleManualProgressSave(newPct, config, book, readOnly);
         });
     }
 
@@ -397,8 +398,6 @@ class BaseMapScene extends Phaser.Scene {
         this.time.delayedCall(100, () => {
             this.updateTokenPosition(true);
         });
-        // Reload the continent background texture.
-        this.bg = this.add.image(0, 0, this.assetKey).setOrigin(0);
     }
 
     updateTokenPosition(shouldAnimate = true) {
