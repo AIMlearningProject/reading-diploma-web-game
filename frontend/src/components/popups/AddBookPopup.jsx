@@ -4,7 +4,7 @@ import ReadingState from '../../game/state';
 import InfoButton from '../InfoButton'
 import './AddBookPopup.css'
 
-function AddBookPopup({ open, onClose, mapKey }) {
+function AddBookPopup({ open, onClose, onSelect, mapKey }) {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [coverimage, setCoverimage] = useState(null)
@@ -49,9 +49,9 @@ function AddBookPopup({ open, onClose, mapKey }) {
 
             ReadingState.globalBooks = [...(ReadingState.globalBooks || []), newBook]
             ReadingState.mapSelectedBook[mapKey] = newBook.id
-            await ReadingState.saveBookSelection(mapKey, createdBook.id)
 
             onClose()
+            onSelect(newBook)
         } catch (err) {
             setError(err?.message || 'Yhteysvirhe')
         } finally {
@@ -68,7 +68,7 @@ function AddBookPopup({ open, onClose, mapKey }) {
                     <h2>Lisää kirja</h2>
                     <div>
                         <InfoButton
-                            info={'Jos et löydä listasta kirjaa, joka sinulla jo on ja jota haluat lukea, voit lisätä sen täällä itse. Kirjan lisääminen ei anna sinulle kirjaa, vaan se näkyy vain luokan yhteisessä listassa.'}
+                            info={'Jos et löydä listasta kirjaa, jota haluat lukea, voit lisätä sen täällä itse. Kirjan lisääminen ei anna sinulle kirjaa, vaan se lisätään näkymään luokan yhteiseen listaan.'}
                             buttonStyle={{
                                 marginRight: '10px',
                                 fontSize: '16px',

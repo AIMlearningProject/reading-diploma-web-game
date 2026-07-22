@@ -65,6 +65,7 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
         <AddBookPopup
             open={showAddBookPopup}
             onClose={() => setShowAddBookPopup(false)}
+            onSelect={onSelect}
             mapKey={mapKey}
         />
     )
