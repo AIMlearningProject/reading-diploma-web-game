@@ -7,8 +7,6 @@ import 'dotenv/config'
 // npm run db:make migration_name_here --> to create a new migration file (fit with the ES module)
 // npm run db:seed seed_name_here --> to create a new seed file (fit with the ES module) for filling tables with data
 
-// npx cross-env NODE_ENV=test knex migrate:rollback --all --> to rollback all migrations from test DB
-
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
@@ -47,6 +45,10 @@ const staging = {
   migrations: {
     directory: './db/migrations',
     tableName: 'knex_migrations'
+  },
+  seeds: {
+    directory: './db/seeds',
+    tableName: 'knex_seeds'
   }
 }
 
@@ -57,17 +59,18 @@ const production = {
   connection: useConnectionString
     ? process.env.DATABASE_URL
     : {
-        host: process.env.DB_HOST || 'localhost',
-        database: process.env.DB_NAME || 'rdiploma',
-        user: process.env.DB_USER || 'postgres',
-        password: process.env.DB_PASSWORD,
-        port: process.env.DB_PORT || 5432
-      },
-   /*pool: { min: 2, max: 10 },*/
+      host: process.env.DB_HOST || 'localhost',
+      database: process.env.DB_NAME || 'rdiploma',
+      user: process.env.DB_USER || 'postgres',
+      password: process.env.DB_PASSWORD,
+      port: process.env.DB_PORT || 5432
+    },
+  /*pool: { min: 2, max: 10 },*/
   migrations: {
     directory: './db/migrations',
     tableName: 'knex_migrations'
-  }
+  },
+
 }
 
 export default {
