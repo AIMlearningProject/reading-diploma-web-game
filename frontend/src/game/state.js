@@ -63,18 +63,7 @@ const ReadingState = {
     /**
      * A global list of 10 books (from your original main.js's globalBooks).
      */
-    globalBooks: [
-        { title: "The Frozen Pirate", author: "W. Clark Russell", id: "34346" },
-        { title: "Alice's Adventures in Wonderland", author: "Lewis Carroll", id: "11" },
-        { title: "The Jungle Book", author: "Rudyard Kipling", id: "19379" },
-        { title: "The Adventures of Tom Sawyer", author: "Mark Twain", id: "74" },
-        { title: "Bomba the Jungle Boy", author: "Roy Rockwood", id: "14294" },
-        { title: "Pinocchio in Africa", author: "E. Cherubini", id: "26084" },
-        { title: "The Coral Island", author: "R. M. Ballantyne", id: "646" },
-        { title: "Lost in the Land of Ice", author: "Edward Stratemeyer", id: "21575" },
-        { title: "Peter Pan", author: "James M. Barrie", id: "16" },
-        { title: "Anne of Green Gables", author: "L. M. Montgomery", id: "45" }
-    ],
+    globalBooks: [],
 
     /**
      * Continent unlocking order: from north to south
