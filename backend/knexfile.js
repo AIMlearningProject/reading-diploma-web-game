@@ -70,7 +70,10 @@ const production = {
     directory: './db/migrations',
     tableName: 'knex_migrations'
   },
-
+  seeds: {
+    directory: './db/seeds',
+    tableName: 'knex_seeds'
+  }
 }
 
 export default {
