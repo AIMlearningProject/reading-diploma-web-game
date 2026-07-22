@@ -12,8 +12,8 @@ function InfoButton({ buttonStyle, textboxStyle, info }) {
             }
         }
 
-        document.addEventListener("click", handleClickOutside)
-        return () => document.removeEventListener("click", handleClickOutside)
+        document.addEventListener("pointerdown", handleClickOutside)
+        return () => document.removeEventListener("pointerdown", handleClickOutside)
     }, [])
 
     return (

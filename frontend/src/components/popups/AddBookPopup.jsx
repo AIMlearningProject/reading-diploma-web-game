@@ -1,6 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef } from 'react';
 import { createBook } from '../../services/api'
-import ReadingState from "../../game/state";
+import ReadingState from '../../game/state';
+import InfoButton from '../InfoButton'
 import './AddBookPopup.css'
 
 function AddBookPopup({ open, onClose, mapKey }) {
@@ -65,9 +66,20 @@ function AddBookPopup({ open, onClose, mapKey }) {
             <div className="student-add-book-panel" onClick={(e) => e.stopPropagation()}>
                 <div className="student-add-book-header">
                     <h2>Lisää kirja</h2>
-                    <button className="student-add-book-close-btn" onClick={onClose}>
-                        X Sulje
-                    </button>
+                    <div>
+                        <InfoButton
+                            info={'Jos et löydä listasta kirjaa, joka sinulla jo on ja jota haluat lukea, voit lisätä sen täällä itse. Kirjan lisääminen ei anna sinulle kirjaa, vaan se näkyy vain luokan yhteisessä listassa.'}
+                            buttonStyle={{
+                                marginRight: '10px',
+                                fontSize: '16px',
+                                fontWeight: '700',
+                                boxShadow: '0 1px 4px rgba(0,0,0,0.3)'
+                            }}
+                        />
+                        <button className="student-add-book-close-btn" onClick={onClose}>
+                            X Sulje
+                        </button>
+                    </div>
                 </div>
 
                 <form

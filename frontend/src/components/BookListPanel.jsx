@@ -172,6 +172,7 @@ const styles = {
         borderRadius: 8,
         padding: 16,
         boxShadow: '0 6px 24px rgba(0,0,0,0.5)',
+        animation: 'popupFadeIn 180ms ease-out',
     },
 
     header: {

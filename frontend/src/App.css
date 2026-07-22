@@ -104,3 +104,8 @@ canvas {
   background: #000;
   overflow: hidden;
 }
+
+@keyframes popupFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
