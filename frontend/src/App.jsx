@@ -5,6 +5,7 @@ import PhaserGame from './components/PhaserGame'
 import WelcomePage from './pages/WelcomePage'
 import TeacherLoginPage from './pages/TeacherLoginPage'
 import StudentLoginPage from './pages/StudentLoginPage'
+import StudentSignUpPage from './pages/StudentSignUpPage'
 import TeacherDashboard from './pages/TeacherDashboard'
 import StudentDashboard from './pages/StudentDashboard'
 // Note: I think all the css of all these pages might get mixed with these imports
@@ -41,6 +42,9 @@ function App() {
                     } />
                     <Route path="/login/student" element={
                         <PublicRoute><StudentLoginPage /></PublicRoute>
+                    } />
+                    <Route path="/sign-up/student" element={
+                        <PublicRoute><StudentSignUpPage /></PublicRoute>
                     } />
                     <Route path="/teacher/dashboard" element={
                         <ProtectedRoute role="teacher"><TeacherDashboard /></ProtectedRoute>

@@ -75,7 +75,7 @@ function TeacherProfileCard({ setShowTransferPopup, setShowAccountDeletionPopup 
                         </button>
                         <div className='divider'></div>
                         <button className="open-transfer-requests-button" onClick={() => setShowTransferPopup(true)}>
-                            Avaa siirtopyynnöt
+                            Siirtopyynnöt
                         </button>
                         <button className="delete-profile-button" onClick={() => setShowAccountDeletionPopup(true)} disabled={saving}>
                             Poista Käyttäjä

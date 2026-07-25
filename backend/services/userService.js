@@ -117,7 +117,7 @@ const UserService = {
         }
 
         const password_hash = await bcrypt.hash(password, saltRounds)
-        return User.create({
+        return await User.create({
             email,
             name,
             password_hash,

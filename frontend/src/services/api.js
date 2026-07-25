@@ -142,6 +142,12 @@ export function createStudent(body) {
         body: JSON.stringify(body),
     });
 }
+export function createStudentWithInvite(body) {
+    return request('/api/users/invite/student', {
+        method: 'POST',
+        body: JSON.stringify(body),
+    });
+}
 export function updateUserName(id, name) {
     return request(`/api/users/profile/${id}`, {
         method: 'PATCH',
@@ -197,6 +203,19 @@ export function acceptTransferRequest(id) {
 }
 export function rejectTransferRequest(id) {
     return request(`/api/transfer-requests/${id}/reject`, {
+        method: 'PATCH',
+    });
+}
+
+// Invite link endpoints
+export function fetchInviteLink() { return request('/api/invite'); }
+export function regenerateInviteLink() {
+    return request(`/api/invite/regenerate`, {
+        method: 'POST',
+    });
+}
+export function toggleInviteLink() {
+    return request(`/api/invite/toggle`, {
         method: 'PATCH',
     });
 }

@@ -3,6 +3,7 @@ import logger from './utils/logger.js'
 import middleware from './utils/middleware.js'
 import express from 'express'
 import cors from 'cors'
+
 import usersRouter from './controllers/users.js'
 import booksRouter from './controllers/books.js'
 import authRouter from './controllers/auth.js'
@@ -10,6 +11,8 @@ import progressRouter from './controllers/progresses.js'
 import rewardsRouter from './controllers/rewards.js'
 import submissionsRouter from './controllers/submissions.js'
 import transferRequestsRouter from './controllers/transferRequests.js'
+import teacherInvitesRouter from './controllers/teacherInvites.js'
+
 import session from 'express-session'
 // Memorystore ∨∨∨ is good for single instance apps (dev/small app), Redis might be better for scaling,
 // because it provides multi-instance rate limit counters. Whomever it may consern: Consider this before scaling.
@@ -145,33 +148,37 @@ const makeLimiter = ({ windowMs, max, message }) => {
 // ∨∨∨ Adjust these if needed
 const authLimiter = makeLimiter({
     // {max} requests per {windowMs} milliseconds
-    // 20 requests per minute allowed to the auth routes per client
     windowMs: 60 * 1000,
-    max: 20,
+    max: 20, // 20 requests per minute allowed to the auth routes per client
 })
 
 const userLimiter = makeLimiter({
-    // 100 requests per minute allowed for user related requests
     windowMs: 60 * 1000,
-    max: 100,
+    max: 100, // 100 requests per minute allowed for user related requests
 })
 
 const apiLimiter = makeLimiter({
-    // 200 requests per minute allowed for other api routes
+    // For other api routes
     windowMs: 60 * 1000,
     max: 200,
 })
 
 const indexLimiter = makeLimiter({
-    // 250 requests per minute allowed for fronted routes in production env (welcomepage, loginpage etc.)
+    // For fronted routes in production env (welcomepage, loginpage etc.)
     windowMs: 60 * 1000,
     max: 250,
 })
 
 const trLimiter = makeLimiter({
-    // 50 requests per minute allowed for transfer requests
+    // For transfer requests
     windowMs: 60 * 1000,
     max: 50,
+})
+
+const tiLimiter = makeLimiter({
+    // For invite link related requests
+    windowMs: 60 * 1000,
+    max: 20,
 })
 
 const uploadPath = path.resolve(__dirname, 'public', 'uploads')
@@ -184,6 +191,7 @@ app.use('/api/progress', apiLimiter, progressRouter)
 app.use('/api/rewards', apiLimiter, rewardsRouter)
 app.use('/api/submissions', apiLimiter, submissionsRouter)
 app.use('/api/transfer-requests', trLimiter, transferRequestsRouter)
+app.use('/api/invite', tiLimiter, teacherInvitesRouter)
 
 if (environmentMode === 'production') {
     const distPath = path.resolve(__dirname, '../frontend/dist')

@@ -4,6 +4,7 @@ import ProgressService from '../services/progressService.js'
 import { z } from 'zod'
 import middleware from '../utils/middleware.js'
 import bcrypt from 'bcrypt'
+import TeacherInviteService from '../services/teacherInviteService.js'
 
 const usersRouter = express.Router()
 
@@ -55,6 +56,48 @@ usersRouter.post('/students', middleware.requireTeacherRole, middleware.zValidat
             })
         }
         response.status(201).json(student) // Why does this return the student's password_hash?
+    } catch (error) {
+        next(error)
+    }
+})
+
+const studentInviteSchema = z.object({
+    email: z.email().optional(),
+    name: z.string().min(3),
+    password: z.string().min(3),
+    token: z.string(),
+}).strict()
+
+usersRouter.post('/invite/student', middleware.requireAuthentication(false), middleware.zValidate(studentInviteSchema), async (request, response, next) => {
+    try {
+        const { email, name, password, token } = request.validated
+
+        const teacherId = await TeacherInviteService.verifyToken(token)
+        const [student] = await UserService.createStudent({
+            email,
+            name,
+            password,
+            teacherId,
+        })
+
+        const levelAmount = 8
+        for (let i = 1; i <= levelAmount; i++) {
+            await ProgressService.addNewProgress({
+                level: i,
+                user: student.id
+            })
+        }
+
+        const teacher = await UserService.findById(teacherId)
+        const sanitizedStudentInfo = {
+            id: student.id,
+            name: student.name,
+            email: student.email,
+            grade: student.grade,
+            teacher_name: teacher.name
+        }
+
+        response.status(201).json(sanitizedStudentInfo)
     } catch (error) {
         next(error)
     }

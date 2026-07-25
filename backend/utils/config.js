@@ -11,13 +11,15 @@ try {
     const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID
     const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET
     const SESSION_SECRET = process.env.SESSION_SECRET
+    const INVITE_SECRET = process.env.INVITE_SECRET
 
     const envVariables = {
         PORT: PORT,
         DB_PASSWORD: DB_PASSWORD,
         GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,
         GOOGLE_CLIENT_SECRET: GOOGLE_CLIENT_SECRET,
-        SESSION_SECRET: SESSION_SECRET
+        SESSION_SECRET: SESSION_SECRET,
+        INVITE_SECRET: INVITE_SECRET
     }
 
     if (process.env.NODE_ENV === 'production') {

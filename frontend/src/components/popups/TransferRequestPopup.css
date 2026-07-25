@@ -190,48 +190,6 @@
 .tr-status--rejected { color: #a64b4b; }
 .tr-status--cancelled { color: #5c6877; }
 
-.accept-button,
-.reject-button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: 'Nunito', sans-serif;
-}
-
-.accept-button {
-    background: linear-gradient(135deg, #90C695 0%, #7DB085 100%);
-    color: white;
-    border: 1.5px solid #7DB085;
-}
-
-.accept-button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(125, 176, 133, 0.3);
-}
-
-.accept-button:disabled,
-.reject-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.reject-button {
-    background: linear-gradient(135deg, #E8A0A0 0%, #D97777 100%);
-    color: white;
-    border: 1.5px solid #D97777;
-}
-
-.reject-button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(217, 119, 119, 0.3);
-}
-
 .transfer-toast {
     position: fixed;
     top: 20px;
@@ -329,11 +287,6 @@
 
     .tr-actions {
         width: 100%;
-    }
-
-    .accept-button,
-    .reject-button {
-        flex: 1;
     }
 
     .transfer-toast {
