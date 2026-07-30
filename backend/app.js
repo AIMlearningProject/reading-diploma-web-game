@@ -154,13 +154,13 @@ const authLimiter = makeLimiter({
 
 const userLimiter = makeLimiter({
     windowMs: 60 * 1000,
-    max: 100, // 100 requests per minute allowed for user related requests
+    max: 80, // 80 requests per minute allowed for user related requests
 })
 
 const apiLimiter = makeLimiter({
     // For other api routes
     windowMs: 60 * 1000,
-    max: 200,
+    max: 150,
 })
 
 const indexLimiter = makeLimiter({
