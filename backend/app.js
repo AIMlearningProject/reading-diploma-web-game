@@ -182,7 +182,9 @@ const tiLimiter = makeLimiter({
 })
 
 const uploadPath = path.resolve(__dirname, 'public', 'uploads')
+const assetPath = path.resolve(__dirname, 'public', 'assets')
 app.use('/uploads', express.static(uploadPath))
+app.use('/assets', express.static(assetPath))
 
 app.use('/auth', authLimiter, authRouter)
 app.use('/api/users', userLimiter, usersRouter)

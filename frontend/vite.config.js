@@ -7,6 +7,7 @@ export default defineConfig({
     allowedHosts: "all", 
     host: '0.0.0.0',
     proxy: {
+      '/assets': 'http://localhost:3001',
       '/uploads': 'http://localhost:3001',
       '/api': 'http://localhost:3001',
       '/auth': 'http://localhost:3001',

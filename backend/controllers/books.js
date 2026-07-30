@@ -121,7 +121,7 @@ booksRouter.post('/',
                 const bookToCreate = {
                     title: normalize(rawTitle),
                     author: normalize(rawAuthor),
-                    coverimage: '/uploads/book-covers/defaultNoImg.ico',
+                    coverimage: '/assets/defaultNoImg.ico',
                     booktype,
                     page_count,
                     added_by: request.user.id

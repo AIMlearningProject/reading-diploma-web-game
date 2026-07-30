@@ -120,7 +120,7 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
                             <img
                                 src={book.coverimage}
                                 alt={book.title}
-                                style={book.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? styles.emptyBookImg : styles.bookImg}
+                                style={book.coverimage === "/assets/defaultNoImg.ico" ? styles.emptyBookImg : styles.bookImg}
                                 onError={(e) => {
                                     e.currentTarget.style.display = "none"
                                 }}

@@ -148,7 +148,7 @@ ${studentNames}`)) return
                                         <tr key={b.id} className="book-item-row">
                                             <td>
                                                 <img
-                                                    className={b.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? "empty-book-cover-thumb" : "book-cover-thumb"}
+                                                    className={b.coverimage === "/assets/defaultNoImg.ico" ? "empty-book-cover-thumb" : "book-cover-thumb"}
                                                     src={b.coverimage}
                                                     alt={b.title}
                                                     onClick={() => setZoomSrc(b.coverimage)}
@@ -188,7 +188,7 @@ ${studentNames}`)) return
                                 {pageSlice.map((b) => (
                                     <div className="mobile-book-item" key={b.id}>
                                         <img
-                                            className={b.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? "empty-mobile-book-cover" : "mobile-book-cover"}
+                                            className={b.coverimage === "/assets/defaultNoImg.ico" ? "empty-mobile-book-cover" : "mobile-book-cover"}
                                             src={b.coverimage}
                                             alt={b.title}
                                             onClick={() => setZoomSrc(b.coverimage)}
