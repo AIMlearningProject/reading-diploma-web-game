@@ -68,23 +68,36 @@ const TeacherInviteService = {
     },
 
     async verifyToken(token) {
+        function invalidTokenErr(msg) {
+            const err = new Error(msg)
+            err.userDetails = 'Virheellinen kutsulinkki'
+            err.status = 400
+            return err
+        }
+
+        if (typeof token !== 'string' || !token.includes('.')) {
+            throw invalidTokenErr(`Invalid invite token`)
+        }
+
         const [payloadB64, signature] = token.split('.')
-        const payloadJson = Buffer.from(payloadB64, 'base64').toString('utf8')
-        const payload = JSON.parse(payloadJson)
+        let payloadJson
+        let payload
+        try {
+            payloadJson = Buffer.from(payloadB64, 'base64').toString('utf8')
+            payload = JSON.parse(payloadJson)
+        } catch (err) {
+            throw invalidTokenErr(`Invalid invite token: ${err}`)
+        }
+
+        if (!payload.teacherId) {
+            throw invalidTokenErr(`Invalid invite token`)
+        }
 
         const invite = await TeacherInvite.findByTeacher(payload.teacherId)
-        if (!invite) {
-            const err = new Error(`Invalid invite token`)
-            err.status = 400
-            throw err
-        }
+        if (!invite) throw invalidTokenErr(`Invalid invite token`)
 
         const expectedSig = sign(payloadJson, invite.invite_secret)
-        if (expectedSig !== signature) {
-            const err = new Error(`Invalid invite token`)
-            err.status = 400
-            throw err
-        }
+        if (expectedSig !== signature) throw invalidTokenErr(`Invalid invite token`)
 
         if (!invite.active) {
             const err = new Error(`Invite link disabled`)
