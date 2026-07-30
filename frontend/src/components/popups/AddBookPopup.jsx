@@ -51,7 +51,7 @@ function AddBookPopup({ open, onClose, onSelect, mapKey }) {
             ReadingState.mapSelectedBook[mapKey] = newBook.id
 
             onClose()
-            onSelect(newBook)
+            onSelect(mapKey, newBook)
         } catch (err) {
             setError(err?.message || 'Yhteysvirhe')
         } finally {

@@ -16,7 +16,7 @@ const Reward = {
 
     async getUserRewards(owner, dbConn = db){
         return dbConn('rewards')
-            .select('reward_type', 'reward')
+            .select('id', 'reward_type', 'reward')
             .where({ owner: owner })
     }
 }

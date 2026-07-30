@@ -115,7 +115,7 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
                                     )
                                 ),
                             }}
-                            onClick={() => onSelect && onSelect(book)}
+                            onClick={() => onSelect && onSelect(mapKey, book)}
                         >
                             <img
                                 src={book.coverimage}

@@ -15,6 +15,7 @@ export default function ReactQuiz({ mapKey, onClose }) {
 
     const isResubmittable = ReadingState.isLevelPendingResubmission(mapKey)
     const isReadOnly = !!(!isResubmittable && ReadingState?.quizAnswers && ReadingState.quizAnswers[mapKey]);
+    const shouldReward = !isResubmittable && !isReadOnly;
 
     const questions = [
         "Mikä on tämän tarinan juoni?",
@@ -54,7 +55,7 @@ export default function ReactQuiz({ mapKey, onClose }) {
                     ReadingState.levelsPendingResubmission[mapKey] = { pending: false, book: ReadingState.mapSelectedBook?.[mapKey] };
                 }
             }
-            onClose();
+            onClose(mapKey, shouldReward);
         }
     };
 

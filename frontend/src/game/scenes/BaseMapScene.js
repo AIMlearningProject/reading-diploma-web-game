@@ -349,6 +349,8 @@ class BaseMapScene extends Phaser.Scene {
         } else {
             console.error("Critical: window.openReactQuiz is undefined!");
         }
+
+        this.events.once('give-level-complete-reward', this.showFinalCelebration.bind(this));
     }
 
     showFinalCelebration() {

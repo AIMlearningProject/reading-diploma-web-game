@@ -7,18 +7,18 @@ const rewardsRouter = express.Router()
 
 const rewardAddSchema = z.object({
     owner: z.number(),
-    reward_type: z.string(),
-    reward: z.string()
+    type: z.string(),
+    name: z.string()
 }).strict()
 
 rewardsRouter.post('/add-reward', middleware.requireAuthentication(true), middleware.zValidate(rewardAddSchema), async(request, response, next) => {
-    const { owner, reward_type, reward } = request.validated
+    const { owner, type, name } = request.validated
 
     try{
         const newReward = {
             owner,
-            reward_type,
-            reward
+            reward_type: type,
+            reward: name
         }
         await RewardService.addReward(newReward)
         response.status(201).json(newReward)

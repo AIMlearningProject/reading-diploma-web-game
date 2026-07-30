@@ -129,11 +129,13 @@ export default function PhaserGame() {
       {quizInfo.visible && (
         <ReactQuiz
           mapKey={quizInfo.mapKey}
-          onClose={() => {
+          onClose={(mapKey, shouldReward) => {
             setQuizInfo({ visible: false, mapKey: null });
             if (gameRef.current) {
-              const activeScenes = gameRef.current.scene.getScenes(true);
-              if (activeScenes.length > 0) activeScenes[0].isDoingQuiz = false;
+              const scene = gameRef.current.scene.getScene(mapKey);
+              if (shouldReward) scene.events.emit('give-level-complete-reward');
+              scene.isDoingQuiz = false;
+              
               if (gameRef.current.input) {
                 gameRef.current.input.enabled = true;
               }
@@ -151,14 +153,15 @@ export default function PhaserGame() {
               gameRef.current.input.enabled = true;
             }
           }}
-          onSelect={(book) => {
+          onSelect={(mapKey, book) => {
             setBookListInfo({ visible: false, mapKey: null });
-            if (gameRef.current.input) {
-              gameRef.current.input.enabled = true;
-            }
             if (gameRef.current) {
-              const activeScenes = gameRef.current.scene.getScenes(true);
-              if (activeScenes.length > 0) activeScenes[0].events.emit('book-selected', book);
+              const scene = gameRef.current.scene.getScene(mapKey);
+              scene.events.emit('book-selected', book);
+
+              if (gameRef.current.input) {
+                gameRef.current.input.enabled = true;
+              }
             }
           }}
         />
@@ -178,12 +181,13 @@ export default function PhaserGame() {
               currentPct: null,
               readOnly: false
             });
-            if (gameRef.current.input) {
-              gameRef.current.input.enabled = true;
-            }
             if (gameRef.current) {
               const scene = gameRef.current.scene.getScene(mapKey);
               scene.events.emit('book-closed', newPct);
+
+              if (gameRef.current.input) {
+                gameRef.current.input.enabled = true;
+              }
             }
           }}
         />
