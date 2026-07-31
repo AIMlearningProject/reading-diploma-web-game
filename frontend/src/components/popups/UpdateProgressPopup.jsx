@@ -46,7 +46,7 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
                     <img
                         src={book?.coverimage}
                         alt={`${book.title} cover`}
-                        className={book?.coverimage === "/uploads/book-covers/defaultNoImg.ico" ? "empty-popup-cover-image" : "popup-cover-image"}
+                        className={book?.coverimage === "/assets/defaultNoImg.ico" ? "empty-popup-cover-image" : "popup-cover-image"}
                     />
                 </div>
 
