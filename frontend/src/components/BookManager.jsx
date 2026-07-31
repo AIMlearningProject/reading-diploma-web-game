@@ -7,7 +7,6 @@ function BookManager() {
     const [books, setBooks] = useState([])
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
-    const [coverimage, setCoverimage] = useState(null)
     const [booktype, setBooktype] = useState('physical')
     const [pageCount, setPageCount] = useState('');
     const [error, setError] = useState('')
@@ -18,7 +17,6 @@ function BookManager() {
     const pageSize = 10;
 
     const formRef = useRef(null)
-    const fileInputRef = useRef(null)
 
     const sorted = useMemo(() => {
         // Sorts books alphabetically by title
@@ -62,18 +60,17 @@ function BookManager() {
         e.preventDefault()
         setError('')
 
-        const formData = new FormData()
-        formData.append('title', title)
-        formData.append('author', author)
-        if (coverimage) formData.append('coverimage', coverimage)
-        formData.append('booktype', booktype)
-        if (booktype === 'physical') formData.append('page_count', pageCount)
+        const body = {
+            title,
+            author,
+            booktype
+        }
+        if (booktype === 'physical') body.page_count = pageCount
 
         try {
-            await createBook(formData)
+            await createBook(body)
             setTitle('')
             setAuthor('')
-            setCoverimage(null)
             setBooktype('physical')
             setPageCount('')
             formRef.current?.reset()
@@ -301,25 +298,6 @@ ${studentNames}`)) return
                         onChange={(e) => setAuthor(e.target.value)}
                         required
                     />
-                </div>
-                <div className="form-group upload-field-group">
-                    <label>
-                        Kansikuva
-                    </label>
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setCoverimage(e.target.files?.[0] ?? null)}
-                        hidden
-                    />
-                    <button
-                        className="upload-button"
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                    >
-                        {coverimage ? coverimage.name : 'Lisää kuva'}
-                    </button>
                 </div>
                 <div className="form-group">
                     <label>Tyyppi</label>

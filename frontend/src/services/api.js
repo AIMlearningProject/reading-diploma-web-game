@@ -55,7 +55,7 @@ export function fetchBookReaders(id) { return request(`/api/books/book-readers/$
 export function createBook(body) {
     return request('/api/books', {
         method: 'POST',
-        body: body,
+        body: JSON.stringify(body),
     });
 }
 export function deleteBook(id) {
