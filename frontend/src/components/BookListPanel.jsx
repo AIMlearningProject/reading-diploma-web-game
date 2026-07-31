@@ -117,14 +117,17 @@ export default function BookListPanel({ mapKey, onSelect, onClose, pageSize = 10
                             }}
                             onClick={() => onSelect && onSelect(mapKey, book)}
                         >
-                            <img
-                                src={book.coverimage}
-                                alt={book.title}
-                                style={book.coverimage === "/assets/defaultNoImg.ico" ? styles.emptyBookImg : styles.bookImg}
-                                onError={(e) => {
-                                    e.currentTarget.style.display = "none"
-                                }}
-                            />
+                            {book?.coverimage && (
+                                <img
+                                    src={book.coverimage}
+                                    alt={book.title}
+                                    style={book.coverimage === "/assets/defaultNoImg.ico" ? styles.emptyBookImg : styles.bookImg}
+                                    onError={(e) => {
+                                        e.currentTarget.style.display = "none"
+                                    }}
+                                />
+                            )}
+                            
                             <div style={styles.bookInfo}>
                                 <div style={styles.bookTitle}>{book.title}</div>
                                 <div style={styles.bookAuthor}>{book.author}</div>

@@ -38,7 +38,7 @@ function AddBookPopup({ open, onClose, onSelect, mapKey }) {
             const newBook = {
                 title: createdBook.title,
                 author: createdBook.author,
-                coverimage: createdBook.coverimage,
+                coverimage: createdBook?.coverimage,
                 type: createdBook.booktype,
                 id: String(createdBook.id),
                 pageCount: createdBook.page_count

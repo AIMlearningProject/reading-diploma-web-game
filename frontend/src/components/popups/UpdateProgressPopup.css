@@ -120,6 +120,12 @@
     margin-bottom: 20px;
 }
 
+.empty-popup-cover-container {
+    width: 100%;
+    border-top: 2px solid #c4963a8d;
+    margin-bottom: 20px;
+}
+
 .popup-cover-image {
     aspect-ratio: 3 / 4;
     min-width: 225px;

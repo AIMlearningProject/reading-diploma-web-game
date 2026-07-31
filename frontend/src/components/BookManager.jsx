@@ -37,6 +37,7 @@ function BookManager() {
 
     const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
     const pageSlice = filtered.slice(page * pageSize, (page + 1) * pageSize);
+    const hasCoverimage = pageSlice.some((e) => e?.coverimage); // Check for coverimages in currently displayed books
 
     const isPrevPagerBtnDisabled = page === 0;
     const isNextPagerBtnDisabled = page >= totalPages - 1;
@@ -133,7 +134,7 @@ ${studentNames}`)) return
                             <table className="data-table desktop-book-list">
                                 <thead>
                                     <tr>
-                                        <th></th>
+                                        {hasCoverimage && <th></th>}
                                         <th>Nimi</th>
                                         <th>Kirjoittaja</th>
                                         <th>Tyyppi</th>
@@ -143,19 +144,26 @@ ${studentNames}`)) return
                                 <tbody>
                                     {pageSlice.map((b) => (
                                         <tr key={b.id} className="book-item-row">
-                                            <td>
-                                                <img
-                                                    className={b.coverimage === "/assets/defaultNoImg.ico" ? "empty-book-cover-thumb" : "book-cover-thumb"}
-                                                    src={b.coverimage}
-                                                    alt={b.title}
-                                                    onClick={() => setZoomSrc(b.coverimage)}
-                                                    onError={(e) => {
-                                                        e.currentTarget.style.display = "none";
-                                                        e.currentTarget.style.width = "0";
-                                                        e.currentTarget.style.height = "0";
-                                                    }}
-                                                />
-                                            </td>
+                                            {hasCoverimage && (
+                                                b?.coverimage ? (
+                                                    <td>
+                                                        <img
+                                                            className={b.coverimage === "/assets/defaultNoImg.ico" ? "empty-book-cover-thumb" : "book-cover-thumb"}
+                                                            src={b.coverimage}
+                                                            alt={b.title}
+                                                            onClick={() => setZoomSrc(b.coverimage)}
+                                                            onError={(e) => {
+                                                                e.currentTarget.style.display = "none";
+                                                                e.currentTarget.style.width = "0";
+                                                                e.currentTarget.style.height = "0";
+                                                            }}
+                                                        />
+                                                        
+                                                    </td>
+                                                ) : (
+                                                    <td></td>
+                                                )
+                                            )}
                                             <td data-label="Nimi"> {b.title}</td>
                                             <td data-label="Kirjoittaja"> {b.author}</td>
                                             <td data-label="Tyyppi"> {typeFi[b.booktype] ?? b.booktype}</td>
@@ -184,17 +192,19 @@ ${studentNames}`)) return
                             <div className="mobile-book-list">
                                 {pageSlice.map((b) => (
                                     <div className="mobile-book-item" key={b.id}>
-                                        <img
-                                            className={b.coverimage === "/assets/defaultNoImg.ico" ? "empty-mobile-book-cover" : "mobile-book-cover"}
-                                            src={b.coverimage}
-                                            alt={b.title}
-                                            onClick={() => setZoomSrc(b.coverimage)}
-                                            onError={(e) => {
-                                                e.currentTarget.style.display = "none";
-                                                e.currentTarget.style.width = "0";
-                                                e.currentTarget.style.height = "0";
-                                            }}
-                                        />
+                                        {hasCoverimage && b?.coverimage && (
+                                            <img
+                                                className={b.coverimage === "/assets/defaultNoImg.ico" ? "empty-mobile-book-cover" : "mobile-book-cover"}
+                                                src={b.coverimage}
+                                                alt={b.title}
+                                                onClick={() => setZoomSrc(b.coverimage)}
+                                                onError={(e) => {
+                                                    e.currentTarget.style.display = "none";
+                                                    e.currentTarget.style.width = "0";
+                                                    e.currentTarget.style.height = "0";
+                                                }}
+                                            />
+                                        )}
 
                                         <div className="mobile-book-info">
                                             <div className="mobile-book-title">{b.title}</div>

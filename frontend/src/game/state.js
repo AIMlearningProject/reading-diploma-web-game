@@ -155,7 +155,7 @@ const ReadingState = {
                 this.globalBooks = booksData.value.map(b => ({
                     title: b.title,
                     author: b.author,
-                    coverimage: b.coverimage,
+                    coverimage: b?.coverimage,
                     type: b.booktype,
                     id: String(b.id),
                     pageCount: b.page_count
