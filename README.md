@@ -108,7 +108,7 @@ Auth state is managed by `AuthContext` (`src/contexts/AuthContext.jsx`) which ch
 
 
 ## Backend
-### Endpoints in use
+### Endpoints
 
 | Method | Endpoint                             | Description                                                    |
 |--------|--------------------------------------|----------------------------------------------------------------|
@@ -158,29 +158,6 @@ Auth state is managed by `AuthContext` (`src/contexts/AuthContext.jsx`) which ch
 | GET    | `/auth/me`                           | Returns current session user                                   |
 | GET    | `/auth/google`                       | Sign up or login using Google account                          |
 | GET    | `/auth/google/callback`              | Redirects back to app frontend after login with Google         |
----
-
-### Endpoints currently NOT in use (if no use is found, should be eventually removed)
-
-| Method | Endpoint                             | Description                                                   |
-|--------|--------------------------------------|---------------------------------------------------------------|
-| GET    | `/api/books`                         | Get all books                                                 |
-| GET    | `/api/books/:id`                     | Get a single book                                             |
-||||
-| POST   | `/api/users/register`                | Create new user (also creates progress entries for new user)  |
-| PATCH  | `/api/users/:id/role`                | Swaps the user role                                           |
-| PATCH  | `/api/users/:id/change-password`     | Change user's password (needs currentPassword, password)      |
-| GET    | `/api/users/profile/:id`             | Get user profile                                              |
-||||
-| GET    | `/api/progress/get-entry/:level`     | Gets specific level from current user                         |
-| GET    | `/api/progress/current-level`        | Gets user's most recent incomplete level                       |
-| POST   | `/api/progress/add-entry`            | Add a new progression entry                                   |
-||||
-| GET    | `/api/submissions/my-students/:id`   | Gets specific submission entry                                |
-| DELETE | `/api/submissions/:id`               | Deletes specific submission entry                             |
-| GET    | `/api/submissions/my-students`       | Gets current user's student submissions                       |
-||||
-| GET    | `/api/rewards/:id`                   | Fetches all of user's rewards                                 |
 ---
 
 ## Testing without Google auth

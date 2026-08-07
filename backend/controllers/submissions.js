@@ -78,38 +78,4 @@ submissionsRouter.get('/student/:id', middleware.requireTeacherRole, async (requ
     }
 })
 
-// Unused
-submissionsRouter.get('/my-students/:id', middleware.requireTeacherRole, async (request, response, next) => {
-    const id = request.params.id
-    const teacher_id = request.user.id
-    try {
-        const submission = await SubmissionService.getById(id, teacher_id)
-        response.status(200).json(submission)
-    } catch (error) {
-        next(error)
-    }
-})
-
-// Unused
-submissionsRouter.delete('/:id', middleware.requireTeacherRole, async (request, response, next) => {
-    const id = request.params.id
-    const teacher_id = request.user.id
-    try {
-        await SubmissionService.deleteSubmission(id, teacher_id)
-        response.status(200).json('Submission deleted successfully')
-    } catch (error) {
-        next(error)
-    }
-})
-
-// Unused
-submissionsRouter.get('/my-students', middleware.requireTeacherRole, async (request, response, next) => {
-    try {
-        const submissions = await SubmissionService.getSubmissionsForTeacher(request.user.id)
-        response.status(200).json(submissions)
-    } catch (error) {
-        next(error)
-    }
-})
-
 export default submissionsRouter

@@ -102,7 +102,6 @@ authRouter.post('/login', loginLimiter, middleware.requireAuthentication(false),
     })(request, response, next)
 })
 
-// vvv Changed this to post, since no data is being fetched here, it can be changed back if this is too bothersome
 authRouter.post('/logout', middleware.requireAuthentication(true), (request, response, next) => {
     request.logout((err) => {
         if (err) return next(err)

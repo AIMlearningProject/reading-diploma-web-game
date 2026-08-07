@@ -24,7 +24,6 @@ const TransferRequest = {
             .first()
     },
 
-    // Returns the pending transfer requests for a specific requester.
     async findPendingRequestsByRequester(requesterTeacherId, dbConn = db) {
         return dbConn('transfer_requests as tr')
             .join('users as recipient', 'recipient.id', 'tr.recipient_teacher_id')
@@ -43,14 +42,11 @@ const TransferRequest = {
             .orderBy('tr.created_at', 'desc')
     },
 
-    // Returns the transfer requests for a specific recipient along with requester and recipient name and email.
     async findByRecipient(recipientTeacherId, dbConn = db) {
         return dbConn('transfer_requests as tr')
             .join('users as requester', 'requester.id', 'tr.requester_teacher_id')
             .select(
                 'tr.id',
-                /*'tr.requester_teacher_id',
-                'tr.recipient_teacher_id',*/
                 'tr.status',
                 'tr.message',
                 'tr.student_count',
@@ -58,14 +54,11 @@ const TransferRequest = {
                 'tr.updated_at',
                 'requester.name as requester_name',
                 'requester.email as requester_email',
-                /*'recipient.name as recipient_name',
-                'recipient.email as recipient_email'*/
             )
             .where('tr.recipient_teacher_id', recipientTeacherId)
             .orderBy('tr.created_at', 'desc')
     },
 
-    // Returns the requests for a specific requester along with recipient email
     async findByRequester(requesterTeacherId, dbConn = db) {
         return dbConn('transfer_requests as tr')
             .join('users as recipient', 'recipient.id', 'tr.recipient_teacher_id')

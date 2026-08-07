@@ -95,30 +95,6 @@ const BookService = {
     async getBookReaders(bookId) {
         return await Book.findCurrentBookReaders(bookId)
     },
-
-    // Unused (used only in unused endpoint)
-    async getAllBooks() {
-        const books = await Book.getAll()
-        if (!books) {
-            const err = new Error(`No books were found`)
-            err.userDetails = 'Kirjoja ei vielä lisätty'
-            err.status = 404
-            throw err
-        }
-        return books
-    },
-
-    // Unused (used only in unused endpoint)
-    async findBookById(id) {
-        const book = await Book.findBookById(id)
-        if (!book) {
-            const err = new Error(`Book not found`)
-            err.userDetails = 'Kirjaa ei löytynyt'
-            err.status = 404
-            throw err
-        }
-        return book
-    }
 }
 
 export default BookService

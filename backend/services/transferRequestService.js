@@ -5,36 +5,29 @@ const TransferRequestService = {
     async createTransferRequest({ requesterTeacherId, recipientEmail, message, student_count }) {
         if (!recipientEmail) {
             const err = new Error('Recipient email is required')
-            err.userDetails = 'Vastaanottajan sähköposti vaaditaan'
+            err.userDetails = 'Vastaanottajan sähköposti vaaditaan.'
             err.status = 400
             throw err
         }
 
         if (requesterTeacherId === undefined || requesterTeacherId === null) {
             const err = new Error('Requester teacher id is required')
-            err.userDetails = 'Lähettäjä vaaditaan'
+            err.userDetails = 'Lähettäjä vaaditaan.'
             err.status = 400
             throw err
         }
 
         const recipient = await User.findByEmail(recipientEmail)
-        if (!recipient) {
+        if (!recipient || recipient.role !== 'teacher') {
             const err = new Error('Recipient teacher not found')
-            err.userDetails = 'Vastaanottajaa ei löytynyt sähköpostilla'
+            err.userDetails = 'Vastaanottajaa tällä sähköpostilla ei löytynyt.'
             err.status = 404
-            throw err
-        }
-
-        if (recipient.role !== 'teacher') {
-            const err = new Error('Recipient must be a teacher')
-            err.userDetails = 'Vastaanottajan täytyy olla opettaja'
-            err.status = 400
             throw err
         }
 
         if (recipient.id === requesterTeacherId) {
             const err = new Error('You cannot send a transfer request to yourself')
-            err.userDetails = 'Et voi lähettää siirtopyyntöä itsellesi'
+            err.userDetails = 'Et voi lähettää siirtopyyntöä itsellesi.'
             err.status = 400
             throw err
         }
@@ -42,7 +35,7 @@ const TransferRequestService = {
         const existing = await TransferRequest.findPendingByRequesterAndRecipient(requesterTeacherId, recipient.id)
         if (existing) {
             const err = new Error('A pending transfer request already exists')
-            err.userDetails = 'Sinulla on jo avoin siirtopyyntö tälle opettajalle'
+            err.userDetails = 'Sinulla on jo avoin siirtopyyntö tälle opettajalle.'
             err.status = 409
             throw err
         }
@@ -133,7 +126,7 @@ const TransferRequestService = {
         const cancelledRequests = await TransferRequest.cancelAllPendingRequests(requesterId, updated_at)
         if (!cancelledRequests) {
             const err = new Error(`Could not find requests for teacher with id ${requesterId}`)
-            err.userDetails = 'Siirtopyyntöjä ei löytynyt'
+            err.userDetails = 'Siirtopyyntöjä ei löytynyt.'
             err.status = 404
             throw err
         }

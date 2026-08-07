@@ -1,23 +1,23 @@
 import db from '../db/db.js'
 
 const Reward = {
-    async add({ owner, reward_type, reward }, dbConn = db){
+    async add({ owner, reward_type, name }, dbConn = db){
         return dbConn('rewards')
-            .insert({ owner, reward_type, reward })
+            .insert({ owner, reward_type, name })
             .returning('*')
     },
 
-    async getByRewardAndUser(owner, reward, dbConn = db){
+    async getByNameAndOwner(owner, name, dbConn = db){
         return dbConn('rewards')
-            .select('owner', 'reward_type', 'reward')
-            .where({ owner:Number(owner), reward:String(reward) })
+            .select('owner', 'reward_type', 'name')
+            .where({ owner:Number(owner), name:String(name) })
             .first()
     },
 
     async getUserRewards(owner, dbConn = db){
         return dbConn('rewards')
-            .select('id', 'reward_type', 'reward')
-            .where({ owner: owner })
+            .select('id', 'reward_type', 'name')
+            .where({ owner })
     }
 }
 

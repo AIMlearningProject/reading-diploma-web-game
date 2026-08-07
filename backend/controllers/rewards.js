@@ -7,18 +7,18 @@ const rewardsRouter = express.Router()
 
 const rewardAddSchema = z.object({
     owner: z.number(),
-    type: z.string(),
+    reward_type: z.string(),
     name: z.string()
 }).strict()
 
 rewardsRouter.post('/add-reward', middleware.requireAuthentication(true), middleware.zValidate(rewardAddSchema), async(request, response, next) => {
-    const { owner, type, name } = request.validated
+    const { owner, reward_type, name } = request.validated
 
     try{
         const newReward = {
             owner,
-            reward_type: type,
-            reward: name
+            reward_type,
+            name
         }
         await RewardService.addReward(newReward)
         response.status(201).json(newReward)
@@ -30,18 +30,6 @@ rewardsRouter.post('/add-reward', middleware.requireAuthentication(true), middle
 rewardsRouter.get('/', middleware.requireAuthentication(true), async(request, response, next) => {
     try {
         const rewards = await RewardService.getUserRewards(request.user.id)
-        response.status(200).json(rewards)
-    } catch(error){
-        next(error)
-    }
-})
-
-// Unused
-rewardsRouter.get('/:id', middleware.requireTeacherRole, async(request, response, next) => {
-    const id = request.params.id
-
-    try{
-        const rewards = await RewardService.getUserRewards(id)
         response.status(200).json(rewards)
     } catch(error){
         next(error)

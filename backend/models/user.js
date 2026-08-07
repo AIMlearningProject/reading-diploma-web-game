@@ -4,7 +4,7 @@ const User = {
     async create({ email, name, password_hash, avatar, currently_reading, grade, role, teacher_id }, dbConn = db) {
         return dbConn('users')
             .insert({ email, name, password_hash, avatar, currently_reading, grade, role, teacher_id })
-            .returning('*')
+            .returning('id', 'email', 'name', 'avatar', 'currently_reading', 'grade', 'role', 'teacher_id')
     },
 
     async findByName(name, dbConn = db) {
@@ -26,20 +26,6 @@ const User = {
             .select('id', 'email', 'name', 'password_hash', 'avatar', 'currently_reading', 'grade', 'role', 'teacher_id')
             .where({ id })
             .first()
-    },
-
-    // Unused (used only in unused services)
-    async getAll(dbConn = db) {
-        return dbConn('users')
-            .select('id', 'email', 'name', 'avatar', 'currently_reading', 'grade', 'role', 'teacher_id')
-    },
-
-    // Unused (used only in unused services)
-    async updateUserRole(id, role, dbConn = db) {
-        return dbConn('users')
-            .where({ id })
-            .update({ role: role })
-            .returning('*')
     },
 
     async updateUserPassword(id, password_hash, dbConn = db) {

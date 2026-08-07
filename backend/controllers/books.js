@@ -5,6 +5,7 @@ import middleware from '../utils/middleware.js'
 
 const booksRouter = express.Router()
 
+// Gets all the students that are currently reading a book
 booksRouter.get('/book-readers/:id', middleware.requireTeacherRole, async (request, response, next) => {
     try {
         const bookId = request.params.id
@@ -73,27 +74,6 @@ booksRouter.delete('/:id', middleware.requireTeacherRole, async (request, respon
     try {
         await BookService.deleteBook(teacherId, bookId)
         return response.status(204).end()
-    } catch (error) {
-        next(error)
-    }
-})
-
-// Unused
-booksRouter.get('/', middleware.requireAuthentication(true), async (request, response, next) => {
-    try {
-        const books = await BookService.getAllBooks()
-        response.json(books)
-    } catch (error) {
-        next(error)
-    }
-})
-
-// Unused
-booksRouter.get('/:id', middleware.requireAuthentication(true), async (request, response, next) => {
-    const { id } = request.params
-    try {
-        const book = await BookService.findBookById(id)
-        response.json(book)
     } catch (error) {
         next(error)
     }

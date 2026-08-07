@@ -92,49 +92,4 @@ progressRouter.put('/:level/add-book', middleware.requireAuthentication(true), m
     }
 })
 
-// Unused
-progressRouter.get('/get-entry/:level', middleware.requireAuthentication(true), async (request, response, next) => {
-    const level = request.params.level
-    try {
-        const progress = await ProgressService.findSpecificEntry(level, request.user.id)
-        response.status(200).json(progress)
-    } catch (error) {
-        next(error)
-    }
-})
-
-// Unused
-progressRouter.get('/current-level', middleware.requireAuthentication(true), async (request, response, next) => {
-    try {
-        //console.log(request.user.id)
-        const progress = await ProgressService.getCurrentLevel(request.user.id)
-        response.status(200).json(progress)
-    } catch (error) {
-        next(error)
-    }
-})
-
-const ProgressSchema = z.object({
-    level: z.number(),
-    user: z.number()//,book: z.number()
-}).strict()
-
-// Unused
-// Might not be necessary anymore in the final version, since all entries are automatically created when an account is created.
-progressRouter.post('/add-entry', middleware.requireAuthentication(true), middleware.zValidate(ProgressSchema), async (request, response, next) => {
-    const { level, user, book } = request.validated
-
-    try {
-        const newEntry = {
-            level,
-            user,
-            book
-        }
-        const progressEntry = await ProgressService.addNewProgress(newEntry)
-        response.status(201).json(progressEntry)
-    } catch (error) {
-        next(error)
-    }
-})
-
 export default progressRouter

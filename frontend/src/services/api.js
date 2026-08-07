@@ -111,10 +111,10 @@ export function updateSubmissionStatus(level, userId, status) {
 
 // Rewards endpoints
 export function fetchRewards() { return request('/api/rewards'); }
-export function addReward(owner, type, name) {
+export function addReward(owner, reward_type, name) {
     return request('/api/rewards/add-reward', {
         method: 'POST',
-        body: JSON.stringify({ owner, type, name }),
+        body: JSON.stringify({ owner, reward_type, name }),
     });
 }
 

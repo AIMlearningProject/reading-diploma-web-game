@@ -18,19 +18,6 @@ const Submission = {
             .returning('*')
     },
 
-    // Unused
-    async getAll(dbConn = db) {
-        return dbConn('submissions')
-            .select('id', 'user', 'question1', 'answer1', 'completedLevel', 'question2', 'answer2', 'question3', 'answer3')
-    },
-
-    // Unused
-    async getAllBasedOnUser(user, dbConn = db) {
-        return dbConn('submissions')
-            .select('user', 'question1', 'answer1', 'completedLevel', 'question2', 'answer2', 'question3', 'answer3')
-            .where({ user })
-    },
-
     async getSpecific(user, completedLevel, dbConn = db) {
         return dbConn('submissions')
             .select('user', 'question1', 'answer1', 'completedLevel', 'question2', 'answer2', 'question3', 'answer3')
@@ -38,24 +25,6 @@ const Submission = {
             .first()
     },
 
-    // Unused (used only in unused services)
-    async getById(id, teacher_id, dbConn = db) {
-        return dbConn('submissions')
-            .innerJoin('users', 'submissions.user', 'users.id')
-            .select('submissions.user', 'submissions.question1', 'submissions.answer1', 'submissions.completedLevel', 'submissions.question2', 'submissions.answer2', 'submissions.question3', 'submissions.answer3')
-            .where('submissions.id', id)
-            .andWhere('users.teacher_id', teacher_id)
-            .first()
-    },
-
-    // Unused (used only in unused services)
-    async remove(id, dbConn = db) {
-        return dbConn('submissions')
-            .where({ id })
-            .del()
-    },
-
-    // Unused
     async findByUser(userId, dbConn = db) {
         userId = Number(userId)
         return dbConn('submissions')
@@ -73,14 +42,6 @@ const Submission = {
             .andWhere('users.teacher_id', teacherId)
             .andWhere('users.role', 'student')
     },
-
-    // Unused (used only in unused services)
-    async getSubmissionsForTeacher(id, dbConn = db) {
-        return dbConn('submissions')
-            .innerJoin('users', 'submissions.user', 'users.id')
-            .select('submissions.user', 'submissions.question1', 'submissions.answer1', 'submissions.completedLevel', 'submissions.question2', 'submissions.answer2', 'submissions.question3', 'submissions.answer3', 'users.name')
-            .where('users.teacher_id', id)
-    }
 }
 
 export default Submission

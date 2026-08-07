@@ -82,32 +82,6 @@ const Progress = {
             .andWhere('users.teacher_id', teacherId)
             .andWhere('users.role', 'student')
     },
-
-    // Unused (used only in unused services)
-    async getCurrentLevel(user, dbConn = db) {
-        user = Number(user)
-        return dbConn('progress')
-            .select('id', 'level', 'user', 'book', 'current_progress', 'level_status')
-            .where({ user: user, level_status: 'incomplete' })
-            .orderBy('level', 'asc')
-            .first()
-    },
-
-    // Unused
-    async findLatestCompletedLevel(user, dbConn = db) {
-        user = Number(user)
-        return dbConn('progress')
-            .select('id', 'level', 'user', 'book', 'current_progress', 'level_status')
-            .where({ user: user, level_status: 'complete' })
-            .orderBy('level', 'desc')
-            .first()
-    },
-
-    // Unused (used only in unused services)
-    async getAll(dbConn = db) {
-        return dbConn('progress')
-            .select('*')
-    },
 }
 
 export default Progress

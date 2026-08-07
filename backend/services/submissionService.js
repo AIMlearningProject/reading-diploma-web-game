@@ -62,50 +62,6 @@ const SubmissionService = {
         }
         return submissions
     },
-
-    // Unused
-    async getSpecificUser(user) {
-        const submissions = await Submission.getAllBasedOnUser(user)
-        if (!submissions) {
-            const err = new Error('User has no submissions')
-            err.status = 404
-            throw err
-        }
-        return submissions
-    },
-
-    // Unused (used only in unused endpoint)
-    async getById(id, teacher_id) {
-        const submission = await Submission.getById(id, teacher_id)
-        if (!submission) {
-            const err = new Error('Submission not found')
-            err.status = 404
-            throw err
-        }
-        return submission
-    },
-
-    // Unused (used only in unused endpoint)
-    async deleteSubmission(id, teacher_id) {
-        const submission = await Submission.getById(id, teacher_id)
-        if (!submission) {
-            const err = new Error('Submission not found')
-            err.status = 404
-            throw err
-        }
-        await Submission.remove(id)
-    },
-
-    // Unused (used only in unused endpoint)
-    async getSubmissionsForTeacher(id) {
-        const submissions = await Submission.getSubmissionsForTeacher(id)
-        if (!submissions) {
-            const err = new Error('No submissions for this teacher')
-            err.status = 404
-            throw err
-        }
-        return submissions
-    }
 }
 
 export default SubmissionService

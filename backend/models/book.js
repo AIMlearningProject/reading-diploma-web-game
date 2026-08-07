@@ -46,20 +46,6 @@ const Book = {
             .where('progress.book', bookId)
             .whereIn('progress.level_status', ['incomplete', 'Resubmit'])
     },
-
-    // Unused (used only in unused services)
-    async findBookReaders(bookId, dbConn = db) {
-        return dbConn('users')
-            .select('users.id', 'users.name')
-            .join('progress', 'progress.user', 'users.id')
-            .where('progress.book', bookId)
-    },
-
-    // Unused (used only in unused services)
-    async getAll(dbConn = db) {
-        return dbConn('books')
-            .select('*')
-    },
 }
 
 export default Book

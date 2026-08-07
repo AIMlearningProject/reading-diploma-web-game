@@ -1,8 +1,8 @@
 import Reward from '../models/reward.js'
 
 const RewardService = {
-    async addReward({ owner, reward_type, reward }) {
-        const existing = await Reward.getByRewardAndUser(owner, reward)
+    async addReward({ owner, reward_type, name }) {
+        const existing = await Reward.getByNameAndOwner(owner, name)
         if (existing) {
             const err = new Error('User already has this reward')
             err.userDetails = 'Sinulla on jo tämä palkinto'
@@ -12,7 +12,7 @@ const RewardService = {
         return await Reward.add({
             owner,
             reward_type,
-            reward
+            name
         })
     },
 
