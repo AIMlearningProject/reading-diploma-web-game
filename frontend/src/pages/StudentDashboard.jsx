@@ -10,6 +10,7 @@ import {
     fetchSubmissions,
     updateUserAvatar,
 } from '../services/api'
+import MinigameModal from '../components/MinigameModal'
 
 const LEVELS = [
     { level: 1, name: 'Pohjoisnapa' },
@@ -33,6 +34,7 @@ function StudentDashboard() {
     const [selectedBuddy, setSelectedBuddy] = useState('')
     const [buddySaving, setBuddySaving] = useState(false)
     const [buddyError, setBuddyError] = useState('')
+    const [openGame, setOpenGame] = useState(null);
 
     useEffect(() => {
         const load = async () => {
@@ -92,6 +94,17 @@ function StudentDashboard() {
         "complete": "Suoritettu",
         "resubmit": "X Hylätty",
         "reviewed": "✓ Hyväksytty"
+    }
+
+    const mapFi = {
+        'ArcticMap': 'Pohjoisnapa',
+        'EuropeMap': 'Eurooppa',
+        'AsiaMap': 'Aasia',
+        'NorthAmericaMap': 'Pohjois Amerikka',
+        'SouthAmericaMap': 'Etelä Amerikka',
+        'AfricaMap': 'Afrikka',
+        'OceaniaMap': 'Oseania',
+        'AntarcticaMap': 'Etelämanner'
     }
 
     return (
@@ -212,10 +225,22 @@ function StudentDashboard() {
                             ) : (
                                 <div className="rewards-grid">
                                     {rewards.map((r) => (
-                                        <div key={r.id} className="reward-card">
-                                            <span className="reward-type">{r.reward_type}</span>
-                                            <span className="reward-name">{r.reward}</span>
-                                        </div>
+                                        r.name = mapFi[r.name] ?? r.name,
+                                        r.reward_type.includes('minigame') ? (
+                                            <div key={r.id} className="reward-card-game" onClick={() => setOpenGame(r)}>
+                                                <span className="reward-type">{r.name} — minipeli</span>
+                                                <span className="reward-name">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 860" width="40px" fill="#1e3a5f">
+                                                        <path d="m272-440 208 120 208-120-168-97v137h-80v-137l-168 97Zm168-189v-17q-44-13-72-49.5T340-780q0-58 41-99t99-41q58 0 99 41t41 99q0 48-28 84.5T520-646v17l280 161q19 11 29.5 29.5T840-398v76q0 22-10.5 40.5T800-252L520-91q-19 11-40 11t-40-11L160-252q-19-11-29.5-29.5T120-322v-76q0-22 10.5-40.5T160-468l280-161Zm0 378L200-389v67l280 162 280-162v-67L520-251q-19 11-40 11t-40-11Zm82.5-486.5Q540-755 540-780t-17.5-42.5Q505-840 480-840t-42.5 17.5Q420-805 420-780t17.5 42.5Q455-720 480-720t42.5-17.5ZM480-160Z"/>
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            <div key={r.id} className="reward-card">
+                                                <span className="reward-type">{r.reward_type}</span>
+                                                <span className="reward-name">{r.name}</span>
+                                            </div>
+                                        )
                                     ))}
                                 </div>
                             )}
@@ -223,6 +248,9 @@ function StudentDashboard() {
                     </>
                 )}
             </div>
+            {openGame && (
+                <MinigameModal reward={openGame} onClose={() => setOpenGame(null)} />
+            )}
         </div>
     )
 }

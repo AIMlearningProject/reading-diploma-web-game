@@ -31,7 +31,7 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
                                 }}
                             />
                         </div>
-                    )}  
+                    )}
                 </div>
                 <div className="progress-popup-close-wrapper">
                     <button className="progress-popup-close-btn" onClick={() => onClose(pct)}>
@@ -39,7 +39,7 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
                     </button>
                 </div>
                 <h3 className="popup-book-title">{book.title}</h3>
-                <p className="popup-book-author">{book.author}</p>              
+                <p className="popup-book-author">{book.author}</p>
 
                 {/* Cover Image */}
                 {book?.coverimage ? (

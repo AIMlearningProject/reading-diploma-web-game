@@ -1,0 +1,74 @@
+.minigame {
+    position: relative;
+    display: grid;
+    justify-self: center;
+    align-self: center;
+    aspect-ratio: 1 / 1;
+    grid-template-columns: repeat(var(--size), 1fr);
+    grid-template-rows: repeat(var(--size), 1fr);
+    touch-action: none;
+    overflow: hidden;
+
+    width: min(70vh, 70vw, 560px);
+    height: auto;
+    max-width: min(92vw, 560px);
+    max-height: min(70vh, 92vw, 560px);
+}
+
+.cell {
+    border: 1px solid #555;
+    position: relative;
+}
+
+.tile {
+    position: absolute;
+    width: calc(var(--tile-size) - 4px);
+    height: calc(var(--tile-size) - 4px);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    border: 1px solid #333;
+    margin: 1px;
+    touch-action: none;
+    z-index: 5;
+}
+
+.tile.correct {
+    pointer-events: none;
+    z-index: 1 !important;
+}
+
+.tile.selected {
+    outline: 2px solid dodgerblue;
+    z-index: 500 !important;
+}
+
+.tile.dragging {
+    transition: none;
+    z-index: 500 !important;
+}
+
+.tile.complete {
+    pointer-events: none;
+    z-index: 1 !important;
+    width: calc(var(--tile-size));
+    height: calc(var(--tile-size));
+    margin: none;
+    border: none;
+
+    animation: tileSnapIn 0.35s ease-out forwards;
+    animation-delay: calc(var(--tile-index) * 0.02s);
+}
+
+@keyframes tileSnapIn {
+    0% {
+        scale: 1.01;
+        opacity: 0.8;
+    }
+    40% {
+        scale: 0.99;
+        opacity: 1;
+    }
+    100% {
+        scale: 1;
+    }
+}

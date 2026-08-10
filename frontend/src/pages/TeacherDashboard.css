@@ -1249,7 +1249,7 @@ td[data-label="Toiminnot"] {
 .tr-popup-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(22, 45, 78, 0.45); /* matches your blue shadow tones */
+    background: rgba(22, 45, 78, 0.45);
     backdrop-filter: blur(6px);
     display: flex;
     align-items: center;
@@ -1265,20 +1265,6 @@ td[data-label="Toiminnot"] {
     position: relative;
     z-index: 450;
     animation: popupFadeIn 180ms ease-out;
-}
-
-.popup-view-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.popup-view-label {
-    font-size: 0.97rem;
-    color: #9E7A2A;
-    font-style: italic;
-    margin: 0;
-    opacity: 0.85;
 }
 
 .tr-popup-close {

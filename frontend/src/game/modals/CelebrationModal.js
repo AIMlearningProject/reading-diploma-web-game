@@ -55,7 +55,7 @@ export default class CelebrationModal {
         this.celebrationUI.add(titleMsg);
 
         const subMsg = this.scene.add.text(width / 2, height / 2 + (15 * s),
-            'Olet suorittanut tutkimusmatkan loppuun!', {
+            'Olet suorittanut tutkimusmatkan loppuun ja ansainnut palkinnon!', {
                 fontSize: `${20 * s}px`,
                 color: CSS_COLORS.WHITE,
                 fontFamily: FONTS.BODY,
@@ -90,7 +90,7 @@ export default class CelebrationModal {
 
         // Add completion reward to backend (fire-and-forget)
         const userId = this.scene.game.registry.get('userId');
-        ReadingState.addCompletionReward(userId, 'continent_complete', mapKey);
+        ReadingState.addCompletionReward(userId, 'minigame', mapKey);
     }
 
     destroy() {
