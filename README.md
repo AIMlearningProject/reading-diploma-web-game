@@ -5,7 +5,7 @@ A web-based reading diploma game. The goal is to encourage the youth to read mor
 
 ### Prerequisites
 
-- Node.js 18 or newer and npm
+- Node.js 22 or newer and npm
 - PostgreSQL (https://www.postgresql.org/download/) installed and running
 ---
 ### Installation
