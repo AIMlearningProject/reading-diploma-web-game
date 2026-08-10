@@ -1,5 +1,13 @@
 import { useState, useEffect } from 'react'
 import TilePuzzle from './minigames/TilePuzzle'
+import arctic from '../assets/arctic.png'
+import europe from '../assets/europe.png'
+import asia from '../assets/asia.png'
+import northamerica from '../assets/northamerica.png'
+import southamerica from '../assets/southamerica.png'
+import africa from '../assets/africa.png'
+import oceania from '../assets/oceania.png'
+import antarctica from '../assets/antarctica.png'
 
 export default function MinigameModal({ reward, onClose }) {
     const [time, setTime] = useState(0)
@@ -68,7 +76,7 @@ const MINIGAMES = {
     'Pohjoisnapa': {  // <-- reward.name
         component: TilePuzzle,
         props: {
-            src: '/src/assets/arctic.png', // Puzzle image
+            src: arctic, // Puzzle image
             size: 3, // Puzzle size (e.g., 4 * 4 pieces)
             mode: ['drag', 'swap'][Math.floor(Math.random() * 2)] // Chooses randomly, swap / drag
         }
@@ -76,7 +84,7 @@ const MINIGAMES = {
     'Eurooppa': {
         component: TilePuzzle,
         props: {
-            src: '/src/assets/europe.png',
+            src: europe,
             size: 4,
             mode: ['drag', 'swap'][Math.floor(Math.random() * 2)]
         }
@@ -84,7 +92,7 @@ const MINIGAMES = {
     'Aasia': {
         component: TilePuzzle,
         props: {
-            src: '/src/assets/asia.png',
+            src: asia,
             size: [3, 4, 5, 6][Math.floor(Math.random() * 4)], // Chooses randomly
             mode: 'drag'
         }
@@ -92,7 +100,7 @@ const MINIGAMES = {
     'Pohjois Amerikka': {
         component: TilePuzzle,
         props: {
-            src: '/src/assets/northamerica.png',
+            src: northamerica,
             size: 4,
             mode: 'swap'
         }
@@ -100,7 +108,7 @@ const MINIGAMES = {
     'Etelä Amerikka': {
         component: TilePuzzle,
         props: {
-            src: '/src/assets/southamerica.png',
+            src: southamerica,
             size: 4,
             mode: 'swap'
         }
@@ -108,7 +116,7 @@ const MINIGAMES = {
     'Afrikka': {
         component: TilePuzzle,
         props: {
-            src: '/src/assets/africa.png',
+            src: africa,
             size: 4,
             mode: 'drag'
         }
@@ -116,7 +124,7 @@ const MINIGAMES = {
     'Oseania': {
         component: TilePuzzle,
         props: {
-            src: '/src/assets/oceania.png',
+            src: oceania,
             size: 5,
             mode: 'swap'
         }
@@ -124,7 +132,7 @@ const MINIGAMES = {
     'Etelämanner': {
         component: TilePuzzle,
         props: {
-            src: '/src/assets/antarctica.png',
+            src: antarctica,
             size: 6,
             mode: 'drag'
         }
