@@ -57,10 +57,12 @@ app.use(cors(CORS_OPTIONS))
 const MemoryStore = memorystore(session)
 
 // Express session middleware
+const sessionCookieSecure = environmentMode === 'production' && domainUrl.startsWith('https://')
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     name: 'sessionId',
-    secure: true,
+    secure: sessionCookieSecure,
     store: new MemoryStore({
         checkPeriod: 43200000 // prune expired entries every 12h, to avoid memory leaks
     }),

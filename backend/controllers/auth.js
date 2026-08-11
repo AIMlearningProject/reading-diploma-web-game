@@ -128,9 +128,9 @@ authRouter.get('/google/callback', middleware.requireAuthentication(false), pass
     // Successful authentication
     //request.session.save(() => { // for modifying the session manually
     try {
-        if (request.user?.needsOnboarding) {
+        /*if (request.user?.needsOnboarding) {
             logger.info('User needs onboarding...')
-        }
+        }*/
         if (process.env.NODE_ENV === 'production') {
             return response.redirect(302, '/')
         } else if (process.env.NODE_ENV === 'development') {
