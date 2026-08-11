@@ -106,6 +106,48 @@ Auth state is managed by `AuthContext` (`src/contexts/AuthContext.jsx`) which ch
 
 > **Note:** Google OAuth requires `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `backend/.env` (ask a team member for the values). Once set, teacher login via Google works normally. If you don't have the credentials, use the browser console snippets in the [Testing](#testing-without-google-auth) section instead.
 
+### Frontend Project Structure
+```
+frontend/
+├── index.html                  # Vite entry point
+├── vite.config.js              # Vite config (API proxy to backend)
+├── package.json
+├── eslint.config.js            # Configuration file for React linter (mainly code style)
+└── src/
+    ├── main.jsx                    # React entry
+    ├── App.jsx                     # Root component
+    ├── App.css                     # Global styles
+    ├── components/                 # components and popups used throughout the pages and the game
+    ├── assets/                     # Map images and token PNGs
+    │   ├── PhaserGame.jsx              # React wrapper for Phaser canvas
+    │   ├── StudentManager.jsx          # Teacher dashboard: manage students
+    │   │   ...
+    │   └── BookManager.jsx             # Teacher dashboard: manage books
+    │
+    ├── contexts/
+    │   └── AuthContext.jsx             # Session auth state (useAuth hook)
+    │   └── BooksContext.jsx            # For keeping the book lists consistent throughout the app
+    │
+    ├── pages/
+    │   ├── WelcomePage.jsx             # Role selection landing page
+    │   ├── TeacherLoginPage.jsx        # Teacher login form
+    │   ├── StudentLoginPage.jsx        # Student login form
+    │   ├── StudentSignUpPage.jsx       # Student sign up form (using invite)
+    │   ├── TeacherDashboard.jsx
+    │   └── StudentDashboard.jsx
+    │
+    ├── services/api.js                 # Access point to all the requests to the backend
+    │
+    └── game/
+        ├── config.js                   # Phaser game config factory
+        ├── state.js                    # Shared game state (ReadingState)
+        ├── data/                       # Book content modules
+        ├── scenes/                     # All Phaser scene classes
+        ├── managers/                   # Handle waypoint generation for level maps
+        ├── modals/                     # Phaser popups
+        └── ui/                         # constants and icons used in the Phaser game
+    
+```
 
 ## Backend
 ### Endpoints
@@ -159,6 +201,60 @@ Auth state is managed by `AuthContext` (`src/contexts/AuthContext.jsx`) which ch
 | GET    | `/auth/google`                       | Sign up or login using Google account                          |
 | GET    | `/auth/google/callback`              | Redirects back to app frontend after login with Google         |
 ---
+
+### Backend Project Structure
+```
+backend/
+├── app.js                      # Backend main entry point
+├── eslint.config.mjs           # Configuration file for JavaScript linter (code style)
+├── index.js                    # Boots up server and loads app.js
+├── knexfile.js                 # Configuration file for Knex
+├── package.json
+├── .env                        # File with secret environmental variables (not found on github)
+├── public/                     # Not really used after functionality for coverimages was removed
+├── controllers/                # controllers/ includes all the API routes (get, post etc.)
+│   ├── auth.js
+│   ├── books.js
+│   ├── progresses.js
+│   ...
+│   ├── users.js
+│   └── README.md
+│
+├── db/
+│   ├── db.js                       # Creates and exports the knex database connection
+│   ├── migrations/                 # Contains knex migrations (used to create and update database schema) 
+│   │   ...
+│   │   ├── migration.stub              # Template for the migration files
+│   │   └── README.md
+│   └── seeds/
+│       ├── books_seed.js               # Can be used to create some template books for testing
+│       └── seed.stub                   # Template for seed files
+│
+├── models/                     # Models are used to make SQL requests to the database (called by services)
+│   ├── book.js
+│   ├── progress.js
+│   ...
+│   ├── user.js
+│   └── README.md
+│
+├── scripts/                    # Various scripts, used to automate actions
+│   ├── createDatabase.js           # Creates the postgres database on npm install
+│   ├── ensureFrontendBuild.js      # Builds frontend on npm run start (production env)
+│   └── entrypoint.js               # Used by Dockerfile to run knex migrations and start the app.
+│
+├── services/                   # Services are used by controllers to clean data, handle errors etc.
+│   ├── bookService.js
+│   ├── progressService.js
+│   ...
+│   ├── userService.js
+│   └── README.md
+│
+└── utils/
+    ├── config.js                   # Loads .env environmental variables
+    ├── logger.js                   # Logs events and errors into the console
+    ├── middleware.js               # Contains middleware related to e.g. authorization, error handling.
+    └── passport.js                 # Passport for local- and google authentication
+```
 
 ## Testing without Google auth
 
