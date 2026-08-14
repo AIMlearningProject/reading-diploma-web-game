@@ -10,7 +10,7 @@ A web-based reading diploma game. The goal is to encourage the youth to read mor
 ---
 ### Installation
 ### Backend
-Create a .env file in /backend which contains AT LEAST these following **required** parameters. The optional parameters can be used to configure the database connection and names incase default values don't work. 
+After cloning the repo, create a .env file in /backend which contains AT LEAST the following **required** parameters. The optional parameters can be used to configure the database connection and names incase default values don't work. 
 > Running npm install in /backend will also generate a default .env file containing randomly generated SESSION_SECRET and INVITE_SECRET, if one doesn't already exist.
 ```
 # ∨∨∨ REQUIRED ∨∨∨
@@ -35,11 +35,11 @@ NODE_ENV=development                              #<--- Environment mode (develo
 # ∧∧∧ optional ∧∧∧
 ```
 
->**IMPORTANT** GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are used for google authentication and can't be uploaded to GitHub, **Google authentication will not work without them**. You can create your own project in the Google cloud api console (https://console.developers.google.com/) and use the values provided there. More detailed instructions (for developers creating your own project) can be found at https://developers.google.com/identity/oauth2/web/guides/get-google-api-clientid.
-
->If you don't have the GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET, you can also use the browser console snippets in the [Testing](#testing-without-google-auth) section instead. **Requires you to create a testing teacher account first** (e.g. with psql).
-
 You can use the command `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"` to generate the SESSION SECRET and INVITE_SECRET for the .env file. Generators can also be found online (e.g. [it-tools.tech/token-generator](https://it-tools.tech/token-generator)).
+
+>**IMPORTANT** GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are used for google authentication and can't be uploaded to GitHub, **Google authentication will not work without them**. You can create your own project in the Google cloud api console (https://console.developers.google.com/) and use the values provided there. More detailed instructions can be found at https://developers.google.com/identity/oauth2/web/guides/get-google-api-clientid.
+
+>If you just want to test the application and don't have the GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET, you can also use the browser console snippet in the [Testing](#testing-without-google-auth) section instead.
 
 ```bash
 # Backend installation
@@ -58,6 +58,14 @@ npm install
 
 ### Development mode
 
+**Terminal 1 - Backend:**
+```bash
+cd backend
+npm run dev
+# Backend runs on http://localhost:3001, by default
+```
+
+
 **Terminal 2 - Frontend:**
 ```bash
 cd frontend
@@ -65,30 +73,23 @@ npm run dev
 # Frontend runs on http://localhost:5173
 # API calls to /api are proxied to the backend (http://localhost:3001) automatically, via vite.config.js
 ```
-
-**Terminal 1 - Backend:**
-```bash
-cd backend
-npm run dev
-# Backend runs on http://localhost:3001, by default
-```
 ---
 
 ### Production mode
-
-**Terminal 2 - Frontend: (Production Build)**
-```bash
-cd frontend
-npm run build    # Output in dist/
-npm run preview  # Preview the production build locally
-```
 
 **Terminal 1 - Backend:**
 ```bash
 cd backend
 npm run start
 # Application uses built frontend/dist/
-# npm run start also checks if frontend/dist/ exists and builds it if it doesn't exist (check doesn't work in powershell or cmd).
+# npm run start also builds frontend/dist/
+```
+
+**Terminal 2 - Frontend: (Production Build)**
+```bash
+cd frontend
+npm run build    # Output in dist/
+npm run preview  # Preview the production build locally
 ```
 
 ## Frontend
@@ -104,7 +105,7 @@ The app uses React Router. Users land on a welcome page and choose a role:
 
 Auth state is managed by `AuthContext` (`src/contexts/AuthContext.jsx`) which checks the session via `GET /auth/me` on load.
 
-> **Note:** Google OAuth requires `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `backend/.env` (ask a team member for the values). Once set, teacher login via Google works normally. If you don't have the credentials, use the browser console snippets in the [Testing](#testing-without-google-auth) section instead.
+> **Note:** Google OAuth requires `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in `backend/.env`. Once set, teacher login via Google works normally. If you don't have the credentials, use the browser console snippets in the [Testing](#testing-without-google-auth) section instead.
 
 ### Frontend Project Structure
 ```
@@ -151,7 +152,6 @@ frontend/
 
 ## Backend
 ### Endpoints
-
 | Method | Endpoint                             | Description                                                    |
 |--------|--------------------------------------|----------------------------------------------------------------|
 | GET    | `/api/books/book-readers/:id`        | Get your student's names that are currently reading this book  |
@@ -258,11 +258,18 @@ backend/
 
 ## Testing without Google auth
 
-If you don't have the Google OAuth credentials in your `.env`, you can log in via the browser console instead. Run these snippets at `http://localhost:5173`.
+If you don't have the Google OAuth credentials in your `.env`, you can log in via the browser console instead.
+First you have to create a teacher account. To do that, follow the instructions below.
 
-> **Important:** If you get `Unexpected end of JSON input` when running a snippet, you might already have an active session. Clear it first using **Option B** in the Troubleshooting section (DevTools → Application → Cookies → delete session cookie), then run the snippet again.
+- Open terminal in `backend/`
+- Run `node`. This opens a Node REPL in which you can run the following command.
+- Import the bcrypt library from the package.json by running `const bcrypt = require('bcrypt');`
+- Create a password_hash by running `bcrypt.hash('Test123!', 10).then(console.log);`. You may now close the Node REPL connection  with `.exit`
+- Open sql connection to database (e.g., with psql: `psql -U <db_user> <db_name>`)
+- Create the teacher account with the newly generated password hash. `INSERT INTO users (name, password_hash, grade, role) VALUES ('TestTeacher', 'hashed_password_here', 1, 'teacher');`
 
-**Teacher dashboard:**
+Run this snippet at `http://localhost:5173` browser console.
+
 ```js
 fetch('/auth/login', {
     method: 'POST',
@@ -270,16 +277,7 @@ fetch('/auth/login', {
     body: JSON.stringify({ identifier: 'TestTeacher', password: 'Test123!' })
 }).then(r => r.json()).then(d => { console.log(d); window.location.href = '/teacher/dashboard' })
 ```
-
-**Student dashboard — first create a student via the teacher dashboard, then:**
-```js
-fetch('/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ identifier: '<student_name>', password: '<student_password>', teacher_name: 'TestTeacher' })
-}).then(r => r.json()).then(d => { console.log(d); window.location.href = '/student/dashboard' })
-```
-Or directly log in through the login page by typing in the student credentials you just created.
+**Now that you have access to the teacher dasboard, you can create a student account and use that to login as student.**
 
 ## Troubleshooting
 
