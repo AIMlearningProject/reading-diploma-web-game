@@ -58,7 +58,6 @@ const MemoryStore = memorystore(session)
 
 // Express session middleware
 const sessionCookieSecure = environmentMode === 'production' && domainUrl.startsWith('https://')
-
 app.use(session({
     secret: process.env.SESSION_SECRET,
     name: 'sessionId',
@@ -77,43 +76,25 @@ app.use(express.json())
 app.use(passport.initialize())
 app.use(passport.session())
 
-/* ∨∨∨ Set the X-CSRF-TOKEN header in the frontend like this ∨∨∨
-import { getCsrfToken } from '../services/api'
-
-// ∨∨ this request is likely required only in the login route, because the logout route clears cookies
-// ∨∨ and no requests are made between logout and login, so the CSRF-token wont be set.
-await fetch('/auth/csrf-token')  // <-- Leave this Line out for other than auth/login requests
-
-const csrfToken = getCsrfToken()
-const res = await fetch('/endpoint', {
-    method: '', // POST/PUT/PATCH/DELETE
-    credentials: 'include',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken
-    },
-    // body...
-})*/
-
-// prints all requests in the console (not required during production)
-if (environmentMode !== 'production') {
-    app.use(middleware.requestLogger)
-}
-
-if (environmentMode === 'production' && domainUrl === 'https://lukudiplomi.onrender.com') {
-    app.set('trust proxy', ['74.220.51.0/24', '74.220.59.0/24'])
-} else if (environmentMode === 'production') {
-    // Moved this here, because i'm worried this will interfere with the render demo during high traffic
-    // Every method besides get requires the X-CSRF-TOKEN header!!!
+// The X-CSRF-TOKEN header in the frontend is set for every request in service/api.js
+if (environmentMode === 'production') {
     app.use(lusca({
-        // Cookie ∨∨∨ option here generates a new X-CSRF-TOKEN
-        // and header option and sends it to the client on every request
+        // Every method besides GET requires the X-CSRF-TOKEN header!!!
+        // Cookie option here generates a new X-CSRF-TOKEN
+        // and header option sends it to the client on every request
         csrf: {
             cookie: 'X-CSRF-TOKEN',
             header: 'X-CSRF-TOKEN',
         },
         nosniff: true,
     }))
+
+    if (domainUrl === 'https://lukudiplomi.onrender.com') {
+        app.set('trust proxy', ['74.220.51.0/24', '74.220.59.0/24'])
+    }
+} else {
+    // prints all requests in the console (not required during production)
+    app.use(middleware.requestLogger)
 }
 
 // ∨∨∨ Rate limiting for all requests to prevent denial of service attacks
@@ -159,18 +140,6 @@ const userLimiter = makeLimiter({
     max: 80, // 80 requests per minute allowed for user related requests
 })
 
-const apiLimiter = makeLimiter({
-    // For other api routes
-    windowMs: 60 * 1000,
-    max: 150,
-})
-
-const indexLimiter = makeLimiter({
-    // For fronted routes in production env (welcomepage, loginpage etc.)
-    windowMs: 60 * 1000,
-    max: 250,
-})
-
 const trLimiter = makeLimiter({
     // For transfer requests
     windowMs: 60 * 1000,
@@ -183,6 +152,18 @@ const tiLimiter = makeLimiter({
     max: 20,
 })
 
+const apiLimiter = makeLimiter({
+    // For other api routes
+    windowMs: 60 * 1000,
+    max: 150,
+})
+
+const indexLimiter = makeLimiter({
+    // For fronted routes in production env (welcomepage, loginpage etc.)
+    windowMs: 60 * 1000,
+    max: 250,
+})
+
 const uploadPath = path.resolve(__dirname, 'public', 'uploads')
 const assetPath = path.resolve(__dirname, 'public', 'assets')
 app.use('/uploads', express.static(uploadPath))
@@ -190,17 +171,17 @@ app.use('/assets', express.static(assetPath))
 
 app.use('/auth', authLimiter, authRouter)
 app.use('/api/users', userLimiter, usersRouter)
+app.use('/api/transfer-requests', trLimiter, transferRequestsRouter)
+app.use('/api/invite', tiLimiter, teacherInvitesRouter)
 app.use('/api/books', apiLimiter, booksRouter)
 app.use('/api/progress', apiLimiter, progressRouter)
 app.use('/api/rewards', apiLimiter, rewardsRouter)
 app.use('/api/submissions', apiLimiter, submissionsRouter)
-app.use('/api/transfer-requests', trLimiter, transferRequestsRouter)
-app.use('/api/invite', tiLimiter, teacherInvitesRouter)
 
 if (environmentMode === 'production') {
     const distPath = path.resolve(__dirname, '../frontend/dist')
 
-    // Servers the frontend statically from the dist build folder
+    // Serves the frontend statically from the dist build folder
     app.use(express.static(distPath))
 
     // SPA fallback for client-side routing
