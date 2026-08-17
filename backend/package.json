@@ -7,7 +7,6 @@
   "scripts": {
     "preinstall": "cross-env NODE_ENV=development node scripts/createDatabase.js",
     "postinstall": "npx knex migrate:latest",
-    "prestart": "node scripts/ensureFrontendBuild.js",
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
