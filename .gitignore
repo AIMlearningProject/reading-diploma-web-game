@@ -1,5 +1,4 @@
 # Manually added entries
-package-lock.json
 .vscode/
 godot/
 /android/
