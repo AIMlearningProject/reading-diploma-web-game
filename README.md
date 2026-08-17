@@ -81,8 +81,7 @@ npm run dev
 ```bash
 cd backend
 npm run start
-# Application uses built frontend/dist/
-# npm run start also builds frontend/dist/
+# Application uses built frontend/dist/ (build frontend first)
 ```
 
 **Terminal 2 - Frontend: (Production Build)**
@@ -239,7 +238,6 @@ backend/
 │
 ├── scripts/                    # Various scripts, used to automate actions
 │   ├── createDatabase.js           # Creates the postgres database on npm install
-│   ├── ensureFrontendBuild.js      # Builds frontend on npm run start (production env)
 │   └── entrypoint.js               # Used by Dockerfile to run knex migrations and start the app.
 │
 ├── services/                   # Services are used by controllers to clean data, handle errors etc.
