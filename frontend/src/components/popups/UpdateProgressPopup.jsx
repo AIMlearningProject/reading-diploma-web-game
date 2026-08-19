@@ -1,5 +1,6 @@
 import { useState } from "react"
 import InfoButton from "../InfoButton"
+import LiveBook from "./LiveBook"
 import "./UpdateProgressPopup.css"
 
 function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }) {
@@ -41,18 +42,9 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
                 <h3 className="popup-book-title">{book.title}</h3>
                 <p className="popup-book-author">{book.author}</p>
 
-                {/* Cover Image */}
-                {book?.coverimage ? (
-                    <div className="popup-cover-container">
-                        <img
-                            src={book?.coverimage}
-                            alt={`${book.title} cover`}
-                            className={book?.coverimage === "/assets/defaultNoImg.ico" ? "empty-popup-cover-image" : "popup-cover-image"}
-                        />
-                    </div>
-                ) : (
-                    <div className="empty-popup-cover-container" />
-                )}
+                <div className="popup-cover-container">
+                    <LiveBook pct={pct} />
+                </div>
 
                 {!readOnly && (
                     <>
