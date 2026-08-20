@@ -20,8 +20,18 @@
         transform-origin: left center;
         width: 50%;
         height: 100%;
-        background: #d4af37;
-        border: 2px solid rgba(0, 0, 0, 0.3);
+        background: linear-gradient(
+            to bottom right,
+            #d8b46a 0%,
+            #c49a4a 40%,
+            #b88a3c 100%
+        );
+        box-shadow:
+            inset 8px 0 6px rgba(0, 0, 0, 0.4),   /* main spine shadow */
+            inset 12px 0 4px rgba(255, 255, 255, 0.15), /* highlight ridge */
+            inset -2px 0 4px rgba(0, 0, 0, 0.25), /* outer edge shadow */
+            inset 0 0 6px rgba(0, 0, 0, 0.25),    /* general depth */
+            0 2px 6px rgba(0, 0, 0, 0.2);         /* outer drop shadow */
         transition: transform 0.6s ease;
         backface-visibility: visible;
         z-index: 100;
@@ -45,41 +55,15 @@
         position: absolute;
         top: 4px;
         width: calc(100% - 4px);
-        height: calc(100% - 4px);
-        background: #fff;
+        height: calc(100% - 8px);
+        background: center / cover no-repeat;
         transform-origin: left center;
-        box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+        box-shadow: 2px 2px 3px -2px rgba(0, 0, 0, 0.15);
         transition: transform 0.6s ease;
         backface-visibility: visible;
     }
 
     .page.flipped {
-        transform: rotateY(-180deg) translateX(7px);
-    }
-
-    .cover-edge-left {
-        position: absolute;
-        top: 0;
-        left: -4px;
-        width: 6px;
-        height: 100%;
-        background: linear-gradient(to right,
-                rgba(0, 0, 0, 0.25),
-                #d4af37);
-        border-radius: 3px 0 0 3px;
-        pointer-events: none;
-    }
-
-    .cover-edge-inner {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 6px;
-        height: 100%;
-        background: linear-gradient(to right,
-                rgba(0, 0, 0, 0.25),
-                #d4af37);
-        border-radius: 2px;
-        pointer-events: none;
+        transform: rotateY(-180deg);
     }
 }
