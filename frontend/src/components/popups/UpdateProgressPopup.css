@@ -112,43 +112,12 @@
     transform: scale(1.08);
 }
 
-/* === Cover Image === */
-.popup-cover-container {
+/* === Book === */
+.popup-book-container {
     width: 100%;
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-}
-
-.empty-popup-cover-container {
-    width: 100%;
-    border-top: 2px solid #c4963a8d;
-    margin-bottom: 20px;
-}
-
-.popup-cover-image {
-    aspect-ratio: 3 / 4;
-    min-width: 225px;
-    min-height: 300px;
-    height: auto;
-    width: auto;
-    max-width: 90%;
-    max-height: calc(84vh - 290px); /* 290px = approximate space for title, author, buttons, progress field */
-    object-fit: cover;
-
-    border: 3px solid #c4973a;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-    background: #fff;
-}
-
-.empty-popup-cover-image {
-    width: 225px;
-    height: 300px;
-    object-fit: none;
-    border: 3px solid #c4973a;
-    border-radius: 8px;
-    display: block;
 }
 
 /* === Update Progress Form === */

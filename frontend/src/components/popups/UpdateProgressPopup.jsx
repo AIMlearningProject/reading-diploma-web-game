@@ -42,7 +42,7 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
                 <h3 className="popup-book-title">{book.title}</h3>
                 <p className="popup-book-author">{book.author}</p>
 
-                <div className="popup-cover-container">
+                <div className="popup-book-container">
                     <LiveBook pct={pct} />
                 </div>
 
