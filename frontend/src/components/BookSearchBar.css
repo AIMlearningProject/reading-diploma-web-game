@@ -1,0 +1,105 @@
+/* --- Search bar --- */
+.search-row {
+    display: flex;
+    gap: 8px;
+    margin: 2px 2px 12px 2px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* --- Pager Row --- */
+.pager-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    margin: 0 2px 12px 2px;
+    flex-wrap: wrap;
+}
+
+.pager {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-self: flex-end;
+    gap: 8px;
+    flex-wrap: nowrap;
+    margin-left: auto;
+}
+
+.pager-button {
+    padding: 4px 8px;
+    cursor: pointer;
+    color: #9c9c9c;
+    border: 1px solid #9c9c9c;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.pager-button.sb-disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.pager-button.sb-teacher {
+    cursor: pointer;
+    background: transparent;
+    color: #9E7A2A;
+    border: 1px solid #9E7A2A;
+}
+
+.pager-status {
+    min-width: 30px;
+    text-align: center;
+}
+
+/* --- Select booktype --- */
+.booktype-select {
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1px solid #9E7A2A;
+    cursor: pointer;
+    background: transparent;
+}
+
+.booktype-select.sb-student {
+    border: 2px solid #9c9c9c;
+    color: #fff;
+    background: #1e3a5f;
+}
+
+/* --- Hide read checkbox --- */
+.hide-read-label {
+    display: inline-flex;
+    align-items: center;
+    color: #ffffff;
+    cursor: pointer;
+    user-select: none;
+}
+
+.hide-read-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.hide-read-text {
+    font-size: 14px;
+}
+
+/* --- Add book button --- */
+.add-book-btn {
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 2px solid #9c9c9c;
+    cursor: pointer;
+    color: #fff;
+    background-color: #1e3a5f;
+}

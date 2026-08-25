@@ -6,7 +6,7 @@ import Phaser from 'phaser';
 import createGameConfig from '../game/config.js';
 import ReadingState from '../game/state.js';
 import ReactQuiz from './ReactQuiz';
-import BookListPanel from './BookListPanel';
+import BookListPanel from './popups/BookListPanel';
 import UpdateProgressPopup from './popups/UpdateProgressPopup'
 
 export default function PhaserGame() {

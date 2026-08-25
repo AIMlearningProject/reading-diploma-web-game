@@ -1,3 +1,5 @@
+import './BookSearchBar.css';
+
 export default function SearchBar({
     query,
     onQueryChange,
@@ -14,9 +16,8 @@ export default function SearchBar({
     // Optional hide-read toggle (only BookListPanel uses this)
     hideRead,
     onToggleHideRead,
-    onAddBook,
-
-    styles
+    hasReadBooks,
+    onAddBook
 }) {
     const isPrevDisabled = page === 0;
     const isNextDisabled = page >= totalPages - 1;
@@ -24,71 +25,23 @@ export default function SearchBar({
     return (
         <div>
             {/* Search input */}
-            <div style={styles.searchRow}>
+            <div className='search-row'>
                 <input
+                    className='search-input'
                     value={query}
                     onChange={e => onQueryChange(e.target.value)}
                     placeholder="Hae kirjaa tai tekijää"
-                    style={styles.searchInput}
                 />
             </div>
 
-            {/* Pager always shown when pager props exist */}
-            <div className="pagerRow" style={styles.pagerRow}>
-                <div style={styles.pager}>
-                    <button
-                        onClick={onPrevPage}
-                        disabled={isPrevDisabled}
-                        style={
-                            isPrevDisabled ? ({
-                                ...styles.pagerButton,
-                                cursor: 'default'
-                            }) : (role === "teacher" ? ({
-                                ...styles.pagerButton,
-                                cursor: 'pointer',
-                                backgroundColor: 'transparent',
-                                color: '#9E7A2A',
-                                border: '1px solid #9E7A2A',
-                            }) : ({
-                                ...styles.pagerButton,
-                                cursor: 'pointer'
-                            }))
-                        }
-                    >
-                        {'<'}
-                    </button>
-
-                    <div style={styles.pagerStatus}>
-                        {page + 1}/{totalPages}
-                    </div>
-                    <button
-                        onClick={onNextPage}
-                        disabled={isNextDisabled}
-                        style={
-                            isNextDisabled ? ({
-                                ...styles.pagerButton,
-                                cursor: 'default'
-                            }) : (role === "teacher" ? ({
-                                ...styles.pagerButton,
-                                cursor: 'pointer',
-                                backgroundColor: 'transparent',
-                                color: '#9E7A2A',
-                                border: '1px solid #9E7A2A',
-                            }) : ({
-                                ...styles.pagerButton,
-                                cursor: 'pointer'
-                            }))
-                        }
-                    >
-                        {'>'}
-                    </button>
-                </div>
-
+            <div className="pager-row">
                 {/* Filter by booktype */}
                 <select
                     value={booktype}
                     onChange={(e) => setBooktype(e.target.value)}
-                    style={styles.booktypeSelect}
+                    className={role === "student"
+                        ? "booktype-select sb-student"
+                        : "booktype-select"}
                 >
                     <option value="">Kaikki</option>
                     <option value="physical">Fyysiset</option>
@@ -96,24 +49,63 @@ export default function SearchBar({
                     <option value="audio">Äänikirjat</option>
                 </select>
 
-                {role === 'student' && <>
-                    {/* Hide-read checkbox */}
-                    <label style={styles.hideReadLabel}>
-                        <input
-                            type="checkbox"
-                            checked={hideRead}
-                            onChange={e => onToggleHideRead(e.target.checked)}
-                            style={styles.hideReadCheckbox}
-                        />
-                        <span style={styles.hideReadText}>Piilota luetut</span>
-                    </label>
+                {/* Hide-read checkbox */}
+                {role === 'student' && (
+                    <>
+                        {hasReadBooks && (
+                            <label className='hide-read-label'>
+                                <input
+                                    type="checkbox"
+                                    checked={hideRead}
+                                    onChange={e => onToggleHideRead(e.target.checked)}
+                                    className='hide-read-checkbox'
+                                />
+                                <span className='hide-read-text'>Piilota luetut</span>
+                            </label>
+                        )}
 
-                    {/* Add book button */}
-                    <button style={styles.addBookBtn} onClick={onAddBook}>
-                        Lisää kirja
-                    </button>
-                </>}
+                        <button className='add-book-btn' onClick={onAddBook}>
+                            Lisää kirja
+                        </button>
+                    </>
+                )}
 
+                {/* Pager */}
+                {totalPages > 1 && (
+                    <div className='pager'>
+                        <button
+                            onClick={onPrevPage}
+                            disabled={isPrevDisabled}
+                            className={
+                                isPrevDisabled
+                                    ? "pager-button sb-disabled"
+                                    : role === "teacher"
+                                        ? "pager-button sb-teacher"
+                                        : "pager-button"
+                            }
+                        >
+                            {'<'}
+                        </button>
+
+                        <div className='pager-status'>
+                            {page + 1}/{totalPages}
+                        </div>
+
+                        <button
+                            onClick={onNextPage}
+                            disabled={isNextDisabled}
+                            className={
+                                isNextDisabled
+                                    ? "pager-button sb-disabled"
+                                    : role === "teacher"
+                                        ? "pager-button sb-teacher"
+                                        : "pager-button"
+                            }
+                        >
+                            {'>'}
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );

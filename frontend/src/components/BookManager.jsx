@@ -37,10 +37,6 @@ function BookManager() {
 
     const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
     const pageSlice = filtered.slice(page * pageSize, (page + 1) * pageSize);
-    const hasCoverimage = pageSlice.some((e) => e?.coverimage); // Check for coverimages in currently displayed books
-
-    const isPrevPagerBtnDisabled = page === 0;
-    const isNextPagerBtnDisabled = page >= totalPages - 1;
 
     useEffect(() => setPage(0), [query, queryBooktype]);
 
@@ -126,7 +122,6 @@ ${studentNames}`)) return
                         totalPages={totalPages}
                         onPrevPage={() => setPage(p => Math.max(0, p - 1))}
                         onNextPage={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-                        styles={searchBarStyles}
                     />
                     {pageSlice.length > 0 ? (
                         <>
@@ -134,7 +129,6 @@ ${studentNames}`)) return
                             <table className="data-table desktop-book-list">
                                 <thead>
                                     <tr>
-                                        {hasCoverimage && <th></th>}
                                         <th>Nimi</th>
                                         <th>Kirjoittaja</th>
                                         <th>Tyyppi</th>
@@ -144,26 +138,6 @@ ${studentNames}`)) return
                                 <tbody>
                                     {pageSlice.map((b) => (
                                         <tr key={b.id} className="book-item-row">
-                                            {hasCoverimage && (
-                                                b?.coverimage ? (
-                                                    <td>
-                                                        <img
-                                                            className={b.coverimage === "/assets/defaultNoImg.ico" ? "empty-book-cover-thumb" : "book-cover-thumb"}
-                                                            src={b.coverimage}
-                                                            alt={b.title}
-                                                            onClick={() => setZoomSrc(b.coverimage)}
-                                                            onError={(e) => {
-                                                                e.currentTarget.style.display = "none";
-                                                                e.currentTarget.style.width = "0";
-                                                                e.currentTarget.style.height = "0";
-                                                            }}
-                                                        />
-                                                        
-                                                    </td>
-                                                ) : (
-                                                    <td></td>
-                                                )
-                                            )}
                                             <td data-label="Nimi"> {b.title}</td>
                                             <td data-label="Kirjoittaja"> {b.author}</td>
                                             <td data-label="Tyyppi"> {typeFi[b.booktype] ?? b.booktype}</td>
@@ -192,20 +166,6 @@ ${studentNames}`)) return
                             <div className="mobile-book-list">
                                 {pageSlice.map((b) => (
                                     <div className="mobile-book-item" key={b.id}>
-                                        {hasCoverimage && b?.coverimage && (
-                                            <img
-                                                className={b.coverimage === "/assets/defaultNoImg.ico" ? "empty-mobile-book-cover" : "mobile-book-cover"}
-                                                src={b.coverimage}
-                                                alt={b.title}
-                                                onClick={() => setZoomSrc(b.coverimage)}
-                                                onError={(e) => {
-                                                    e.currentTarget.style.display = "none";
-                                                    e.currentTarget.style.width = "0";
-                                                    e.currentTarget.style.height = "0";
-                                                }}
-                                            />
-                                        )}
-
                                         <div className="mobile-book-info">
                                             <div className="mobile-book-title">{b.title}</div>
                                             <div className="mobile-book-author">{b.author}</div>
@@ -222,46 +182,39 @@ ${studentNames}`)) return
                                     </div>
                                 ))}
                             </div>
-                            {/* Bottom pager buttons < X/X > */}
-                            <div style={searchBarStyles.pager}>
-                                <button
-                                    onClick={() => setPage(p => Math.max(0, p - 1))}
-                                    disabled={page === 0}
-                                    style={isPrevPagerBtnDisabled ? ({
-                                        ...searchBarStyles.pagerButton,
-                                        cursor: 'default'
-                                    }) : ({
-                                        ...searchBarStyles.pagerButton,
-                                        cursor: 'pointer',
-                                        backgroundColor: 'transparent',
-                                        color: '#9E7A2A',
-                                        border: '1px solid #9E7A2A',
-                                    })}
-                                >
-                                    {'<'}
-                                </button>
 
-                                <div style={searchBarStyles.pagerStatus}>
-                                    {page + 1}/{totalPages}
+                            {/* Bottom Pager */}
+                            {totalPages > 1 && (
+                                <div className='pager'>
+                                    <button
+                                        onClick={() => setPage(p => Math.max(0, p - 1))}
+                                        disabled={page === 0}
+                                        className={
+                                            page === 0
+                                                ? "pager-button sb-disabled"
+                                                : "pager-button sb-teacher"
+                                        }
+                                    >
+                                        {'<'}
+                                    </button>
+
+                                    <div className='pager-status'>
+                                        {page + 1}/{totalPages}
+                                    </div>
+
+                                    <button
+                                        onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                                        disabled={page >= totalPages - 1}
+                                        className={
+                                            page >= totalPages - 1
+                                                ? "pager-button sb-disabled"
+                                                : "pager-button sb-teacher"
+                                        }
+                                    >
+                                        {'>'}
+                                    </button>
                                 </div>
-
-                                <button
-                                    onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
-                                    disabled={page >= totalPages - 1}
-                                    style={isNextPagerBtnDisabled ? ({
-                                        ...searchBarStyles.pagerButton,
-                                        cursor: 'default'
-                                    }) : ({
-                                        ...searchBarStyles.pagerButton,
-                                        cursor: 'pointer',
-                                        backgroundColor: 'transparent',
-                                        color: '#9E7A2A',
-                                        border: '1px solid #9E7A2A',
-                                    })}
-                                >
-                                    {'>'}
-                                </button>
-                            </div>
+                            )}
                         </>
                     ) : (
                         <table className="data-table">
@@ -343,63 +296,3 @@ ${studentNames}`)) return
 }
 
 export default BookManager
-
-const searchBarStyles = {
-    container: {
-        position: 'relative',
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        pointerEvents: 'auto',
-        marginBottom: 12,
-        gap: 12,
-    },
-    searchRow: {
-        position: 'relative',
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        pointerEvents: 'auto',
-        marginBottom: 12,
-        gap: 12,
-    },
-    searchInput: {
-        width: '100%',
-        padding: '6px 8px',
-        borderRadius: 6,
-        border: '1px solid #ccc'
-    },
-    pagerRow: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        gap: 12,
-        marginBottom: 12,
-        flexWrap: 'wrap',
-    },
-    pager: {
-        display: 'flex',
-        flexDirection: 'row',
-        gap: 8,
-        alignItems: 'center',
-        flexWrap: 'nowrap',
-    },
-    pagerStatus: { minWidth: 30, textAlign: 'center' },
-    pagerButton: {
-        padding: '4px 8px',
-        color: '#9c9c9c',
-        border: '1px solid #9c9c9c',
-        borderRadius: 4,
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-    booktypeSelect: {
-        cursor: 'pointer',
-        padding: '4px 6px',
-        borderRadius: 6,
-        border: '1px solid #9E7A2A',
-        //color: '#fff',
-        background: 'transparent'
-    },
-}
