@@ -1,7 +1,7 @@
 import pageImg from "../../assets/bookPage.jpg"
 import "./LiveBook.css";
 
-export default function LiveBook({ pct }) {
+export default function LiveBook({ pct, isReadOnly }) {
     const totalPages = 20;
 
     const pages = Array.from({ length: totalPages - 1}, (_, i) => {
@@ -14,7 +14,7 @@ export default function LiveBook({ pct }) {
     const isBackCoverClosed = pct > 99;
 
     return (
-        <div className={"openbook-wrapper"}>
+        <div className={"openbook-wrapper"} style={{ "--requiredSpace": isReadOnly ? "150px" : "295px" }}>
             <div className="openbook">
                 <div className={`book-cover ${isFrontCoverClosed ? "" : "flipped"}`}
                     style={{ zIndex: isFrontCoverClosed ? totalPages + 2 : 1 }}

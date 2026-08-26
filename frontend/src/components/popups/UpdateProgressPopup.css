@@ -18,6 +18,7 @@
     position: relative;
     width: fit-content;
     height: fit-content;
+    min-width: 200px;
     max-width: min(80%, 800px);
     max-height: 84vh;
     overflow-y: auto;
@@ -117,7 +118,6 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
 }
 
 /* === Update Progress Form === */
@@ -125,7 +125,8 @@
     font-family: 'Nunito', sans-serif;
     font-size: 26px;
     color: #1e3a5f;
-    margin: 0;
+    margin-top: 20px;
+    margin-bottom: 0;
     text-align: center;
 }
 

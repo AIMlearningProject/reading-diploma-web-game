@@ -18,9 +18,9 @@ export default function ReactQuiz({ mapKey, onClose }) {
     const shouldReward = !isResubmittable && !isReadOnly;
 
     const questions = [
-        "Mikä on tämän tarinan juoni?",
-        "Ketkä ovat tarinan päähenkilöt?",
-        "Mitä ajatuksia tai tunteita tämä tarina herätti sinussa?"
+        "Miten kirja päättyi?",
+        "Mistä kohdasta kirjassa pidit eniten?",
+        "Miten kirja voisi jatkua?"
     ];
 
     const handleNext = async () => {
@@ -153,7 +153,8 @@ const styles = {
     textarea: {
         width: '100%', height: '130px', padding: '12px', fontSize: '16px',
         borderRadius: '8px', border: '1px solid #c4973a', outline: 'none',
-        color: '#1e3a5f', boxSizing: 'border-box', marginBottom: '20px'
+        color: '#1e3a5f', boxSizing: 'border-box', marginBottom: '20px',
+        minWidth: '50%', maxWidth: '100%', maxHeight: '40vh'
     },
     footer: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' },
     btnGroup: { display: 'flex', gap: '10px', width: '100%', justifyContent: 'center' },

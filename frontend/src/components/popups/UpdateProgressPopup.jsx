@@ -12,9 +12,12 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
     }
 
     return (
-        <div className="progress-popup-overlay">
+        <div className="progress-popup-overlay"
+            onClick={() => onClose(pct)}
+            onMouseDown={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
+        >
             <div className="progress-popup">
-
                 {/* Title + Author + info/close buttons */}
                 <div className="progress-popup-info-wrapper">
                     {readOnly && (
@@ -43,55 +46,53 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
                 <p className="popup-book-author">{book.author}</p>
 
                 <div className="popup-book-container">
-                    <LiveBook pct={pct} />
+                    <LiveBook pct={pct} isReadOnly={readOnly} />
                 </div>
 
-                {!readOnly && (
-                    <>
-                        {/* Progress fields */}
-                        <h2>Päivitä edistyminen</h2>
+                {!readOnly && (<>
+                    {/* Update Progress form */}
+                    <h2>Päivitä edistyminen</h2>
 
-                        <div className="progress-update-form">
-                            {book.pageCount && (
-                                <div className="editable-field">
-                                    <span>Sivu</span>
-                                    <input
-                                        type="number"
-                                        min={0}
-                                        max={book.pageCount}
-                                        value={Math.round((pct / 100) * book.pageCount)}
-                                        onChange={(e) => handlePageChange(e.target.value)}
-                                    />
-                                    <span>/ {book.pageCount}</span>
-                                </div>
-                            )}
-
-                            <div className="progress-pct">
+                    <div className="progress-update-form">
+                        {book.pageCount && (
+                            <div className="editable-field">
+                                <span>Sivu</span>
                                 <input
-                                    type="range"
+                                    type="number"
+                                    min={0}
+                                    max={book.pageCount}
+                                    value={Math.round((pct / 100) * book.pageCount)}
+                                    onChange={(e) => handlePageChange(e.target.value)}
+                                />
+                                <span>/ {book.pageCount}</span>
+                            </div>
+                        )}
+
+                        <div className="progress-pct">
+                            <input
+                                type="range"
+                                min={0}
+                                max={100}
+                                value={pct}
+                                onChange={(e) => setPct(Number(e.target.value))}
+                                className="progress-slider-bar"
+                            />
+                            
+                            <div className="editable-field">
+                                <input
+                                    type="number"
+                                    value={pct}
                                     min={0}
                                     max={100}
-                                    value={pct}
                                     onChange={(e) => setPct(Number(e.target.value))}
-                                    className="progress-slider-bar"
                                 />
-                                
-                                <div className="editable-field">
-                                    <input
-                                        type="number"
-                                        value={pct}
-                                        min={0}
-                                        max={100}
-                                        onChange={(e) => setPct(Number(e.target.value))}
-                                    />
-                                    <span>%</span>
-                                </div>
+                                <span>%</span>
                             </div>
-                            
                         </div>
-                        <button className="save-progress-button" onClick={() => onClose(pct)}>Tallenna</button>
-                    </>
-                )}
+                        
+                    </div>
+                    <button className="save-progress-button" onClick={() => onClose(pct)}>Tallenna</button>
+                </>)}
             </div>
         </div>
     );

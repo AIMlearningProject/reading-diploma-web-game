@@ -1,7 +1,8 @@
 .openbook-wrapper {
     perspective: 1600px;
     aspect-ratio: 3 / 2;
-    width: min(100%, calc((84vh - 295px) * (3 / 2)));
+    /* less space is required when update form is not present */
+    width: min(100%, calc((84vh - var(--requiredSpace)) * (3 / 2)));
     height: auto;
     max-width: 300px;
     margin: 20px auto;
