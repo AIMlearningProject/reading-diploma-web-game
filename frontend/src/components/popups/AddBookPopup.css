@@ -132,7 +132,7 @@
     background: #2d4a77;
 }
 
-/* --- small buttons (coverimage, booktype, pageCount) --- */
+/* --- small buttons (booktype, pageCount) --- */
 .student-add-book-small-row {
     display: flex;
     flex-direction: row;

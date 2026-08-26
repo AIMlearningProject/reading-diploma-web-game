@@ -115,13 +115,6 @@ async function createDatabase() {
         logger.info(`Migrations folder was missing. Created folder at '../db/migrations': ${migrationsDir}`);
     }
 
-    // ensure public/uploads/book-covers folder exists
-    const bookCoversDir = path.join(__dirname, '..', 'public', 'uploads', 'book-covers')
-
-    if (!fs.existsSync(bookCoversDir)) {
-        fs.mkdirSync(bookCoversDir, { recursive: true });
-        logger.info(`Book covers folder was missing. Created folder at '../public/uploads/book-covers': ${bookCoversDir}`);
-    }
     await client.end()
 }
 

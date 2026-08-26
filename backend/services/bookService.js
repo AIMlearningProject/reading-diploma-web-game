@@ -1,12 +1,8 @@
 import Book from '../models/book.js'
 import User from '../models/user.js'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import { promises as fs } from 'fs'
-import logger from '../utils/logger.js'
 
 const BookService = {
-    async addBook({ title, author, coverimage, booktype, page_count, added_by }) {
+    async addBook({ title, author, booktype, page_count, added_by }) {
         const existing = await Book.findByTitleAndAuthor(title, author)
         if (existing) {
             const err = new Error(`A book with the title and author '${title}' - '${author}' already exists`)
@@ -28,7 +24,6 @@ const BookService = {
         const [newBook] = await Book.create({
             title,
             author,
-            coverimage,
             booktype,
             page_count,
             added_by
@@ -73,23 +68,6 @@ const BookService = {
             err.status = 500
             throw err
         }
-
-        // Remove cover image from disk if it's not the default placeholder
-        try {
-            const cover = book.coverimage
-            if (cover && !cover.endsWith('defaultNoImg.ico')) {
-                const __filename = fileURLToPath(import.meta.url)
-                const __dirname = path.dirname(__filename)
-                const relative = cover.startsWith('/') ? cover.slice(1) : cover
-                const filepath = path.resolve(__dirname, '..', 'public', relative)
-                await fs.unlink(filepath)
-            }
-        } catch (err) {
-            // Log the error but do not fail the request because the DB delete already happened
-            logger.error('Failed to delete book cover file:', err)
-        }
-
-        return deletedRows
     },
 
     async getBookReaders(bookId) {

@@ -210,7 +210,6 @@ backend/
 ├── knexfile.js                 # Configuration file for Knex
 ├── package.json
 ├── .env                        # File with secret environmental variables (not found on github)
-├── public/                     # Not really used after functionality for coverimages was removed
 ├── controllers/                # controllers/ includes all the API routes (get, post etc.)
 │   ├── auth.js
 │   ├── books.js

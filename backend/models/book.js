@@ -1,15 +1,15 @@
 import db from '../db/db.js'
 
 const Book = {
-    async create({ title, author, coverimage, booktype, page_count, added_by }, dbConn = db) {
+    async create({ title, author, booktype, page_count, added_by }, dbConn = db) {
         return dbConn('books')
-            .insert({ title, author, coverimage, booktype, page_count, added_by })
+            .insert({ title, author, booktype, page_count, added_by })
             .returning('*')
     },
 
     async findByTitleAndAuthor(title, author, dbConn = db) {
         return dbConn('books')
-            .select('title', 'author', 'coverimage', 'booktype', 'page_count')
+            .select('title', 'author', 'booktype', 'page_count')
             .whereRaw('LOWER(title) = LOWER(?) AND LOWER(author) = LOWER(?)', [title, author]) // Used raw SQL here since knex doesn't have support for functional unique indexes
             .first()
     },
@@ -22,7 +22,7 @@ const Book = {
 
     async getByTeacher(addedByIds, dbConn = db) {
         return dbConn('books')
-            .select('id', 'title', 'author', 'coverimage', 'booktype', 'page_count')
+            .select('id', 'title', 'author', 'booktype', 'page_count')
             .whereIn('added_by', addedByIds)
     },
 
