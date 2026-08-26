@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { BUDDIES, BuddySprite, BuddyIcon } from '../components/BuddyAvatar'
 import homeBG from '../assets/HomeBG1.jpg'
+import MinigameModal from '../components/minigames/MinigameModal'
 import './StudentDashboard.css'
 import {
     fetchProgress,
@@ -10,7 +11,6 @@ import {
     fetchSubmissions,
     updateUserAvatar,
 } from '../services/api'
-import MinigameModal from '../components/MinigameModal'
 
 const LEVELS = [
     { level: 1, name: 'Pohjoisnapa' },

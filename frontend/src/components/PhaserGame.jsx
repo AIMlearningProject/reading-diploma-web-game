@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Phaser from 'phaser';
 import createGameConfig from '../game/config.js';
 import ReadingState from '../game/state.js';
-import ReactQuiz from './ReactQuiz';
+import ReactQuiz from './popups/ReactQuiz';
 import BookListPanel from './popups/BookListPanel';
 import UpdateProgressPopup from './popups/UpdateProgressPopup'
 

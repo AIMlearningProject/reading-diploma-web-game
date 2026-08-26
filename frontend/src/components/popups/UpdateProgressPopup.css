@@ -18,7 +18,7 @@
     position: relative;
     width: fit-content;
     height: fit-content;
-    max-width: 80%;
+    max-width: min(80%, 800px);
     max-height: 84vh;
     overflow-y: auto;
     background: #fdf6e3;
@@ -122,22 +122,19 @@
 
 /* === Update Progress Form === */
 .progress-popup h2 {
-    font-family: "Cinzel Decorative", serif;
+    font-family: 'Nunito', sans-serif;
     font-size: 26px;
     color: #1e3a5f;
-    margin-top: 0;
-    margin-bottom: 5px;
+    margin: 0;
     text-align: center;
 }
 
 .progress-update-form {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     margin-bottom: 10px;
-    gap: 6px;
     width: 100%;
 }
 
@@ -171,6 +168,14 @@
 .editable-field input:focus {
     border-bottom-color: #1e3a5f;
     background-color: rgba(0, 0, 0, 0.03);
+}
+
+.progress-pct {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    gap: 8px;
 }
 
 .progress-slider-bar {

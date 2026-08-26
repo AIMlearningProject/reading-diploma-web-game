@@ -52,17 +52,6 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
                         <h2>Päivitä edistyminen</h2>
 
                         <div className="progress-update-form">
-                            <div className="editable-field">
-                                <input
-                                    type="number"
-                                    value={pct}
-                                    min={0}
-                                    max={100}
-                                    onChange={(e) => setPct(Number(e.target.value))}
-                                />
-                                <span>%</span>
-                            </div>
-
                             {book.pageCount && (
                                 <div className="editable-field">
                                     <span>Sivu</span>
@@ -77,14 +66,28 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
                                 </div>
                             )}
 
-                            <input
-                                type="range"
-                                min={0}
-                                max={100}
-                                value={pct}
-                                onChange={(e) => setPct(Number(e.target.value))}
-                                className="progress-slider-bar"
-                            />
+                            <div className="progress-pct">
+                                <input
+                                    type="range"
+                                    min={0}
+                                    max={100}
+                                    value={pct}
+                                    onChange={(e) => setPct(Number(e.target.value))}
+                                    className="progress-slider-bar"
+                                />
+                                
+                                <div className="editable-field">
+                                    <input
+                                        type="number"
+                                        value={pct}
+                                        min={0}
+                                        max={100}
+                                        onChange={(e) => setPct(Number(e.target.value))}
+                                    />
+                                    <span>%</span>
+                                </div>
+                            </div>
+                            
                         </div>
                         <button className="save-progress-button" onClick={() => onClose(pct)}>Tallenna</button>
                     </>

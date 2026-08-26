@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
-import TilePuzzle from './minigames/TilePuzzle'
-import arctic from '../assets/arctic.png'
-import europe from '../assets/europe.png'
-import asia from '../assets/asia.png'
-import northamerica from '../assets/northamerica.png'
-import southamerica from '../assets/southamerica.png'
-import africa from '../assets/africa.png'
-import oceania from '../assets/oceania.png'
-import antarctica from '../assets/antarctica.png'
+import TilePuzzle from './TilePuzzle'
+import arctic from '../../assets/arctic.png'
+import europe from '../../assets/europe.png'
+import asia from '../../assets/asia.png'
+import northamerica from '../../assets/northamerica.png'
+import southamerica from '../../assets/southamerica.png'
+import africa from '../../assets/africa.png'
+import oceania from '../../assets/oceania.png'
+import antarctica from '../../assets/antarctica.png'
 
 export default function MinigameModal({ reward, onClose }) {
     const [time, setTime] = useState(0)
