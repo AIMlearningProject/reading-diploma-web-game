@@ -77,14 +77,6 @@ const errorHandler = (error, request, response, _next) => {
     if (process.env.NODE_ENV !== 'production') logger.error(error.message)
     if (error.name === 'userNotFound') {
         return response.status(404).send({ error: 'Käyttäjää ei löytynyt' })
-    } else if (error.name === 'MulterError') {
-        let message = 'Upload error'
-        if (error.code === 'LIMIT_FILE_SIZE') {
-            message = 'Tiedosto on liian suuri. Enintään 2 MB on sallittu.'
-        } else {
-            message = error.message || 'Tiedoston latauksessa tapahtui virhe.'
-        }
-        return response.status(400).json({ error: message })
     } else if (error.userDetails) {
         // For custom errors with a seperate message for users and developers
         return response.status(error.status).json({

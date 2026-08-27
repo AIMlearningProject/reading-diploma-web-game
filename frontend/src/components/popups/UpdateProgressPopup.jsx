@@ -17,7 +17,7 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
             onMouseDown={(e) => e.stopPropagation()}
             onMouseUp={(e) => e.stopPropagation()}
         >
-            <div className="progress-popup">
+            <div className="progress-popup" onClick={(e) => e.stopPropagation()}>
                 {/* Title + Author + info/close buttons */}
                 <div className="progress-popup-info-wrapper">
                     {readOnly && (

@@ -25,12 +25,10 @@
     "knex": "^3.1.0",
     "lusca": "^1.7.0",
     "memorystore": "^1.6.7",
-    "multer": "^2.2.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "pg": "^8.18.0",
-    "sharp": "^0.35.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -67,7 +65,6 @@
       "knex": "SQL query builder for Node.js",
       "lusca": "Used for creating and comparing CSRF tokens",
       "memorystore": "Used to prevent memory leaks caused by express-session (https://www.npmjs.com/package/memorystore)",
-      "multer": "Used to handle forms that include file uploads",
       "passport": "Used for authentication (https://www.npmjs.com/package/passport)",
       "passport-google-oauth20": "Passport plugin for Google OAuth 2.0",
       "passport-local": "Plugins that the passport uses as strategies (https://github.com/jaredhanson/passport-local)",
