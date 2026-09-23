@@ -1,6 +1,5 @@
 import express from 'express'
 import passport from 'passport'
-import logger from '../utils/logger.js'
 import { rateLimit, ipKeyGenerator } from 'express-rate-limit'
 import middleware from '../utils/middleware.js'
 
