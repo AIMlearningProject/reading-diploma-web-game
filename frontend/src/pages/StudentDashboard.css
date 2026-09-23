@@ -238,11 +238,6 @@
     align-items: center;
     gap: 0.4rem;
     text-align: center;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.level-card:hover {
-    transform: translateY(-3px);
 }
 
 .level-incomplete {
