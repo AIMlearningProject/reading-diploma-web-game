@@ -1,6 +1,7 @@
 import BaseMapScene from './BaseMapScene.js';
 import { buddyIdleImg, buddyIdleJson } from './continentRegistry.js';
 import { preloadIcons } from '../ui/icons.js';
+import { preloadDesk } from '../ui/desk.js';
 
 export default function createContinentScene(config) {
     class ContinentScene extends BaseMapScene {
@@ -16,6 +17,7 @@ export default function createContinentScene(config) {
                 this.load.atlas('buddyIdle', buddyIdleImg, buddyIdleJson);
             }
             preloadIcons(this);
+            preloadDesk(this);
         }
     }
 

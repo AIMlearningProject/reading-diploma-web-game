@@ -15,10 +15,21 @@ export default class WaypointRenderer {
             const isVideo = !!videoCheckpoints[index];
             const dotColor = isVideo ? COLORS.VIDEO_BLUE : (themeColor || 0xffffff);
             const dotRadius = (isVideo ? 26 : 18) * baseScale;
-            const dot = this.scene.add.circle(pos.x, pos.y, dotRadius, dotColor, 1)
-                .setStrokeStyle(isVideo ? 3 : 2, 0xffffff)
+
+            // Same gold double rim as the world map medallions.
+            const shadow = this.scene.add.circle(pos.x, pos.y + 2 * baseScale, dotRadius, 0x000000, 0.2)
+                .setDepth(DEPTHS.WAYPOINT - 1);
+            this.dotObjects.push(shadow);
+
+            const dot = this.scene.add.circle(pos.x, pos.y, dotRadius, dotColor, 0.95)
+                .setStrokeStyle(Math.max(2, 3 * baseScale), COLORS.GOLD)
                 .setDepth(DEPTHS.WAYPOINT);
             this.dotObjects.push(dot);
+
+            const innerRing = this.scene.add.circle(pos.x, pos.y, dotRadius - 4 * baseScale)
+                .setStrokeStyle(Math.max(1, 1 * baseScale), COLORS.GOLD, 0.45)
+                .setDepth(DEPTHS.WAYPOINT);
+            this.dotObjects.push(innerRing);
 
             if (isVideo) {
                 const iconSize = 32 * baseScale;

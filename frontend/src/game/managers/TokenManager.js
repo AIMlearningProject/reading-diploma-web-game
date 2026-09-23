@@ -68,9 +68,6 @@ export default class TokenManager {
                 y: pointPositions[nextI].y,
                 duration: 300,
                 ease: 'Linear',
-                onStart: () => {
-                    scene.cameras.main.startFollow(this.token, true, 0.1, 0.1);
-                },
                 onComplete: () => {
                     moveStep(nextI);
                 }
@@ -80,12 +77,11 @@ export default class TokenManager {
         moveStep(fromIndex);
     }
 
-    snapToPoint(scene, pointPositions, index, sceneKey) {
+    snapToPoint(pointPositions, index, sceneKey) {
         const pos = pointPositions[index];
         this.token.setPosition(pos.x, pos.y);
         this.token.lastPointIndex = index;
         ReadingState.tokenPositions ||= {};
         ReadingState.tokenPositions[sceneKey] = index;
-        scene.cameras.main.startFollow(this.token, true, 1, 1);
     }
 }
