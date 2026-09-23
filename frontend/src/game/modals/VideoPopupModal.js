@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { DEPTHS, CSS_COLORS, FONTS } from '../ui/constants.js';
 import { ICON_KEYS, INLINE_SVGS } from '../ui/icons.js';
+import { drawParchmentPlate, makeParchmentButton } from '../ui/panels.js';
 
 export default class VideoPopupModal {
     constructor(scene) {
@@ -29,51 +30,47 @@ export default class VideoPopupModal {
         // Box
         const boxW = 450 * s;
         const boxH = 300 * s;
-        const box = this.scene.add.rectangle(width / 2, height / 2, boxW, boxH, 0x1e3a5f)
-            .setStrokeStyle(4, 0xc4973a).setScrollFactor(0).setDepth(depthBase + 1);
-        this.popupUI.add(box);
+
+        const plate = this.scene.add.graphics().setScrollFactor(0).setDepth(depthBase + 1);
+        drawParchmentPlate(plate, width / 2 - boxW / 2, height / 2 - boxH / 2, boxW, boxH, 12 * s, { s });
+        this.popupUI.add(plate);
 
         // Title with lightbulb icon
-        const bulbIcon = this.scene.add.image(width / 2 - (130 * s), height / 2 - (100 * s), ICON_KEYS.LIGHTBULB)
-            .setDisplaySize(30 * s, 30 * s).setScrollFactor(0).setDepth(depthBase + 2);
-        this.popupUI.add(bulbIcon);
-
         const title = this.scene.add.text(width / 2 + (10 * s), height / 2 - (100 * s), 'LUKUVINKKI AVATTU', {
             fontFamily: FONTS.HEADING,
             fontSize: (26 * s) + 'px',
-            color: CSS_COLORS.GOLD,
-            shadow: { offsetX: 0, offsetY: 2, color: '#000', blur: 4, fill: true }
+            color: '#9e7a2a',
+            fontStyle: 'bold'
         }).setOrigin(0.5).setScrollFactor(0).setDepth(depthBase + 2);
         this.popupUI.add(title);
+
+        const bulbIcon = this.scene.add.image(
+            title.x - title.width / 2 - (24 * s), height / 2 - (100 * s), ICON_KEYS.LIGHTBULB
+        ).setDisplaySize(30 * s, 30 * s).setScrollFactor(0).setDepth(depthBase + 2);
+        this.popupUI.add(bulbIcon);
 
         // Subtitle
         const subTitle = this.scene.add.text(width / 2, height / 2 - (40 * s), videoData.title, {
             fontFamily: FONTS.BODY,
             fontSize: (18 * s) + 'px',
-            color: CSS_COLORS.WHITE,
+            color: '#1e3a5f',
             align: 'center',
-            wordWrap: { width: boxW - 50 }
+            wordWrap: { width: boxW - 60 * s }
         }).setOrigin(0.5).setScrollFactor(0).setDepth(depthBase + 2);
         this.popupUI.add(subTitle);
 
         // Watch button
-        const btnBg = this.scene.add.rectangle(width / 2, height / 2 + (50 * s), 260 * s, 60 * s, 0xc4973a)
-            .setScrollFactor(0).setDepth(depthBase + 2).setInteractive({ useHandCursor: true });
-        this.popupUI.add(btnBg);
-
-        const btnLabel = this.scene.add.text(width / 2, height / 2 + (50 * s), 'KATSO TÄSSÄ', {
-            fontFamily: FONTS.BODY,
-            fontSize: (20 * s) + 'px',
-            color: CSS_COLORS.NAVY,
-            fontWeight: 'bold'
-        }).setOrigin(0.5).setScrollFactor(0).setDepth(depthBase + 3);
-        this.popupUI.add(btnLabel);
+        const watchBtn = makeParchmentButton(this.scene, width / 2, height / 2 + (50 * s), 'KATSO TÄSSÄ', {
+            s, fontSize: 20, minWidth: 260 * s, depth: depthBase + 2
+        });
+        this.popupUI.add(watchBtn.container);
 
         // Close button
         const closeBtn = this.scene.add.text(width / 2, height / 2 + (120 * s), '[ Sulje ]', {
             fontFamily: FONTS.BODY,
             fontSize: (18 * s) + 'px',
-            color: CSS_COLORS.LIGHT_BLUE,
+            color: CSS_COLORS.NAVY,
+            fontStyle: '800',
             padding: 10
         }).setOrigin(0.5).setScrollFactor(0).setDepth(depthBase + 2)
             .setInteractive({ useHandCursor: true });
@@ -84,10 +81,7 @@ export default class VideoPopupModal {
             this.destroy();
         };
 
-        btnBg.on('pointerover', () => btnBg.setFillStyle(0xd4a74a));
-        btnBg.on('pointerout', () => btnBg.setFillStyle(0xc4973a));
-
-        btnBg.on('pointerdown', () => {
+        watchBtn.container.on('pointerup', () => {
             const targetVideoId = String(index) === '7' ? 'jDZcdgDgM48' : 'TZoNz-2rk8c';
 
             const embedUrl = `https://www.youtube.com/embed/${targetVideoId}?autoplay=1&rel=0&modestbranding=1`;

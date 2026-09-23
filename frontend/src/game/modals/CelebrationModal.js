@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import ReadingState from '../state.js';
-import { DEPTHS, CSS_COLORS, FONTS } from '../ui/constants.js';
+import { DEPTHS, FONTS } from '../ui/constants.js';
 import { ICON_KEYS } from '../ui/icons.js';
+import { drawParchmentPlate, makeParchmentButton } from '../ui/panels.js';
 
 export default class CelebrationModal {
     constructor(scene) {
@@ -37,54 +38,51 @@ export default class CelebrationModal {
 
         const boxW = Math.min(width * 0.85, 500 * s);
         const boxH = 300 * s;
-        const box = this.scene.add.rectangle(width / 2, height / 2, boxW, boxH, 0x1e3a5f)
-            .setStrokeStyle(4, 0xc4973a).setScrollFactor(0);
-        this.celebrationUI.add(box);
 
-        const partyIcon = this.scene.add.image(width / 2 - (110 * s), height / 2 - (60 * s), ICON_KEYS.PARTY)
-            .setDisplaySize(36 * s, 36 * s).setScrollFactor(0);
-        this.celebrationUI.add(partyIcon);
+        // Everything below lives in one container so the entry tween can scale
+        // the whole panel at once.
+        const panel = this.scene.add.container(width / 2, height / 2).setScrollFactor(0);
+        this.celebrationUI.add(panel);
 
-        const titleMsg = this.scene.add.text(width / 2 + (10 * s), height / 2 - (60 * s), 'ONNITTELUT!', {
+        const plate = this.scene.add.graphics();
+        drawParchmentPlate(plate, -boxW / 2, -boxH / 2, boxW, boxH, 12 * s, { s });
+        panel.add(plate);
+
+        const titleMsg = this.scene.add.text(10 * s, -60 * s, 'ONNITTELUT!', {
             fontSize: `${32 * s}px`,
-            color: CSS_COLORS.GOLD,
+            color: '#9e7a2a',
             fontFamily: FONTS.HEADING,
-            fontWeight: 'bold',
-            shadow: { offsetX: 0, offsetY: 2, color: '#000', blur: 4, fill: true }
-        }).setOrigin(0.5).setScrollFactor(0);
-        this.celebrationUI.add(titleMsg);
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+        panel.add(titleMsg);
 
-        const subMsg = this.scene.add.text(width / 2, height / 2 + (15 * s),
+        const partyIcon = this.scene.add.image(
+            titleMsg.x - titleMsg.width / 2 - 26 * s, -60 * s, ICON_KEYS.PARTY
+        ).setDisplaySize(36 * s, 36 * s);
+        panel.add(partyIcon);
+
+        const subMsg = this.scene.add.text(0, 15 * s,
             'Olet suorittanut tutkimusmatkan loppuun ja ansainnut palkinnon!', {
                 fontSize: `${20 * s}px`,
-                color: CSS_COLORS.WHITE,
+                color: '#1e3a5f',
                 fontFamily: FONTS.BODY,
                 align: 'center',
-                wordWrap: { width: boxW - 40 }
-            }).setOrigin(0.5).setScrollFactor(0);
-        this.celebrationUI.add(subMsg);
+                wordWrap: { width: boxW - 60 * s }
+            }).setOrigin(0.5);
+        panel.add(subMsg);
 
-        const okBtn = this.scene.add.text(width / 2, height / 2 + (90 * s), ' SELVÄ ', {
-            fontSize: `${22 * s}px`,
-            color: CSS_COLORS.WHITE,
-            backgroundColor: CSS_COLORS.GOLD,
-            padding: { x: 40, y: 12 },
-            fontFamily: FONTS.BODY,
-            fontWeight: 'bold'
-        }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setScrollFactor(0);
-
-        okBtn.on('pointerover', () => okBtn.setBackgroundColor('#d4a74a'));
-        okBtn.on('pointerout', () => okBtn.setBackgroundColor(CSS_COLORS.GOLD));
-        okBtn.on('pointerdown', () => this.destroy());
-        this.celebrationUI.add(okBtn);
+        const okBtn = makeParchmentButton(this.scene, 0, 90 * s, 'SELVÄ', {
+            s, fontSize: 22, minWidth: 180 * s, onClick: () => this.destroy()
+        });
+        panel.add(okBtn.container);
 
         this._resizeHandler = () => { if (this.celebrationUI) this.show(mapKey); };
         this.scene.scale.on('resize', this._resizeHandler, this.scene);
 
         // Entry animation
-        box.setScale(0.5);
+        panel.setScale(0.5);
         this.scene.tweens.add({
-            targets: [box, titleMsg, subMsg, okBtn],
+            targets: panel,
             scaleX: 1, scaleY: 1, duration: 400, ease: 'Back.easeOut'
         });
 
