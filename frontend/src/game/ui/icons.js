@@ -17,6 +17,7 @@ export const ICON_KEYS = {
     BOOK:        'icon-book',
     CHECKMARK:   'icon-book-read',
     DOOR_EXIT:   'icon-door-exit',
+    ARROW_LEFT:  'icon-arrow-left',
 };
 
 const SVGS = {
@@ -39,6 +40,8 @@ const SVGS = {
     [ICON_KEYS.BOOK]: `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 36 36"><path fill="#269" d="M32 7H4a4 4 0 0 0-4 4v15a4 4 0 0 0 4 4h11.416c.52.596 1.477 1 2.584 1s2.065-.404 2.584-1H32a4 4 0 0 0 4-4V11a4 4 0 0 0-4-4"/><path fill="#292f33" d="M20 27a2 2 0 0 1-4 0V9a2 2 0 0 1 4 0z"/><path fill="#99aab5" d="M18 26a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path fill="#e1e8ed" d="M18 26c-.999-1.998-3.657-2-4-2c-2 0-5 2-8 2c-1 0-2-.896-2-2V8c0-1.104 1-2 2-2c3.255 0 6-2 8-2c3 0 4 1.896 4 3z"/><path fill="#99aab5" d="M34 26a2 2 0 0 1-2 2H20a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/><path fill="#ccd6dd" d="M18 26c.999-1.998 3.657-2 4-2c2 0 5 2 8 2c1 0 2-.896 2-2V8c0-1.104-1-2-2-2c-3.256 0-6-2-8-2c-3 0-4 1.896-4 3z"/></svg>`,
 
     [ICON_KEYS.CHECKMARK]: `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 36 36"><g transform="translate(-9 -12) scale(0.09)"><path d="M508.745 226.99c-49.323-33.818-72.66-63.394-72.66-63.394C345 217.266 248.269 407.837 248.269 407.837c-45.333-63.818-90.914-81.618-90.914-81.618-20.492 27.382-55.813 63.874-55.813 63.874C183.924 412.281 253.073 493.7 253.073 493.7c149.484-234.687 255.672-266.71 255.672-266.71z" fill="#5fd35f" fill-rule="evenodd" /></g></svg>`,
+
+    [ICON_KEYS.ARROW_LEFT]: `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="#1e3a5f"/><circle cx="18" cy="18" r="13" fill="none" stroke="#c4973a" stroke-width="1" opacity="0.5"/><path d="M21.5 10.5L14 18l7.5 7.5" fill="none" stroke="#c4973a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 
     [ICON_KEYS.DOOR_EXIT]: `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 36 36"><rect x="4" y="3" width="18" height="30" rx="2" fill="#8899a6"/><rect x="6" y="5" width="14" height="26" rx="1" fill="#e1e8ed"/><rect x="6" y="5" width="8" height="26" rx="1" fill="#ccd6dd"/><circle cx="17" cy="18" r="1.5" fill="#ffac33"/><path d="M24 13l6 5-6 5" fill="none" stroke="#dd2e44" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="18" x2="30" y2="18" fill="none" stroke="#dd2e44" stroke-width="2.5" stroke-linecap="round"/></svg>`,
 };
