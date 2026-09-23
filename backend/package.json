@@ -9,10 +9,14 @@
     "postinstall": "npx knex migrate:latest",
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "pretest": "cross-env NODE_ENV=test node scripts/createDatabase.js",
+    "test": "cross-env NODE_ENV=test vitest run --config vitest.integration.config.js",
+    "posttest": "cross-env NODE_ENV=test node scripts/removeTestDB.js",
     "lint": "eslint .",
     "db:create": "node scripts/createDatabase.js",
     "db:make": "npx knex migrate:make --stub migration.stub --",
-    "db:seed": "npx knex seed:make --stub seed.stub --"
+    "db:seed": "npx knex seed:make --stub seed.stub --",
+    "db:seed:test": "npx knex seed:run --specific=01_test_data.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -34,10 +38,14 @@
   "devDependencies": {
     "@eslint/js": "^9.39.2",
     "@stylistic/eslint-plugin": "^4.4.1",
+    "@vitest/coverage-istanbul": "^3.2.4",
     "eslint": "^9.39.2",
     "eslint-plugin": "^1.0.1",
     "globals": "^17.3.0",
-    "nodemon": "^3.1.11"
+    "nodemon": "^3.1.11",
+    "passport-strategy": "^1.0.0",
+    "supertest": "^7.2.2",
+    "vitest": "^3.2.4"
   },
   "comments": {
     "type": "module/commonjs",

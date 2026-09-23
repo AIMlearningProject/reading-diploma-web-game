@@ -92,7 +92,11 @@ async function createDatabase() {
     })
 
     await client.connect()
-    const dbName = process.env.DB_NAME || 'rdiploma'
+    // Under NODE_ENV=test the integration tests get their own throwaway database,
+    // so running them never touches development data.
+    const dbName = process.env.NODE_ENV === 'test'
+        ? (process.env.INTEGRATION_TEST_DB_NAME || 'rdiplomatestintegration')
+        : (process.env.DB_NAME || 'rdiploma')
 
     const result = await client.query(
         `SELECT 1 FROM pg_database WHERE datname = $1`,

@@ -29,6 +29,27 @@ const development = {
   }
 };
 
+// Database for the integration tests (NODE_ENV=test). Created by scripts/createDatabase.js
+// and dropped again by scripts/removeTestDB.js, so it never touches the development database.
+const test = {
+  client: 'pg',
+  connection: {
+    host: process.env.DB_HOST || 'localhost',
+    database: process.env.INTEGRATION_TEST_DB_NAME || 'rdiplomatestintegration',
+    user: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT || 5432
+  },
+  migrations: {
+    directory: './db/migrations',
+    tableName: 'knex_migrations'
+  },
+  seeds: {
+    directory: './db/seeds',
+    tableName: 'knex_seeds'
+  }
+};
+
 const staging = {
   client: 'postgresql',
   connection: {
@@ -77,5 +98,5 @@ const production = {
 }
 
 export default {
-  development, staging, production
+  development, test, staging, production
 };

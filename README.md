@@ -225,7 +225,8 @@ backend/
 │   │   ├── migration.stub              # Template for the migration files
 │   │   └── README.md
 │   └── seeds/
-│       ├── books_seed.js               # Can be used to create some template books for testing
+│       ├── 01_test_data.js             # Development test data: teachers, students, books (npm run db:seed:test)
+│       ├── users_seed.js               # Fixture users for the integration tests
 │       └── seed.stub                   # Template for seed files
 │
 ├── models/                     # Models are used to make SQL requests to the database (called by services)
@@ -236,7 +237,8 @@ backend/
 │   └── README.md
 │
 ├── scripts/                    # Various scripts, used to automate actions
-│   ├── createDatabase.js           # Creates the postgres database on npm install
+│   ├── createDatabase.js           # Creates the postgres database on npm install (test db under NODE_ENV=test)
+│   ├── removeTestDB.js             # Drops the integration test database after npm test
 │   └── entrypoint.js               # Used by Dockerfile to run knex migrations and start the app.
 │
 ├── services/                   # Services are used by controllers to clean data, handle errors etc.
