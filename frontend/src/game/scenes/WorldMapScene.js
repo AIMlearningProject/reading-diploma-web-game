@@ -109,17 +109,12 @@ class WorldMapScene extends Phaser.Scene {
 
                 // The panda stands in for the marker on the continent the player is on.
                 if (!isCurrent) {
-                    const marker = makeMedallion(this, index + 1, s, { isUnlocked, isCompleted, isResubmittable });
+                    const marker = makeMedallion(
+                        this, index + 1, s,
+                        { isUnlocked, isCompleted, isResubmittable },
+                        isUnlocked ? () => this.scene.start(pos.mapKey) : null
+                    );
                     marker.setPosition(finalX, finalY).setDepth(6);
-                    if (isUnlocked) {
-                        const r = 24 * s;
-                        marker.setSize(r * 2, r * 2)
-                            .setInteractive(new Phaser.Geom.Circle(0, 0, r), Phaser.Geom.Circle.Contains);
-                        marker.input.cursor = 'pointer';
-                        marker.on('pointerover', () => this.tweens.add({ targets: marker, scale: 1.12, duration: 150 }));
-                        marker.on('pointerout', () => this.tweens.add({ targets: marker, scale: 1, duration: 150 }));
-                        marker.on('pointerdown', () => this.scene.start(pos.mapKey));
-                    }
                     this.pointGroup.add(marker);
                 }
 
@@ -187,22 +182,13 @@ class WorldMapScene extends Phaser.Scene {
 
         const poistu = makeParchmentBadge(
             this, initW - margin, margin, 'POISTU',
-            { iconKey: ICON_KEYS.DOOR_EXIT, s: uiS, anchor: 'right' }
+            {
+                iconKey: ICON_KEYS.DOOR_EXIT, s: uiS, anchor: 'right',
+                onClick: () => { if (this.game.handleBackNavigation) this.game.handleBackNavigation(); }
+            }
         );
         this.backBtn = poistu.container;
         this.backBtn._badgeWidth = poistu.width;
-        this.backBtn.setInteractive(
-            new Phaser.Geom.Rectangle(0, 0, poistu.width, poistu.height),
-            Phaser.Geom.Rectangle.Contains
-        );
-        this.backBtn.input.cursor = 'pointer';
-        this.backBtn.on('pointerover', () => this.tweens.add({ targets: this.backBtn, scale: 1.05, duration: 120 }));
-        this.backBtn.on('pointerout', () => this.tweens.add({ targets: this.backBtn, scale: 1, duration: 120 }));
-        this.backBtn.on('pointerdown', () => { this.backBtn.setScale(0.95); });
-        this.backBtn.on('pointerup', () => {
-            this.backBtn.setScale(1);
-            if (this.game.handleBackNavigation) this.game.handleBackNavigation();
-        });
 
         // --- 4. Resize handling ---
         const onResize = () => {

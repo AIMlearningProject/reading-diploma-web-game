@@ -143,13 +143,18 @@ class BaseMapScene extends Phaser.Scene {
 
         // Back badge
         const back = makeParchmentBadge(this, margin, margin, 'TAKAISIN', {
-            iconKey: ICON_KEYS.ARROW_LEFT, s: uiS, anchor: 'left', depth: DEPTHS.UI
+            iconKey: ICON_KEYS.ARROW_LEFT, s: uiS, anchor: 'left', depth: DEPTHS.UI,
+            onClick: () => {
+                if (this.mapBgm) this.mapBgm.stop();
+                this.scene.start('WorldMap');
+            }
         });
         this.backIconContainer = back.container;
 
         // Book badge, with the done/loading icons stacked in the same slot
         const book = makeParchmentBadge(this, width - margin, margin, 'AVAA KIRJA', {
-            iconKey: ICON_KEYS.BOOK, s: uiS, anchor: 'right', depth: DEPTHS.UI
+            iconKey: ICON_KEYS.BOOK, s: uiS, anchor: 'right', depth: DEPTHS.UI,
+            onClick: () => this._handleBookBtnClick()
         });
         this.bookIconContainer = book.container;
         if (book.icon) book.icon.name = 'bookGraphic';
@@ -174,25 +179,6 @@ class BaseMapScene extends Phaser.Scene {
         this.titleBadge = makeParchmentBadge(this, width / 2, titleY, this.title, {
             s: uiS, anchor: 'center', fontSize: 24, depth: DEPTHS.UI
         }).container;
-
-        // Button interaction
-        const setupBtn = (container, callback) => {
-            container.setInteractive(
-                new Phaser.Geom.Rectangle(0, 0, container.width, container.height),
-                Phaser.Geom.Rectangle.Contains
-            );
-            container.input.cursor = 'pointer';
-            container.on('pointerover', () => container.setScale(1.05));
-            container.on('pointerdown', () => container.setScale(0.95));
-            container.on('pointerup', () => { container.setScale(1); callback(); });
-            container.on('pointerout', () => container.setScale(1));
-        };
-
-        setupBtn(this.bookIconContainer, () => this._handleBookBtnClick());
-        setupBtn(this.backIconContainer, () => {
-            if (this.mapBgm) this.mapBgm.stop();
-            this.scene.start('WorldMap');
-        });
 
         // Token
         this.tokenManager.updateScale(this.baseScale);

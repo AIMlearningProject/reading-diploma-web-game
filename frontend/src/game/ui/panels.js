@@ -8,6 +8,24 @@ import { COLORS, FONTS } from './constants.js';
  */
 
 /**
+ * Wire a container up for input.
+ *
+ * Phaser tests a custom hit area in the object's local space, but first shifts
+ * the tested point by displayOrigin -- and Container.displayOriginX is
+ * `width * 0.5`. So never call setSize() on a container that carries a custom
+ * hit area: width stays 0, displayOrigin stays 0, and the hit area can be
+ * written in plain local coordinates. Every factory below relies on that.
+ */
+function wireInteraction(container, hitArea, contains, onClick, hoverScale) {
+    container.setInteractive(hitArea, contains);
+    container.input.cursor = 'pointer';
+    container.on('pointerover', () => container.setScale(hoverScale));
+    container.on('pointerout', () => container.setScale(1));
+    container.on('pointerdown', () => container.setScale(hoverScale * 0.9));
+    container.on('pointerup', () => { container.setScale(1); onClick(); });
+}
+
+/**
  * Paint a parchment plate onto an existing Graphics object.
  * Coordinates are the top-left corner of the plate.
  */
@@ -47,7 +65,8 @@ export function makeParchmentBadge(scene, x, y, text, options = {}) {
         anchor = 'left',
         fontSize = 20,
         radius = 12,
-        depth = 2000
+        depth = 2000,
+        onClick = null
     } = options;
 
     const padH = Math.round(14 * s);
@@ -86,7 +105,10 @@ export function makeParchmentBadge(scene, x, y, text, options = {}) {
     const container = scene.add.container(originX, y, children)
         .setScrollFactor(0)
         .setDepth(depth);
-    container.setSize(w, h);
+
+    if (onClick) {
+        wireInteraction(container, new Phaser.Geom.Rectangle(0, 0, w, h), Phaser.Geom.Rectangle.Contains, onClick, 1.05);
+    }
 
     return { container, label, icon, width: w, height: h, iconX, iconY, iconSize };
 }
@@ -121,7 +143,7 @@ export function makeParchmentButton(scene, x, y, text, options = {}) {
     const container = scene.add.container(x, y, [plate, label])
         .setScrollFactor(0)
         .setDepth(depth);
-    container.setSize(w, h);
+    // Content is centred on the container's origin, so the hit area is too.
     container.setInteractive(new Phaser.Geom.Rectangle(-w / 2, -h / 2, w, h), Phaser.Geom.Rectangle.Contains);
     container.input.cursor = 'pointer';
     container.on('pointerover', () => paint(COLORS.GOLD_HOVER));
@@ -175,7 +197,7 @@ export function makeParchmentTooltip(scene, x, y, text, options = {}) {
  * Gold-rimmed medallion used for the continent markers.
  * `state` is { isUnlocked, isCompleted, isResubmittable }.
  */
-export function makeMedallion(scene, level, s, state) {
+export function makeMedallion(scene, level, s, state, onClick = null) {
     const { isUnlocked, isCompleted, isResubmittable } = state;
     const r = 24 * s;
 
@@ -216,5 +238,11 @@ export function makeMedallion(scene, level, s, state) {
         children.push(lock);
     }
 
-    return scene.add.container(0, 0, children);
+    const container = scene.add.container(0, 0, children);
+
+    if (onClick) {
+        wireInteraction(container, new Phaser.Geom.Circle(0, 0, r), Phaser.Geom.Circle.Contains, onClick, 1.12);
+    }
+
+    return container;
 }
