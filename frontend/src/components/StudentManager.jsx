@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import BooksContext from '../contexts/BooksContext'
 import InfoButton from './InfoButton'
 import InviteSection from './InviteSection'
+import StatusLegend from './StatusLegend'
 import {
     createStudent,
     deleteStudent,
@@ -190,6 +191,7 @@ function StudentManager() {
         <div className="dashboard-section">
             <h2>Oppilaat {students.length > 0 && <span className="student-count">{students.length}</span>}</h2>
             <InviteSection />
+            {students.length > 0 && <StatusLegend />}
             {students.length > 0 ? (
                 <table className="data-table">
                     <thead>
