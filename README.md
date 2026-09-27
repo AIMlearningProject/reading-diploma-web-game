@@ -257,26 +257,32 @@ backend/
 
 ## Testing without Google auth
 
-If you don't have the Google OAuth credentials in your `.env`, you can log in via the browser console instead.
-First you have to create a teacher account. To do that, follow the instructions below.
+The teacher login page offers Google only, so without the Google OAuth credentials in
+your `.env` you log in from the browser console instead.
 
-- Open terminal in `backend/`
-- Run `node`. This opens a Node REPL in which you can run the following command.
-- Import the bcrypt library from the package.json by running `const bcrypt = require('bcrypt');`
-- Create a password_hash by running `bcrypt.hash('Test123!', 10).then(console.log);`. You may now close the Node REPL connection  with `.exit`
-- Open sql connection to database (e.g., with psql: `psql -U <db_user> <db_name>`)
-- Create the teacher account with the newly generated password hash. `INSERT INTO users (name, password_hash, grade, role) VALUES ('TestTeacher', 'hashed_password_here', 1, 'teacher');`
+First load the development data, which creates the teachers, a class of pupils and the
+library's book list:
 
-Run this snippet at `http://localhost:5173` browser console.
+```bash
+cd backend && npm run db:seed:test
+```
+
+Then open `http://localhost:5173`, and run this in the browser console (F12):
 
 ```js
 fetch('/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ identifier: 'TestTeacher', password: 'Test123!' })
+    body: JSON.stringify({ identifier: 'teacher', password: 'teacher' })
 }).then(r => r.json()).then(d => { console.log(d); window.location.href = '/teacher/dashboard' })
 ```
-**Now that you have access to the teacher dasboard, you can create a student account and use that to login as student.**
+
+The seed creates two teachers, `teacher` / `teacher` and `Virtanen` / `Test123!`, and a
+class of pupils covering every state the dashboard has to show. Pupils log in normally at
+`/login/student` with their teacher's name; `student` / `student` under teacher `teacher`
+is the untouched one, and the rest are listed in `CLAUDE.md`.
+
+Only teachers need the console: the student login page takes a password directly.
 
 ## Troubleshooting
 
