@@ -138,9 +138,27 @@ class WorldMapScene extends Phaser.Scene {
                     : null;
                 if (genreTxt) genreTxt.setLetterSpacing(Math.max(0.3, 0.6 * s));
 
+                // Sent back by the teacher: say so on the plate, not only in the
+                // colour of the marker, which means nothing on its own.
+                const redoFontSize = Math.max(10, Math.round(12 * s));
+                const redoTxt = isResubmittable
+                    ? this.add.text(0, 0, 'TEE UUDELLEEN', {
+                        fontFamily: FONTS.BODY, fontSize: `${redoFontSize}px`,
+                        color: '#FDFBF4', fontStyle: '800', align: 'center'
+                    }).setOrigin(0.5)
+                    : null;
+                if (redoTxt) redoTxt.setLetterSpacing(Math.max(0.4, 0.8 * s));
+
                 const gapY = genreTxt ? 5 * s : 0;
-                const innerW = Math.max(txt.width, genreTxt ? genreTxt.width : 0);
-                const innerH = txt.height + gapY + (genreTxt ? genreTxt.height : 0);
+                const redoGapY = redoTxt ? 6 * s : 0;
+                const redoH = redoTxt ? redoTxt.height + 6 * s : 0;
+                const innerW = Math.max(
+                    txt.width,
+                    genreTxt ? genreTxt.width : 0,
+                    redoTxt ? redoTxt.width + 16 * s : 0
+                );
+                const innerH = txt.height + gapY + (genreTxt ? genreTxt.height : 0)
+                    + redoGapY + redoH;
 
                 const pillPadH = 14 * s;
                 const pillPadV = 7 * s;
@@ -149,7 +167,10 @@ class WorldMapScene extends Phaser.Scene {
                 const radius = Math.min(pillH / 2, 12 * s);
 
                 txt.setY(-innerH / 2 + txt.height / 2);
-                if (genreTxt) genreTxt.setY(innerH / 2 - genreTxt.height / 2);
+                if (genreTxt) {
+                    genreTxt.setY(-innerH / 2 + txt.height + gapY + genreTxt.height / 2);
+                }
+                if (redoTxt) redoTxt.setY(innerH / 2 - redoH / 2);
 
                 const pillBg = this.add.graphics();
                 pillBg.fillStyle(COLORS.PARCHMENT, isUnlocked ? 0.96 : 0.75)
@@ -164,7 +185,16 @@ class WorldMapScene extends Phaser.Scene {
                         .lineBetween(-innerW / 2, ruleY, innerW / 2, ruleY);
                 }
 
-                const labelParts = genreTxt ? [pillBg, txt, genreTxt] : [pillBg, txt];
+                // The redo tag sits on its own filled strip, in the same violet
+                // the marker uses for this state.
+                if (redoTxt) {
+                    const tagW = redoTxt.width + 16 * s;
+                    const tagR = Math.min(redoH / 2, 8 * s);
+                    pillBg.fillStyle(0x865fd9, 0.95)
+                        .fillRoundedRect(-tagW / 2, redoTxt.y - redoH / 2, tagW, redoH, tagR);
+                }
+
+                const labelParts = [pillBg, txt, genreTxt, redoTxt].filter(Boolean);
                 const labelContainer = this.add.container(
                     finalX, finalY + (58 * s) + pillH / 2 - (12 * s), labelParts
                 ).setDepth(5);

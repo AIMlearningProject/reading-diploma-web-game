@@ -207,6 +207,24 @@ class BaseMapScene extends Phaser.Scene {
             s: uiS, anchor: 'center', fontSize: 24, depth: DEPTHS.UI
         }).container;
 
+        // A continent the teacher sent back says so, under the title, and the
+        // notice is the way back to the questions.
+        if (this.redoNotice) { this.redoNotice.destroy(); this.redoNotice = null; }
+        if (ReadingState.isLevelPendingResubmission(mapKey)) {
+            const noticeY = titleY + this.titleBadge.getBounds().height + 10;
+            const notice = makeParchmentBadge(
+                this, width / 2, noticeY,
+                this.needsRedo()
+                    ? 'OPETTAJA PYYTÄÄ VASTAAMAAN UUDELLEEN — KLIKKAA TÄSTÄ'
+                    : 'OPETTAJA PYYTÄÄ TEKEMÄÄN TÄMÄN MANTEREEN UUDELLEEN',
+                {
+                    s: uiS, anchor: 'center', fontSize: 14, depth: DEPTHS.UI,
+                    onClick: this.needsRedo() ? () => this.showStoryQuiz() : null
+                }
+            );
+            this.redoNotice = notice.container;
+        }
+
         // Token
         this.tokenManager.updateScale(this.baseScale);
         const curIdx = this.tokenManager.lastPointIndex;
@@ -218,9 +236,24 @@ class BaseMapScene extends Phaser.Scene {
         const mapKey = this.scene.key;
         if (ReadingState._continentCompletedFlags?.[mapKey] === true) {
             this.showStoryQuiz();
+        } else if (this.needsRedo()) {
+            // Sent back by the teacher with every book already read: the only
+            // thing left to do is answer the questions again, so go straight
+            // there rather than into a book the pupil has finished.
+            this.showStoryQuiz();
         } else {
             this.openNode(ReadingState.currentNodeIndex(mapKey));
         }
+    }
+
+    /**
+     * The teacher sent this continent back and there is nothing left to read,
+     * so the pupil is being asked to answer the questions again.
+     */
+    needsRedo() {
+        const mapKey = this.scene.key;
+        return ReadingState.isLevelPendingResubmission(mapKey)
+            && ReadingState.continentProgress(mapKey) >= 100;
     }
 
     /**
