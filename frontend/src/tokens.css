@@ -1,0 +1,176 @@
+/* ── Lukudiplomi design tokens ─────────────────────────────
+ *
+ * GENERATED from the Lukudiplomi design system. Do not hand-edit:
+ * change the token there and regenerate, or the two drift apart.
+ *   https://claude.ai/artifact/QPBYTnPBVXw6xHU3kSuDw2
+ *
+ * Imported first in App.jsx, before App.css and every page stylesheet,
+ * so every var() below resolves in all of them.
+ *
+ * The canvas cannot read CSS, so game/ui/constants.js holds the same
+ * colours as Phaser integers. When a colour changes here, change it there.
+ */
+
+:root {
+
+    /* ── Colour ───────────────────────────────────────── */
+    --sky-100                : #ebf3fe;
+    --parchment-000          : #fdfbf4;
+    --parchment-100          : #fdf6e3;
+    --parchment-200          : #f5efe0;
+    --parchment-300          : #f0e8d8;
+    --parchment-400          : #e8dcc8;
+    --page-white             : #ffffff;
+    --paper-warm             : #fff8f0;
+    --field-readonly         : #dcd7ca;
+    --navy-900               : #0a192f;
+    --navy-800               : #162d4e;
+    --navy-700               : #1e3a5f;
+    --navy-600               : #2d4a77;
+    --navy-500               : #2c5f8a;
+    --blue-400               : #4a90d9;
+    --brass-200              : #e0bc64;
+    --brass-300              : #d8b25a;
+    --brass-350              : #d4af37;
+    --brass-400              : #cca040;
+    --brass-500              : #c4973a;
+    --brass-600              : #9e7a2a;
+    --brass-650              : #b08826;
+    --brass-700              : #a67e1e;
+    --ink-900                : #3a2a10;
+    --ink-700                : #7a5c35;
+    --ink-650                : #7a6040;
+    --ink-600                : #6b5030;
+    --ink-500                : #8a7a5a;
+    --ink-disabled           : #9c9c9c;
+    --state-reviewed         : #3c763d;
+    --state-reviewed-surface : #eafbea;
+    --state-reviewed-border  : #549963;
+    --state-resubmit         : #7b4ce2;
+    --state-resubmit-ink     : #2a1f4d;
+    --state-danger           : #8b1a1a;
+    --state-neutral          : #5c6877;
+    --accept-300             : #90c695;
+    --accept-500             : #7db085;
+    --reject-300             : #e8a0a0;
+    --reject-500             : #d97777;
+    --surface-muted          : #ededed;
+    --continent-arctic       : #00ffff;
+    --continent-europe       : #9b59b6;
+    --continent-asia         : #ffa500;
+    --continent-north-america: #e74c3c;
+    --continent-south-america: #27ae60;
+    --continent-africa       : #e67e22;
+    --continent-oceania      : #3498db;
+    --continent-antarctica   : #2c3e50;
+    --wood-dark              : #3d2b1f;
+    --wood-light             : #5d4037;
+    --book-red               : #a52a2a;
+    --book-page              : #fff5e1;
+    --video-blue             : #3b88c3;
+    --back-fill              : #6d7a7a;
+
+    /* ── Typeface ─────────────────────────────────────── */
+    --font-display: "Cinzel Decorative", serif;
+    --font-body: Nunito, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+    /* ── Type scale ───────────────────────────────────── */
+    /* Per style from the design system. Fluid sizes on the pupil side keep */
+    /* their clamp() in the page stylesheet; these are the flat values. */
+
+    /* Display */
+    --fs-title-hero: 80px;
+    --lh-title-hero: 1.05;
+    --fw-title-hero: 700;
+    --ls-title-hero: 0.02em;
+    --fs-title-logo: 60px;
+    --lh-title-logo: 1.1;
+    --fw-title-logo: 700;
+    --ls-title-logo: 0.03em;
+    --fs-panel-heading: 20px;
+    --lh-panel-heading: 1.2;
+    --fw-panel-heading: 700;
+    --fs-card-heading: 20.8px;
+    --lh-card-heading: 1.2;
+    --fw-card-heading: 800;
+    --ls-card-heading: 0.16em;
+    --fs-level-number: 1.6rem;
+    --lh-level-number: 1;
+    --fw-level-number: 700;
+
+    /* Text */
+    --fs-body: 17px;
+    --lh-body: 1.5;
+    --fw-body: 400;
+    --fs-body-sm: 0.9rem;
+    --lh-body-sm: 1.45;
+    --fw-body-sm: 400;
+    --fs-body-xs: 0.85rem;
+    --lh-body-xs: 1.4;
+    --fw-body-xs: 400;
+    --fs-prose-italic: 0.97rem;
+    --lh-prose-italic: 1.55;
+    --fw-prose-italic: 400;
+    --fs-label: 0.9rem;
+    --lh-label: 1.3;
+    --fw-label: 700;
+    --ls-label: 0.06em;
+    --fs-label-strong: 0.95rem;
+    --lh-label-strong: 1.3;
+    --fw-label-strong: 800;
+    --ls-label-strong: 0.06em;
+    --fs-badge: 0.78rem;
+    --lh-badge: 1.2;
+    --fw-badge: 700;
+    --ls-badge: 0.1em;
+    --fs-meta: 0.75rem;
+    --lh-meta: 1.2;
+    --fw-meta: 700;
+    --ls-meta: 0.14em;
+    --fs-micro: 0.72rem;
+    --lh-micro: 1.25;
+    --fw-micro: 700;
+
+    /* ── Spacing ──────────────────────────────────────── */
+    /* An 8px rhythm in rem. The CSS also carries ad-hoc 0.3, 0.35, 0.4, */
+    /* 0.45, 0.6 and 0.7rem values in about thirty places; treat those as */
+    /* legacy and round to the nearest step when you touch them. */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 2.5rem;
+    --space-8: 3rem;
+
+    /* ── Radius ───────────────────────────────────────── */
+    --radius-xs   : 2px;
+    --radius-sm   : 3px;
+    --radius-md   : 4px;
+    --radius-lg   : 6px;
+    --radius-xl   : 8px;
+    --radius-pill : 20px;
+    --radius-round: 50%;
+
+    /* ── Border width ─────────────────────────────────── */
+    /* Borders, not shadows, are how this system separates things. A shadow */
+    /* only ever lifts something that is already bordered. */
+    --border-hairline: 1px;
+    --border-frame   : 1.5px;
+    --border-card    : 2px;
+    --border-accent  : 3px;
+
+    /* ── Shadow ───────────────────────────────────────── */
+    /* Every shadow is warm — rgba(44, 30, 5, …) rather than black — except */
+    /* the two that sit on the deep layer. */
+    --shadow-card       : 0 6px 32px rgba(44, 30, 5, 0.18), 0 2px 8px rgba(44, 30, 5, 0.1);
+    --shadow-card-hover : 0 16px 44px rgba(44, 30, 5, 0.22), 0 4px 14px rgba(44, 30, 5, 0.12);
+    --shadow-tile       : 0 2px 8px rgba(44, 30, 5, 0.06);
+    --shadow-tile-gold  : 0 4px 16px rgba(196, 151, 58, 0.2);
+    --shadow-tile-green : 0 4px 16px rgba(84, 153, 99, 0.2);
+    --shadow-tile-violet: 0 4px 16px rgba(123, 76, 226, 0.18);
+    --shadow-panel-deep : 0 6px 24px rgba(0, 0, 0, 0.5);
+    --shadow-header     : 0 4px 24px rgba(22, 45, 78, 0.45);
+    --shadow-inset-brass: inset 0 1px 4px rgba(196, 151, 58, 0.18), 0 2px 6px rgba(44, 30, 5, 0.08);
+}

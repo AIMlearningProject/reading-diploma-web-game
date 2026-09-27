@@ -71,6 +71,20 @@ export default defineConfig([
         },
     },
     {
+        // Build-time scripts run in Node, not the browser, and are CLIs.
+        files: ['scripts/**/*.{js,mjs}'],
+        languageOptions: {
+            sourceType: 'module',
+            ecmaVersion: 'latest',
+            globals: {
+                ...globals.node,
+            },
+        },
+        rules: {
+            'unicorn/no-process-exit': 'off',
+        },
+    },
+    {
         ignores: ['dist/**', 'build/**', 'assets/**', 'node_modules/'],
     },
 ]);

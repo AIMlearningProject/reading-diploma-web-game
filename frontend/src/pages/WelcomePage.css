@@ -1,21 +1,28 @@
+/* Tokens come from tokens.css, imported in App.jsx. Raw values remain only
+   where they are genuinely page-local: the fluid clamp() ranges, the wave
+   band data-URIs (an SVG attribute cannot read a custom property), and the
+   alpha washes layered over a token colour. */
+
 /* ── Page Shell ──────────────────────────────────────────── */
 .welcome-page {
     min-height: 100vh;
     box-sizing: border-box;
-    background-color: #EBF3FE;
+    background-color: var(--sky-100);
     background-size: cover;
     background-position: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 2rem 1.5rem;
+    padding: var(--space-6) var(--space-5);
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
 }
 
-/* Top ocean waves — two layered paths for depth */
+/* Top ocean waves — two layered paths for depth.
+   Fills are blue-400 at 0.08 and navy-500 at 0.12; they are percent-encoded
+   into the data URI and so cannot be var(). Change them with the tokens. */
 .welcome-page::before {
     content: '';
     position: absolute;
@@ -26,7 +33,7 @@
     pointer-events: none;
 }
 
-/* Bottom earth waves — two layered paths for depth */
+/* Bottom earth waves — brass-500 at 0.07 over brass-600 at 0.09. */
 .welcome-page::after {
     content: '';
     position: absolute;
@@ -39,16 +46,16 @@
 
 /* ── Logo & Subtitle ─────────────────────────────────────── */
 .welcome-title {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: clamp(2.8rem, 7vw, 5rem);
-    color: #1e3a5f;
-    margin-bottom: 0.25rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 7vw, 5rem);    /* flat value: --fs-title-hero */
+    color: var(--navy-700);
+    margin-bottom: var(--space-1);
     text-align: center;
     text-shadow:
         0 1px 0 rgba(196, 151, 58, 0.9),
         0 3px 8px rgba(30, 20, 5, 0.22),
         0 8px 24px rgba(30, 20, 5, 0.07);
-    letter-spacing: 0.02em;
+    letter-spacing: var(--ls-title-hero);
     position: relative;
     z-index: 1;
     animation: fadeSlideDown 0.65s cubic-bezier(0.34, 1.2, 0.64, 1) both;
@@ -56,8 +63,8 @@
 
 .welcome-subtitle {
     font-size: clamp(1.2rem, 2.5vw, 1.55rem);
-    color: #6b5030;
-    margin-bottom: 3rem;
+    color: var(--ink-600);
+    margin-bottom: var(--space-8);
     text-align: center;
     font-style: italic;
     font-weight: 600;
@@ -69,7 +76,7 @@
 .welcome-subtitle::before,
 .welcome-subtitle::after {
     content: ' ✦ ';
-    color: #C4973A;
+    color: var(--brass-500);
     font-style: normal;
     font-size: 0.8em;
 }
@@ -77,7 +84,7 @@
 /* ── Role Cards Grid ─────────────────────────────────────── */
 .role-cards {
     display: flex;
-    gap: 2.5rem;
+    gap: var(--space-7);
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
@@ -95,12 +102,10 @@
     background:
         radial-gradient(ellipse 75% 55% at 18% 18%, rgba(255, 252, 225, 0.75) 0%, transparent 60%),
         radial-gradient(ellipse 55% 55% at 82% 82%, rgba(196, 151, 58, 0.09) 0%, transparent 65%),
-        #FDFBF4;
-    border-radius: 8px;
-    border: 2px solid #C4973A;
-    box-shadow:
-        0 6px 32px rgba(44, 30, 5, 0.18),
-        0 2px 8px rgba(44, 30, 5, 0.1);
+        var(--parchment-000);
+    border-radius: var(--radius-xl);
+    border: var(--border-card) solid var(--brass-500);
+    box-shadow: var(--shadow-card);
     padding: clamp(2rem, 5vw, 2.8rem) clamp(2rem, 6vw, 3.5rem);
     text-align: center;
     cursor: pointer;
@@ -114,21 +119,19 @@
 .role-card:nth-child(1) { animation-delay: 0.22s; }
 .role-card:nth-child(2) { animation-delay: 0.36s; }
 
-/* Inner decorative frame */
+/* Inner decorative frame — the cartouche signature */
 .role-card::before {
     content: '';
     position: absolute;
     inset: 7px;
-    border: 1px solid rgba(196, 151, 58, 0.3);
-    border-radius: 4px;
+    border: var(--border-hairline) solid rgba(196, 151, 58, 0.3);
+    border-radius: var(--radius-md);
     pointer-events: none;
 }
 
 .role-card:hover {
     transform: translateY(-7px);
-    box-shadow:
-        0 16px 44px rgba(44, 30, 5, 0.22),
-        0 4px 14px rgba(44, 30, 5, 0.12);
+    box-shadow: var(--shadow-card-hover);
 }
 
 /* ── Icon Badge ──────────────────────────────────────────── */
@@ -136,22 +139,22 @@
     width: 90px;
     height: 90px;
     margin: 0 auto 1.3rem;
-    border: 1.5px solid rgba(196, 151, 58, 0.5);
-    border-radius: 50%;
+    border: var(--border-frame) solid rgba(196, 151, 58, 0.5);
+    border-radius: var(--radius-round);
     display: flex;
     align-items: center;
     justify-content: center;
     background: radial-gradient(circle, rgba(255, 252, 225, 0.85) 0%, rgba(196, 151, 58, 0.06) 100%);
-    box-shadow: inset 0 1px 4px rgba(196, 151, 58, 0.18), 0 2px 6px rgba(44, 30, 5, 0.08);
+    box-shadow: var(--shadow-inset-brass);
 }
 
 /* ── Card Typography ─────────────────────────────────────── */
 .role-card h2 {
     margin: 0;
-    color: #1e3a5f;
-    font-size: clamp(1rem, 2.5vw, 1.3rem);
-    font-weight: 800;
-    letter-spacing: 0.16em;
+    color: var(--navy-700);
+    font-size: clamp(1rem, 2.5vw, 1.3rem);   /* flat value: --fs-card-heading */
+    font-weight: var(--fw-card-heading);
+    letter-spacing: var(--ls-card-heading);
     text-transform: uppercase;
 }
 
@@ -160,22 +163,22 @@
     display: block;
     width: 32px;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #C4973A, transparent);
+    background: linear-gradient(90deg, transparent, var(--brass-500), transparent);
     margin: 0.55rem auto 0.65rem;
 }
 
 .role-card p {
     margin: 0;
-    color: #7a5c35;
-    font-size: clamp(0.88rem, 1.8vw, 0.97rem);
+    color: var(--ink-700);
+    font-size: clamp(0.88rem, 1.8vw, 0.97rem);  /* flat value: --fs-prose-italic */
     font-style: italic;
-    line-height: 1.55;
+    line-height: var(--lh-prose-italic);
 }
 
 /* ── Footer ──────────────────────────────────────────────── */
 .welcome-footer {
-    margin-top: 3rem;
-    color: #7a6040;
+    margin-top: var(--space-8);
+    color: var(--ink-650);
     font-size: 1rem;
     font-style: italic;
     text-align: center;
@@ -185,9 +188,9 @@
 }
 
 .welcome-feedback {
-    margin-top: 2rem;
-    margin-bottom: -2rem;
-    color: #7a6040;
+    margin-top: var(--space-6);
+    margin-bottom: calc(var(--space-6) * -1);
+    color: var(--ink-650);
     font-size: 1.1rem;
     text-align: center;
     position: relative;
@@ -195,17 +198,21 @@
     animation: fadeSlideDown 0.65s 0.18s cubic-bezier(0.34, 1.2, 0.64, 1) both;
 }
 
+/* The one appearance change in this pass. Was brass-500, which reads 2.4:1
+   against the page ground's sky-100 base; ink-700 keeps the warmth at 5.5:1.
+   The real ground is HomeBG1 under a 0.78 wash, so the shipped ratio varies
+   with the photo — sky-100 is the light end and therefore the worst case. */
 .welcome-feedback a {
-    color: #C4973A;
-    font-weight: 700;
+    color: var(--ink-700);
+    font-weight: var(--fw-label);
     text-decoration: none;
-    border-bottom: 1px solid rgba(196, 151, 58, 0.4);
+    border-bottom: var(--border-hairline) solid rgba(196, 151, 58, 0.4);
     transition: color 0.15s, border-bottom-color 0.15s;
 }
 
 .welcome-feedback a:hover {
-    color: #9E7A2A;
-    border-bottom-color: #9E7A2A;
+    color: var(--brass-600);
+    border-bottom-color: var(--brass-600);
 }
 
 /* ── Animations ──────────────────────────────────────────── */
