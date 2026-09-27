@@ -1,0 +1,7 @@
+# Re-fetchable from the library's website by fetch.py.
+cache/
+
+# The customer questionnaire and the review page: generated, not source.
+out/
+
+__pycache__/

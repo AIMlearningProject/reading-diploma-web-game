@@ -1,0 +1,7414 @@
+{
+ "source": {
+  "page_id": 4129,
+  "page_link": "https://www.ylivieska.fi/vapaa-ajan-palvelut/kirjasto/lapsille-ja-nuorille/lukudiplomi/",
+  "page_modified": "2026-09-17T15:33:39"
+ },
+ "source_files": [
+  {
+   "grade": "1-2",
+   "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/1.-2.-luokka.pdf",
+   "sha256": "99eeb0da00ac1d62fa5392a21a4101bf08ccd7cfd52d79a3ff6cd38806a4fddc"
+  },
+  {
+   "grade": "3-4",
+   "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/3.-4.-luokka.pdf",
+   "sha256": "00e04d0fa6ebd6b5347b7e419012368d9780ec086f935ed2482610a79a5d5fe5"
+  },
+  {
+   "grade": "5-6",
+   "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/5.-6.-luokka.pdf",
+   "sha256": "b7d89cb448853b470f33546cafa942df1a8df072c8312c5054b03459ea21d6ea"
+  },
+  {
+   "grade": "7",
+   "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/7.-luokka.pdf",
+   "sha256": "e0a6e09533f8b194e13a25c225e65dc6e45ef372b43dbeae74246654c7b16000"
+  },
+  {
+   "grade": "8",
+   "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/8.-luokka.pdf",
+   "sha256": "f323800d71a7d48e66f06eb0f3f10e0cd284a659b3a311ff76d21a3ae29da80f"
+  },
+  {
+   "grade": "9",
+   "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/9.-luokka.pdf",
+   "sha256": "3450b39aa50cb0d284001e105b87abadf397bdce26330feb14dae31662d37aa6"
+  }
+ ],
+ "pending_decisions": {
+  "Q1_ambiguous_handling": "ask",
+  "Q2_continent_map": "draft",
+  "Q3_books_required": {
+   "1-2": 8,
+   "3-4": 8,
+   "5-6": 8,
+   "7": 8,
+   "8": 8,
+   "9": 8
+  },
+  "Q4_grade_1_2_groups": "as_printed"
+ },
+ "free_choice_label": "Vapaa valinta",
+ "continents": [
+  {
+   "key": "ArcticMap",
+   "name": "Arctic",
+   "stands_for": "Poetry and rhymes",
+   "grades": {
+    "1-2": {
+     "categories": [
+      "Runoja ja loruja"
+     ],
+     "label": "Runoja ja loruja",
+     "free": false
+    },
+    "3-4": {
+     "categories": [
+      "Iloinen lipas – runoja ja loruja"
+     ],
+     "label": "Iloinen lipas – runoja ja loruja",
+     "free": false
+    },
+    "5-6": {
+     "categories": [
+      "Pegasuksen siivillä - runoja"
+     ],
+     "label": "Pegasuksen siivillä - runoja",
+     "free": false
+    },
+    "7": {
+     "categories": [
+      "6. Runoja ja novelleja"
+     ],
+     "label": "6. Runoja ja novelleja",
+     "free": false
+    },
+    "8": {
+     "categories": [
+      "5. Novellit, runot, lyriikka"
+     ],
+     "label": "5. Novellit, runot, lyriikka",
+     "free": false
+    },
+    "9": {
+     "categories": [
+      "5. Runot ja novellit"
+     ],
+     "label": "5. Runot ja novellit",
+     "free": false
+    }
+   }
+  },
+  {
+   "key": "EuropeMap",
+   "name": "Europe",
+   "stands_for": "Classics and picture books",
+   "grades": {
+    "1-2": {
+     "categories": [
+      "Kuvakirjoja"
+     ],
+     "label": "Kuvakirjoja",
+     "free": false
+    },
+    "3-4": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    },
+    "5-6": {
+     "categories": [
+      "Klassikkotarinoita"
+     ],
+     "label": "Klassikkotarinoita",
+     "free": false
+    },
+    "7": {
+     "categories": [
+      "3. Suosikkeja vuosikymmenten takaa"
+     ],
+     "label": "3. Suosikkeja vuosikymmenten takaa",
+     "free": false
+    },
+    "8": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    },
+    "9": {
+     "categories": [
+      "3. Kotimaisia ja ulkomaisia klassikoita"
+     ],
+     "label": "3. Kotimaisia ja ulkomaisia klassikoita",
+     "free": false
+    }
+   }
+  },
+  {
+   "key": "AsiaMap",
+   "name": "Asia",
+   "stands_for": "Fantasy and science fiction",
+   "grades": {
+    "1-2": {
+     "categories": [
+      "Villejä viikareita ja outoja otuksia"
+     ],
+     "label": "Villejä viikareita ja outoja otuksia",
+     "free": false
+    },
+    "3-4": {
+     "categories": [
+      "Jännittäviä seikkailuja ja lumottuja maailmoja"
+     ],
+     "label": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+     "free": false
+    },
+    "5-6": {
+     "categories": [
+      "Fantasiaa ja scifiä"
+     ],
+     "label": "Fantasiaa ja scifiä",
+     "free": false
+    },
+    "7": {
+     "categories": [
+      "1. Fantasiaa ja jännitystä"
+     ],
+     "label": "1. Fantasiaa ja jännitystä",
+     "free": false
+    },
+    "8": {
+     "categories": [
+      "1. Fantasiaa ja tieteiskirjoja"
+     ],
+     "label": "1. Fantasiaa ja tieteiskirjoja",
+     "free": false
+    },
+    "9": {
+     "categories": [
+      "1. Fantasiaa, tieteiskirjoja ja jännitystä"
+     ],
+     "label": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+     "free": false
+    }
+   }
+  },
+  {
+   "key": "NorthAmericaMap",
+   "name": "North America",
+   "stands_for": "Suspense and adventure",
+   "grades": {
+    "1-2": {
+     "categories": [
+      "Helppolukuisia kirjoja"
+     ],
+     "label": "Helppolukuisia kirjoja",
+     "free": false
+    },
+    "3-4": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    },
+    "5-6": {
+     "categories": [
+      "Jännitystä, seikkailuja ja kummitustarinoita"
+     ],
+     "label": "Jännitystä, seikkailuja ja kummitustarinoita",
+     "free": false
+    },
+    "7": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    },
+    "8": {
+     "categories": [
+      "2. Jännitystä ja kauhua"
+     ],
+     "label": "2. Jännitystä ja kauhua",
+     "free": false
+    },
+    "9": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    }
+   }
+  },
+  {
+   "key": "SouthAmericaMap",
+   "name": "South America",
+   "stands_for": "Animals and hobbies",
+   "grades": {
+    "1-2": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    },
+    "3-4": {
+     "categories": [
+      "Eläinystävämme",
+      "Harrastuksen iloa"
+     ],
+     "label": "Eläinystävämme / Harrastuksen iloa",
+     "free": false
+    },
+    "5-6": {
+     "categories": [
+      "Eläimiä tarinoissa",
+      "Harrastuksia"
+     ],
+     "label": "Eläimiä tarinoissa / Harrastuksia",
+     "free": false
+    },
+    "7": {
+     "categories": [
+      "5. Harrastuksia"
+     ],
+     "label": "5. Harrastuksia",
+     "free": false
+    },
+    "8": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    },
+    "9": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    }
+   }
+  },
+  {
+   "key": "AfricaMap",
+   "name": "Africa",
+   "stands_for": "Life here and now",
+   "grades": {
+    "1-2": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    },
+    "3-4": {
+     "categories": [
+      "Hauskoja tarinoita"
+     ],
+     "label": "Hauskoja tarinoita",
+     "free": false
+    },
+    "5-6": {
+     "categories": [
+      "Elämää tässä ja nyt"
+     ],
+     "label": "Elämää tässä ja nyt",
+     "free": false
+    },
+    "7": {
+     "categories": [
+      "2. Aikamme kertomuksia"
+     ],
+     "label": "2. Aikamme kertomuksia",
+     "free": false
+    },
+    "8": {
+     "categories": [
+      "3. Äsken ja nyt"
+     ],
+     "label": "3. Äsken ja nyt",
+     "free": false
+    },
+    "9": {
+     "categories": [
+      "2. Aikamme kertomuksia"
+     ],
+     "label": "2. Aikamme kertomuksia",
+     "free": false
+    }
+   }
+  },
+  {
+   "key": "OceaniaMap",
+   "name": "Oceania",
+   "stands_for": "History and biography",
+   "grades": {
+    "1-2": {
+     "categories": [
+      "Ta-vu-tet-tu-ja kir-jo-ja"
+     ],
+     "label": "Ta-vu-tet-tu-ja kir-jo-ja",
+     "free": false
+    },
+    "3-4": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    },
+    "5-6": {
+     "categories": [
+      "Eilispäivää"
+     ],
+     "label": "Eilispäivää",
+     "free": false
+    },
+    "7": {
+     "categories": [
+      "4. Historian salaisuuksia. Totta ja tarinaa."
+     ],
+     "label": "4. Historian salaisuuksia. Totta ja tarinaa.",
+     "free": false
+    },
+    "8": {
+     "categories": [
+      "4. Historiaa ja elämäkertoja"
+     ],
+     "label": "4. Historiaa ja elämäkertoja",
+     "free": false
+    },
+    "9": {
+     "categories": [
+      "4. Elämää kansien välissä"
+     ],
+     "label": "4. Elämää kansien välissä",
+     "free": false
+    }
+   }
+  },
+  {
+   "key": "AntarcticaMap",
+   "name": "Antarctica",
+   "stands_for": "Non-fiction",
+   "grades": {
+    "1-2": {
+     "categories": [
+      "Tietoa ja taitoa"
+     ],
+     "label": "Tietoa ja taitoa",
+     "free": false
+    },
+    "3-4": {
+     "categories": [
+      "Tietoa ja taitoa"
+     ],
+     "label": "Tietoa ja taitoa",
+     "free": false
+    },
+    "5-6": {
+     "categories": [
+      "Tietoa ja taitoa"
+     ],
+     "label": "Tietoa ja taitoa",
+     "free": false
+    },
+    "7": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    },
+    "8": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    },
+    "9": {
+     "categories": [],
+     "label": "Vapaa valinta",
+     "free": true
+    }
+   }
+  }
+ ],
+ "books": [
+  {
+   "external_key": "25cf61a4a669",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Bagge, Tapani",
+   "title": "Rohkea pikku auto tai Pikku auto ja jättikaivuri",
+   "alt_titles": [
+    "Rohkea pikku auto",
+    "Pikku auto ja jättikaivuri"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ba62c20d6115",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Bright, Rachel",
+   "title": "Minun, sanoi orava tai Kyllä, sanoi koala",
+   "alt_titles": [
+    "Minun, sanoi orava",
+    "Kyllä, sanoi koala"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "216c6ebaf21e",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Flygare, Ingri",
+   "title": "Liian pieni Putti tai Putti ja ystävä",
+   "alt_titles": [
+    "Liian pieni Putti",
+    "Putti ja ystävä"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "0883d2c3391f",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Frölander-Ulf, Lena",
+   "title": "Minä, muru ja metsä tai Isä, minä ja meri",
+   "alt_titles": [
+    "Minä, muru ja metsä",
+    "Isä, minä ja meri"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "5230351148ac",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Jansson, Tove",
+   "title": "Kuka lohduttaisi nyytiä? tai jokin muu kirjailijan kuvakirja",
+   "alt_titles": [
+    "Kuka lohduttaisi nyytiä?"
+   ],
+   "series_note": "jokin muu kirjailijan kuvakirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c309a3b6f892",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Jeffers, Oliver",
+   "title": "Ystävä avaruudesta tai Löytöpingviini tai Lentävä pingviini",
+   "alt_titles": [
+    "Ystävä avaruudesta",
+    "Löytöpingviini",
+    "Lentävä pingviini"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "57c25f0a5ca0",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Kanto, Anneli",
+   "title": "Virtasen lapset ja pentu tai jokin muu Viisi villiä Virtasta -sarjan kirja",
+   "alt_titles": [
+    "Virtasen lapset ja pentu"
+   ],
+   "series_note": "jokin muu Viisi villiä Virtasta -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "98c1ddecaecd",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Kirkkopelto, Katri",
+   "title": "Piki tai jokin Molli-kirjoista",
+   "alt_titles": [
+    "Piki"
+   ],
+   "series_note": "jokin Molli-kirjoista",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "12166f7d5c56",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Laajarinne, Jukka",
+   "title": "Multakutri ja suon salaisuus",
+   "alt_titles": [
+    "Multakutri ja suon salaisuus"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "e2ae55c5f0b0",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Lindgren, Astrid",
+   "title": "Se Eemeli, se Eemeli tai Tunnetko Peppi Pitkätossun tai jokin muu kirjailijan kuvakirja",
+   "alt_titles": [
+    "Se Eemeli, se Eemeli",
+    "Tunnetko Peppi Pitkätossun"
+   ],
+   "series_note": "jokin muu kirjailijan kuvakirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c5da08b4b2e9",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Majaluoma, Markus",
+   "title": "Hulda ja Jalmari -kirjat",
+   "alt_titles": [],
+   "series_note": "Hulda ja Jalmari -kirjat",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "80c3f42332ee",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Miler, Zdenek",
+   "title": "Myyrä ja kotka tai jokin muu Myyrä-kirja",
+   "alt_titles": [
+    "Myyrä ja kotka"
+   ],
+   "series_note": "jokin muu Myyrä-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "1572802b5d91",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Napp, Daniel",
+   "title": "Mikko Murina lomailee tai jokin muu Mikko Murina -kirja",
+   "alt_titles": [
+    "Mikko Murina lomailee"
+   ],
+   "series_note": "jokin muu Mikko Murina -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "cca3404a86b8",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Nopola, Tiina",
+   "title": "Siiri ja hurja Hunskeli tai jokin muu Siiri-kirja",
+   "alt_titles": [
+    "Siiri ja hurja Hunskeli"
+   ],
+   "series_note": "jokin muu Siiri-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "9085cf95b805",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Ross, Tony",
+   "title": "Koulussa on käärme",
+   "alt_titles": [
+    "Koulussa on käärme"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "e729a2dc1b58",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Velthuijs, Max",
+   "title": "Sammakko on surullinen tai jokin muu Sammakko-kirja",
+   "alt_titles": [
+    "Sammakko on surullinen"
+   ],
+   "series_note": "jokin muu Sammakko-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "117f09f786d3",
+   "grade_band": "1-2",
+   "category": "Kuvakirjoja",
+   "map_key": "EuropeMap",
+   "author": "Wieslander, Jujja",
+   "title": "Mimmi Lehmä lukee tai jokin muu Mimmi Lehmä -kirja",
+   "alt_titles": [
+    "Mimmi Lehmä lukee"
+   ],
+   "series_note": "jokin muu Mimmi Lehmä -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "6b24cf099bd4",
+   "grade_band": "1-2",
+   "category": "Ta-vu-tet-tu-ja kir-jo-ja",
+   "map_key": "OceaniaMap",
+   "author": "Huovi, Hannele",
+   "title": "Urpo ja Turpo löytävät aarteet tai Urpo ja Turpo valokuvaajina tai Urpo, Turpo ja hirnuva heppa tai Urpo, Turpo ja hymyilevä aave",
+   "alt_titles": [
+    "Urpo ja Turpo löytävät aarteet",
+    "Urpo ja Turpo valokuvaajina",
+    "Urpo, Turpo ja hirnuva heppa",
+    "Urpo, Turpo ja hymyilevä aave"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8463c6dba16b",
+   "grade_band": "1-2",
+   "category": "Ta-vu-tet-tu-ja kir-jo-ja",
+   "map_key": "OceaniaMap",
+   "author": "",
+   "title": "Vihreä Banaani-sarja",
+   "alt_titles": [],
+   "series_note": "Vihreä Banaani-sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f9e10190bf9b",
+   "grade_band": "1-2",
+   "category": "Ta-vu-tet-tu-ja kir-jo-ja",
+   "map_key": "OceaniaMap",
+   "author": "",
+   "title": "Kirjatiikeri-sarja",
+   "alt_titles": [],
+   "series_note": "Kirjatiikeri-sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "bdaa40cb0699",
+   "grade_band": "1-2",
+   "category": "Ta-vu-tet-tu-ja kir-jo-ja",
+   "map_key": "OceaniaMap",
+   "author": "",
+   "title": "Kirja käteen -sarja",
+   "alt_titles": [],
+   "series_note": "Kirja käteen -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "6fe54f0fa56c",
+   "grade_band": "1-2",
+   "category": "Ta-vu-tet-tu-ja kir-jo-ja",
+   "map_key": "OceaniaMap",
+   "author": "Korhonen, Riitta",
+   "title": "Ystävyyden kevätretki,",
+   "alt_titles": [
+    "Ystävyyden kevätretki"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "0e6bbdac5221",
+   "grade_band": "1-2",
+   "category": "Ta-vu-tet-tu-ja kir-jo-ja",
+   "map_key": "OceaniaMap",
+   "author": "",
+   "title": "Kirja käteen –sarja",
+   "alt_titles": [],
+   "series_note": "Kirja käteen –sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "1966725bdf4b",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "Coe, Catherine",
+   "title": "Länkkäri–Lasse-sarja",
+   "alt_titles": [],
+   "series_note": "Länkkäri–Lasse-sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "a7db66ada04c",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "Davidson, Zanna",
+   "title": "Töräys pimeässä tai jokin muu Mauno ja Muka-Monsterit",
+   "alt_titles": [
+    "Töräys pimeässä"
+   ],
+   "series_note": "jokin muu Mauno ja Muka-Monsterit",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e4ba25cff7cd",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "Hallberg, Lin",
+   "title": "Eppu etsii kotia tai jokin muu Eppu-sarjan kirja",
+   "alt_titles": [
+    "Eppu etsii kotia"
+   ],
+   "series_note": "jokin muu Eppu-sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "733738259dd7",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "Impey, Rose",
+   "title": "Piraatti–Pete-sarja",
+   "alt_titles": [],
+   "series_note": "Piraatti–Pete-sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "9c8619d5f136",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "Kallioniemi, Tuula",
+   "title": "Karoliina-sarja tai Reuhurinne – Lue itse -sarja",
+   "alt_titles": [],
+   "series_note": "Karoliina-sarja / Reuhurinne – Lue itse -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "5bd6b038f9ab",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "Marttinen, Tittamari",
+   "title": "Keskiyön kissat tai jokin muu Leon lemmikkiuutiset -sarjan kirja",
+   "alt_titles": [
+    "Keskiyön kissat"
+   ],
+   "series_note": "jokin muu Leon lemmikkiuutiset -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "97ad63b18293",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "Niemelä, Reetta",
+   "title": "Kaiken kadottajan arvoitus tai jokin muu Pikkiriin pulmatoimisto-sarjan kirja",
+   "alt_titles": [
+    "Kaiken kadottajan arvoitus"
+   ],
+   "series_note": "jokin muu Pikkiriin pulmatoimisto-sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "fe1d9f11c82d",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "Widmark, Martin",
+   "title": "Lasse-Maijan etsivätoimisto -sarja tai Kauhuagentti Nelli Rapp -sarja",
+   "alt_titles": [],
+   "series_note": "Lasse-Maijan etsivätoimisto -sarja / Kauhuagentti Nelli Rapp -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ae4d338b74fb",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "",
+   "title": "Sininen, punainen ja keltainen banaani-sarja",
+   "alt_titles": [],
+   "series_note": "Sininen, punainen ja keltainen banaani-sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "596665bb4d07",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "",
+   "title": "Eka B -sarja",
+   "alt_titles": [],
+   "series_note": "Eka B -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f170b92096bf",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "",
+   "title": "Hyppivä sammakko -sarja",
+   "alt_titles": [],
+   "series_note": "Hyppivä sammakko -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "cbb873f32ffb",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "",
+   "title": "Hyppää kirjan kyytiin -sarja",
+   "alt_titles": [],
+   "series_note": "Hyppää kirjan kyytiin -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8444fe7e57ca",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "",
+   "title": "Keltanokka-sarja",
+   "alt_titles": [],
+   "series_note": "Keltanokka-sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "d7cc01cc9567",
+   "grade_band": "1-2",
+   "category": "Helppolukuisia kirjoja",
+   "map_key": "NorthAmericaMap",
+   "author": "",
+   "title": "Tähtilukija-sarja",
+   "alt_titles": [],
+   "series_note": "Tähtilukija-sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "89a86f59a79e",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Anrell, Lasse",
+   "title": "Zlatan on tähti tai jokin muu Futisjunnut-sarjan kirja",
+   "alt_titles": [
+    "Zlatan on tähti"
+   ],
+   "series_note": "jokin muu Futisjunnut-sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8d214c6bbe12",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Barrows, Annie",
+   "title": "Isa+Bea tai jokin muu Isa+Bea -sarjan kirja",
+   "alt_titles": [
+    "Isa+Bea"
+   ],
+   "series_note": "jokin muu Isa+Bea -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "678306da6021",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Fendrich, Nadja",
+   "title": "Ensimmäinen kilpailu tai jokin muu Nuoli, urhea kilpa-auto -sarjan kirja",
+   "alt_titles": [
+    "Ensimmäinen kilpailu"
+   ],
+   "series_note": "jokin muu Nuoli, urhea kilpa-auto -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "01fea4be96d3",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Gough, Julian",
+   "title": "Kaverin kamalat tavat tai jokin muu sarjan kirja",
+   "alt_titles": [
+    "Kaverin kamalat tavat"
+   ],
+   "series_note": "jokin muu sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "2abe79cd6de6",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Jalo, Merja",
+   "title": "Olivia ja Onnentähti tai jokin muu Onnenkepparit-sarjan kirja",
+   "alt_titles": [
+    "Olivia ja Onnentähti"
+   ],
+   "series_note": "jokin muu Onnenkepparit-sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "4cac3ab08242",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Kuutti, Maria",
+   "title": "Anna ja Elvis kylpylässä tai jokin muu Anna ja Elvis -sarjan kirja",
+   "alt_titles": [
+    "Anna ja Elvis kylpylässä"
+   ],
+   "series_note": "jokin muu Anna ja Elvis -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8c4ed788f5e3",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Niemelä, Reetta",
+   "title": "Ystäväni Uljas tai Uljas ja kadonnut koira",
+   "alt_titles": [
+    "Ystäväni Uljas",
+    "Uljas ja kadonnut koira"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "343851b6c528",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Parvela, Timo",
+   "title": "Paten viidakonkuningas tai jokin muu Pate-kirja",
+   "alt_titles": [
+    "Paten viidakonkuningas"
+   ],
+   "series_note": "jokin muu Pate-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "d033a30c709e",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Perttula, Pirkko",
+   "title": "Kummitusperhe Kammoset -sarja",
+   "alt_titles": [],
+   "series_note": "Kummitusperhe Kammoset -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "75baa51b40f3",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Rekola, Teija",
+   "title": "Eetu ja ruma Rusina tai Eetu ja nokkelat neropatit",
+   "alt_titles": [
+    "Eetu ja ruma Rusina",
+    "Eetu ja nokkelat neropatit"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "9bcc28db2961",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Pilkey, Dave",
+   "title": "Kapteeni Kalsari -sarja tai Koiramies-sarja",
+   "alt_titles": [],
+   "series_note": "Kapteeni Kalsari -sarja / Koiramies-sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "bb9095bf8081",
+   "grade_band": "1-2",
+   "category": "Villejä viikareita ja outoja otuksia",
+   "map_key": "AsiaMap",
+   "author": "Savisaari, Aira",
+   "title": "Ponku, Peetu ja helppo nakki tai jokin muu Ponku ja Peetu -sarjan kirja",
+   "alt_titles": [
+    "Ponku, Peetu ja helppo nakki"
+   ],
+   "series_note": "jokin muu Ponku ja Peetu -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e67928135a6e",
+   "grade_band": "1-2",
+   "category": "Runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Haamuhetki kullan kallis",
+   "alt_titles": [
+    "Haamuhetki kullan kallis"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "70c53eb6ab48",
+   "grade_band": "1-2",
+   "category": "Runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Hirvonen, Hannu",
+   "title": "Hui hai hajamiele!",
+   "alt_titles": [
+    "Hui hai hajamiele!"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "4660dfdb5fd9",
+   "grade_band": "1-2",
+   "category": "Runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Itkonen, Jukka",
+   "title": "Krokotiili hikoaa ja muita eläinrunoja tai Hirvi irvistää tai Tiira tiiraa tiiraa",
+   "alt_titles": [
+    "Krokotiili hikoaa ja muita eläinrunoja",
+    "Hirvi irvistää",
+    "Tiira tiiraa tiiraa"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "b62079ad31f2",
+   "grade_band": "1-2",
+   "category": "Runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Korolainen, Tuula",
+   "title": "Noitaluvut",
+   "alt_titles": [
+    "Noitaluvut"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "84377a356600",
+   "grade_band": "1-2",
+   "category": "Runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Kunnas, Kirsi",
+   "title": "Hassut aakkoset tai Tiitiäisen satupuu tai Sirkukseen",
+   "alt_titles": [
+    "Hassut aakkoset",
+    "Tiitiäisen satupuu",
+    "Sirkukseen"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "aab895a7f9c0",
+   "grade_band": "1-2",
+   "category": "Runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Mariska Määt ja Muut",
+   "alt_titles": [
+    "Mariska Määt ja Muut"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ef1b9dd5fdc9",
+   "grade_band": "1-2",
+   "category": "Runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Niska, Heikki",
+   "title": "Peikkovaara tai Satakieli ja lakaisukone",
+   "alt_titles": [
+    "Peikkovaara",
+    "Satakieli ja lakaisukone"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "65bf854ed656",
+   "grade_band": "1-2",
+   "category": "Runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Perkiö, Pia",
+   "title": "Kiitos! sanoi Leijona tai Siilin satupuu",
+   "alt_titles": [
+    "Kiitos! sanoi Leijona",
+    "Siilin satupuu"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "1b40fb7d4df1",
+   "grade_band": "1-2",
+   "category": "Runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Riipinen, Anni",
+   "title": "Kielet kippuralle: lasten loruaapinen",
+   "alt_titles": [
+    "Kielet kippuralle: lasten loruaapinen"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "cb77f41ea770",
+   "grade_band": "1-2",
+   "category": "Runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Tammi, Jari",
+   "title": "Kakkikirja: paukkuvia lastenrunoja ja haisevia eläinloruja",
+   "alt_titles": [
+    "Kakkikirja: paukkuvia lastenrunoja ja haisevia eläinloruja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "58d387659803",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Ardagh, Philip",
+   "title": "Avaruus tai Dinosaurukset tai Ihminen tai Ötökät (Tatun talo -sarja)",
+   "alt_titles": [
+    "Avaruus",
+    "Dinosaurukset",
+    "Ihminen"
+   ],
+   "series_note": "Ötökät (Tatun talo -sarja)",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "dd41dde6b7c8",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Auvinen, Jari",
+   "title": "Pieni paloautokirja",
+   "alt_titles": [
+    "Pieni paloautokirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "3a8b149243e7",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Bagge, Tapani",
+   "title": "Hämeenlinnan Janne",
+   "alt_titles": [
+    "Hämeenlinnan Janne"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "2387b8060ea3",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Cruz, Carlos da",
+   "title": "Kuninkaantie tai Suomen keskiaika lapsille",
+   "alt_titles": [
+    "Kuninkaantie",
+    "Suomen keskiaika lapsille"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "29d4e287ad5d",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Douglas, Jozua",
+   "title": "Dinosaurukset tai jokin muu Tahtoo tietää -sarjan kirja",
+   "alt_titles": [
+    "Dinosaurukset"
+   ],
+   "series_note": "jokin muu Tahtoo tietää -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c8a7dfad3d7f",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Lappalainen, Elina",
+   "title": "Nakki lautasella – mistä ruoka tulee?",
+   "alt_titles": [
+    "Nakki lautasella – mistä ruoka tulee?"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "896bf8ed8ec5",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Liukas, Linda",
+   "title": "Hello Ruby -sarja",
+   "alt_titles": [],
+   "series_note": "Hello Ruby -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e06a2c147c27",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Palanterä, Jaana",
+   "title": "Tavutettu eläinkirja -sarja",
+   "alt_titles": [],
+   "series_note": "Tavutettu eläinkirja -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "64195ce9ead9",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Ryhänen, Eeva-Liisa",
+   "title": "Jänö-Jussin jäljillä: lasten luonto-opas",
+   "alt_titles": [
+    "Jänö-Jussin jäljillä: lasten luonto-opas"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d253bb8a62e5",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Säfström, Maja",
+   "title": "Tärkeitä tietoja eläimistä",
+   "alt_titles": [
+    "Tärkeitä tietoja eläimistä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "703d097fd462",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Vallinkoski, Anu",
+   "title": "Lasten eka keittokirja",
+   "alt_titles": [
+    "Lasten eka keittokirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "30d676b36fb8",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Walsh, Melanie",
+   "title": "10 askelta maapallomme auttamiseksi",
+   "alt_titles": [
+    "10 askelta maapallomme auttamiseksi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b488137b6019",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "",
+   "title": "Fiksut faktat -sarja",
+   "alt_titles": [],
+   "series_note": "Fiksut faktat -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f95c713b42b5",
+   "grade_band": "1-2",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "",
+   "title": "Pienet tutkijat -sarja",
+   "alt_titles": [],
+   "series_note": "Pienet tutkijat -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "869cf97a6700",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Clary, Julian",
+   "title": "Me Ponnekkaat tai Me Ponnekkaat: pelastuspartio",
+   "alt_titles": [
+    "Me Ponnekkaat",
+    "Me Ponnekkaat: pelastuspartio"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "a94f71fd9b4b",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Dahl, Roald",
+   "title": "Ilmarin ihmelääke tai jokin muu Roald Dahlin kirja",
+   "alt_titles": [
+    "Ilmarin ihmelääke"
+   ],
+   "series_note": "jokin muu Roald Dahlin kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "0712b8bccaea",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Gutman, Dan",
+   "title": "Ihan pöhkö ope tai jokin muu Kahjo kouluni -sarjan kirja",
+   "alt_titles": [
+    "Ihan pöhkö ope"
+   ],
+   "series_note": "jokin muu Kahjo kouluni -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "19f90b1215ac",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Havukainen, Aino",
+   "title": "Tatu ja Patu supersankareina tai jokin muu Tatu ja Patu",
+   "alt_titles": [
+    "Tatu ja Patu supersankareina"
+   ],
+   "series_note": "jokin muu Tatu ja Patu",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "292e4e78ed17",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Kunnas, Mauri",
+   "title": "Robin Hood tai Koiramäen lapset ja näkki tai jokin muu kirjailijan kuvakirja",
+   "alt_titles": [
+    "Robin Hood",
+    "Koiramäen lapset ja näkki"
+   ],
+   "series_note": "jokin muu kirjailijan kuvakirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "3facdfef60eb",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Mäkipää, Jari",
+   "title": "Masi Tulppa: pääsy kielletty tai jokin muu Masi Tulppa -kirja",
+   "alt_titles": [
+    "Masi Tulppa: pääsy kielletty"
+   ],
+   "series_note": "jokin muu Masi Tulppa -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ebfd526b11fb",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Nopola, Sinikka ja Tiina",
+   "title": "Risto Räppääjä -kirjat tai Heinähattu ja Vilttitossu -kirjat",
+   "alt_titles": [],
+   "series_note": "Risto Räppääjä -kirjat / Heinähattu ja Vilttitossu -kirjat",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "49ec1c215d8e",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Noronen, Paula",
+   "title": "Supermarsu lentää Intiaan tai jokin muu Supermarsu -kirja",
+   "alt_titles": [
+    "Supermarsu lentää Intiaan"
+   ],
+   "series_note": "jokin muu Supermarsu -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "91288b906916",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Noronen, Paula",
+   "title": "Tagli ja Telle -kirjat",
+   "alt_titles": [],
+   "series_note": "Tagli ja Telle -kirjat",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "67a419d8e2d2",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Palviainen, Jukka-Pekka",
+   "title": "Allu ja salainen ihalilija tai Allu ja salaperäinen opettaja",
+   "alt_titles": [
+    "Allu ja salainen ihalilija",
+    "Allu ja salaperäinen opettaja"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "eebf5feb7615",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Parvela, Timo",
+   "title": "Ella-kirjat",
+   "alt_titles": [],
+   "series_note": "Ella-kirjat",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "5ec757c0765a",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Peirce, Lincoln",
+   "title": "Iso Nipa on ykkönen tai Iso Nipa iskee jälleen",
+   "alt_titles": [
+    "Iso Nipa on ykkönen",
+    "Iso Nipa iskee jälleen"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "b3d8656505ef",
+   "grade_band": "3-4",
+   "category": "Hauskoja tarinoita",
+   "map_key": "AfricaMap",
+   "author": "Saarivirta, Leila",
+   "title": "Nukkumatin vastaisku",
+   "alt_titles": [
+    "Nukkumatin vastaisku"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "a4e120b16436",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Colfer, Eoin",
+   "title": "Legenda Pottu-Mäkisestä tai Legenda kapteeni Korpin hampaista tai Legenda maailman tuhmimmasta pojasta",
+   "alt_titles": [
+    "Legenda Pottu-Mäkisestä",
+    "Legenda kapteeni Korpin hampaista",
+    "Legenda maailman tuhmimmasta pojasta"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "16c10a4bc35c",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "DiTerlizzi, Tony",
+   "title": "Haltijakirja tai jokin muu Spiderwickin kronikat -sarjan kirja",
+   "alt_titles": [
+    "Haltijakirja"
+   ],
+   "series_note": "jokin muu Spiderwickin kronikat -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "51c1088e5eed",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Evinsalo, Kari",
+   "title": "Etsivä Vertti ja varastettu veistos tai jokin muu Etsivä Vertti",
+   "alt_titles": [
+    "Etsivä Vertti ja varastettu veistos"
+   ],
+   "series_note": "jokin muu Etsivä Vertti",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ebc5b0843d88",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Gahrton, Måns",
+   "title": "Huoneen 13 kummitus tai muu Hotelli kultainen mysteeri -kirja",
+   "alt_titles": [
+    "Huoneen 13 kummitus"
+   ],
+   "series_note": "muu Hotelli kultainen mysteeri -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e95a9f55cdff",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Heinänen, Saku",
+   "title": "Zaida ja lumienkeli tai Zaida ja elovalkeat",
+   "alt_titles": [
+    "Zaida ja lumienkeli",
+    "Zaida ja elovalkeat"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "a77cb3c93656",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "",
+   "title": "Operaatio Myrskypilvi tai jokin muu Etsiväkaksikko -sarjan kirja",
+   "alt_titles": [
+    "Operaatio Myrskypilvi"
+   ],
+   "series_note": "jokin muu Etsiväkaksikko -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "626a1493eb7e",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Jansson, Anna",
+   "title": "Kadonneet retkirahat tai jokin muu Emil Wern -sarjan kirja",
+   "alt_titles": [
+    "Kadonneet retkirahat"
+   ],
+   "series_note": "jokin muu Emil Wern -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "567087366b6a",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Kolu, Siri",
+   "title": "Me Rosvolat tai Taika Taksinen",
+   "alt_titles": [
+    "Me Rosvolat",
+    "Taika Taksinen"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "57059416b536",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Lewis, C.S.",
+   "title": "Velho ja leijona tai jokin muu Narnian tarinat -kirja",
+   "alt_titles": [
+    "Velho ja leijona"
+   ],
+   "series_note": "jokin muu Narnian tarinat -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "683fbe01bf4a",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Mattila, Ilkka",
+   "title": "Neljän rikoksen syksy tai jokin muu Mysteerinmurtajat -sarjan kirja",
+   "alt_titles": [
+    "Neljän rikoksen syksy"
+   ],
+   "series_note": "jokin muu Mysteerinmurtajat -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "6607fcf9c1cb",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Mazetti, Katarina",
+   "title": "Varjoja ja vakoojia tai jokin muu Seikkailuserkut -sarjan kirja",
+   "alt_titles": [
+    "Varjoja ja vakoojia"
+   ],
+   "series_note": "jokin muu Seikkailuserkut -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "23dd06853cc0",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Peltoniemi, Sari",
+   "title": "Taivazalan joutsen tai jokin muu Avaimenkantaja -sarjan kirja",
+   "alt_titles": [
+    "Taivazalan joutsen"
+   ],
+   "series_note": "jokin muu Avaimenkantaja -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "80edbe107df7",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "",
+   "title": "Ada Gootti ja hiiren haamu tai jokin muu Ada Gootti -sarjan kirja",
+   "alt_titles": [
+    "Ada Gootti ja hiiren haamu"
+   ],
+   "series_note": "jokin muu Ada Gootti -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "d01d6c24a3a5",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Tolonen, Tuulikki",
+   "title": "Mörkövahti tai Mörköreitti",
+   "alt_titles": [
+    "Mörkövahti",
+    "Mörköreitti"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "87c3f914858b",
+   "grade_band": "3-4",
+   "category": "Jännittäviä seikkailuja ja lumottuja maailmoja",
+   "map_key": "AsiaMap",
+   "author": "Walldén, Netta",
+   "title": "Ruben ja rouva Mallamudin tapaus tai jokin muu Ruben kirja",
+   "alt_titles": [
+    "Ruben ja rouva Mallamudin tapaus"
+   ],
+   "series_note": "jokin muu Ruben kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "6be0fad15ac3",
+   "grade_band": "3-4",
+   "category": "Eläinystävämme",
+   "map_key": "SouthAmericaMap",
+   "author": "Hallberg, Lin",
+   "title": "Sinttu-sarjasta jokin kirja",
+   "alt_titles": [],
+   "series_note": "Sinttu-sarjasta jokin kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f1e47395193f",
+   "grade_band": "3-4",
+   "category": "Eläinystävämme",
+   "map_key": "SouthAmericaMap",
+   "author": "Jalo, Merja",
+   "title": "Koiratytöt- tai Jesse-sarjasta jokin kirja",
+   "alt_titles": [
+    "Koiratytöt-"
+   ],
+   "series_note": "Jesse-sarjasta jokin kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "baca578bd2e5",
+   "grade_band": "3-4",
+   "category": "Eläinystävämme",
+   "map_key": "SouthAmericaMap",
+   "author": "Lukkarila, Päivi",
+   "title": "Venlan alkeiskurssi tai jokin muu Venla-sarjan kirja",
+   "alt_titles": [
+    "Venlan alkeiskurssi"
+   ],
+   "series_note": "jokin muu Venla-sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e5e1ae55ff90",
+   "grade_band": "3-4",
+   "category": "Eläinystävämme",
+   "map_key": "SouthAmericaMap",
+   "author": "McCall Smith, A.",
+   "title": "Akimbo ja krokotiilimies tai jokin muu Akimbo-kirja",
+   "alt_titles": [
+    "Akimbo ja krokotiilimies"
+   ],
+   "series_note": "jokin muu Akimbo-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "a26a0b43c9dc",
+   "grade_band": "3-4",
+   "category": "Eläinystävämme",
+   "map_key": "SouthAmericaMap",
+   "author": "Parkkinen, Jukka",
+   "title": "Karhukirjeitä-sarjasta jokin kirja",
+   "alt_titles": [],
+   "series_note": "Karhukirjeitä-sarjasta jokin kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e63df27618d4",
+   "grade_band": "3-4",
+   "category": "Eläinystävämme",
+   "map_key": "SouthAmericaMap",
+   "author": "Parvela, Timo",
+   "title": "Maukka ja Väykkä tai jokin muu Maukka ja Väykkä -kirja",
+   "alt_titles": [
+    "Maukka ja Väykkä"
+   ],
+   "series_note": "jokin muu Maukka ja Väykkä -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f375dec94a54",
+   "grade_band": "3-4",
+   "category": "Eläinystävämme",
+   "map_key": "SouthAmericaMap",
+   "author": "Reeve, Philip",
+   "title": "Shen ja mopsit tai Oliver ja Meriperuukit",
+   "alt_titles": [
+    "Shen ja mopsit",
+    "Oliver ja Meriperuukit"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "601b8084c4c9",
+   "grade_band": "3-4",
+   "category": "Eläinystävämme",
+   "map_key": "SouthAmericaMap",
+   "author": "Salmi, Veera",
+   "title": "Puluboin ja Ponin kirja tai jokin muu Puluboi ja Poni -kirja",
+   "alt_titles": [
+    "Puluboin ja Ponin kirja"
+   ],
+   "series_note": "jokin muu Puluboi ja Poni -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "6953d455e7c2",
+   "grade_band": "3-4",
+   "category": "Eläinystävämme",
+   "map_key": "SouthAmericaMap",
+   "author": "Webb, Holly",
+   "title": "Samu, varastettu koiranpentu tai jokin muu kirjailijan kirja",
+   "alt_titles": [
+    "Samu, varastettu koiranpentu"
+   ],
+   "series_note": "jokin muu kirjailijan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "69ddf899e601",
+   "grade_band": "3-4",
+   "category": "Eläinystävämme",
+   "map_key": "SouthAmericaMap",
+   "author": "Venho, Johanna",
+   "title": "Opossumi repussa tai Opossumi ja sata tykkäystä",
+   "alt_titles": [
+    "Opossumi repussa",
+    "Opossumi ja sata tykkäystä"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f6c575fd011b",
+   "grade_band": "3-4",
+   "category": "Harrastuksen iloa",
+   "map_key": "SouthAmericaMap",
+   "author": "Henna, Helmi",
+   "title": "Nellyn uudet kuviot tai jokin muu IceLove -sarjan kirja",
+   "alt_titles": [
+    "Nellyn uudet kuviot"
+   ],
+   "series_note": "jokin muu IceLove -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "1746b3a07efd",
+   "grade_band": "3-4",
+   "category": "Harrastuksen iloa",
+   "map_key": "SouthAmericaMap",
+   "author": "Hulkko, Johanna",
+   "title": "Geoetsivät ja rahakäärön arvoitus tai jokin muu Geoetsivät kirja",
+   "alt_titles": [
+    "Geoetsivät ja rahakäärön arvoitus"
+   ],
+   "series_note": "jokin muu Geoetsivät kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8d9dfd5a8dd9",
+   "grade_band": "3-4",
+   "category": "Harrastuksen iloa",
+   "map_key": "SouthAmericaMap",
+   "author": "Kanto, Anneli",
+   "title": "Futistyttö -sarjasta jokin kirja",
+   "alt_titles": [],
+   "series_note": "Futistyttö -sarjasta jokin kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f1165b3101b4",
+   "grade_band": "3-4",
+   "category": "Harrastuksen iloa",
+   "map_key": "SouthAmericaMap",
+   "author": "Lehtinen, Tuija",
+   "title": "Karting team Vintiöt -sarjasta jokin kirja",
+   "alt_titles": [],
+   "series_note": "Karting team Vintiöt -sarjasta jokin kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8a03e4bc12ca",
+   "grade_band": "3-4",
+   "category": "Harrastuksen iloa",
+   "map_key": "SouthAmericaMap",
+   "author": "Ljunggren, Magnus",
+   "title": "Kaikki pelaa tai jokin muu Futaajat -sarjan kirja",
+   "alt_titles": [
+    "Kaikki pelaa"
+   ],
+   "series_note": "jokin muu Futaajat -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "a181eab2e7f8",
+   "grade_band": "3-4",
+   "category": "Harrastuksen iloa",
+   "map_key": "SouthAmericaMap",
+   "author": "Mark, W. C.",
+   "title": "Hattutemppu tai Ketjunvaihto tai Läpiajo",
+   "alt_titles": [
+    "Hattutemppu",
+    "Ketjunvaihto",
+    "Läpiajo"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "bed590b93d93",
+   "grade_band": "3-4",
+   "category": "Harrastuksen iloa",
+   "map_key": "SouthAmericaMap",
+   "author": "Niskanen, Kirsi-Marja",
+   "title": "Lätkäjätkiä",
+   "alt_titles": [
+    "Lätkäjätkiä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "39e23ff3c25c",
+   "grade_band": "3-4",
+   "category": "Harrastuksen iloa",
+   "map_key": "SouthAmericaMap",
+   "author": "Veirto, Kalle",
+   "title": "Jyrsijöiden haaste tai jokin muu Sählymestarit -sarjan kirja",
+   "alt_titles": [
+    "Jyrsijöiden haaste"
+   ],
+   "series_note": "jokin muu Sählymestarit -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f5f3c6a7c7ca",
+   "grade_band": "3-4",
+   "category": "Iloinen lipas – runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Dahl, Roald",
+   "title": "Elukat",
+   "alt_titles": [
+    "Elukat"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "dbb411d979d0",
+   "grade_band": "3-4",
+   "category": "Iloinen lipas – runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Itkonen, Jukka",
+   "title": "Taikuri Into Kiemura tai Kaupunkiretki tai Tukaani puussa",
+   "alt_titles": [
+    "Taikuri Into Kiemura",
+    "Kaupunkiretki",
+    "Tukaani puussa"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "cfa60c66addf",
+   "grade_band": "3-4",
+   "category": "Iloinen lipas – runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Kunnas, Kirsi",
+   "title": "Tapahtui Tiitiäisen maassa",
+   "alt_titles": [
+    "Tapahtui Tiitiäisen maassa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b0b9efc87f88",
+   "grade_band": "3-4",
+   "category": "Iloinen lipas – runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Laukkanen, Jukka",
+   "title": "Ajan Hukkaa, sanoi susikuski",
+   "alt_titles": [
+    "Ajan Hukkaa, sanoi susikuski"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "02de80037ce0",
+   "grade_band": "3-4",
+   "category": "Iloinen lipas – runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Ollikainen, Aki",
+   "title": "Merirosvo Morgan ja Matruusi Hulkkonen",
+   "alt_titles": [
+    "Merirosvo Morgan ja Matruusi Hulkkonen"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "44db3e0bf152",
+   "grade_band": "3-4",
+   "category": "Iloinen lipas – runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Ruhonen, Laura",
+   "title": "Yökyöpelit tai Tippukivitapaus",
+   "alt_titles": [
+    "Yökyöpelit",
+    "Tippukivitapaus"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ed92f7ef16ea",
+   "grade_band": "3-4",
+   "category": "Iloinen lipas – runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Sinervo, Helena",
+   "title": "Akuvatus ja muita härveleitä & otuksia",
+   "alt_titles": [
+    "Akuvatus ja muita härveleitä & otuksia"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "797aab3f9da4",
+   "grade_band": "3-4",
+   "category": "Iloinen lipas – runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "Vento-Makkonen, Sari",
+   "title": "Puhvelilettu",
+   "alt_titles": [
+    "Puhvelilettu"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "1e73e01460e1",
+   "grade_band": "3-4",
+   "category": "Iloinen lipas – runoja ja loruja",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Värssyveturi",
+   "alt_titles": [
+    "Värssyveturi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "01c14857a8aa",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Cap, Henri",
+   "title": "Arvaa kenen luut",
+   "alt_titles": [
+    "Arvaa kenen luut"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d95f6e712d06",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Frith, Alex",
+   "title": "100 asiaa jotka haluat tietää tai jokin muu 100 asiaa -kirja",
+   "alt_titles": [
+    "100 asiaa jotka haluat tietää"
+   ],
+   "series_note": "jokin muu 100 asiaa -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c6ecb551ac1b",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Havukainen, Aino",
+   "title": "Tatu ja Patu pihalla",
+   "alt_titles": [
+    "Tatu ja Patu pihalla"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d5524830e69a",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Helgestad, Asgeir",
+   "title": "Metsän eläimiä tai Metsän lintuja",
+   "alt_titles": [
+    "Metsän eläimiä",
+    "Metsän lintuja"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "d82582a06d47",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Kunnas, Mauri",
+   "title": "Koiramäen Suomen historia",
+   "alt_titles": [
+    "Koiramäen Suomen historia"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "71e15b2da4a8",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Lappalainen, Elina",
+   "title": "Nyt pelittää!: miten pelejä tehdään?",
+   "alt_titles": [
+    "Nyt pelittää!: miten pelejä tehdään?"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "8eb73e4f13dd",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Lehtinen, Silva",
+   "title": "Mikä kukka? Lasten oma kasvikirja",
+   "alt_titles": [
+    "Mikä kukka? Lasten oma kasvikirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "83c1b7a792e1",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Lintunen, Martti",
+   "title": "Savannin sankarit",
+   "alt_titles": [
+    "Savannin sankarit"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "68df5bd14886",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Mäki-Kihniä, Nina",
+   "title": "Pikkulemmikit: omistajan opas",
+   "alt_titles": [
+    "Pikkulemmikit: omistajan opas"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "76db66fb2197",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Noronen, Paula",
+   "title": "Supermarsun rohkeuskirja",
+   "alt_titles": [
+    "Supermarsun rohkeuskirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "82ecd833f014",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Oster, Grigori",
+   "title": "Mieletön matikka",
+   "alt_titles": [
+    "Mieletön matikka"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "8b5bf2c665df",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Paajala, Heidi",
+   "title": "Pienten kokkien keittokirja",
+   "alt_titles": [
+    "Pienten kokkien keittokirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "c0bb3d6ec633",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Tagholm, Sally",
+   "title": "Ötököiden salaisuudet",
+   "alt_titles": [
+    "Ötököiden salaisuudet"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "4dc6d5938342",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "",
+   "title": "Avaruus tai jokin muu Katse tietoon -sarjan tietokirja",
+   "alt_titles": [
+    "Avaruus"
+   ],
+   "series_note": "jokin muu Katse tietoon -sarjan tietokirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f424adfc2b0f",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "",
+   "title": "Kysymysten kirja… dinosaurukset tai jokin muu 50 kysymystä ja vastausta -tietokirja",
+   "alt_titles": [
+    "Kysymysten kirja… dinosaurukset"
+   ],
+   "series_note": "jokin muu 50 kysymystä ja vastausta -tietokirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8fa69c5c14ef",
+   "grade_band": "3-4",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "",
+   "title": "Me kaikki synnymme vapaina",
+   "alt_titles": [
+    "Me kaikki synnymme vapaina"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "846da17e3e45",
+   "grade_band": "5-6",
+   "category": "Eläimiä tarinoissa",
+   "map_key": "SouthAmericaMap",
+   "author": "Brezina, Thomas",
+   "title": "Seitsemän tassua ja Penny -sarja",
+   "alt_titles": [],
+   "series_note": "Seitsemän tassua ja Penny -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "d5bb317715a1",
+   "grade_band": "5-6",
+   "category": "Eläimiä tarinoissa",
+   "map_key": "SouthAmericaMap",
+   "author": "Daniels, Lucy",
+   "title": "Eläinten arkki -sarja",
+   "alt_titles": [],
+   "series_note": "Eläinten arkki -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "1d0d4988a7c1",
+   "grade_band": "5-6",
+   "category": "Eläimiä tarinoissa",
+   "map_key": "SouthAmericaMap",
+   "author": "Heimonen, Satu",
+   "title": "Suokaislan suloinen Cecilia tai jokin muu Cecilia -sarjan kirja",
+   "alt_titles": [
+    "Suokaislan suloinen Cecilia"
+   ],
+   "series_note": "jokin muu Cecilia -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "59352d4d5e46",
+   "grade_band": "5-6",
+   "category": "Eläimiä tarinoissa",
+   "map_key": "SouthAmericaMap",
+   "author": "Hunter, Erine",
+   "title": "Etsijät -sarja tai Selviytyjät -sarja tai Soturikissat -sarja",
+   "alt_titles": [],
+   "series_note": "Etsijät -sarja / Selviytyjät -sarja / Soturikissat -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f8fec99f93d1",
+   "grade_band": "5-6",
+   "category": "Eläimiä tarinoissa",
+   "map_key": "SouthAmericaMap",
+   "author": "Kurvinen, Jorma",
+   "title": "Susikoira Roi -sarja",
+   "alt_titles": [],
+   "series_note": "Susikoira Roi -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "53408882a18c",
+   "grade_band": "5-6",
+   "category": "Eläimiä tarinoissa",
+   "map_key": "SouthAmericaMap",
+   "author": "Lukkarila, Päivi",
+   "title": "Ihana Panda tai jokin muu Jasmiina -sarjan kirja",
+   "alt_titles": [
+    "Ihana Panda"
+   ],
+   "series_note": "jokin muu Jasmiina -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e4df3a130f16",
+   "grade_band": "5-6",
+   "category": "Eläimiä tarinoissa",
+   "map_key": "SouthAmericaMap",
+   "author": "Meripaasi, Helena",
+   "title": "Kuriton koiranpentu tai jokin muu Tassu-trio -sarjan kirja",
+   "alt_titles": [
+    "Kuriton koiranpentu"
+   ],
+   "series_note": "jokin muu Tassu-trio -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "1a62190e6c32",
+   "grade_band": "5-6",
+   "category": "Eläimiä tarinoissa",
+   "map_key": "SouthAmericaMap",
+   "author": "Ojala, Anu",
+   "title": "Aino – neljän tuulen tyttö tai jokin muu Aino-kirja",
+   "alt_titles": [
+    "Aino – neljän tuulen tyttö"
+   ],
+   "series_note": "jokin muu Aino-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "eba1486e2d14",
+   "grade_band": "5-6",
+   "category": "Eläimiä tarinoissa",
+   "map_key": "SouthAmericaMap",
+   "author": "Romppainen, Päivi",
+   "title": "Vilman koiraklubi -sarja",
+   "alt_titles": [],
+   "series_note": "Vilman koiraklubi -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "2b3fa1e16dfe",
+   "grade_band": "5-6",
+   "category": "Eläimiä tarinoissa",
+   "map_key": "SouthAmericaMap",
+   "author": "Saarinen, Virpi",
+   "title": "Sudenkesyttäjä tai Hämäränkoira",
+   "alt_titles": [
+    "Sudenkesyttäjä",
+    "Hämäränkoira"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "be525b217155",
+   "grade_band": "5-6",
+   "category": "Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Aho, Elisabet",
+   "title": "Salibandypantterit",
+   "alt_titles": [
+    "Salibandypantterit"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "5d8a829269dd",
+   "grade_band": "5-6",
+   "category": "Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Hagmar, Pia",
+   "title": "Klara ja unelmien hevonen tai jokin muu Klara -kirja",
+   "alt_titles": [
+    "Klara ja unelmien hevonen"
+   ],
+   "series_note": "jokin muu Klara -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8fb872a7b1b8",
+   "grade_band": "5-6",
+   "category": "Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Heinonen, Henna",
+   "title": "Miisa voittaa kultaa tai jokin muu Miisa -sarjan kirja",
+   "alt_titles": [
+    "Miisa voittaa kultaa"
+   ],
+   "series_note": "jokin muu Miisa -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "4ecdfe2ac1ad",
+   "grade_band": "5-6",
+   "category": "Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Lehtinen, Tuija",
+   "title": "Futiskesä tai Futistähtiä tai Futiskuvioita tai Futismestarit",
+   "alt_titles": [
+    "Futiskesä",
+    "Futistähtiä",
+    "Futiskuvioita",
+    "Futismestarit"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "4ef63e3e4617",
+   "grade_band": "5-6",
+   "category": "Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Nordström, Gunnar",
+   "title": "Kiekkotähti -sarja",
+   "alt_titles": [],
+   "series_note": "Kiekkotähti -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c2596d8653ad",
+   "grade_band": "5-6",
+   "category": "Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Pehkonen, Kirsi",
+   "title": "Aloituskiekko tai Punaviiva tai Vieraskentillä tai Ketjukaverit tai Voittolaukaus",
+   "alt_titles": [
+    "Aloituskiekko",
+    "Punaviiva",
+    "Vieraskentillä",
+    "Ketjukaverit",
+    "Voittolaukaus"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c9c7eb0aa42f",
+   "grade_band": "5-6",
+   "category": "Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Puikkonen, Arja",
+   "title": "Minä ja Mozart tai Zum Zum",
+   "alt_titles": [
+    "Minä ja Mozart",
+    "Zum Zum"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "20d818754988",
+   "grade_band": "5-6",
+   "category": "Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Romppainen, Katariina",
+   "title": "Salainen sähkökitara tai Sääskentapporock",
+   "alt_titles": [
+    "Salainen sähkökitara",
+    "Sääskentapporock"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8997f3d4f19a",
+   "grade_band": "5-6",
+   "category": "Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Tanskanen, Tiina",
+   "title": "Talttumaton Talismaani tai jokin muu Iitu-kirja",
+   "alt_titles": [
+    "Talttumaton Talismaani"
+   ],
+   "series_note": "jokin muu Iitu-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "237409b7071f",
+   "grade_band": "5-6",
+   "category": "Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Veirto, Kalle",
+   "title": "Kyläkaukalon lupaus tai jokin muu Tähtikeiju -sarjan kirja",
+   "alt_titles": [
+    "Kyläkaukalon lupaus"
+   ],
+   "series_note": "jokin muu Tähtikeiju -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "470216228b5e",
+   "grade_band": "5-6",
+   "category": "Eilispäivää",
+   "map_key": "OceaniaMap",
+   "author": "Amnell, Anna",
+   "title": "Kyynärän mittainen tyttö",
+   "alt_titles": [
+    "Kyynärän mittainen tyttö"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "4df847f0cf6a",
+   "grade_band": "5-6",
+   "category": "Eilispäivää",
+   "map_key": "OceaniaMap",
+   "author": "Bagge, Tapani",
+   "title": "Aavehevosen arvoitus tai jokin muu Apassit -sarjan kirja",
+   "alt_titles": [
+    "Aavehevosen arvoitus"
+   ],
+   "series_note": "jokin muu Apassit -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "401cb3ee7367",
+   "grade_band": "5-6",
+   "category": "Eilispäivää",
+   "map_key": "OceaniaMap",
+   "author": "Dieckmann, Maijaliisa",
+   "title": "Kerjäläistyttö ja sissipäällikkö",
+   "alt_titles": [
+    "Kerjäläistyttö ja sissipäällikkö"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "183fb8514222",
+   "grade_band": "5-6",
+   "category": "Eilispäivää",
+   "map_key": "OceaniaMap",
+   "author": "Kallioniemi, Tuula",
+   "title": "Kulkuripoika ja tuulen tyttö",
+   "alt_titles": [
+    "Kulkuripoika ja tuulen tyttö"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "1a24b7b2ec91",
+   "grade_band": "5-6",
+   "category": "Eilispäivää",
+   "map_key": "OceaniaMap",
+   "author": "Kohonen, Laila",
+   "title": "Kumisevan kiven arvoitus tai Miehuuskoe 1917",
+   "alt_titles": [
+    "Kumisevan kiven arvoitus",
+    "Miehuuskoe 1917"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "cb8058b02801",
+   "grade_band": "5-6",
+   "category": "Eilispäivää",
+   "map_key": "OceaniaMap",
+   "author": "Koskinen, Juha-Pekka",
+   "title": "Benjamin Hawk: merirosvon oppipoika tai jokin muu Benjamin Hawk -sarjan kirja",
+   "alt_titles": [
+    "Benjamin Hawk: merirosvon oppipoika"
+   ],
+   "series_note": "jokin muu Benjamin Hawk -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "531446ca1a3b",
+   "grade_band": "5-6",
+   "category": "Eilispäivää",
+   "map_key": "OceaniaMap",
+   "author": "Lipasti, Roope",
+   "title": "Viikinkisolmu tai Thorin pöly tai Karhuriimu",
+   "alt_titles": [
+    "Viikinkisolmu",
+    "Thorin pöly",
+    "Karhuriimu"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f997685e6c3c",
+   "grade_band": "5-6",
+   "category": "Eilispäivää",
+   "map_key": "OceaniaMap",
+   "author": "Mikkanen, Raili",
+   "title": "Kahdentoista vala",
+   "alt_titles": [
+    "Kahdentoista vala"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "7518ed4a4b8c",
+   "grade_band": "5-6",
+   "category": "Eilispäivää",
+   "map_key": "OceaniaMap",
+   "author": "Pavel, Michelle",
+   "title": "Suden veli tai jokin muu Muinainen pimeys -sarjan kirja",
+   "alt_titles": [
+    "Suden veli"
+   ],
+   "series_note": "jokin muu Muinainen pimeys -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "1f4347d25b3f",
+   "grade_band": "5-6",
+   "category": "Eilispäivää",
+   "map_key": "OceaniaMap",
+   "author": "Saunders, Kate",
+   "title": "Lumottu lukukausi",
+   "alt_titles": [
+    "Lumottu lukukausi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "65d5e4998da3",
+   "grade_band": "5-6",
+   "category": "Elämää tässä ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Birchall, Katy",
+   "title": "Suosituksi yhdessä päivässä tai jokin muu It girl -sarjan kirja",
+   "alt_titles": [
+    "Suosituksi yhdessä päivässä"
+   ],
+   "series_note": "jokin muu It girl -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c708bd93bbb0",
+   "grade_band": "5-6",
+   "category": "Elämää tässä ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Cassidy, Cathy",
+   "title": "Kirsikkasydän tai jokin muu Suklaamuruset-sarjan kirja",
+   "alt_titles": [
+    "Kirsikkasydän"
+   ],
+   "series_note": "jokin muu Suklaamuruset-sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "df28ea759cc3",
+   "grade_band": "5-6",
+   "category": "Elämää tässä ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Heikkinen, Karo",
+   "title": "Sirpale",
+   "alt_titles": [
+    "Sirpale"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9374557238db",
+   "grade_band": "5-6",
+   "category": "Elämää tässä ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Kallioniemi, Tuula",
+   "title": "Kaksoisolennot",
+   "alt_titles": [
+    "Kaksoisolennot"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "062127d7ed4c",
+   "grade_band": "5-6",
+   "category": "Elämää tässä ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Kinney, Jeff",
+   "title": "Neropatin päiväkirja -sarja",
+   "alt_titles": [],
+   "series_note": "Neropatin päiväkirja -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "b6e28072770d",
+   "grade_band": "5-6",
+   "category": "Elämää tässä ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Lehtinen, Tuija",
+   "title": "Saimi ja Selma – salainen ihailija tai jokin muu Saimi ja Selma - kirja",
+   "alt_titles": [
+    "Saimi ja Selma – salainen ihailija"
+   ],
+   "series_note": "jokin muu Saimi ja Selma - kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c3d476c2bd5f",
+   "grade_band": "5-6",
+   "category": "Elämää tässä ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Marttinen, Tittamari",
+   "title": "Viivi Pusu -kirjat",
+   "alt_titles": [],
+   "series_note": "Viivi Pusu -kirjat",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f2e12f5ffdca",
+   "grade_band": "5-6",
+   "category": "Elämää tässä ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Palacio, R. J.",
+   "title": "Ihme tai Auggie ja minä",
+   "alt_titles": [
+    "Ihme",
+    "Auggie ja minä"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e0f56caf9410",
+   "grade_band": "5-6",
+   "category": "Elämää tässä ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Walliams, David",
+   "title": "Poika ja mekko tai Herra Lemu tai Maailman rikkain poika",
+   "alt_titles": [
+    "Poika ja mekko",
+    "Herra Lemu",
+    "Maailman rikkain poika"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "51aa4542f878",
+   "grade_band": "5-6",
+   "category": "Elämää tässä ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Wilson, Jacqueline",
+   "title": "Kurja juttu tai Salainen siskoni tai Yllytysleikki",
+   "alt_titles": [
+    "Kurja juttu",
+    "Salainen siskoni",
+    "Yllytysleikki"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "6c8dff8f6f0b",
+   "grade_band": "5-6",
+   "category": "Jännitystä, seikkailuja ja kummitustarinoita",
+   "map_key": "NorthAmericaMap",
+   "author": "Grey, Jacob",
+   "title": "Varismiekka tai jokin muu Ferals -sarjan kirja",
+   "alt_titles": [
+    "Varismiekka"
+   ],
+   "series_note": "jokin muu Ferals -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "48c869315a5c",
+   "grade_band": "5-6",
+   "category": "Jännitystä, seikkailuja ja kummitustarinoita",
+   "map_key": "NorthAmericaMap",
+   "author": "Kallioniemi, Tuula",
+   "title": "Pako",
+   "alt_titles": [
+    "Pako"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d6648971fed2",
+   "grade_band": "5-6",
+   "category": "Jännitystä, seikkailuja ja kummitustarinoita",
+   "map_key": "NorthAmericaMap",
+   "author": "Perttula, Pirkko-Liisa (toim.)",
+   "title": "Vampyyrin vapaailta ja 69 muuta karmivaa tarinaa",
+   "alt_titles": [
+    "Vampyyrin vapaailta ja 69 muuta karmivaa tarinaa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b28c1e42439a",
+   "grade_band": "5-6",
+   "category": "Jännitystä, seikkailuja ja kummitustarinoita",
+   "map_key": "NorthAmericaMap",
+   "author": "Shan, Darren",
+   "title": "Darren Shanin tarina -sarja",
+   "alt_titles": [],
+   "series_note": "Darren Shanin tarina -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "24bdf869ac03",
+   "grade_band": "5-6",
+   "category": "Jännitystä, seikkailuja ja kummitustarinoita",
+   "map_key": "NorthAmericaMap",
+   "author": "Sten, Camilla",
+   "title": "Syvyyksissä tai jokin muu Syvät vedet -sarjan kirja",
+   "alt_titles": [
+    "Syvyyksissä"
+   ],
+   "series_note": "jokin muu Syvät vedet -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "d77d5414ba73",
+   "grade_band": "5-6",
+   "category": "Jännitystä, seikkailuja ja kummitustarinoita",
+   "map_key": "NorthAmericaMap",
+   "author": "Stine, R.L",
+   "title": "Goosebumps-sarja tai Kauhumaa-sarja tai Nightmare room –sarja",
+   "alt_titles": [],
+   "series_note": "Goosebumps-sarja / Kauhumaa-sarja / Nightmare room –sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "53d72cfeb97a",
+   "grade_band": "5-6",
+   "category": "Jännitystä, seikkailuja ja kummitustarinoita",
+   "map_key": "NorthAmericaMap",
+   "author": "Swindells, Robert",
+   "title": "Huone 13",
+   "alt_titles": [
+    "Huone 13"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "0ad6481fd83e",
+   "grade_band": "5-6",
+   "category": "Jännitystä, seikkailuja ja kummitustarinoita",
+   "map_key": "NorthAmericaMap",
+   "author": "Trenter, Laura",
+   "title": "Prätkäjengi -sarja",
+   "alt_titles": [],
+   "series_note": "Prätkäjengi -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "204cf4fd3416",
+   "grade_band": "5-6",
+   "category": "Jännitystä, seikkailuja ja kummitustarinoita",
+   "map_key": "NorthAmericaMap",
+   "author": "Wolfe, Sean Fay",
+   "title": "Elementia kronikat. Kirja 1, Oikeuden voitto tai jokin muu Minecraft seikkailu -sarjan kirja",
+   "alt_titles": [
+    "Elementia kronikat. Kirja 1, Oikeuden voitto"
+   ],
+   "series_note": "jokin muu Minecraft seikkailu -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f635e6aa1796",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Black, Holly",
+   "title": "Rautakoe tai jokin muu Magisterium -sarjan kirja",
+   "alt_titles": [
+    "Rautakoe"
+   ],
+   "series_note": "jokin muu Magisterium -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "7e4c193e3d64",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Colfer, Eoin",
+   "title": "Artemis Fowl -sarja",
+   "alt_titles": [],
+   "series_note": "Artemis Fowl -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "eac99a48f9f7",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Collins, Suzanne",
+   "title": "Ylismaan Gregor tai jokin muu Alismaan tarinat -sarjan kirja",
+   "alt_titles": [
+    "Ylismaan Gregor"
+   ],
+   "series_note": "jokin muu Alismaan tarinat -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "acae98d055c2",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Ellila, Kirsti",
+   "title": "Eksyneet näkevät unia",
+   "alt_titles": [
+    "Eksyneet näkevät unia"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "cc02f5ec0a4c",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Hai, Magdalena",
+   "title": "Kerjäläisprinsessa tai Kellopelikuningas tai Susikuningatar",
+   "alt_titles": [
+    "Kerjäläisprinsessa",
+    "Kellopelikuningas",
+    "Susikuningatar"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "30ff96d26cbc",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Kress, Adrienne",
+   "title": "Kätketty ovi tai jokin muu Löytöretkeilijät -sarjan kirja",
+   "alt_titles": [
+    "Kätketty ovi"
+   ],
+   "series_note": "jokin muu Löytöretkeilijät -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ee69ab58375d",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Kontio, Tomi",
+   "title": "Keväällä isä sai siivet tai jokin muu Austraasia-sarjan kirja",
+   "alt_titles": [
+    "Keväällä isä sai siivet"
+   ],
+   "series_note": "jokin muu Austraasia-sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "d24ee8b36046",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Ohtonen, Kimmo",
+   "title": "Ikimaa: soturin tie tai jokin muu Ikimaa -sarjan kirja",
+   "alt_titles": [
+    "Ikimaa: soturin tie"
+   ],
+   "series_note": "jokin muu Ikimaa -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "3316b6ea68f7",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Parvela, Timo",
+   "title": "Kepler62. Kirja yksi, Kutsu tai jokin muu Kepler 62 -kirja",
+   "alt_titles": [
+    "Kepler62. Kirja yksi, Kutsu"
+   ],
+   "series_note": "jokin muu Kepler 62 -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e4a091fa2a51",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Riordan, Rick",
+   "title": "Salamavaras tai jokin muu Percy Jackson -kirja",
+   "alt_titles": [
+    "Salamavaras"
+   ],
+   "series_note": "jokin muu Percy Jackson -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "da806e51cd40",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Rowling, J.K.",
+   "title": "Harry Potter -kirjat",
+   "alt_titles": [],
+   "series_note": "Harry Potter -kirjat",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "0a278b264537",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Stephens, John",
+   "title": "Smaragdiatlas tai Tulikronikka tai Kohtalon kirja",
+   "alt_titles": [
+    "Smaragdiatlas",
+    "Tulikronikka",
+    "Kohtalon kirja"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f896bc46754c",
+   "grade_band": "5-6",
+   "category": "Fantasiaa ja scifiä",
+   "map_key": "AsiaMap",
+   "author": "Townsend, Jessica",
+   "title": "Morriganin koetukset tai jokin muu Nevermoor -sarjan kirja",
+   "alt_titles": [
+    "Morriganin koetukset"
+   ],
+   "series_note": "jokin muu Nevermoor -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "d8444065a20d",
+   "grade_band": "5-6",
+   "category": "Pegasuksen siivillä - runoja",
+   "map_key": "ArcticMap",
+   "author": "Aho, Tuulia",
+   "title": "Tähtienlaskijan runoja",
+   "alt_titles": [
+    "Tähtienlaskijan runoja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "83a8b6da03d5",
+   "grade_band": "5-6",
+   "category": "Pegasuksen siivillä - runoja",
+   "map_key": "ArcticMap",
+   "author": "Dahl, Robert",
+   "title": "Tautisia tarinoita",
+   "alt_titles": [
+    "Tautisia tarinoita"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "cb23cf886cd5",
+   "grade_band": "5-6",
+   "category": "Pegasuksen siivillä - runoja",
+   "map_key": "ArcticMap",
+   "author": "Itkonen, Jukka",
+   "title": "Laulavat lenkkitossut",
+   "alt_titles": [
+    "Laulavat lenkkitossut"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "873ae9ea3b2f",
+   "grade_band": "5-6",
+   "category": "Pegasuksen siivillä - runoja",
+   "map_key": "ArcticMap",
+   "author": "Korolainen, Tuula",
+   "title": "Mikä onni 6 B",
+   "alt_titles": [
+    "Mikä onni 6 B"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "38e613c56472",
+   "grade_band": "5-6",
+   "category": "Pegasuksen siivillä - runoja",
+   "map_key": "ArcticMap",
+   "author": "Laaksonen, Heli",
+   "title": "Aapine tai Ykköne",
+   "alt_titles": [
+    "Aapine",
+    "Ykköne"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ce994168a2ef",
+   "grade_band": "5-6",
+   "category": "Pegasuksen siivillä - runoja",
+   "map_key": "ArcticMap",
+   "author": "Kunnas, Kirsi",
+   "title": "Sirkusjuttuja",
+   "alt_titles": [
+    "Sirkusjuttuja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "42d857b9f4ff",
+   "grade_band": "5-6",
+   "category": "Pegasuksen siivillä - runoja",
+   "map_key": "ArcticMap",
+   "author": "Marttinen, Tittamari",
+   "title": "Tivoli Tähtisade",
+   "alt_titles": [
+    "Tivoli Tähtisade"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ec89e8d49c7f",
+   "grade_band": "5-6",
+   "category": "Pegasuksen siivillä - runoja",
+   "map_key": "ArcticMap",
+   "author": "Nuotio, Eppu",
+   "title": "Ollaan ananas ja kookos",
+   "alt_titles": [
+    "Ollaan ananas ja kookos"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "8a2e7a1fa9ab",
+   "grade_band": "5-6",
+   "category": "Pegasuksen siivillä - runoja",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Leijona se venytteli: 100 vuotta suomalaista lastenrunoutta",
+   "alt_titles": [
+    "Leijona se venytteli: 100 vuotta suomalaista lastenrunoutta"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9a30614062b4",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Adams, Richard",
+   "title": "Ruohometsän kansa",
+   "alt_titles": [
+    "Ruohometsän kansa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b0fcad912440",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Burroughs, Edgar Rice",
+   "title": "Tarzan-kirjat tai Marsin sankarit tai jokin muu John Carter –kirja",
+   "alt_titles": [
+    "Marsin sankarit"
+   ],
+   "series_note": "Tarzan-kirjat / jokin muu John Carter –kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "04e50f4e396e",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Defoe, Daniel",
+   "title": "Robinson Crusoe",
+   "alt_titles": [
+    "Robinson Crusoe"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "573a1eb63ee6",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Finnemore, John",
+   "title": "Robin Hood",
+   "alt_titles": [
+    "Robin Hood"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "e14b6751bead",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "",
+   "title": "Muumipeikko ja pyrstötähti tai jokin muu Muumi-kirja",
+   "alt_titles": [
+    "Muumipeikko ja pyrstötähti"
+   ],
+   "series_note": "jokin muu Muumi-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "4f00c75b5de4",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Kipling, Rudyard",
+   "title": "Viidakkokirjat",
+   "alt_titles": [
+    "Viidakkokirjat"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "8738d9e7ccd2",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Lindgren, Astrid",
+   "title": "Veljeni Leijonamieli tai Mio, poikani Mio",
+   "alt_titles": [
+    "Veljeni Leijonamieli",
+    "Mio, poikani Mio"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8ea86be9080c",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Montgomery, Lucy",
+   "title": "Annan nuoruusvuodet tai jokin muu Anna-kirja",
+   "alt_titles": [
+    "Annan nuoruusvuodet"
+   ],
+   "series_note": "jokin muu Anna-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "0b21fa971424",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Saint-Exupery, A. de",
+   "title": "Pikku Prinssi",
+   "alt_titles": [
+    "Pikku Prinssi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "eda177ba4be9",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Stevenson, Robert Louis",
+   "title": "Aarresaari",
+   "alt_titles": [
+    "Aarresaari"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "c75554f276cf",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Swan, Anni",
+   "title": "Tottisalmen perillinen tai jokin muu kirjailijan Kootut kertomukset - kirja",
+   "alt_titles": [
+    "Tottisalmen perillinen"
+   ],
+   "series_note": "jokin muu kirjailijan Kootut kertomukset - kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "471f0c82962a",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Verne, Jules",
+   "title": "Kapteeni Grantin lapset tai jokin muu kirjailijan kirja",
+   "alt_titles": [
+    "Kapteeni Grantin lapset"
+   ],
+   "series_note": "jokin muu kirjailijan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "5b1504d518ae",
+   "grade_band": "5-6",
+   "category": "Klassikkotarinoita",
+   "map_key": "EuropeMap",
+   "author": "Virtanen, Rauha S.",
+   "title": "Seljan tytöt tai jokin muu Selja-sarjan kirja",
+   "alt_titles": [
+    "Seljan tytöt"
+   ],
+   "series_note": "jokin muu Selja-sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "3d0f4498b5cc",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Brooks, Ben",
+   "title": "Rohkeiden poikien kirja: tositarinoita hämmästyttävistä pojista, jotka muuttivat maailmaa",
+   "alt_titles": [
+    "Rohkeiden poikien kirja: tositarinoita hämmästyttävistä pojista, jotka muuttivat maailmaa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "14038f4bb12f",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Back, Roni",
+   "title": "Tubettajan käsikirja",
+   "alt_titles": [
+    "Tubettajan käsikirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "89416fc96a54",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Ertimo, Laura",
+   "title": "Yö tai Vesi",
+   "alt_titles": [
+    "Yö",
+    "Vesi"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e9ed08a00666",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Favilli, Elena",
+   "title": "Iltasatuja kapinallisille tytöille: 100 tarinaa ihmeellisistä naisista",
+   "alt_titles": [
+    "Iltasatuja kapinallisille tytöille: 100 tarinaa ihmeellisistä naisista"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9f07f7b24d0f",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Hotakainen, Markus",
+   "title": "Opas avaruuslennolle tai Opas aurinkokuntaan",
+   "alt_titles": [
+    "Opas avaruuslennolle",
+    "Opas aurinkokuntaan"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "94c0b4a52f78",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Kristiansson, Mattias",
+   "title": "Vegeä aamusta iltaan",
+   "alt_titles": [
+    "Vegeä aamusta iltaan"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "77c868943f1b",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Kuisma, Juha",
+   "title": "Suomen lasten historia",
+   "alt_titles": [
+    "Suomen lasten historia"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9f45e2e20b31",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Laine, Lasse",
+   "title": "Suomen lasten luontokirja",
+   "alt_titles": [
+    "Suomen lasten luontokirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "3b74a8f057ec",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Manninen, Kirsti",
+   "title": "Suomen lasten Suomi",
+   "alt_titles": [
+    "Suomen lasten Suomi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b3d9851d67a0",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Palanterä, Jaana",
+   "title": "Urheilu -sarjan kirja",
+   "alt_titles": [],
+   "series_note": "Urheilu -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e8284814e269",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Pääskysaari, Jenni",
+   "title": "Poika, sinä olet tai Tyttö, sinä olet",
+   "alt_titles": [
+    "Poika, sinä olet",
+    "Tyttö, sinä olet"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "4e85f8209c96",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Rönkä, Otto",
+   "title": "E-urheilun käsikirja",
+   "alt_titles": [
+    "E-urheilun käsikirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "3623c52f99b4",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Wainewirght, Max",
+   "title": "Hei me koodataan pelejä",
+   "alt_titles": [
+    "Hei me koodataan pelejä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "8f377cbbd360",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Winston, Robert",
+   "title": "Kiireestä kantapäähän: ihmeellinen ihminen",
+   "alt_titles": [
+    "Kiireestä kantapäähän: ihmeellinen ihminen"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "98f5d8173f6d",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "Vorderman, Carol",
+   "title": "Koululaisen ohjelmointikirja",
+   "alt_titles": [
+    "Koululaisen ohjelmointikirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "5f838db49e8f",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "",
+   "title": "Bändin käsikirja",
+   "alt_titles": [
+    "Bändin käsikirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "7e478b898f89",
+   "grade_band": "5-6",
+   "category": "Tietoa ja taitoa",
+   "map_key": "AntarcticaMap",
+   "author": "",
+   "title": "Sankaritarinoita tytöille",
+   "alt_titles": [
+    "Sankaritarinoita tytöille"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "df1e3de8433c",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Almond, David",
+   "title": "Nimeni on Skellig",
+   "alt_titles": [
+    "Nimeni on Skellig"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "86ae1b2c5c2b",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Bujor, Flavia",
+   "title": "Ennuskivien mahti",
+   "alt_titles": [
+    "Ennuskivien mahti"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "fcc9b9525ced",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Cast, P. C.",
+   "title": "Merkitty tai jokin muu Yön talo -sarjan kirja",
+   "alt_titles": [
+    "Merkitty"
+   ],
+   "series_note": "jokin muu Yön talo -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "6fd365b65ddb",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Christie, Agatha",
+   "title": "Idän pikajunan arvoitus tai Kissa kyyhkyslakassa",
+   "alt_titles": [
+    "Idän pikajunan arvoitus",
+    "Kissa kyyhkyslakassa"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "00a6ca25d670",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Cooper, Susan",
+   "title": "Yllä meren, alla kiven",
+   "alt_titles": [
+    "Yllä meren, alla kiven"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "f59c2e948cc5",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Doyle, Arthur Conan",
+   "title": "Baskervillen koira",
+   "alt_titles": [
+    "Baskervillen koira"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "73c0892ad2aa",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Ende, Michael",
+   "title": "Tarina vailla loppua tai Momo",
+   "alt_titles": [
+    "Tarina vailla loppua",
+    "Momo"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "728d1445b65c",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Harrison, Michelle",
+   "title": "13 lahjaa tai 13 kirousta tai 13 salaisuutta",
+   "alt_titles": [
+    "13 lahjaa",
+    "13 kirousta",
+    "13 salaisuutta"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "52dc56c9465c",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Horowitz, Anthony",
+   "title": "Alex Rider ja Stormbreaker tai jokin muu Alex Rider -kirja",
+   "alt_titles": [
+    "Alex Rider ja Stormbreaker"
+   ],
+   "series_note": "jokin muu Alex Rider -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "9d3816281311",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Kaaberbøl, Lene",
+   "title": "Hopeahevonen tai jokin muu Katrionan tarina -sarjan kirja",
+   "alt_titles": [
+    "Hopeahevonen"
+   ],
+   "series_note": "jokin muu Katrionan tarina -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "2db8fe6dbedf",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Landy, Derek",
+   "title": "Keplo Leutokalma -sarja",
+   "alt_titles": [],
+   "series_note": "Keplo Leutokalma -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f12cc586bac2",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Meyer, Stephenie",
+   "title": "Houkutus tai Uusikuu tai Epäilys tai Aamunkoi",
+   "alt_titles": [
+    "Houkutus",
+    "Uusikuu",
+    "Epäilys",
+    "Aamunkoi"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "28ad41ab04a9",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Ness, Patrick",
+   "title": "Hirviön kutsu",
+   "alt_titles": [
+    "Hirviön kutsu"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "970a9f5b8d91",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Ojanen, Soila",
+   "title": "Petos paketissa",
+   "alt_titles": [
+    "Petos paketissa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d44d61316b6b",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Parvela, Timo",
+   "title": "Tuliterä tai jokin muu Sammon vartijat -sarjan kirja",
+   "alt_titles": [
+    "Tuliterä"
+   ],
+   "series_note": "jokin muu Sammon vartijat -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8f81308428b6",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Peltoniemi, Sari",
+   "title": "Kuulen kutsun metsänpeittoon tai Haltijan poika",
+   "alt_titles": [
+    "Kuulen kutsun metsänpeittoon",
+    "Haltijan poika"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "d062340a1c17",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Sedgwick, Marcus",
+   "title": "Miekkani laulaa",
+   "alt_titles": [
+    "Miekkani laulaa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "384a4da94952",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Simukka, Salla",
+   "title": "Jäljellä tai Toisaalla",
+   "alt_titles": [
+    "Jäljellä",
+    "Toisaalla"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "9e8e34b0eb07",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Stiefvater, Maggie",
+   "title": "Väristys tai Häivähdys tai Ikuisuus",
+   "alt_titles": [
+    "Väristys",
+    "Häivähdys",
+    "Ikuisuus"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "37641bd75745",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Turtschaninoff, Maria",
+   "title": "Maresi – Punaisen luostarin kronikoita",
+   "alt_titles": [
+    "Maresi – Punaisen luostarin kronikoita"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b201b4b3ecb1",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Tolkien, J. R. R",
+   "title": "Hobitti eli sinne ja takaisin",
+   "alt_titles": [
+    "Hobitti eli sinne ja takaisin"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "db94579ee661",
+   "grade_band": "7",
+   "category": "1. Fantasiaa ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Wahl, Mats",
+   "title": "Näkymätön tai Lumi peittää jäljet",
+   "alt_titles": [
+    "Näkymätön",
+    "Lumi peittää jäljet"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "4d80ee75393a",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Almond, David",
+   "title": "Taivassilmä tai Tiikerisydän",
+   "alt_titles": [
+    "Taivassilmä",
+    "Tiikerisydän"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "73559a14f73b",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "",
+   "title": "Bagge & Hämäläinen Karu kuukausi tai Juhannusblues",
+   "alt_titles": [
+    "Bagge & Hämäläinen Karu kuukausi",
+    "Juhannusblues"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ea2ebdf33a92",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Gaarder, Jostein",
+   "title": "Appelsiinityttö",
+   "alt_titles": [
+    "Appelsiinityttö"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "fdb0f4619aff",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Haddon, Mark",
+   "title": "Yöllisen koiran merkillinen tapaus",
+   "alt_titles": [
+    "Yöllisen koiran merkillinen tapaus"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "cdd07def3d97",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Kallioniemi, Tuula",
+   "title": "Risteys",
+   "alt_titles": [
+    "Risteys"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "267df1f7d3eb",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Lehtinen, Tuija",
+   "title": "Mopo",
+   "alt_titles": [
+    "Mopo"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "222cf1666476",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Lehtinen, Tuija",
+   "title": "Rebekka ja kesäprinssi tai jokin muu Rebekka-kirja",
+   "alt_titles": [
+    "Rebekka ja kesäprinssi"
+   ],
+   "series_note": "jokin muu Rebekka-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "571b8c5c8dc1",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Mankell, Henning",
+   "title": "Tulen salaisuus tai Tulen arvoitus tai Tulen raivo",
+   "alt_titles": [
+    "Tulen salaisuus",
+    "Tulen arvoitus",
+    "Tulen raivo"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "112796860f38",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Paretskoi, Jyri",
+   "title": "Shell´s Angles tai jokin muu Shell´s Angles -sarjan kirja",
+   "alt_titles": [
+    "Shell´s Angles"
+   ],
+   "series_note": "jokin muu Shell´s Angles -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "0fd3de75d956",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Romppainen, Katariina",
+   "title": "Sori vaan, se on totuus",
+   "alt_titles": [
+    "Sori vaan, se on totuus"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "34180705f7f8",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Sachar, Louis",
+   "title": "Paahde tai Takapulpetin poika tai Riskitekijä",
+   "alt_titles": [
+    "Paahde",
+    "Takapulpetin poika",
+    "Riskitekijä"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "b8ddb32888d0",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Sumanen, Nadja",
+   "title": "Rambo",
+   "alt_titles": [
+    "Rambo"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b85a311d7048",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Tiainen, Marja-Leena",
+   "title": "Alex ja pelon aika tai Alex, Aisha ja Sam tai Alex, Aisha ja toivon aika",
+   "alt_titles": [
+    "Alex ja pelon aika",
+    "Alex, Aisha ja Sam",
+    "Alex, Aisha ja toivon aika"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "62277dfc8b6b",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Wahl, Mats",
+   "title": "Emma ja Daniel – Kohtaaminen tai muu Emma ja Daniel –kirja",
+   "alt_titles": [
+    "Emma ja Daniel – Kohtaaminen"
+   ],
+   "series_note": "muu Emma ja Daniel –kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "37d2679b8948",
+   "grade_band": "7",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Wilson, Jacqueline",
+   "title": "Lola Rose tai Mieletön kalorikammo tai Myöhään ulkona tai Voi itku!",
+   "alt_titles": [
+    "Lola Rose",
+    "Mieletön kalorikammo",
+    "Myöhään ulkona",
+    "Voi itku!"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "5289a51512d6",
+   "grade_band": "7",
+   "category": "3. Suosikkeja vuosikymmenten takaa",
+   "map_key": "EuropeMap",
+   "author": "Alcott, Louisa M.",
+   "title": "Pikku naisia",
+   "alt_titles": [
+    "Pikku naisia"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "dbe4e7f89a58",
+   "grade_band": "7",
+   "category": "3. Suosikkeja vuosikymmenten takaa",
+   "map_key": "EuropeMap",
+   "author": "Cooper, James Fenimore",
+   "title": "Viimeinen mohikaani",
+   "alt_titles": [
+    "Viimeinen mohikaani"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "6e1a0f8bfa79",
+   "grade_band": "7",
+   "category": "3. Suosikkeja vuosikymmenten takaa",
+   "map_key": "EuropeMap",
+   "author": "de Saint-Exupery, A.",
+   "title": "Pikku Prinssi",
+   "alt_titles": [
+    "Pikku Prinssi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "70d4f58997af",
+   "grade_band": "7",
+   "category": "3. Suosikkeja vuosikymmenten takaa",
+   "map_key": "EuropeMap",
+   "author": "Jansson, Tove",
+   "title": "Vaarallinen juhannus tai jokin muu Muumi-kirja",
+   "alt_titles": [
+    "Vaarallinen juhannus"
+   ],
+   "series_note": "jokin muu Muumi-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "0ddccca30f65",
+   "grade_band": "7",
+   "category": "3. Suosikkeja vuosikymmenten takaa",
+   "map_key": "EuropeMap",
+   "author": "Kokko, Yrjö",
+   "title": "Pessi ja Illusia",
+   "alt_titles": [
+    "Pessi ja Illusia"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "7594cf78b75b",
+   "grade_band": "7",
+   "category": "3. Suosikkeja vuosikymmenten takaa",
+   "map_key": "EuropeMap",
+   "author": "Montgomery, Lucy",
+   "title": "Pieni runotyttö tai Runotyttö maineen polulla tai Runotyttö etsii tähteään",
+   "alt_titles": [
+    "Pieni runotyttö",
+    "Runotyttö maineen polulla",
+    "Runotyttö etsii tähteään"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "75599433c972",
+   "grade_band": "7",
+   "category": "3. Suosikkeja vuosikymmenten takaa",
+   "map_key": "EuropeMap",
+   "author": "Mäkinen, Kirsti",
+   "title": "Suomen lasten Kalevala",
+   "alt_titles": [
+    "Suomen lasten Kalevala"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "55177e266aef",
+   "grade_band": "7",
+   "category": "3. Suosikkeja vuosikymmenten takaa",
+   "map_key": "EuropeMap",
+   "author": "Swan, Anni",
+   "title": "Iris-rukka tai Ollin oppivuodet",
+   "alt_titles": [
+    "Iris-rukka",
+    "Ollin oppivuodet"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "09a558b25fc7",
+   "grade_band": "7",
+   "category": "3. Suosikkeja vuosikymmenten takaa",
+   "map_key": "EuropeMap",
+   "author": "Twain, Mark",
+   "title": "Huckleberry Finnin seikkailut tai Tom Sawyerin seikkailut",
+   "alt_titles": [
+    "Huckleberry Finnin seikkailut",
+    "Tom Sawyerin seikkailut"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "9c8fac6f621a",
+   "grade_band": "7",
+   "category": "3. Suosikkeja vuosikymmenten takaa",
+   "map_key": "EuropeMap",
+   "author": "Verne, Jules",
+   "title": "Sukelluslaivalla maapallon ympäri tai jokin muu kirjailijan kirja",
+   "alt_titles": [
+    "Sukelluslaivalla maapallon ympäri"
+   ],
+   "series_note": "jokin muu kirjailijan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "d34c2b0f9a36",
+   "grade_band": "7",
+   "category": "4. Historian salaisuuksia. Totta ja tarinaa.",
+   "map_key": "OceaniaMap",
+   "author": "Crossley-Holland, Kevin",
+   "title": "Kuningas Arthur ja hänen ritarinsa",
+   "alt_titles": [
+    "Kuningas Arthur ja hänen ritarinsa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ed8d09a3f0d4",
+   "grade_band": "7",
+   "category": "4. Historian salaisuuksia. Totta ja tarinaa.",
+   "map_key": "OceaniaMap",
+   "author": "Gier, Kerstin",
+   "title": "Rubiininpuna tai Safiirinsini tai Smaragdinvihreä",
+   "alt_titles": [
+    "Rubiininpuna",
+    "Safiirinsini",
+    "Smaragdinvihreä"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "a9da29b3bdaa",
+   "grade_band": "7",
+   "category": "4. Historian salaisuuksia. Totta ja tarinaa.",
+   "map_key": "OceaniaMap",
+   "author": "Dieckman, Marja-Liisa",
+   "title": "Väläys pimeässä tai jokin muu kirjailijan historiallinen romaani",
+   "alt_titles": [
+    "Väläys pimeässä"
+   ],
+   "series_note": "jokin muu kirjailijan historiallinen romaani",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "2ac187fbce82",
+   "grade_band": "7",
+   "category": "4. Historian salaisuuksia. Totta ja tarinaa.",
+   "map_key": "OceaniaMap",
+   "author": "Kelly, Jacqueline",
+   "title": "Luonnonlapsi Calpurnia Tate",
+   "alt_titles": [
+    "Luonnonlapsi Calpurnia Tate"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "86d8361ab8aa",
+   "grade_band": "7",
+   "category": "4. Historian salaisuuksia. Totta ja tarinaa.",
+   "map_key": "OceaniaMap",
+   "author": "McCaughrean, Geraldine",
+   "title": "Juna seis",
+   "alt_titles": [
+    "Juna seis"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "52681d7293fb",
+   "grade_band": "7",
+   "category": "4. Historian salaisuuksia. Totta ja tarinaa.",
+   "map_key": "OceaniaMap",
+   "author": "Mikkanen, Raili",
+   "title": "Myrkkypuun marjat tai Pähkinäpuinen lipas tai Hopearenkaan taika",
+   "alt_titles": [
+    "Myrkkypuun marjat",
+    "Pähkinäpuinen lipas",
+    "Hopearenkaan taika"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "719cb03189f6",
+   "grade_band": "7",
+   "category": "4. Historian salaisuuksia. Totta ja tarinaa.",
+   "map_key": "OceaniaMap",
+   "author": "Moilanen, Paula",
+   "title": "Herttuan hovissa",
+   "alt_titles": [
+    "Herttuan hovissa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "3c8791219b89",
+   "grade_band": "7",
+   "category": "4. Historian salaisuuksia. Totta ja tarinaa.",
+   "map_key": "OceaniaMap",
+   "author": "Morpurgo, Michael",
+   "title": "Sotahevonen",
+   "alt_titles": [
+    "Sotahevonen"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "5c0bf5d67d3b",
+   "grade_band": "7",
+   "category": "4. Historian salaisuuksia. Totta ja tarinaa.",
+   "map_key": "OceaniaMap",
+   "author": "Newth, Mette",
+   "title": "Pimeä valo",
+   "alt_titles": [
+    "Pimeä valo"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "0c8ef844631d",
+   "grade_band": "7",
+   "category": "4. Historian salaisuuksia. Totta ja tarinaa.",
+   "map_key": "OceaniaMap",
+   "author": "Thor, Annika",
+   "title": "Saari meren keskellä tai Lumpeenkukkalampi tai Meren syvyyksissä tai Avoimille vesille",
+   "alt_titles": [
+    "Saari meren keskellä",
+    "Lumpeenkukkalampi",
+    "Meren syvyyksissä",
+    "Avoimille vesille"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c18d1bfe9f3e",
+   "grade_band": "7",
+   "category": "4. Historian salaisuuksia. Totta ja tarinaa.",
+   "map_key": "OceaniaMap",
+   "author": "Wallenius, Leena",
+   "title": "Rosalien laulu",
+   "alt_titles": [
+    "Rosalien laulu"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "e44e5db4acf4",
+   "grade_band": "7",
+   "category": "5. Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Haakana, Veikko",
+   "title": "Jäähyväiset joelle tai Vuosien lumet",
+   "alt_titles": [
+    "Jäähyväiset joelle",
+    "Vuosien lumet"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ed038764f468",
+   "grade_band": "7",
+   "category": "5. Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Huotarinen, Vilja-Tuulia",
+   "title": "Siljan laulu: tarina tyttöbändistä tai Siljan syksy",
+   "alt_titles": [
+    "Siljan laulu: tarina tyttöbändistä",
+    "Siljan syksy"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "2bd12e1594ee",
+   "grade_band": "7",
+   "category": "5. Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Hämeen-Anttila, Maria",
+   "title": "Nietos - Intro tai Nietos – Riffi tai Nietos – Fade out",
+   "alt_titles": [
+    "Nietos - Intro",
+    "Nietos – Riffi",
+    "Nietos – Fade out"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "7d013ae2ba13",
+   "grade_band": "7",
+   "category": "5. Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Kokko, Yrjö",
+   "title": "Sudenhampainen kaulanauha",
+   "alt_titles": [
+    "Sudenhampainen kaulanauha"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ceaa8aec041d",
+   "grade_band": "7",
+   "category": "5. Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Ojala, Anu",
+   "title": "Unien hevonen tai Koira vailla kotia tai Rautakavio",
+   "alt_titles": [
+    "Unien hevonen",
+    "Koira vailla kotia",
+    "Rautakavio"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e2c08e469314",
+   "grade_band": "7",
+   "category": "5. Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Sortland, Bjørn",
+   "title": "Silmätyksin",
+   "alt_titles": [
+    "Silmätyksin"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "6599a9307a33",
+   "grade_band": "7",
+   "category": "5. Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Suhonen, Ville",
+   "title": "Poika ja ilves – paluu erämaahan",
+   "alt_titles": [
+    "Poika ja ilves – paluu erämaahan"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "85ec575e676f",
+   "grade_band": "7",
+   "category": "5. Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Suhonen, Ville",
+   "title": "Tuulensieppaaja",
+   "alt_titles": [
+    "Tuulensieppaaja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "230f4e0d81c8",
+   "grade_band": "7",
+   "category": "5. Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Tiitinen, Esko-Pekka",
+   "title": "Jäljen jättävät sanat tai Villapäät",
+   "alt_titles": [
+    "Jäljen jättävät sanat",
+    "Villapäät"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "5ce0da6a2d55",
+   "grade_band": "7",
+   "category": "5. Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Tracey, Rhian",
+   "title": "Neljän tytön kirjakimppa",
+   "alt_titles": [
+    "Neljän tytön kirjakimppa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "5cc5f68889a9",
+   "grade_band": "7",
+   "category": "5. Harrastuksia",
+   "map_key": "SouthAmericaMap",
+   "author": "Veirto, Kalle",
+   "title": "Pelastakaa jalkapalloilija Lumperi tai joku muu FC viirupaidat -sarjan kirja",
+   "alt_titles": [
+    "Pelastakaa jalkapalloilija Lumperi"
+   ],
+   "series_note": "joku muu FC viirupaidat -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "0dea0ee47b0e",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Heti tänään: 13–18-vuotiaitten runoja",
+   "alt_titles": [
+    "Heti tänään: 13–18-vuotiaitten runoja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "537a7d5097e9",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Huovi, Hannele",
+   "title": "Gepardi katsoo peiliin",
+   "alt_titles": [
+    "Gepardi katsoo peiliin"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "8b7a8f0f966a",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Isokangas, Antti",
+   "title": "Villejä rubiineja: väärin kuultuja laulun sanoja tai Minä suojelen sinua taiteelta",
+   "alt_titles": [
+    "Villejä rubiineja: väärin kuultuja laulun sanoja",
+    "Minä suojelen sinua taiteelta"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "758cf977bf46",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Itkonen, Jukka",
+   "title": "Kuutanssi tai Be & Pop tai Käpälämäki",
+   "alt_titles": [
+    "Kuutanssi",
+    "Be & Pop",
+    "Käpälämäki"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c7bc61c6672f",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Kallioniemi, Tuula",
+   "title": "Viimeinen juna",
+   "alt_titles": [
+    "Viimeinen juna"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "0324b9bae3bc",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Leskinen, Juice",
+   "title": "Räkä ja Roiskis tai jokin muu Räkä ja Roiskis-runokirja",
+   "alt_titles": [
+    "Räkä ja Roiskis"
+   ],
+   "series_note": "jokin muu Räkä ja Roiskis-runokirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8f3a9e3a2114",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Levola, Kari",
+   "title": "Valheenpaljastuskone tai Syvältä veistoluokan uumenista",
+   "alt_titles": [
+    "Valheenpaljastuskone",
+    "Syvältä veistoluokan uumenista"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "6fe74c752108",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Martinheimo, Asko",
+   "title": "Kivensiruja tai Isojalkainen poika",
+   "alt_titles": [
+    "Kivensiruja",
+    "Isojalkainen poika"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e038e24e2667",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Mörö, Mari",
+   "title": "Äkkihäly",
+   "alt_titles": [
+    "Äkkihäly"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ca944ef4cfbb",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Ranivaara, Jorma",
+   "title": "Pelurit",
+   "alt_titles": [
+    "Pelurit"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "f189944ee645",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Savisaari, Aira",
+   "title": "Joku siipi pitäis olla",
+   "alt_titles": [
+    "Joku siipi pitäis olla"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9dba4939bc8b",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Tiihonen, Ilpo",
+   "title": "Jees, ketsuppia",
+   "alt_titles": [
+    "Jees, ketsuppia"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ef6b49da0551",
+   "grade_band": "7",
+   "category": "6. Runoja ja novelleja",
+   "map_key": "ArcticMap",
+   "author": "Toivola, Ritva",
+   "title": "Panssarimyyrä",
+   "alt_titles": [
+    "Panssarimyyrä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "fc37532abc9c",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Adams, Douglas",
+   "title": "Linnunradan käsikirja liftareille",
+   "alt_titles": [
+    "Linnunradan käsikirja liftareille"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "c91f12ee7c7d",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Bradbury, Ray",
+   "title": "Fahrenheit 451",
+   "alt_titles": [
+    "Fahrenheit 451"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "653789143abc",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Condie, Ally",
+   "title": "Tarkoitettu tai Rajalla tai Perillä",
+   "alt_titles": [
+    "Tarkoitettu",
+    "Rajalla",
+    "Perillä"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ae5512e62ad4",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Dashner, James",
+   "title": "Maze runner - Labyrintti",
+   "alt_titles": [
+    "Maze runner - Labyrintti"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b986d99942be",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Eddings, David",
+   "title": "Kiven vartija tai jokin muu Belgarionin taru -kirja",
+   "alt_titles": [
+    "Kiven vartija"
+   ],
+   "series_note": "jokin muu Belgarionin taru -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "35a5bda75d7d",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Enoranta, Siiri",
+   "title": "Surunhauras, lasinterävä",
+   "alt_titles": [
+    "Surunhauras, lasinterävä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "f6afb4663f25",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Funke, Cornelia",
+   "title": "Reckless: Kiveen kadonnut",
+   "alt_titles": [
+    "Reckless: Kiveen kadonnut"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9bd6cf35b0ae",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Holopainen, Anu",
+   "title": "Welman tytöt tai jokin muu Syysmaa-sarjan kirja",
+   "alt_titles": [
+    "Welman tytöt"
+   ],
+   "series_note": "jokin muu Syysmaa-sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "bebfd349a5b7",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Huovi, Hannele",
+   "title": "Vladimirin kirja",
+   "alt_titles": [
+    "Vladimirin kirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "7691063e8d4e",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Kouros, Alexis",
+   "title": "Gondwanan lapset",
+   "alt_titles": [
+    "Gondwanan lapset"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "3f1c69ee3ba6",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Le Guin, Ursula",
+   "title": "Maameren tarinat -sarja",
+   "alt_titles": [],
+   "series_note": "Maameren tarinat -sarja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "d3343cdd2d92",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Lempinen, Marja-Leena",
+   "title": "Mustan suden aika",
+   "alt_titles": [
+    "Mustan suden aika"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9bfc1b86dc0d",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Moers, Walter",
+   "title": "Hurja matka halki yön tai jokin muu kirjailijan teos",
+   "alt_titles": [
+    "Hurja matka halki yön"
+   ],
+   "series_note": "jokin muu kirjailijan teos",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "7339b9992c3b",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Paolini, Christopher",
+   "title": "Eragon tai jokin muu Perillinen-sarjan kirja",
+   "alt_titles": [
+    "Eragon"
+   ],
+   "series_note": "jokin muu Perillinen-sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "525821819431",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Parkkola, Seita",
+   "title": "Usva",
+   "alt_titles": [
+    "Usva"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "6e51eff3adce",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Pullman, Philip",
+   "title": "Kultainen kompassi tai jokin muu Universumien tomu -kirja",
+   "alt_titles": [
+    "Kultainen kompassi"
+   ],
+   "series_note": "jokin muu Universumien tomu -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "eb92d0750bc1",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Rouhiainen, Elina",
+   "title": "Kesytön tai Uhanalainen tai Jäljitetty",
+   "alt_titles": [
+    "Kesytön",
+    "Uhanalainen",
+    "Jäljitetty"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "43c4eaa9520a",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Salama, Annukka",
+   "title": "Käärmeenlumooja tai Piraijakuiskaaja tai Harakanloukku",
+   "alt_titles": [
+    "Käärmeenlumooja",
+    "Piraijakuiskaaja",
+    "Harakanloukku"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "86178a634dc9",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Teräs, Mila",
+   "title": "Tyttö tulevaisuudesta",
+   "alt_titles": [
+    "Tyttö tulevaisuudesta"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "76762943ef4a",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Tolkien, J. R .R",
+   "title": "Taru sormusten herrasta -kirjat",
+   "alt_titles": [],
+   "series_note": "Taru sormusten herrasta -kirjat",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "a3dc5ec5808b",
+   "grade_band": "8",
+   "category": "1. Fantasiaa ja tieteiskirjoja",
+   "map_key": "AsiaMap",
+   "author": "Tolkien, J.R.R",
+   "title": "Satujen valtakunta",
+   "alt_titles": [
+    "Satujen valtakunta"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ad8970e3685c",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Christie, Agatha",
+   "title": "Eikä yksikään pelastunut (ent. nimeltään Kymmenen pientä neekeripoikaa) tai Roger Ackroydin murha",
+   "alt_titles": [
+    "Eikä yksikään pelastunut (ent. nimeltään Kymmenen pientä neekeripoikaa)",
+    "Roger Ackroydin murha"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "559abe33857e",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Collins, Suzanne",
+   "title": "Nälkäpeli tai Matkijanärhi tai Vihan liekit",
+   "alt_titles": [
+    "Nälkäpeli",
+    "Matkijanärhi",
+    "Vihan liekit"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "241c7384c284",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Gaiman, Neil",
+   "title": "Hautausmaan poika",
+   "alt_titles": [
+    "Hautausmaan poika"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "4a9c8e7dd33f",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Lehtolainen, Leena",
+   "title": "Ensimmäinen murhani",
+   "alt_titles": [
+    "Ensimmäinen murhani"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "45988e817b87",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "McNab, Andy",
+   "title": "Sotilaan oppipoika tai jokin muu Sotilaan oppipojan seikkailu -kirja",
+   "alt_titles": [
+    "Sotilaan oppipoika"
+   ],
+   "series_note": "jokin muu Sotilaan oppipojan seikkailu -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "3420c20de464",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Meyer, Stephenie",
+   "title": "Houkutus-sarjasta jokin teos",
+   "alt_titles": [],
+   "series_note": "Houkutus-sarjasta jokin teos",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "81a2ea5cb072",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Nuotio, Eppu",
+   "title": "Musta tai jokin muu Pii Marin -sarjan kirja",
+   "alt_titles": [
+    "Musta"
+   ],
+   "series_note": "jokin muu Pii Marin -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "2f324626a23b",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Parkkola, Seita",
+   "title": "Ruttolinna tai Jalostamo",
+   "alt_titles": [
+    "Ruttolinna",
+    "Jalostamo"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ca8e2a6479b6",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Rees, Celia",
+   "title": "Näkijä tai jokin muu kirjailijan kirja",
+   "alt_titles": [
+    "Näkijä"
+   ],
+   "series_note": "jokin muu kirjailijan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8b8d6c6e266f",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Remes, Ilkka",
+   "title": "Musta kobra tai jokin muu Aaro Korpi -kirja",
+   "alt_titles": [
+    "Musta kobra"
+   ],
+   "series_note": "jokin muu Aaro Korpi -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ddee0d5d5856",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Roth, Veronica",
+   "title": "Outolintu tai Kapinallinen tai Uskollinen tai Neljä",
+   "alt_titles": [
+    "Outolintu",
+    "Kapinallinen",
+    "Uskollinen",
+    "Neljä"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ebf54314f429",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Simukka, Salla",
+   "title": "Punainen kuin veri tai Valkoinen kuin lumi tai Musta kuin Eebenpuu",
+   "alt_titles": [
+    "Punainen kuin veri",
+    "Valkoinen kuin lumi",
+    "Musta kuin Eebenpuu"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "643fec53273c",
+   "grade_band": "8",
+   "category": "2. Jännitystä ja kauhua",
+   "map_key": "NorthAmericaMap",
+   "author": "Waltari, Mika",
+   "title": "Kuka murhasi rouva Skrofin?",
+   "alt_titles": [
+    "Kuka murhasi rouva Skrofin?"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "16110c055f3b",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Abdel-Fattah, Randa",
+   "title": "Näyttääkö pääni tässä isolta",
+   "alt_titles": [
+    "Näyttääkö pääni tässä isolta"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "a0bc3ef777c1",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Forman, Gayle",
+   "title": "Jos vielä jään",
+   "alt_titles": [
+    "Jos vielä jään"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "2f47c8b30992",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Green, John",
+   "title": "Tähtiin kirjoitettu virhe tai jokin muu kirjailijan kirja",
+   "alt_titles": [
+    "Tähtiin kirjoitettu virhe"
+   ],
+   "series_note": "jokin muu kirjailijan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "1c47575f2d4a",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Kaskiaho, Reija",
+   "title": "Rastas tai Veitsenterällä",
+   "alt_titles": [
+    "Rastas",
+    "Veitsenterällä"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "19498c387c98",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Lehtinen, Tuija",
+   "title": "Sara@crazymail.com tai Ikkunaprinsessa tai Traktori tai WWW.Liisanblogi.net",
+   "alt_titles": [
+    "Sara@crazymail.com",
+    "Ikkunaprinsessa",
+    "Traktori",
+    "WWW.Liisanblogi.net"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f4275033140d",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Leino, Katariina",
+   "title": "Haaveiden nuorallatanssi",
+   "alt_titles": [
+    "Haaveiden nuorallatanssi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "2136b3ff3979",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Lähteenmäki, Laura",
+   "title": "Iskelmiä",
+   "alt_titles": [
+    "Iskelmiä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "088a6660bcda",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Lönn, Pasi",
+   "title": "Hyppy syvyyteen tai Harhaisku",
+   "alt_titles": [
+    "Hyppy syvyyteen",
+    "Harhaisku"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "7edaba78f45b",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Mahy, Margaret",
+   "title": "Tähtien tytär tai jokin muu kirjailijan kirja",
+   "alt_titles": [
+    "Tähtien tytär"
+   ],
+   "series_note": "jokin muu kirjailijan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "426dbfd8d016",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Mazetti, Katarina",
+   "title": "Sielunsiskot tai Punahilkka ja suden hetki tai Herttasotilas",
+   "alt_titles": [
+    "Sielunsiskot",
+    "Punahilkka ja suden hetki",
+    "Herttasotilas"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "31921e76cb4a",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Mäki, Harri Istvan",
+   "title": "Maailman tärkein",
+   "alt_titles": [
+    "Maailman tärkein"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "77ebd520b5a8",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Parkkola, Seita",
+   "title": "Susitosi",
+   "alt_titles": [
+    "Susitosi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "c3b3489efec9",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Poutanen, Kira",
+   "title": "Ihana meri tai Katso minua",
+   "alt_titles": [
+    "Ihana meri",
+    "Katso minua"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f8ad04a30a8e",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Puskala, Sirpa",
+   "title": "Tapaus Allu Salminen tai Taivas taskussa tai Kingi",
+   "alt_titles": [
+    "Tapaus Allu Salminen",
+    "Taivas taskussa",
+    "Kingi"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "b160b400eacd",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Tiainen, Marja-Leena",
+   "title": "Rakas Mikael",
+   "alt_titles": [
+    "Rakas Mikael"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "a1666ceff5dc",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Wahl, Mats",
+   "title": "Veden tuolla puolen tai Veden varassa tai Syvässä vedessä",
+   "alt_titles": [
+    "Veden tuolla puolen",
+    "Veden varassa",
+    "Syvässä vedessä"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c52de21fb8f8",
+   "grade_band": "8",
+   "category": "3. Äsken ja nyt",
+   "map_key": "AfricaMap",
+   "author": "Wickström, Mika",
+   "title": "Sukupolvi X tai Vastakarvaan tai Kalkkiviivoilla",
+   "alt_titles": [
+    "Sukupolvi X",
+    "Vastakarvaan",
+    "Kalkkiviivoilla"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "a0709a1204c3",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Andersen, Jens",
+   "title": "Astrid Lindgren – tämä päivä, yksi elämä",
+   "alt_titles": [
+    "Astrid Lindgren – tämä päivä, yksi elämä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "140c82d814e6",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Boyne, John",
+   "title": "Poika raidallisessa pyjamassa",
+   "alt_titles": [
+    "Poika raidallisessa pyjamassa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "1909a7362d89",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Brown, Dee",
+   "title": "Haudatkaa sydämeni Wounded Kneehen",
+   "alt_titles": [
+    "Haudatkaa sydämeni Wounded Kneehen"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ded132984ec3",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Carpenter, Humphrey",
+   "title": "Tolkien: elämäkerta tai J. R. R. Tolkien: elämäkerta",
+   "alt_titles": [
+    "Tolkien: elämäkerta",
+    "J. R. R. Tolkien: elämäkerta"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "c27f1ffc96c4",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Filipovic, Zlata",
+   "title": "Zlatan päiväkirja",
+   "alt_titles": [
+    "Zlatan päiväkirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "3562f6dd8777",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Frank, Anne",
+   "title": "Nuoren tytön päiväkirja",
+   "alt_titles": [
+    "Nuoren tytön päiväkirja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9e15a4c53b21",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Haanpää, Pentti",
+   "title": "Yhdeksän miehen saappaat",
+   "alt_titles": [
+    "Yhdeksän miehen saappaat"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "8cebd56d3551",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Karjalainen, Tuula",
+   "title": "Tove Jansson – tee työtä ja rakasta",
+   "alt_titles": [
+    "Tove Jansson – tee työtä ja rakasta"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "6d8f76d2dc4a",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Kunnas, Mauri",
+   "title": "Minä, Mauri Kunnas",
+   "alt_titles": [
+    "Minä, Mauri Kunnas"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9b29dff6e7fa",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Leyson, Leon",
+   "title": "Poika joka pelastui",
+   "alt_titles": [
+    "Poika joka pelastui"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "535f1a341b56",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Manninen, Kirsti",
+   "title": "Kun taivas repeää tai Taivas sinivalkoinen",
+   "alt_titles": [
+    "Kun taivas repeää",
+    "Taivas sinivalkoinen"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "036dcf5676d5",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Mattila-Laine, Satu",
+   "title": "Parantola",
+   "alt_titles": [
+    "Parantola"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "951bf0eac666",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "Tuuri, Antti",
+   "title": "Kylmien kyytimies tai Rukajärven tiellä tai Talvisota",
+   "alt_titles": [
+    "Kylmien kyytimies",
+    "Rukajärven tiellä",
+    "Talvisota"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "0d2593d1b1ff",
+   "grade_band": "8",
+   "category": "4. Historiaa ja elämäkertoja",
+   "map_key": "OceaniaMap",
+   "author": "",
+   "title": "Urheilijan elämäkerta, esimerkiksi Ibrahimovič, Zlatan: Minä, Zlatan Ibrahimovič tai Menander, Ari: Teemu",
+   "alt_titles": [
+    "Urheilijan elämäkerta, esimerkiksi Ibrahimovič, Zlatan: Minä, Zlatan Ibrahimovič",
+    "Menander, Ari: Teemu"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "900cbb6601f4",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Alumiinikuu: suomalaista rocklyriikka tai Get on: 101 rocklyriikan parasta tai Mopolla tähtiin",
+   "alt_titles": [
+    "Alumiinikuu: suomalaista rocklyriikka",
+    "Get on: 101 rocklyriikan parasta",
+    "Mopolla tähtiin"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f1436da3acaa",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Etsijät: novelleja nuorille",
+   "alt_titles": [
+    "Etsijät: novelleja nuorille"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "6234d2ed4a59",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "Hotakainen, Kari",
+   "title": "Näytän hyvältä ilman paitaa",
+   "alt_titles": [
+    "Näytän hyvältä ilman paitaa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "83ca32dc949e",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "Hämäläinen, Karo",
+   "title": "Luokkakuva",
+   "alt_titles": [
+    "Luokkakuva"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b72b73d6922a",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "Jansson, Tove",
+   "title": "Näkymätön lapsi",
+   "alt_titles": [
+    "Näkymätön lapsi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ffe883bf9103",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Kauhun vuosisadat: historian kuuluisimpia kauhutarinoita",
+   "alt_titles": [
+    "Kauhun vuosisadat: historian kuuluisimpia kauhutarinoita"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9a3ac7847e91",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Kevätsateiden aika: japanilaista tankarunoutta",
+   "alt_titles": [
+    "Kevätsateiden aika: japanilaista tankarunoutta"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "6cc25e166b14",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "Kuronen, Kirsti",
+   "title": "Likkojen lipas tai Paha puuska",
+   "alt_titles": [
+    "Likkojen lipas",
+    "Paha puuska"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "6a8323640f14",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Kuusiraajainen purppuratähti: 13–19-vuotiaitten runoja",
+   "alt_titles": [
+    "Kuusiraajainen purppuratähti: 13–19-vuotiaitten runoja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "66a3e33ae1b9",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "Laaksonen, Heli",
+   "title": "Pulu uis",
+   "alt_titles": [
+    "Pulu uis"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ba1d25966302",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "Laulajainen, Leena",
+   "title": "Lumileopardi tanssii tai Yksisarvinen ja sadepuu",
+   "alt_titles": [
+    "Lumileopardi tanssii",
+    "Yksisarvinen ja sadepuu"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "56e6c0d92d12",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "Leinonen, Maaria",
+   "title": "Jos näkisit, rakastaisit",
+   "alt_titles": [
+    "Jos näkisit, rakastaisit"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "69358f383181",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Nuoruus nyt!: suomalaisia nykynovelleja",
+   "alt_titles": [
+    "Nuoruus nyt!: suomalaisia nykynovelleja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9c181d26d885",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "Nykänen, Harri",
+   "title": "Puoli volttia kerien ja muita novelleja",
+   "alt_titles": [
+    "Puoli volttia kerien ja muita novelleja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "a5781796e08c",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Painajaisia: WSOY:n nuorten jännityskertomuskilpailussa palkittuja novelleja",
+   "alt_titles": [
+    "Painajaisia: WSOY:n nuorten jännityskertomuskilpailussa palkittuja novelleja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "a9d2d7a45762",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Rakastaa, ei rakasta: pohjoismaisia novelleja nuorille",
+   "alt_titles": [
+    "Rakastaa, ei rakasta: pohjoismaisia novelleja nuorille"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "2a2ae3f46dd3",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Runo vieköön",
+   "alt_titles": [
+    "Runo vieköön"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b7f1e8805051",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "Skiftesvik, Joni",
+   "title": "Puhalluskukkapoika ja taivaankorjaaja",
+   "alt_titles": [
+    "Puhalluskukkapoika ja taivaankorjaaja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "f62bf9a773ee",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Terkut sulle",
+   "alt_titles": [
+    "Terkut sulle"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "60c763cb7f3f",
+   "grade_band": "8",
+   "category": "5. Novellit, runot, lyriikka",
+   "map_key": "ArcticMap",
+   "author": "Verronen, Maarit",
+   "title": "Viimeinen lapsitähti ja muita ylimääräisiä ihmisiä",
+   "alt_titles": [
+    "Viimeinen lapsitähti ja muita ylimääräisiä ihmisiä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "16f94202ed8e",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Bagge, Tapani",
+   "title": "Paha kuu tai Puhaltaja tai Suden hetki",
+   "alt_titles": [
+    "Paha kuu",
+    "Puhaltaja",
+    "Suden hetki"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8cadd5b3b4e5",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Bear, Greg",
+   "title": "Darwinin radio tai jokin muu kirjailijan kirjoittama kirja",
+   "alt_titles": [
+    "Darwinin radio"
+   ],
+   "series_note": "jokin muu kirjailijan kirjoittama kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "4ed3c03a4762",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Clare, Cassandra",
+   "title": "Luukaupunki tai jokin muu Varjojen kaupungit -sarjan kirja",
+   "alt_titles": [
+    "Luukaupunki"
+   ],
+   "series_note": "jokin muu Varjojen kaupungit -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e17f8e308713",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Chandler, Raymond",
+   "title": "Pitkät jäähyväiset tai jokin muu kirjailijan kirjoittama kirja",
+   "alt_titles": [
+    "Pitkät jäähyväiset"
+   ],
+   "series_note": "jokin muu kirjailijan kirjoittama kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "af613b439ff7",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Crichton, Mihael",
+   "title": "Aikamatka tai Dinosauruspuisto tai Kadonnut maailma",
+   "alt_titles": [
+    "Aikamatka",
+    "Dinosauruspuisto",
+    "Kadonnut maailma"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "15787e955271",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Funke, Cornelia",
+   "title": "Mustesydän tai Musteloitsu tai Mustemaailma",
+   "alt_titles": [
+    "Mustesydän",
+    "Musteloitsu",
+    "Mustemaailma"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ad383f2e9b1b",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Hobb, Robin",
+   "title": "Salamurhaajan oppipoika tai jokin muu W. A. R. P. -kirja",
+   "alt_titles": [
+    "Salamurhaajan oppipoika"
+   ],
+   "series_note": "jokin muu W. A. R. P. -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "2052bc022a98",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Hoffman, Mary",
+   "title": "Stravaganza: Naamioiden kaupunki tai muu Stravaganza-kirja",
+   "alt_titles": [
+    "Stravaganza: Naamioiden kaupunki"
+   ],
+   "series_note": "muu Stravaganza-kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "461ceddeb2b4",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Hyvönen, Viivi",
+   "title": "Apina ja Uusikuu",
+   "alt_titles": [
+    "Apina ja Uusikuu"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d12c917816c1",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Isomäki, Risto",
+   "title": "Sarasvatin hiekkaa",
+   "alt_titles": [
+    "Sarasvatin hiekkaa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "3f7fdcc2f2f7",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Joensuu, Matti Yrjänä",
+   "title": "Harjunpää ja poliisin poika",
+   "alt_titles": [
+    "Harjunpää ja poliisin poika"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "20c0675b737b",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Lehtolainen, Leena",
+   "title": "Kuolemanspiraali",
+   "alt_titles": [
+    "Kuolemanspiraali"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "31f201329419",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Lem, Stanislaw",
+   "title": "Solaris",
+   "alt_titles": [
+    "Solaris"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "50c0fe739749",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Mankell, Henning",
+   "title": "Valkoinen naarasleijona tai jokin muu Wallander-sarjan kirja",
+   "alt_titles": [
+    "Valkoinen naarasleijona"
+   ],
+   "series_note": "jokin muu Wallander-sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "760a06baab68",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Martin, George R. R.",
+   "title": "Valtaistuinpeli tai jokin muu Game of Thrones -kirja",
+   "alt_titles": [
+    "Valtaistuinpeli"
+   ],
+   "series_note": "jokin muu Game of Thrones -kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "2889c1059699",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Nicholson, William",
+   "title": "Tuulen laulu tai Ylivaltiaan orjat tai Tulilaulu",
+   "alt_titles": [
+    "Tuulen laulu",
+    "Ylivaltiaan orjat",
+    "Tulilaulu"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "0eede6a6832d",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Peltoniemi, Sari",
+   "title": "Hirvi",
+   "alt_titles": [
+    "Hirvi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "5451b5e07aa5",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Reeve, Philip",
+   "title": "Kävelevät koneet tai jokin muu Kävelevät koneet -sarjan kirja",
+   "alt_titles": [
+    "Kävelevät koneet"
+   ],
+   "series_note": "jokin muu Kävelevät koneet -sarjan kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "471e85d7c5a5",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Remes, Ilkka",
+   "title": "Isku ytimeen tai 6/12 tai Nimessä ja veressä",
+   "alt_titles": [
+    "Isku ytimeen",
+    "6/12",
+    "Nimessä ja veressä"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "67b33971eaf5",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Rice, Anne",
+   "title": "Veren vangit tai jokin muu kirjailijan kirjoittama kirja",
+   "alt_titles": [
+    "Veren vangit"
+   ],
+   "series_note": "jokin muu kirjailijan kirjoittama kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "1e4ea2fd6494",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Shelley, Mary",
+   "title": "Frankenstein",
+   "alt_titles": [
+    "Frankenstein"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "4d6cc63fbfdb",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Sinisalo, Johanna",
+   "title": "Ennen päivänlaskua ei voi",
+   "alt_titles": [
+    "Ennen päivänlaskua ei voi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "56ea6b633752",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Stiefvater, Maggie",
+   "title": "Väristys tai Häivähdys tai Ikuisuus",
+   "alt_titles": [
+    "Väristys",
+    "Häivähdys",
+    "Ikuisuus"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "7fdf7910cbd6",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Stroud, Jonathan",
+   "title": "Samarkandin amuletti tai Golemin silmä tai Ptolemaioksen portti",
+   "alt_titles": [
+    "Samarkandin amuletti",
+    "Golemin silmä",
+    "Ptolemaioksen portti"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "5d72218cf945",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Turetsky, Bianca",
+   "title": "Muotimatkaaja Titanicin kannella",
+   "alt_titles": [
+    "Muotimatkaaja Titanicin kannella"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "11e53ed02c38",
+   "grade_band": "9",
+   "category": "1. Fantasiaa, tieteiskirjoja ja jännitystä",
+   "map_key": "AsiaMap",
+   "author": "Verronen, Maarit",
+   "title": "Älä maksa lautturille",
+   "alt_titles": [
+    "Älä maksa lautturille"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "eeafcef7d126",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Bakhtiari, Marjaneh",
+   "title": "Mistään kotosin tai Toista maata",
+   "alt_titles": [
+    "Mistään kotosin",
+    "Toista maata"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "0cfb99229852",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Benway, Robin",
+   "title": "Bonusraita",
+   "alt_titles": [
+    "Bonusraita"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "0f389b8b4f08",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Brink, Andre",
+   "title": "Tuokio tuulessa tai Hiekkalinna",
+   "alt_titles": [
+    "Tuokio tuulessa",
+    "Hiekkalinna"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "0a0fd721f973",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Downham, Jenny",
+   "title": "Ennen kuin kuolen",
+   "alt_titles": [
+    "Ennen kuin kuolen"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "0377fcce63af",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Holopainen, Anu",
+   "title": "Ihonalaiset",
+   "alt_titles": [
+    "Ihonalaiset"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "38b4eacc0e02",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Honkasalo, Laura",
+   "title": "Sinun lapsesi eivät ole sinun",
+   "alt_titles": [
+    "Sinun lapsesi eivät ole sinun"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "fd16e6c92839",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Hornby, Nick",
+   "title": "Skeittari",
+   "alt_titles": [
+    "Skeittari"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "923835203a0b",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Hosseini, Khaled",
+   "title": "Leijapoika",
+   "alt_titles": [
+    "Leijapoika"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "c5950d6f36e2",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Kaarlela, Tanja",
+   "title": "Menneen talven lumia",
+   "alt_titles": [
+    "Menneen talven lumia"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "aaed17d4dff6",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Kelly, Julia",
+   "title": "Toisella silmällä",
+   "alt_titles": [
+    "Toisella silmällä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "2e67edea033a",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Kuronen, Kirsti",
+   "title": "Piruettiystävyys",
+   "alt_titles": [
+    "Piruettiystävyys"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "89523f0d2b43",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Lander, Leena",
+   "title": "Tummien perhosten koti",
+   "alt_titles": [
+    "Tummien perhosten koti"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "30228787e4a5",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Lempinen, Marja-Leena",
+   "title": "Jääympyrä",
+   "alt_titles": [
+    "Jääympyrä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "0cd5c8ca90a2",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Levola, Kari",
+   "title": "Tahdon",
+   "alt_titles": [
+    "Tahdon"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "e889d51c449e",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Mahy, Margaret",
+   "title": "Hitaat tunnit",
+   "alt_titles": [
+    "Hitaat tunnit"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "fbf9167b2f3c",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Mörö, Mari",
+   "title": "Kiltin yön lahjat",
+   "alt_titles": [
+    "Kiltin yön lahjat"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "300740061942",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Niemi, Mikael",
+   "title": "Populäärimusiikkia Vittulajänkältä",
+   "alt_titles": [
+    "Populäärimusiikkia Vittulajänkältä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ad0a30d6fda7",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Nousiainen, Miika",
+   "title": "Vadelmavenepakolainen",
+   "alt_titles": [
+    "Vadelmavenepakolainen"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "eb34dd70c798",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Palmgren, Reidar",
+   "title": "Jalat edellä",
+   "alt_titles": [
+    "Jalat edellä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9b60f9372ed1",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Parkkonen, Linnea",
+   "title": "112 – vihaan itseäni",
+   "alt_titles": [
+    "112 – vihaan itseäni"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d20b0f3b1e29",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Prinz, Yvonne",
+   "title": "Vinyyliprinsessa",
+   "alt_titles": [
+    "Vinyyliprinsessa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "0ecd13fa8914",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Rowell, Rainbow",
+   "title": "Eleanor & Park",
+   "alt_titles": [
+    "Eleanor & Park"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "7f474b166643",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Simukka, Salla",
+   "title": "Kun enkelit katsovat muualle",
+   "alt_titles": [
+    "Kun enkelit katsovat muualle"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d823c80b34eb",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Smith, Jennifer",
+   "title": "Tilastollinen todennäköisyys kohdata se ainoa oikea",
+   "alt_titles": [
+    "Tilastollinen todennäköisyys kohdata se ainoa oikea"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d08b4327f07f",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Tamminen, Petri",
+   "title": "Enon opetukset",
+   "alt_titles": [
+    "Enon opetukset"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "8b541a0ed359",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Tiainen, Marja-Leena",
+   "title": "Päin mäntyä",
+   "alt_titles": [
+    "Päin mäntyä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "8366fd15e292",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Vallik, Aidi",
+   "title": "Pelkkää vedätystä",
+   "alt_titles": [
+    "Pelkkää vedätystä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "a16ee885a290",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Westö, Kjell",
+   "title": "Leijat Helsingin yllä",
+   "alt_titles": [
+    "Leijat Helsingin yllä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "a780f08d7dd7",
+   "grade_band": "9",
+   "category": "2. Aikamme kertomuksia",
+   "map_key": "AfricaMap",
+   "author": "Voigt, Cynthia",
+   "title": "Matkalla kotiin tai jokin muu kirjailijan kirjoittama kirja",
+   "alt_titles": [
+    "Matkalla kotiin"
+   ],
+   "series_note": "jokin muu kirjailijan kirjoittama kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "e7d4e58c048c",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Austen, Jane",
+   "title": "Kasvattitytön tarina tai jokin muu kirjailijan kirjoittama kirja",
+   "alt_titles": [
+    "Kasvattitytön tarina"
+   ],
+   "series_note": "jokin muu kirjailijan kirjoittama kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "669425c540ea",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Bach, Richard",
+   "title": "Lokki Joonatan",
+   "alt_titles": [
+    "Lokki Joonatan"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "f19a7e6bd79b",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Bronte, Charlotte",
+   "title": "Kotiopettajattaren romaani",
+   "alt_titles": [
+    "Kotiopettajattaren romaani"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "3a03d027c32d",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Bronte, Emily",
+   "title": "Humiseva harju",
+   "alt_titles": [
+    "Humiseva harju"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "5449a063a10b",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Dickens, Charles",
+   "title": "Oliver Twist",
+   "alt_titles": [
+    "Oliver Twist"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d27502d875c5",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Dumas, Alexandre",
+   "title": "Kolme muskettisoturia",
+   "alt_titles": [
+    "Kolme muskettisoturia"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ad97c79d34c5",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Grass, Gunter",
+   "title": "Peltirumpu",
+   "alt_titles": [
+    "Peltirumpu"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9b14983dce7e",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Haanpää, Pentti",
+   "title": "Juttuja",
+   "alt_titles": [
+    "Juttuja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9081ba14cded",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Hemingway, Ernest",
+   "title": "Vanhus ja meri",
+   "alt_titles": [
+    "Vanhus ja meri"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "f67fcaec0eb4",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Hugo, Victor",
+   "title": "Notre-Damen kellonsoittaja",
+   "alt_titles": [
+    "Notre-Damen kellonsoittaja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "10de10ede96f",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Huovinen, Veikko",
+   "title": "Havukka-ahon ajattelija tai Konstan Pylkkerö tai Konsta Pylkkänen etsii kortteeria",
+   "alt_titles": [
+    "Havukka-ahon ajattelija",
+    "Konstan Pylkkerö",
+    "Konsta Pylkkänen etsii kortteeria"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "f40e24c22441",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Kallas, Aino",
+   "title": "Sudenmorsian",
+   "alt_titles": [
+    "Sudenmorsian"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "37905bd6ad7b",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Kazantzakis, Niko",
+   "title": "Kerro minulle Zorbas",
+   "alt_titles": [
+    "Kerro minulle Zorbas"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "f8ddd98ffe12",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Kivi, Aleksis",
+   "title": "Seitsemän veljestä",
+   "alt_titles": [
+    "Seitsemän veljestä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "65190f534ecf",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Linna, Väinö",
+   "title": "Tuntematon sotilas tai Sotaromaani",
+   "alt_titles": [
+    "Tuntematon sotilas",
+    "Sotaromaani"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "3331d056eaf7",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Meri, Veijo",
+   "title": "Manillaköysi",
+   "alt_titles": [
+    "Manillaköysi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "6175d49a3a04",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Paasilinna, Arto",
+   "title": "Jäniksen vuosi",
+   "alt_titles": [
+    "Jäniksen vuosi"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "65e2b0ad3b45",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Pakkala, Teuvo",
+   "title": "Lapsia tai Pikku ihmisiä tai Vaaralla",
+   "alt_titles": [
+    "Lapsia",
+    "Pikku ihmisiä",
+    "Vaaralla"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "32d6117982f1",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Pushkin, Aleksandr",
+   "title": "Kapteenin tytär",
+   "alt_titles": [
+    "Kapteenin tytär"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "f164d5603438",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Päivärinta, Pietari",
+   "title": "Valitut kertomukset (lue kolme kertomusta, esim. Konttis-Antti, Pikku Mari ja Ompelukone)",
+   "alt_titles": [
+    "Valitut kertomukset (lue kolme kertomusta, esim. Konttis-Antti, Pikku Mari ja Ompelukone)"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "5a8a5eb8bf82",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Steinbeck, John",
+   "title": "Eedenistä itään tai Ystävyyden talo tai Punainen poni",
+   "alt_titles": [
+    "Eedenistä itään",
+    "Ystävyyden talo",
+    "Punainen poni"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "ddad9badc583",
+   "grade_band": "9",
+   "category": "3. Kotimaisia ja ulkomaisia klassikoita",
+   "map_key": "EuropeMap",
+   "author": "Waltari, Mika",
+   "title": "Sinuhe, egyptiläinen tai jokin muu kirjailijan kirjoittama kirja",
+   "alt_titles": [
+    "Sinuhe, egyptiläinen"
+   ],
+   "series_note": "jokin muu kirjailijan kirjoittama kirja",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "23b1d3d8f23d",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Day, David",
+   "title": "Tolkien: tarujen taustaa",
+   "alt_titles": [
+    "Tolkien: tarujen taustaa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "4c2c6b420540",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Hakala, Olli",
+   "title": "Sami Hyypiä : Voikkaalta valioliigaan",
+   "alt_titles": [
+    "Sami Hyypiä : Voikkaalta valioliigaan"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d88d153af179",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Helttunen, A. & Saure, A-M",
+   "title": "Elämä on suuri runo – Eino Leino, runoilija ja vaikuttaja",
+   "alt_titles": [
+    "Elämä on suuri runo – Eino Leino, runoilija ja vaikuttaja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "1fd897a7c258",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Helttunen, A. & Uusi-Hallila,T.",
+   "title": "Kaukana kavala maailma – Aleksis Kiven jäljillä",
+   "alt_titles": [
+    "Kaukana kavala maailma – Aleksis Kiven jäljillä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d935fcae5737",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Hussaini, Safiya",
+   "title": "Minä, Safiya: nigerialaisen naisen tarina",
+   "alt_titles": [
+    "Minä, Safiya: nigerialaisen naisen tarina"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "2a6eb34405c0",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Kilpi, Eeva",
+   "title": "Talvisodan aika tai Jatkosodan aika",
+   "alt_titles": [
+    "Talvisodan aika",
+    "Jatkosodan aika"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "1753b45165c2",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Kuukka, Väinö ym",
+   "title": "Elias Lönnrot – taitaja, tarkkailija tiedemies",
+   "alt_titles": [
+    "Elias Lönnrot – taitaja, tarkkailija tiedemies"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "0682524d5e69",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Liehu, Rakel",
+   "title": "Helene: romaani Helene Schjerfbeckin elämästä",
+   "alt_titles": [
+    "Helene: romaani Helene Schjerfbeckin elämästä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b3724ed5d2c9",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "McCourt, Frank",
+   "title": "Seitsemännen portaan enkeli",
+   "alt_titles": [
+    "Seitsemännen portaan enkeli"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "20f01a8960b7",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Mikkanen, Raili",
+   "title": "Karhun kumarrus",
+   "alt_titles": [
+    "Karhun kumarrus"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "9aa4fa19a4cc",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Mikkanen, Raili",
+   "title": "Ei ole minulle suvannot",
+   "alt_titles": [
+    "Ei ole minulle suvannot"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "00f989e2be57",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Myron, Vicki",
+   "title": "Kirjastokissa",
+   "alt_titles": [
+    "Kirjastokissa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "39182e78883b",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Mäkinen, K. & Uusi-Hallila,",
+   "title": "T Minna Canth – taiteilija ja taistelija",
+   "alt_titles": [
+    "T Minna Canth – taiteilija ja taistelija"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "69e7d09b3395",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Rinne, Harri",
+   "title": "Juice on, Juice off",
+   "alt_titles": [
+    "Juice on, Juice off"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "5a0054031459",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "Sepetys, Ruta",
+   "title": "Harmaata valoa",
+   "alt_titles": [
+    "Harmaata valoa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "34bed89839c8",
+   "grade_band": "9",
+   "category": "4. Elämää kansien välissä",
+   "map_key": "OceaniaMap",
+   "author": "St. Michael, Mick",
+   "title": "Madonna: omin sanoin",
+   "alt_titles": [
+    "Madonna: omin sanoin"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "195e8e28d789",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Alanko, Ismo",
+   "title": "Sanat",
+   "alt_titles": [
+    "Sanat"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "ceee749b56fc",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Dahl, Roald",
+   "title": "Rakkaani, kyyhkyläiseni",
+   "alt_titles": [
+    "Rakkaani, kyyhkyläiseni"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b87791bc118f",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Eräjuttuja (toimittanut Juha Iisak Koivisto)",
+   "alt_titles": [
+    "Eräjuttuja (toimittanut Juha Iisak Koivisto)"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "2fa65386215e",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Honkasalo, Laura",
+   "title": "Lumen saartama kahvila",
+   "alt_titles": [
+    "Lumen saartama kahvila"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "e16bd1fb4292",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Huovinen, Veikko",
+   "title": "Lyhyet erikoiset",
+   "alt_titles": [
+    "Lyhyet erikoiset"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "b5454954e43a",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Härkönen, Anna-Leena",
+   "title": "Jos joku kysyis multa: lauluja",
+   "alt_titles": [
+    "Jos joku kysyis multa: lauluja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "a010f9521f33",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Konstig, Joonas",
+   "title": "Ahneet ja viattomat",
+   "alt_titles": [
+    "Ahneet ja viattomat"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "0aaefa58631a",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Kontio, Tomi",
+   "title": "Vaaksan päässä taivaasta tai jokin muu runoilijan kirjoittama kokoelma",
+   "alt_titles": [
+    "Vaaksan päässä taivaasta"
+   ],
+   "series_note": "jokin muu runoilijan kirjoittama kokoelma",
+   "needs_title_input": true
+  },
+  {
+   "external_key": "73eb04d93980",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Kotro, Arno",
+   "title": "Sanovat sitä rakkaudeksi tai Musta morsian",
+   "alt_titles": [
+    "Sanovat sitä rakkaudeksi",
+    "Musta morsian"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "9275fccd6604",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Krylov, I.A.",
+   "title": "Eläintarinoita tai Krylovin faabeleita",
+   "alt_titles": [
+    "Eläintarinoita",
+    "Krylovin faabeleita"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "cf2e9c509758",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Laaksonen, Heli",
+   "title": "Raparperisyrän tai Peippo vei",
+   "alt_titles": [
+    "Raparperisyrän",
+    "Peippo vei"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "9fe79a48fecb",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Mörö, Mari",
+   "title": "Vesipajatso (novelleja nuorille)",
+   "alt_titles": [
+    "Vesipajatso (novelleja nuorille)"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "db80245eeff2",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Niemi, Juuli",
+   "title": "Tule hyvä: novelleja",
+   "alt_titles": [
+    "Tule hyvä: novelleja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "7894d639b09a",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Niemi, Juuli",
+   "title": "Pitkästä ilosta",
+   "alt_titles": [
+    "Pitkästä ilosta"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "c93cc7653de1",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Novellit 2011",
+   "alt_titles": [
+    "Novellit 2011"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "4f44a374c456",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Peltoniemi, Sari",
+   "title": "Ainakin tuhat laivaa",
+   "alt_titles": [
+    "Ainakin tuhat laivaa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "08082252a1a5",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Pää auki! Säkeitä nuorille",
+   "alt_titles": [
+    "Pää auki! Säkeitä nuorille"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "7a687de61feb",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "",
+   "title": "Rakkaudesta elämään: kauneimmat suomalaiset runot",
+   "alt_titles": [
+    "Rakkaudesta elämään: kauneimmat suomalaiset runot"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "d184d3bb9430",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Rasa, Risto",
+   "title": "Tuhat purjetta: kootut runot",
+   "alt_titles": [
+    "Tuhat purjetta: kootut runot"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "093ea6bbdf3c",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Saarikoski, Pentti",
+   "title": "Tähänastiset runot",
+   "alt_titles": [
+    "Tähänastiset runot"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "c59340ad30cb",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Sinnemäki, Anni",
+   "title": "Aleksis Kiven katu tai Sokeana hetkenä",
+   "alt_titles": [
+    "Aleksis Kiven katu",
+    "Sokeana hetkenä"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "7295f5f20440",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Södergran, Edith",
+   "title": "Runoja",
+   "alt_titles": [
+    "Runoja"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "5fd2c9280a7b",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Tabermann, Tommi",
+   "title": "Ihme nimeltä me tai Ilma: runoja jotta uskaltaisit uneksia",
+   "alt_titles": [
+    "Ihme nimeltä me",
+    "Ilma: runoja jotta uskaltaisit uneksia"
+   ],
+   "series_note": null,
+   "needs_title_input": true
+  },
+  {
+   "external_key": "8475c95d12fa",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Tamminen, Petri",
+   "title": "Elämiä",
+   "alt_titles": [
+    "Elämiä"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "add693786a86",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Tuuri, Antti",
+   "title": "Tenoa soutamassa",
+   "alt_titles": [
+    "Tenoa soutamassa"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  },
+  {
+   "external_key": "219bd53e8464",
+   "grade_band": "9",
+   "category": "5. Runot ja novellit",
+   "map_key": "ArcticMap",
+   "author": "Verronen, Maarit",
+   "title": "Normaalia elämää",
+   "alt_titles": [
+    "Normaalia elämää"
+   ],
+   "series_note": null,
+   "needs_title_input": false
+  }
+ ]
+}

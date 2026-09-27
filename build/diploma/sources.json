@@ -1,0 +1,51 @@
+{
+  "source": {
+    "page_id": 4129,
+    "page_link": "https://www.ylivieska.fi/vapaa-ajan-palvelut/kirjasto/lapsille-ja-nuorille/lukudiplomi/",
+    "page_modified": "2026-09-17T15:33:39"
+  },
+  "files": [
+    {
+      "grade": "1-2",
+      "basename": "1.-2.-luokka",
+      "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/1.-2.-luokka.pdf",
+      "bytes": 200685,
+      "sha256": "99eeb0da00ac1d62fa5392a21a4101bf08ccd7cfd52d79a3ff6cd38806a4fddc"
+    },
+    {
+      "grade": "3-4",
+      "basename": "3.-4.-luokka",
+      "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/3.-4.-luokka.pdf",
+      "bytes": 202091,
+      "sha256": "00e04d0fa6ebd6b5347b7e419012368d9780ec086f935ed2482610a79a5d5fe5"
+    },
+    {
+      "grade": "5-6",
+      "basename": "5.-6.-luokka",
+      "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/5.-6.-luokka.pdf",
+      "bytes": 212693,
+      "sha256": "b7d89cb448853b470f33546cafa942df1a8df072c8312c5054b03459ea21d6ea"
+    },
+    {
+      "grade": "7",
+      "basename": "7.-luokka",
+      "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/7.-luokka.pdf",
+      "bytes": 195884,
+      "sha256": "e0a6e09533f8b194e13a25c225e65dc6e45ef372b43dbeae74246654c7b16000"
+    },
+    {
+      "grade": "8",
+      "basename": "8.-luokka",
+      "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/8.-luokka.pdf",
+      "bytes": 205265,
+      "sha256": "f323800d71a7d48e66f06eb0f3f10e0cd284a659b3a311ff76d21a3ae29da80f"
+    },
+    {
+      "grade": "9",
+      "basename": "9.-luokka",
+      "url": "https://www.ylivieska.fi/wp-content/uploads/2023/07/9.-luokka.pdf",
+      "bytes": 208148,
+      "sha256": "3450b39aa50cb0d284001e105b87abadf397bdce26330feb14dae31662d37aa6"
+    }
+  ]
+}
