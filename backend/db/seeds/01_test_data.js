@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt'
+import { seed as seedDiplomaBooks } from './00_diploma_books.js'
 
 /**
  * Development test data.
@@ -19,6 +20,9 @@ import bcrypt from 'bcrypt'
 
 const SALT_ROUNDS = 12
 const LEVEL_COUNT = 8
+// A continent is a route of NODE_COUNT nodes, one book each. Mirrors
+// NODES_PER_CONTINENT in utils/diplomaConfig.js.
+const NODE_COUNT = 4
 
 // Level number -> continent, mirrors mapOrder in frontend/src/game/state.js
 const MAP_ORDER = [
@@ -95,7 +99,7 @@ const STUDENTS = [
     {
         name: 'student',
         password: 'student',
-        grade: 3,
+        grade: 1,
         email: null,
         // Matches the credentials printed on the student login page.
         levels: []
@@ -116,7 +120,7 @@ const STUDENTS = [
     {
         name: 'Väinö',
         password: 'Test123!',
-        grade: 5,
+        grade: 7,
         email: null,
         // Level 1 submitted and waiting for the teacher to accept it.
         levels: [
@@ -140,7 +144,7 @@ const STUDENTS = [
     {
         name: 'Onni',
         password: 'Test123!',
-        grade: 6,
+        grade: 9,
         email: 'onni@lukudiplomi.test',
         // Whole diploma finished: every level reviewed, every minigame unlocked.
         levels: MAP_ORDER.map((_, i) => ({
@@ -187,12 +191,45 @@ async function insertStudent(knex, { student, teacherId, books }) {
             user: studentId,
             book: book ? book.id : null,
             book_title: book ? book.title : null,
+            // Now means "how far through the whole continent", i.e. across all
+            // NODE_COUNT books, not through one book.
             current_progress: override?.progress ?? 0,
             level_status: override?.status ?? 'incomplete'
         })
     }
     const inserted = await knex('progress').insert(progressRows).returning(['id', 'level'])
     const progressIdByLevel = new Map(inserted.map((row) => [row.level, row.id]))
+
+    // Nodes. A level the student has worked on spreads its progress across the
+    // route: a finished level has all four nodes done, a half-read one has the
+    // first node part-read. `book` is the same book on every node it fills,
+    // which the game forbids, so each filled node takes a different book.
+    const nodeRows = []
+    for (let level = 1; level <= LEVEL_COUNT; level++) {
+        const override = overrides.get(level)
+        const levelPct = override?.progress ?? 0
+        // How many nodes this level's percentage covers, and how far into the
+        // next one it reaches.
+        const done = Math.floor((levelPct * NODE_COUNT) / 100)
+        const partial = Math.round(levelPct * NODE_COUNT - done * 100)
+
+        for (let node_index = 1; node_index <= NODE_COUNT; node_index++) {
+            const filled = node_index <= done || (node_index === done + 1 && partial > 0)
+            // Walk forward through the book list so no two nodes share a book.
+            const bookIndex = override?.book === undefined
+                ? undefined
+                : (override.book + node_index - 1) % books.length
+            const book = filled && bookIndex !== undefined ? books[bookIndex] : null
+            nodeRows.push({
+                progress_id: progressIdByLevel.get(level),
+                node_index,
+                book: book ? book.id : null,
+                book_title: book ? book.title : null,
+                current_progress: node_index <= done ? 100 : (node_index === done + 1 ? partial : 0)
+            })
+        }
+    }
+    await knex('level_nodes').insert(nodeRows)
 
     // submissions.completedLevel holds the PROGRESS ROW ID, not the level
     // number — see frontend/src/services/api.js (submitQuiz) and
@@ -227,9 +264,14 @@ export async function seed(knex) {
     await knex.raw(`
         TRUNCATE TABLE
             rewards, submissions, transfer_requests, teacher_invites,
-            progress, books, federated_credentials, users
+            level_nodes, progress, books, diploma_continents,
+            federated_credentials, users
         RESTART IDENTITY CASCADE
     `)
+
+    // The TRUNCATE above wipes the diploma catalogue too, so put it back before
+    // anything references a book.
+    await seedDiplomaBooks(knex)
 
     const [teacherHash, studentHash, testHash] = await Promise.all([
         bcrypt.hash('teacher', SALT_ROUNDS),

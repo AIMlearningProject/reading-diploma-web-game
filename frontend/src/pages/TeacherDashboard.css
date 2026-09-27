@@ -1322,3 +1322,118 @@ td[data-label="Toiminnot"] {
         flex: 1;
     }
 }
+/* Pupil's school year, in the student table. Decides which of the library's
+   diploma book lists they see. */
+.grade-select {
+    padding: 2px 6px;
+    background: transparent;
+    border: 1px solid #C4973A;
+    border-radius: 4px;
+    color: #3a2a10;
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.grade-select:focus {
+    outline: none;
+    border-color: #9E7A2A;
+}
+
+/* The books on one continent's route, as the teacher sees them while marking.
+   One row per stop: its number, the book the pupil said they read, and how far
+   in they are. Class names are prefixed for this page -- the dashboards share a
+   global stylesheet. */
+.node-list {
+    margin: 0 0 0.6rem;
+    padding: 0.5rem 0.65rem;
+    background: rgba(253, 246, 227, 0.75);
+    border: 1px solid rgba(196, 151, 58, 0.35);
+    border-radius: 5px;
+}
+
+.node-list-header {
+    margin-bottom: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9E7A2A;
+}
+
+.node-row {
+    display: grid;
+    grid-template-columns: 1.6rem 1fr auto;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.3rem 0;
+    font-size: 0.9rem;
+    color: #3a2a10;
+    border-top: 1px solid rgba(196, 151, 58, 0.15);
+}
+
+.node-row:first-of-type {
+    border-top: none;
+}
+
+.node-row-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    border: 1px solid #C4973A;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #9E7A2A;
+}
+
+.node-row-title {
+    line-height: 1.35;
+}
+
+.node-row-pct {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    color: #9E7A2A;
+}
+
+/* Read: the stop is done and the pupil moved on. */
+.node-row--done .node-row-index {
+    background: linear-gradient(#D8B25A, #C4973A, #A67E1E);
+    border-color: #A67E1E;
+    color: #FDFBF4;
+}
+
+.node-row--done .node-row-pct {
+    color: #2c5f8a;
+}
+
+/* Started: a book is picked but not finished. */
+.node-row--started .node-row-index {
+    background: rgba(196, 151, 58, 0.18);
+}
+
+/* Empty: no book picked for this stop yet. */
+.node-row--empty {
+    color: #8a7a5a;
+}
+
+.node-row--empty .node-row-index {
+    border-style: dashed;
+    color: #b0a084;
+}
+
+.node-row--empty em {
+    font-style: italic;
+}
+
+.submission-none {
+    margin: 0;
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #8a7a5a;
+}

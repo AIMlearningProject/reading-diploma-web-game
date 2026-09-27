@@ -16,7 +16,8 @@
     "db:create": "node scripts/createDatabase.js",
     "db:make": "npx knex migrate:make --stub migration.stub --",
     "db:seed": "npx knex seed:make --stub seed.stub --",
-    "db:seed:test": "npx knex seed:run --specific=01_test_data.js"
+    "db:seed:test": "npx knex seed:run --specific=01_test_data.js",
+    "db:seed:diploma": "npx knex seed:run --specific=00_diploma_books.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

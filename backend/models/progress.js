@@ -13,11 +13,70 @@ const Progress = {
             .where({ user: user })
     },
 
+    // --- nodes: one per book slot on a continent --------------------------
+
+    async createNodes(progressId, nodeCount, dbConn = db) {
+        const rows = []
+        for (let node_index = 1; node_index <= nodeCount; node_index++) {
+            rows.push({ progress_id: progressId, node_index, current_progress: 0 })
+        }
+        return dbConn('level_nodes').insert(rows).returning('*')
+    },
+
+    async findNodesByUser(user, dbConn = db) {
+        return dbConn('level_nodes')
+            .select(
+                'level_nodes.id', 'level_nodes.progress_id', 'level_nodes.node_index',
+                'level_nodes.book', 'level_nodes.book_title', 'level_nodes.current_progress',
+                'progress.level'
+            )
+            .innerJoin('progress', 'progress.id', 'level_nodes.progress_id')
+            .where('progress.user', user)
+            .orderBy(['progress.level', 'level_nodes.node_index'])
+    },
+
+    // Same scoping as findByUserAndTeacher: a teacher only ever sees the route
+    // of a pupil who is actually theirs.
+    async findNodesByUserAndTeacher(userId, teacherId, dbConn = db) {
+        return dbConn('level_nodes')
+            .select(
+                'level_nodes.progress_id', 'level_nodes.node_index', 'level_nodes.book',
+                'level_nodes.book_title', 'level_nodes.current_progress', 'progress.level'
+            )
+            .innerJoin('progress', 'progress.id', 'level_nodes.progress_id')
+            .innerJoin('users', 'users.id', 'progress.user')
+            .where('progress.user', Number(userId))
+            .andWhere('users.teacher_id', Number(teacherId))
+            .andWhere('users.role', 'student')
+            .orderBy(['progress.level', 'level_nodes.node_index'])
+    },
+
+    async findNodesByProgress(progressId, dbConn = db) {
+        return dbConn('level_nodes')
+            .select('id', 'node_index', 'book', 'book_title', 'current_progress')
+            .where({ progress_id: progressId })
+            .orderBy('node_index')
+    },
+
+    async findNode(progressId, nodeIndex, dbConn = db) {
+        return dbConn('level_nodes')
+            .where({ progress_id: progressId, node_index: Number(nodeIndex) })
+            .first()
+    },
+
+    async updateNode(progressId, nodeIndex, updates, dbConn = db) {
+        return dbConn('level_nodes')
+            .where({ progress_id: progressId, node_index: Number(nodeIndex) })
+            .update(updates)
+            .returning('*')
+    },
+
     async findSpecificEntry(level, user, dbConn = db) {
         level = Number(level)
         user = Number(user)
         return dbConn('progress')
-            .select('level', 'user', 'book', 'current_progress', 'level_status')
+            // `id` is what level_nodes hangs off, so it is always selected here.
+            .select('id', 'level', 'user', 'book', 'current_progress', 'level_status')
             .where({ level, user })
             .first()
     },
@@ -63,6 +122,8 @@ const Progress = {
             .returning('*')
     },
 
+    // Kept in step with the node the pupil touched last, so book-readers and
+    // the teacher's level list still show a book without being rewritten.
     async changeBookinEntry(level, user, bookId, bookTitle, dbConn = db) {
         level = Number(level)
         user = Number(user)

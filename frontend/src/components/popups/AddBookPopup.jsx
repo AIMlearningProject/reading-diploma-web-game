@@ -35,12 +35,20 @@ function AddBookPopup({ open, onClose, onSelect, mapKey }) {
             setPageCount('')
             formRef.current?.reset()
 
+            // Same shape ReadingState.loadFromBackend builds, so the book the
+            // pupil just added behaves like the rest of the list: offered on
+            // every continent and needing no extra title step.
             const newBook = {
                 title: createdBook.title,
                 author: createdBook.author,
                 type: createdBook.booktype,
                 id: String(createdBook.id),
-                pageCount: createdBook.page_count
+                pageCount: createdBook.page_count,
+                source: 'custom',
+                category: null,
+                altTitles: [],
+                seriesNote: null,
+                needsTitleInput: false
             }
 
             ReadingState.globalBooks = [...(ReadingState.globalBooks || []), newBook]

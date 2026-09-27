@@ -16,7 +16,7 @@ export default function PhaserGame() {
   const { user } = useAuth();
 
   const [quizInfo, setQuizInfo] = useState({ visible: false, mapKey: null });
-  const [bookListInfo, setBookListInfo] = useState({ visible: false, mapKey: null });
+  const [bookListInfo, setBookListInfo] = useState({ visible: false, mapKey: null, nodeIndex: 1 });
   const [updateProgressInfo, setUpdateProgressInfo] = useState({
     visible: false,
     mapKey: null,
@@ -63,14 +63,15 @@ export default function PhaserGame() {
       };
 
       // React wake-up logic for book list overlay
-      window.openReactBookList = (mapKey) => {
+      // nodeIndex says which stop on the continent's route the book is for.
+      window.openReactBookList = (mapKey, nodeIndex = 1) => {
         if (ReadingState._continentCompletedFlags?.[mapKey] === true) {
           return 'completed';
         }
         if (gameRef.current?.input) {
           gameRef.current.input.enabled = false;
         }
-        setBookListInfo({ visible: true, mapKey });
+        setBookListInfo({ visible: true, mapKey, nodeIndex });
         return;
       };
 
@@ -147,14 +148,15 @@ export default function PhaserGame() {
       {bookListInfo.visible && (
         <BookListPanel
           mapKey={bookListInfo.mapKey}
+          nodeIndex={bookListInfo.nodeIndex}
           onClose={() => {
-            setBookListInfo({ visible: false, mapKey: null });
+            setBookListInfo({ visible: false, mapKey: null, nodeIndex: 1 });
             if (gameRef.current.input) {
               gameRef.current.input.enabled = true;
             }
           }}
           onSelect={(mapKey, book) => {
-            setBookListInfo({ visible: false, mapKey: null });
+            setBookListInfo({ visible: false, mapKey: null, nodeIndex: 1 });
             if (gameRef.current) {
               const scene = gameRef.current.scene.getScene(mapKey);
               scene.events.emit('book-selected', book);

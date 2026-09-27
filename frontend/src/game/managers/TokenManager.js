@@ -5,6 +5,10 @@ export default class TokenManager {
     constructor() {
         this.token = null;
         this.baseTokenScale = 0.25;
+        // The buddy stands just above the node it is on, rather than on top of
+        // it: a node carries its number, and being covered is what a pupil
+        // would have to click through to open it.
+        this.nodeOffsetY = 0;
     }
 
     create(scene, savedIndex) {
@@ -28,13 +32,14 @@ export default class TokenManager {
     }
 
     updateScale(baseScale) {
+        this.nodeOffsetY = 40 * baseScale;
         if (this.token) {
             this.token.setScale(this.baseTokenScale * baseScale);
         }
     }
 
     setPosition(x, y) {
-        if (this.token) this.token.setPosition(x, y);
+        if (this.token) this.token.setPosition(x, y - this.nodeOffsetY);
     }
 
     get lastPointIndex() {
@@ -65,7 +70,7 @@ export default class TokenManager {
             scene.tweens.add({
                 targets: this.token,
                 x: pointPositions[nextI].x,
-                y: pointPositions[nextI].y,
+                y: pointPositions[nextI].y - this.nodeOffsetY,
                 duration: 300,
                 ease: 'Linear',
                 onComplete: () => {
@@ -79,7 +84,7 @@ export default class TokenManager {
 
     snapToPoint(pointPositions, index, sceneKey) {
         const pos = pointPositions[index];
-        this.token.setPosition(pos.x, pos.y);
+        this.setPosition(pos.x, pos.y);
         this.token.lastPointIndex = index;
         ReadingState.tokenPositions ||= {};
         ReadingState.tokenPositions[sceneKey] = index;

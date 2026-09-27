@@ -30,6 +30,10 @@ export const DEPTHS = {
     TOKEN:          50,
     WAYPOINT:       10,
     WAYPOINT_TEXT:  11,
+    // The book nodes sit above the buddy: they carry the stop's number and are
+    // what the pupil clicks, so the character must never cover one.
+    BOOK_NODE:      60,
+    BOOK_NODE_TEXT: 61,
     UI:             2000,
     BOOK_LIST:      10000,
     VIDEO:          9999999,

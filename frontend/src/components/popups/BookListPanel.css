@@ -141,6 +141,135 @@
 .book-progress-done { color: #00ff88; }
 .book-progress-resubmit { color: #ffffff; }
 
+/* Which group of the library's list this continent holds for the pupil's year,
+   under the panel title. Italic grey when the continent has no group of its own
+   and the whole year's list is on offer. */
+.booklist-header-genre {
+    margin: 2px 0 0;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: #e6d8b8;
+    text-align: center;
+}
+
+.book-row-tag {
+    margin-left: 8px;
+    padding: 1px 7px;
+    border: 1px solid #c4973a;
+    border-radius: 9px;
+    font-size: 11px;
+    color: #d4af37;
+    white-space: nowrap;
+}
+
+.booklist-empty {
+    padding: 24px 8px;
+    text-align: center;
+    color: #e6d8b8;
+    font-style: italic;
+}
+
+/* Picking which book was actually read, when the list offers a choice. */
+.choose-title {
+    padding: 20px 24px 24px;
+    color: #f4ecd8;
+}
+
+.choose-title-printed {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.choose-title-author {
+    margin: 4px 0 16px;
+    font-size: 13px;
+    color: #e6d8b8;
+}
+
+.choose-title-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.choose-title-chip {
+    padding: 7px 14px;
+    background: transparent;
+    border: 1px solid #c4973a;
+    border-radius: 16px;
+    color: #f4ecd8;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.choose-title-chip:hover { background: rgba(196, 151, 58, 0.18); }
+
+.choose-title-chip.is-picked {
+    background: linear-gradient(#d8b25a, #c4973a, #a67e1e);
+    border-color: #a67e1e;
+    color: #1e3a5f;
+    font-weight: 700;
+}
+
+.choose-title-note {
+    margin: 0 0 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #e6d8b8;
+}
+
+.choose-title-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #d4af37;
+}
+
+/* Logbook style: a ruled line rather than a box, as on the other forms. */
+.choose-title-input {
+    width: 100%;
+    padding: 6px 2px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #c4973a;
+    color: #f4ecd8;
+    font: inherit;
+    font-size: 15px;
+}
+
+.choose-title-input:focus {
+    outline: none;
+    border-bottom-color: #d4af37;
+}
+
+.choose-title-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.choose-title-confirm {
+    padding: 8px 22px;
+    background: linear-gradient(#d8b25a, #c4973a, #a67e1e);
+    border: none;
+    border-radius: 4px;
+    color: #1e3a5f;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.choose-title-confirm:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
 @media (max-height: 480px) {
     .booklist-header {
         flex-direction: row;

@@ -35,15 +35,17 @@ const studentCreateSchema = z.object({
     email: z.email().optional(),
     name: z.string().min(3),
     password: z.string().min(3),
+    grade: z.coerce.number().int().min(1).max(9).optional(),
 }).strict()
 
 usersRouter.post('/students', middleware.requireTeacherRole, middleware.zValidate(studentCreateSchema), async (request, response, next) => {
     try {
-        const { email, name, password } = request.validated
+        const { email, name, password, grade } = request.validated
         const student = await UserService.createStudent({
             email,
             name,
             password,
+            grade,
             teacherId: request.user.id
         })
 
@@ -65,17 +67,19 @@ const studentInviteSchema = z.object({
     name: z.string().min(3),
     password: z.string().min(3),
     token: z.string(),
+    grade: z.coerce.number().int().min(1).max(9).optional(),
 }).strict()
 
 usersRouter.post('/invite/student', middleware.requireAuthentication(false), middleware.zValidate(studentInviteSchema), async (request, response, next) => {
     try {
-        const { email, name, password, token } = request.validated
+        const { email, name, password, token, grade } = request.validated
 
         const teacherId = await TeacherInviteService.verifyToken(token)
         const [student] = await UserService.createStudent({
             email,
             name,
             password,
+            grade,
             teacherId,
         })
 
@@ -168,7 +172,7 @@ usersRouter.patch('/students/:id/password', middleware.requireTeacherRole, middl
 const profileUpdateSchema = z.object({
     name: z.string().optional(),
     avatar: z.string().optional(),
-    grade: z.string().optional(),
+    grade: z.coerce.number().int().min(1).max(9).optional(),
     email: z.union([z.email(), z.literal('')]).optional(),
 }).strict()
 

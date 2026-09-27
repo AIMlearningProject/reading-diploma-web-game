@@ -3,6 +3,7 @@ import supertest from 'supertest'
 import express from 'express'
 import middleware from '../../utils/middleware.js'
 import { resetDB } from '../testConfig/cleanTestDB.js'
+import { NODES_PER_CONTINENT } from '../../utils/diplomaConfig.js'
 import db from '../../db/db.js'
 
 import booksRouter from '../../controllers/books.js'
@@ -41,12 +42,21 @@ const api = supertest(app)
 
 // Progress rows are normally created alongside the student by
 // POST /api/users/students; there is no endpoint that creates them on their own.
+// Each level also gets its nodes, one book slot each, the way
+// ProgressService.addNewProgress does it.
 const giveLevels = async (userId, levelCount = 8) => {
     const rows = []
     for (let level = 1; level <= levelCount; level++) {
         rows.push({ level, user: userId, current_progress: 0, level_status: 'incomplete' })
     }
     const inserted = await db('progress').insert(rows).returning(['id', 'level'])
+    const nodes = []
+    for (const row of inserted) {
+        for (let node_index = 1; node_index <= NODES_PER_CONTINENT; node_index++) {
+            nodes.push({ progress_id: row.id, node_index, current_progress: 0 })
+        }
+    }
+    await db('level_nodes').insert(nodes)
     return new Map(inserted.map((row) => [row.level, row.id]))
 }
 
@@ -63,6 +73,33 @@ const addBook = async (addedBy, overrides = {}) => {
         .returning('*')
     return book
 }
+
+// The library's catalogue, in miniature. The tests build their own rows rather
+// than seeding the real 500-book list: that list belongs to the library and
+// changes when they republish it, which is not something a test should break on.
+const addDiplomaBook = async (overrides = {}) => {
+    const [book] = await db('books')
+        .insert({
+            source: 'diploma',
+            external_key: `key-${Math.random().toString(36).slice(2, 12)}`,
+            grade_band: '3-4',
+            category: 'Eläinystävämme',
+            title: 'Koiramäen lapset',
+            author: 'Kunnas, Mauri',
+            booktype: 'physical',
+            page_count: null,
+            added_by: null,
+            needs_title_input: false,
+            ...overrides
+        })
+        .returning('*')
+    return book
+}
+
+const mapCategoryToContinent = async (map_key, grade_band, category) =>
+    db('diploma_continents').insert({ map_key, grade_band, category })
+
+const setGrade = async (userId, grade) => db('users').where({ id: userId }).update({ grade })
 
 beforeEach(async () => {
     await resetDB()
@@ -157,6 +194,232 @@ describe('Book endpoints', () => {
     })
 })
 
+describe('Diploma catalogue endpoints', () => {
+    test('a student gets the list for their own grade band, and only that one', async () => {
+        await setGrade(STUDENT.id, 4)
+        const mine = await addDiplomaBook({ grade_band: '3-4', title: 'Koiramäen lapset' })
+        await addDiplomaBook({ grade_band: '7', title: 'Hobitti eli sinne ja takaisin' })
+        loginAs(STUDENT)
+
+        const response = await api.get('/api/books/diploma').expect(200)
+
+        expect(response.body.gradeBand).toBe('3-4')
+        expect(response.body.books.map((book) => book.id)).toStrictEqual([mine.id])
+    })
+
+    test('grades 1 and 2 share one list', async () => {
+        await addDiplomaBook({ grade_band: '1-2', title: 'Kuka lohduttaisi nyytiä?' })
+
+        for (const grade of [1, 2]) {
+            await setGrade(STUDENT.id, grade)
+            loginAs(STUDENT)
+            const response = await api.get('/api/books/diploma').expect(200)
+            expect(response.body.gradeBand).toBe('1-2')
+            expect(response.body.books).toHaveLength(1)
+        }
+    })
+
+    test('the catalogue says which continent each group sits on', async () => {
+        await setGrade(STUDENT.id, 4)
+        await addDiplomaBook({ grade_band: '3-4', category: 'Eläinystävämme' })
+        await mapCategoryToContinent('SouthAmericaMap', '3-4', 'Eläinystävämme')
+        loginAs(STUDENT)
+
+        const response = await api.get('/api/books/diploma').expect(200)
+
+        expect(response.body.books[0].map_key).toBe('SouthAmericaMap')
+        expect(response.body.continents).toStrictEqual([
+            { map_key: 'SouthAmericaMap', grade_band: '3-4', category: 'Eläinystävämme' }
+        ])
+    })
+
+    test('a teacher can look at any grade, a student cannot', async () => {
+        await addDiplomaBook({ grade_band: '9', title: 'Seitsemän veljestä' })
+        await setGrade(STUDENT.id, 4)
+
+        const asTeacher = await api.get('/api/books/diploma?grade=9').expect(200)
+        expect(asTeacher.body.gradeBand).toBe('9')
+
+        loginAs(STUDENT)
+        const asStudent = await api.get('/api/books/diploma?grade=9').expect(200)
+        expect(asStudent.body.gradeBand).toBe('3-4')
+    })
+
+    test('the diploma catalogue stays out of the class book list', async () => {
+        await addBook(TEACHER.id, { title: 'Taikurin hattu' })
+        await addDiplomaBook({ title: 'Koiramäen lapset' })
+
+        const response = await api.get('/api/books/my-books').expect(200)
+
+        expect(response.body.map((book) => book.title)).toStrictEqual(['Taikurin hattu'])
+    })
+
+    test('a teacher cannot delete a book from the library catalogue', async () => {
+        const book = await addDiplomaBook()
+
+        await api.delete(`/api/books/${book.id}`).expect(403)
+
+        expect(await db('books').where({ id: book.id }).first()).toBeDefined()
+    })
+
+    test('a class can still add a book that is already in the catalogue', async () => {
+        await addDiplomaBook({ title: 'Koiramäen lapset', author: 'Kunnas, Mauri' })
+
+        const response = await api
+            .post('/api/books')
+            .send({ title: 'Koiramäen lapset', author: 'Kunnas, Mauri' })
+            .expect(201)
+
+        expect(response.body.source).toBe('custom')
+        expect(response.body.added_by).toBe(TEACHER.id)
+    })
+
+    test('a book in another class does not block this one', async () => {
+        await addBook(OTHER_TEACHER.id, { title: 'Taikurin hattu' })
+
+        await api.post('/api/books').send({ title: 'Taikurin hattu', author: 'Tove Jansson' }).expect(201)
+    })
+})
+
+describe('Continent route (nodes)', () => {
+    test('every level comes back with its nodes', async () => {
+        await giveLevels(STUDENT.id)
+        loginAs(STUDENT)
+
+        const response = await api.get('/api/progress').expect(200)
+
+        expect(response.body).toHaveLength(8)
+        for (const entry of response.body) {
+            expect(entry.nodes).toHaveLength(NODES_PER_CONTINENT)
+            expect(entry.nodes.map((node) => node.node_index))
+                .toStrictEqual([1, 2, 3, 4].slice(0, NODES_PER_CONTINENT))
+        }
+    })
+
+    test('a book is bound to one node, not to the whole continent', async () => {
+        await giveLevels(STUDENT.id)
+        const book = await addDiplomaBook({ title: 'Koiramäen lapset' })
+        loginAs(STUDENT)
+
+        await api.put('/api/progress/1/nodes/2/book').send({ book: book.id }).expect(200)
+
+        const nodes = await api.get('/api/progress').expect(200)
+            .then((response) => response.body.find((entry) => entry.level === 1).nodes)
+        expect(nodes.find((node) => node.node_index === 2).book).toBe(book.id)
+        expect(nodes.find((node) => node.node_index === 1).book).toBeNull()
+    })
+
+    test('the same book cannot sit on two nodes of one continent', async () => {
+        await giveLevels(STUDENT.id)
+        const book = await addDiplomaBook()
+        loginAs(STUDENT)
+
+        await api.put('/api/progress/1/nodes/1/book').send({ book: book.id }).expect(200)
+        await api.put('/api/progress/1/nodes/2/book').send({ book: book.id }).expect(400)
+
+        // ...but the same book on another continent is fine.
+        await api.put('/api/progress/2/nodes/1/book').send({ book: book.id }).expect(200)
+    })
+
+    test('the continent percentage is the average of its nodes', async () => {
+        await giveLevels(STUDENT.id)
+        const books = await Promise.all([
+            addDiplomaBook({ title: 'Yksi' }),
+            addDiplomaBook({ title: 'Kaksi' })
+        ])
+        loginAs(STUDENT)
+
+        await api.put('/api/progress/1/nodes/1/book').send({ book: books[0].id }).expect(200)
+        await api.put('/api/progress/1/nodes/2/book').send({ book: books[1].id }).expect(200)
+        await api.put('/api/progress/1/nodes/1/current-progress').send({ current_progress: 100 }).expect(200)
+        const response = await api.put('/api/progress/1/nodes/2/current-progress')
+            .send({ current_progress: 50 }).expect(200)
+
+        // 100 + 50 + 0 + 0 over four nodes.
+        expect(response.body.current_progress).toBe(38)
+        const entry = await db('progress').where({ user: STUDENT.id, level: 1 }).first()
+        expect(entry.current_progress).toBe(38)
+    })
+
+    test('a node needs a book before it can have progress', async () => {
+        await giveLevels(STUDENT.id)
+        loginAs(STUDENT)
+
+        await api.put('/api/progress/1/nodes/1/current-progress')
+            .send({ current_progress: 40 }).expect(400)
+    })
+
+    test('the pupil records which book they read on a node', async () => {
+        await giveLevels(STUDENT.id)
+        const book = await addDiplomaBook({
+            title: 'Tarina vailla loppua tai Momo',
+            needs_title_input: true
+        })
+        loginAs(STUDENT)
+
+        await api.put('/api/progress/1/nodes/3/book')
+            .send({ book: book.id, book_title: 'Momo' }).expect(200)
+
+        const nodes = await api.get('/api/progress').expect(200)
+            .then((response) => response.body.find((entry) => entry.level === 1).nodes)
+        expect(nodes.find((node) => node.node_index === 3).book_title).toBe('Momo')
+    })
+
+    test('changing a node’s book starts that node over', async () => {
+        await giveLevels(STUDENT.id)
+        const [first, second] = await Promise.all([addDiplomaBook({ title: 'A' }), addDiplomaBook({ title: 'B' })])
+        loginAs(STUDENT)
+
+        await api.put('/api/progress/1/nodes/1/book').send({ book: first.id }).expect(200)
+        await api.put('/api/progress/1/nodes/1/current-progress').send({ current_progress: 80 }).expect(200)
+        const response = await api.put('/api/progress/1/nodes/1/book').send({ book: second.id }).expect(200)
+
+        expect(response.body.node.current_progress).toBe(0)
+    })
+
+    test('a node on a level the pupil does not have is a 404', async () => {
+        await giveLevels(STUDENT.id)
+        const book = await addDiplomaBook()
+        loginAs(STUDENT)
+
+        await api.put('/api/progress/9/nodes/1/book').send({ book: book.id }).expect(404)
+        await api.put('/api/progress/1/nodes/99/book').send({ book: book.id }).expect(404)
+    })
+})
+
+describe('Teacher reviewing a pupil', () => {
+    test('the teacher sees every level of their pupil, with its route', async () => {
+        await giveLevels(STUDENT.id)
+        const book = await addDiplomaBook({ title: 'Koirami\u00e4en lapset' })
+        loginAs(STUDENT)
+        await api.put('/api/progress/1/nodes/2/book').send({ book: book.id }).expect(200)
+        await api.put('/api/progress/1/nodes/2/current-progress').send({ current_progress: 100 }).expect(200)
+        loginAs(TEACHER)
+
+        const response = await api.get(`/api/progress/student/${STUDENT.id}`).expect(200)
+
+        expect(response.body).toHaveLength(8)
+        const level1 = response.body.find((entry) => entry.level === 1)
+        expect(level1.nodes).toHaveLength(NODES_PER_CONTINENT)
+        expect(level1.nodes.find((node) => node.node_index === 2)).toMatchObject({
+            book: book.id,
+            current_progress: 100
+        })
+        // A level the pupil has not started still comes back with empty stops,
+        // so the teacher can see there is nothing there rather than nothing at all.
+        const level5 = response.body.find((entry) => entry.level === 5)
+        expect(level5.nodes).toHaveLength(NODES_PER_CONTINENT)
+        expect(level5.nodes.every((node) => node.book === null)).toBe(true)
+    })
+
+    test('a teacher cannot see the route of a pupil who is not theirs', async () => {
+        await giveLevels(OTHER_STUDENT.id)
+        loginAs(TEACHER)
+
+        await api.get(`/api/progress/student/${OTHER_STUDENT.id}`).expect(404)
+    })
+})
+
 describe('Progress endpoints', () => {
     test('a student sees their own entries', async () => {
         await giveLevels(STUDENT.id)
@@ -179,6 +442,35 @@ describe('Progress endpoints', () => {
         const entry = await db('progress').where({ user: STUDENT.id, level: 1 }).first()
         expect(entry.book).toBe(book.id)
         expect(entry.book_title).toBe(book.title)
+    })
+
+    test('the pupil records which book they actually read', async () => {
+        await giveLevels(STUDENT.id)
+        // A catalogue row that offers a choice rather than naming one book.
+        const book = await addDiplomaBook({
+            title: 'Tarina vailla loppua tai Momo',
+            needs_title_input: true
+        })
+        loginAs(STUDENT)
+
+        await api.put('/api/progress/1/add-book')
+            .send({ book: book.id, book_title: 'Momo' })
+            .expect(200)
+
+        const entry = await db('progress').where({ user: STUDENT.id, level: 1 }).first()
+        expect(entry.book).toBe(book.id)
+        expect(entry.book_title).toBe('Momo')
+    })
+
+    test('a catalogue title longer than the column is cut, not rejected', async () => {
+        await giveLevels(STUDENT.id)
+        const book = await addDiplomaBook({ title: 'Urpo ja Turpo '.repeat(18).trim() })
+        loginAs(STUDENT)
+
+        await api.put('/api/progress/1/add-book').send({ book: book.id }).expect(200)
+
+        const entry = await db('progress').where({ user: STUDENT.id, level: 1 }).first()
+        expect(entry.book_title).toHaveLength(200)
     })
 
     test('binding a book that does not exist fails', async () => {

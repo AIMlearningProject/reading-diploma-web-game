@@ -16,12 +16,31 @@ booksRouter.get('/book-readers/:id', middleware.requireTeacherRole, async (reque
     }
 })
 
-// Gets all the books added by the user's "class" (teacher + students)
+// Gets all the books added by the user's "class" (teacher + students).
+// The library's diploma catalogue is NOT included here: it is shared by every
+// class and would bury a teacher's own two dozen books under five hundred.
 booksRouter.get('/my-books', middleware.requireAuthentication(true), async (request, response, next) => {
     try {
         const teacherId = request.user.role === 'teacher' ? request.user.id : request.user.teacher_id
         const books = await BookService.getBooksByTeacher(teacherId)
         response.status(200).json(books)
+    } catch (error) {
+        next(error)
+    }
+})
+
+// The library's Kirja kantaa book list for one grade band, with the continent
+// each group sits on. A pupil always gets their own grade; a teacher may ask
+// for any grade so they can see what a pupil of that year sees.
+booksRouter.get('/diploma', middleware.requireAuthentication(true), async (request, response, next) => {
+    try {
+        const asked = request.query.grade
+        // Only a teacher may ask for a grade other than their own.
+        const grade = request.user.role === 'teacher' && asked !== undefined
+            ? Number(asked)
+            : undefined
+        const catalogue = await BookService.getDiplomaCatalogue({ userId: request.user.id, grade })
+        response.status(200).json(catalogue)
     } catch (error) {
         next(error)
     }
@@ -56,7 +75,9 @@ booksRouter.post('/',
                 author: normalize(rawAuthor),
                 booktype,
                 page_count,
-                added_by: request.user.id
+                added_by: request.user.id,
+                // Duplicate checking is per class, not global.
+                teacherId: request.user.role === 'teacher' ? request.user.id : request.user.teacher_id
             }
 
             const createdBook = await BookService.addBook(bookToCreate)

@@ -51,6 +51,11 @@ export async function fetchLogin(identifier, password, teacher_name) {
 // Book endpoints
 export function fetchBooks() { return request('/api/books'); } // Unused
 export function fetchMyBooks() { return request('/api/books/my-books'); }
+// The library's Kirja kantaa book list for the logged-in pupil's school year.
+// Teachers may pass a grade to see what a pupil of that year sees.
+export function fetchDiplomaBooks(grade) {
+    return request(grade === undefined ? '/api/books/diploma' : `/api/books/diploma?grade=${grade}`);
+}
 export function fetchBookReaders(id) { return request(`/api/books/book-readers/${id}`); }
 export function createBook(body) {
     return request('/api/books', {
@@ -80,10 +85,28 @@ export function updateLevelProgress(level, currentProgress) {
         body: JSON.stringify({ current_progress: currentProgress }),
     });
 }
-export function addBookToLevel(level, bookId) {
+// A continent is a route of nodes, one book each. These two drive a single node;
+// the continent's own percentage is recomputed by the backend from its nodes.
+export function setNodeBook(level, nodeIndex, bookId, bookTitle) {
+    return request(`/api/progress/${level}/nodes/${nodeIndex}/book`, {
+        method: 'PUT',
+        body: JSON.stringify(bookTitle ? { book: bookId, book_title: bookTitle } : { book: bookId }),
+    });
+}
+export function setNodeProgress(level, nodeIndex, currentProgress) {
+    return request(`/api/progress/${level}/nodes/${nodeIndex}/current-progress`, {
+        method: 'PUT',
+        body: JSON.stringify({ current_progress: currentProgress }),
+    });
+}
+
+// bookTitle is the book the pupil says they actually read. The library's list
+// often offers a choice ("X tai jokin muu Y -sarjan kirja"), so the catalogue
+// entry on its own does not say which book that was.
+export function addBookToLevel(level, bookId, bookTitle) {
     return request(`/api/progress/${level}/add-book`, {
         method: 'PUT',
-        body: JSON.stringify({ book: bookId }),
+        body: JSON.stringify(bookTitle ? { book: bookId, book_title: bookTitle } : { book: bookId }),
     });
 }
 
@@ -152,6 +175,14 @@ export function updateUserName(id, name) {
     return request(`/api/users/profile/${id}`, {
         method: 'PATCH',
         body: JSON.stringify({ name }),
+    });
+}
+// The pupil's school year, 1-9. It decides which of the library's diploma book
+// lists they are shown, so the teacher keeps it up to date as the class moves up.
+export function updateUserGrade(id, grade) {
+    return request(`/api/users/profile/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ grade }),
     });
 }
 export function updateUserEmail(id, email) {

@@ -95,7 +95,7 @@ const UserService = {
         }
     },
 
-    async createStudent({ email, name, password, teacherId }) {
+    async createStudent({ email, name, password, grade, teacherId }) {
         const existing = await User.findStudentByNameAndTeacher(name, teacherId)
         if (existing) {
             const err = new Error('Student name already taken for this teacher')
@@ -120,7 +120,9 @@ const UserService = {
             name,
             password_hash,
             role: 'student',
-            grade: 1,
+            // The school year, 1-9. Decides which diploma book list the pupil
+            // sees; see utils/gradeBand.js.
+            grade: grade ?? 1,
             teacher_id: teacherId,
             avatar: ''
         })

@@ -9,6 +9,7 @@ export const TEST_TABLES = [
     'teacher_invites',
     'progress',
     'books',
+    'diploma_continents',
     'federated_credentials',
     'users'
 ].join(', ')

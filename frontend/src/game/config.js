@@ -2,7 +2,6 @@
 
 import Phaser from 'phaser';
 import WorldMapScene from './scenes/WorldMapScene.js';
-import ReadingScene from './scenes/ReadingScene.js';
 import continentRegistry from './scenes/continentRegistry.js';
 import createContinentScene from './scenes/createContinentScene.js';
 
@@ -29,8 +28,7 @@ export default function createGameConfig(parent, width, height) {
     },
     scene: [
       WorldMapScene,
-      ...continentScenes,
-      ReadingScene
+      ...continentScenes
     ]
   };
 }

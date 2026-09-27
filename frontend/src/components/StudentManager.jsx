@@ -11,7 +11,8 @@ import {
     resetStudentPassword,
     updateSubmissionStatus,
     updateUserEmail,
-    updateUserName
+    updateUserName,
+    updateUserGrade
 } from '../services/api'
 
 const LEVELS = [
@@ -24,6 +25,8 @@ const LEVELS = [
     { level: 7, name: 'Oseania' },
     { level: 8, name: 'Etelämanner' },
 ]
+
+const INFO_LEVEL_STATUS = 'Suorittamatta: Oppilaan täytyy lukea kirja loppuun tällä tasolla ja vastata avoimiin kysymyksiin suorittaakseen tason.\n\n Suoritettu: Oppilas on lukenut kirjan loppuun ja vastannut avoimiin kysymyksiin tällä tasolla.\n\n Hylätty: Opettaja on tarkistanut ja EI hyväksynyt tasolla annettuja vastauksia. Oppilas voi suorittaa tason uudestaan.\n\n Hyväksytty: Opettaja on tarkistanut ja hyväksynyt tasolla annetut, luettuun kirjaan liittyvät vastaukset.'
 
 function StudentManager() {
     const [students, setStudents] = useState([])
@@ -90,6 +93,18 @@ function StudentManager() {
             fetchStudents()
         } catch (err) {
             setError(err?.message || 'Yhteysvirhe')
+        }
+    }
+
+
+    // Saves straight away: it is one value from a drop-down, so an edit/save
+    // pair would only get in the way.
+    const handleGradeChange = async (id, grade) => {
+        try {
+            await updateUserGrade(id, grade)
+            setStudents(prev => prev.map(s => (s.id === id ? { ...s, grade } : s)))
+        } catch (err) {
+            setError(err?.message || 'Luokka-asteen tallennus epäonnistui')
         }
     }
 
@@ -180,6 +195,7 @@ function StudentManager() {
                     <thead>
                         <tr>
                             <th>Nimi</th>
+                            <th>Luokka-aste</th>
                             <th>Sähköposti</th>
                             <th>Toiminnot</th>
                         </tr>
@@ -223,6 +239,18 @@ function StudentManager() {
                                                     </button>
                                                 </>
                                             )}
+                                        </td>
+                                        <td data-label="Luokka-aste">
+                                            <select
+                                                className="grade-select"
+                                                value={s.grade ?? 1}
+                                                onChange={(e) => handleGradeChange(s.id, Number(e.target.value))}
+                                                title="Luokka-aste ratkaisee, minkä lukudiplomin kirjalistan oppilas näkee"
+                                            >
+                                                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(g => (
+                                                    <option key={g} value={g}>{g}. luokka</option>
+                                                ))}
+                                            </select>
                                         </td>
                                         <td data-label="Sähköposti">
                                             {editEmailId === s.id ? (
@@ -317,11 +345,14 @@ function StudentManager() {
                                                     {LEVELS.map(({ level, name: levelName }) => {
                                                         const entry = progress.find(p => p.level === level)
                                                         const status = entry?.level_status || 'incomplete'
+                                                        const nodes = entry?.nodes || []
+                                                        const booksDone = nodes.filter(n => n.current_progress >= 100).length
+                                                        const booksHint = nodes.length > 0 ? ` — ${booksDone}/${nodes.length} kirjaa luettu` : ''
                                                         return (
                                                             <span
                                                                 key={level}
                                                                 className={`progress-level-badge progress-level-badge--${status}`}
-                                                                title={`${levelName}${status === 'complete' || status === 'reviewed' ? ' ✓' : ''}`}
+                                                                title={`${levelName}${booksHint}${status === 'complete' || status === 'reviewed' ? ' ✓' : ''}`}
                                                             >
                                                                 {level}
                                                             </span>
@@ -332,7 +363,7 @@ function StudentManager() {
                                                     className="expand-btn"
                                                     onClick={() => handleToggleSubmissions(s.id)}
                                                 >
-                                                    {isExpanded ? 'Piilota palautukset' : 'Näytä palautukset'}
+                                                    {isExpanded ? 'Piilota edistyminen' : 'Näytä edistyminen'}
                                                     <svg
                                                         className={`expand-chevron ${isExpanded ? 'expand-chevron--open' : ''}`}
                                                         viewBox="0 0 12 12" width="12" height="12"
@@ -345,18 +376,21 @@ function StudentManager() {
                                             </div>
                                             {isExpanded && (
                                                 <div className="submissions-detail">
-                                                    {loadingSubs && !submissions ? (
+                                                    {loadingSubs && !progress ? (
                                                         <p className="empty-message">Ladataan...</p>
-                                                    ) : (submissions && submissions.length > 0 ? (
+                                                    ) : (progress && progress.length > 0 ? (
                                                         LEVELS
                                                             .map(({ level, name: levelName }) => {
                                                                 const progressEntry = progress.find(p => p.level === level)
                                                                 if (!progressEntry) return null; // Only show levels with progress entries
-                                                                const sub = submissions.find(sb => sb.completedLevel === progressEntry?.id)
+                                                                const sub = (submissions || []).find(sb => sb.completedLevel === progressEntry?.id)
                                                                 const status = progressEntry?.level_status || 'incomplete'
 
-                                                                const book = books.find(b => b?.id === progressEntry?.book)
-                                                                const title = book?.title || progressEntry.book_title
+                                                                // One book per stop on the continent's route. The teacher
+                                                                // marks the whole continent, so they need to see which
+                                                                // stops have been read and which have not.
+                                                                const nodes = progressEntry.nodes || []
+                                                                const booksDone = nodes.filter(n => n.current_progress >= 100).length
                                                                 return (
                                                                     <div key={level} className="submission-group">
                                                                         <h4 className="submission-level-title" style={{ display: 'flex', gap: 12 }}>
@@ -372,13 +406,37 @@ function StudentManager() {
                                                                                     <option value="resubmit">Hylätty</option>
                                                                                     <option value="reviewed">Hyväksytty</option>
                                                                                 </select>
-                                                                                {level === 1 && <InfoButton textboxStyle={{ left: "-90px" }} info={'Suorittamatta: Oppilaan täytyy lukea kirja loppuun tällä tasolla ja vastata avoimiin kysymyksiin suorittaakseen tason.\n\n Suoritettu: Oppilas on lukenut kirjan loppuun ja vastannut avoimiin kysymyksiin tällä tasolla.\n\n Hylätty: Opettaja on tarkistanut ja EI hyväksynyt tasolla annettuja vastauksia. Oppilas voi suorittaa tason uudestaan.\n\n Hyväksytty: Opettaja on tarkistanut ja hyväksynyt tasolla annetut, luettuun kirjaan liittyvät vastaukset.'} />}
+                                                                                {level === 1 && <InfoButton textboxStyle={{ left: "-90px" }} info={INFO_LEVEL_STATUS} />}
                                                                             </div>
                                                                         </h4>
-                                                                        {title &&
-                                                                            <div className="book-title">
-                                                                                <span><strong>KIRJA: </strong>{title}</span>
-                                                                            </div>}
+
+                                                                        {nodes.length > 0 && (
+                                                                            <div className="node-list">
+                                                                                <div className="node-list-header">
+                                                                                    Kirjat: {booksDone}/{nodes.length} luettu
+                                                                                </div>
+                                                                                {nodes.map(node => {
+                                                                                    const pct = node.current_progress || 0
+                                                                                    const isDone = pct >= 100
+                                                                                    const isStarted = pct > 0 || !!node.book
+                                                                                    const book = books.find(b => b?.id === node.book)
+                                                                                    const title = node.book_title || book?.title
+                                                                                    const state = isDone ? 'done' : (isStarted ? 'started' : 'empty')
+                                                                                    return (
+                                                                                        <div key={node.node_index} className={`node-row node-row--${state}`}>
+                                                                                            <span className="node-row-index">{node.node_index}</span>
+                                                                                            <span className="node-row-title">
+                                                                                                {title || <em>Ei kirjaa valittuna</em>}
+                                                                                            </span>
+                                                                                            <span className="node-row-pct">
+                                                                                                {isDone ? 'Luettu' : `${pct} %`}
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    )
+                                                                                })}
+                                                                            </div>
+                                                                        )}
+
                                                                         {sub ? (
                                                                             <div className="submission-qa">
                                                                                 <p><strong>K1:</strong> {sub.question1}</p>
@@ -388,12 +446,14 @@ function StudentManager() {
                                                                                 <p><strong>K3:</strong> {sub.question3}</p>
                                                                                 <p className="submission-answer"><strong>V3:</strong> {sub.answer3}</p>
                                                                             </div>
-                                                                        ) : null}
+                                                                        ) : (
+                                                                            <p className="submission-none">Ei palautusta tältä tasolta.</p>
+                                                                        )}
                                                                     </div>
                                                                 )
                                                             })
                                                     ) : (
-                                                        <p className="empty-message">Ei palautuksia vielä.</p>
+                                                        <p className="empty-message">Ei edistymistä vielä.</p>
                                                     ))}
                                                 </div>
                                             )}

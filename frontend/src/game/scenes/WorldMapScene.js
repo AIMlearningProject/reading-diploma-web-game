@@ -78,8 +78,6 @@ class WorldMapScene extends Phaser.Scene {
             for (let i = 0; i < CONTINENTS.length - 1; i++) {
                 const from = CONTINENTS[i];
                 const to = CONTINENTS[i + 1];
-                // Only draw the leg once the destination has been reached.
-                if (!ReadingState.mapUnlock[to.mapKey]) break;
                 this.drawDashedLine(
                     this.routeGraphics,
                     mapX(from.x), mapY(from.y),
@@ -102,7 +100,7 @@ class WorldMapScene extends Phaser.Scene {
             CONTINENTS.forEach((pos, index) => {
                 const finalX = mapX(pos.x);
                 const finalY = mapY(pos.y);
-                const isUnlocked = ReadingState.mapUnlock[pos.mapKey] === true;
+                const isUnlocked = true;
                 const isCurrent = pos.mapKey === currentMapKey;
                 const isCompleted = ReadingState._continentCompletedFlags?.[pos.mapKey] === true;
                 const isResubmittable = ReadingState.isLevelPendingResubmission(pos.mapKey);
@@ -119,6 +117,10 @@ class WorldMapScene extends Phaser.Scene {
                 }
 
                 // --- Label ---
+                // The continent's name, and under it what kind of book it holds
+                // for this pupil's year. Both sit inside one parchment plate, so
+                // the genre stays readable wherever it lands on the map.
+                const genre = ReadingState.genreFor(pos.mapKey);
                 const labelFontSize = Math.max(12, Math.round(15 * s));
                 const txt = this.add.text(0, 0, pos.name, {
                     fontFamily: FONTS.BODY, fontSize: `${labelFontSize}px`,
@@ -126,17 +128,46 @@ class WorldMapScene extends Phaser.Scene {
                 }).setOrigin(0.5);
                 txt.setLetterSpacing(Math.max(0.5, 1 * s));
 
-                const pillPadH = 11 * s;
-                const pillPadV = 4 * s;
-                const pillW = txt.width + pillPadH * 2;
-                const pillH = txt.height + pillPadV * 2;
-                const pillBg = this.add.graphics();
-                pillBg.fillStyle(COLORS.PARCHMENT, isUnlocked ? 0.94 : 0.75)
-                    .fillRoundedRect(-pillW / 2, -pillH / 2, pillW, pillH, pillH / 2);
-                pillBg.lineStyle(Math.max(1, 1.5 * s), COLORS.GOLD, isUnlocked ? 0.9 : 0.4)
-                    .strokeRoundedRect(-pillW / 2, -pillH / 2, pillW, pillH, pillH / 2);
+                const genreFontSize = Math.max(11, Math.round(13 * s));
+                const genreTxt = genre.label
+                    ? this.add.text(0, 0, genre.label.toUpperCase(), {
+                        fontFamily: FONTS.BODY, fontSize: `${genreFontSize}px`,
+                        color: genre.free ? '#7a6a4a' : '#8a5a12', fontStyle: '700',
+                        align: 'center', wordWrap: { width: Math.max(140, 190 * s) }
+                    }).setOrigin(0.5)
+                    : null;
+                if (genreTxt) genreTxt.setLetterSpacing(Math.max(0.3, 0.6 * s));
 
-                const labelContainer = this.add.container(finalX, finalY + 58 * s, [pillBg, txt]).setDepth(5);
+                const gapY = genreTxt ? 5 * s : 0;
+                const innerW = Math.max(txt.width, genreTxt ? genreTxt.width : 0);
+                const innerH = txt.height + gapY + (genreTxt ? genreTxt.height : 0);
+
+                const pillPadH = 14 * s;
+                const pillPadV = 7 * s;
+                const pillW = innerW + pillPadH * 2;
+                const pillH = innerH + pillPadV * 2;
+                const radius = Math.min(pillH / 2, 12 * s);
+
+                txt.setY(-innerH / 2 + txt.height / 2);
+                if (genreTxt) genreTxt.setY(innerH / 2 - genreTxt.height / 2);
+
+                const pillBg = this.add.graphics();
+                pillBg.fillStyle(COLORS.PARCHMENT, isUnlocked ? 0.96 : 0.75)
+                    .fillRoundedRect(-pillW / 2, -pillH / 2, pillW, pillH, radius);
+                pillBg.lineStyle(Math.max(1, 1.5 * s), COLORS.GOLD, isUnlocked ? 0.9 : 0.4)
+                    .strokeRoundedRect(-pillW / 2, -pillH / 2, pillW, pillH, radius);
+
+                // A hairline between the name and the genre, as on the other plates.
+                if (genreTxt) {
+                    const ruleY = txt.y + txt.height / 2 + gapY / 2;
+                    pillBg.lineStyle(Math.max(1, 1 * s), COLORS.GOLD, 0.45)
+                        .lineBetween(-innerW / 2, ruleY, innerW / 2, ruleY);
+                }
+
+                const labelParts = genreTxt ? [pillBg, txt, genreTxt] : [pillBg, txt];
+                const labelContainer = this.add.container(
+                    finalX, finalY + (58 * s) + pillH / 2 - (12 * s), labelParts
+                ).setDepth(5);
                 this.pointGroup.add(labelContainer);
 
                 if (isCurrent) {
@@ -174,7 +205,7 @@ class WorldMapScene extends Phaser.Scene {
 
         const kirjat = makeParchmentBadge(
             this, margin, margin,
-            `Luetut kirjat: ${ReadingState.booksRead}/8`,
+            `Luetut kirjat: ${ReadingState.booksRead}/${ReadingState.targetBooks}`,
             { iconKey: ICON_KEYS.BOOK, s: uiS, anchor: 'left' }
         );
         this.bookCountText = kirjat.container;
