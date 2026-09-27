@@ -1561,3 +1561,230 @@ td[data-label="Toiminnot"] {
     color: #9E7A2A;
     white-space: nowrap;
 }
+
+/* --- Kirjat: the library's list and the class's own, one tab each --------- */
+
+.book-tabs {
+    display: flex;
+    gap: 0.4rem;
+    margin: 0 0 0.9rem;
+    border-bottom: 1px solid rgba(196, 151, 58, 0.4);
+}
+
+.book-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: -1px;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    color: #8a7a5a;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.book-tab:hover {
+    color: #9E7A2A;
+}
+
+.book-tab--active {
+    background: rgba(253, 246, 227, 0.85);
+    border-color: rgba(196, 151, 58, 0.4);
+    color: #1e3a5f;
+}
+
+.book-tab-count {
+    padding: 0.05rem 0.45rem;
+    background: rgba(196, 151, 58, 0.22);
+    border-radius: 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #9E7A2A;
+}
+
+.diploma-books-intro {
+    margin: 0 0 0.9rem;
+    font-size: 0.85rem;
+    font-style: italic;
+    line-height: 1.5;
+    color: #8a7a5a;
+}
+
+.diploma-books-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin-bottom: 0.9rem;
+}
+
+.diploma-books-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #9E7A2A;
+}
+
+.diploma-books-field select,
+.diploma-books-field input {
+    padding: 0.35rem 0.6rem;
+    background: rgba(253, 251, 244, 0.9);
+    border: 1px solid #C4973A;
+    border-radius: 4px;
+    color: #3a2a10;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-transform: none;
+}
+
+.diploma-books-field select:focus,
+.diploma-books-field input:focus {
+    outline: none;
+    border-color: #9E7A2A;
+}
+
+.diploma-books-search {
+    flex: 1 1 14rem;
+}
+
+.diploma-books-summary {
+    margin-bottom: 0.7rem;
+    font-size: 0.85rem;
+    color: #3a2a10;
+}
+
+.diploma-books-summary strong {
+    color: #9E7A2A;
+}
+
+/* One card per continent, so a teacher can see at a glance what each stands
+   for this year and jump into its books. */
+.continent-chip-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 0.5rem;
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.continent-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    background: rgba(253, 246, 227, 0.75);
+    border: 1px solid rgba(196, 151, 58, 0.45);
+    border-radius: 5px;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s;
+}
+
+.continent-chip:hover {
+    background: rgba(253, 246, 227, 1);
+    border-color: #C4973A;
+}
+
+.continent-chip-level {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 1.55rem;
+    height: 1.55rem;
+    background: linear-gradient(#D8B25A, #C4973A, #A67E1E);
+    border-radius: 50%;
+    color: #FDFBF4;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.continent-chip-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    font-size: 0.82rem;
+    color: #3a2a10;
+}
+
+.continent-chip-body strong {
+    color: #1e3a5f;
+}
+
+.continent-chip-body span {
+    overflow: hidden;
+    font-size: 0.76rem;
+    color: #8a7a5a;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.continent-chip--free .continent-chip-level {
+    background: rgba(196, 151, 58, 0.28);
+    color: #9E7A2A;
+}
+
+.continent-chip--free .continent-chip-body span {
+    font-style: italic;
+}
+
+.continent-chip-count {
+    margin-left: auto;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #9E7A2A;
+}
+
+/* A catalogue row that offers a choice rather than naming one book. */
+.diploma-books-flag {
+    margin-left: 0.45rem;
+    padding: 0.05rem 0.4rem;
+    border: 1px solid rgba(196, 151, 58, 0.6);
+    border-radius: 9px;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #9E7A2A;
+    white-space: nowrap;
+    cursor: help;
+}
+
+.diploma-books-pager {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.8rem;
+    font-size: 0.85rem;
+    color: #3a2a10;
+}
+
+.diploma-books-pager button {
+    width: 1.8rem;
+    height: 1.8rem;
+    background: transparent;
+    border: 1px solid #C4973A;
+    border-radius: 4px;
+    color: #9E7A2A;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.diploma-books-pager button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}

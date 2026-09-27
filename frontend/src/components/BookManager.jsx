@@ -1,16 +1,27 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { fetchMyBooks, fetchBookReaders, createBook, deleteBook } from '../services/api'
+import { fetchMyBooks, fetchBookReaders, createBook, deleteBook, fetchMyStudents } from '../services/api'
 import BookSearchBar from './BookSearchBar'
-import { createPortal } from 'react-dom'
+import DiplomaBookList from './DiplomaBookList'
+
+/**
+ * The Kirjat section.
+ *
+ * There are two book lists now and they are not interchangeable: the library's
+ * diploma list, which the game imports and nobody edits here, and the books a
+ * class adds for itself. Showing them in one table would hide five hundred
+ * imported rows behind a teacher's own two dozen, so they get a tab each.
+ */
 
 function BookManager() {
+    const [tab, setTab] = useState('diploma')
     const [books, setBooks] = useState([])
+    const [studentGrades, setStudentGrades] = useState([])
+    const [gradesLoaded, setGradesLoaded] = useState(false)
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [booktype, setBooktype] = useState('physical')
     const [pageCount, setPageCount] = useState('');
     const [error, setError] = useState('')
-    const [zoomSrc, setZoomSrc] = useState(null);
     const [query, setQuery] = useState('');
     const [queryBooktype, setQueryBooktype] = useState('');
     const [page, setPage] = useState(0);
@@ -49,9 +60,37 @@ function BookManager() {
         }
     }
 
+    // Which years the class is actually in, so the diploma tab opens on a list
+    // the teacher has pupils for rather than always on grade 1.
+    const fetchStudentGrades = async () => {
+        try {
+            const students = await fetchMyStudents()
+            setStudentGrades(students.map((student) => Number(student.grade)).filter(Boolean))
+        } catch {
+            setStudentGrades([])
+        } finally {
+            setGradesLoaded(true)
+        }
+    }
+
     useEffect(() => {
         fetchBookList()
+        fetchStudentGrades()
     }, [])
+
+    const gradeOptions = useMemo(
+        () => [...new Set(studentGrades)].toSorted((a, b) => a - b),
+        [studentGrades]
+    )
+
+    // The year most of the class is in.
+    const defaultGrade = useMemo(() => {
+        if (studentGrades.length === 0) return 1
+        const tally = new Map()
+        for (const grade of studentGrades) tally.set(grade, (tally.get(grade) ?? 0) + 1)
+        const byFrequency = [...tally].toSorted((a, b) => b[1] - a[1] || a[0] - b[0])
+        return byFrequency[0][0]
+    }, [studentGrades])
 
     const handleAdd = async (e) => {
         e.preventDefault()
@@ -107,6 +146,46 @@ ${studentNames}`)) return
     return (
         <div className="dashboard-section">
             <h2>Kirjat</h2>
+
+            <div className="book-tabs" role="tablist">
+                <button
+                    type="button"
+                    role="tab"
+                    aria-selected={tab === 'diploma'}
+                    className={`book-tab ${tab === 'diploma' ? 'book-tab--active' : ''}`}
+                    onClick={() => setTab('diploma')}
+                >
+                    Lukudiplomin kirjat
+                </button>
+                <button
+                    type="button"
+                    role="tab"
+                    aria-selected={tab === 'own'}
+                    className={`book-tab ${tab === 'own' ? 'book-tab--active' : ''}`}
+                    onClick={() => setTab('own')}
+                >
+                    Luokan omat kirjat
+                    {books.length > 0 && <span className="book-tab-count">{books.length}</span>}
+                </button>
+            </div>
+
+            {tab === 'diploma' ? (
+                gradesLoaded
+                    ? <DiplomaBookList grades={gradeOptions} defaultGrade={defaultGrade} />
+                    : <p className="empty-message">Ladataan kirjalistaa...</p>
+            ) : (
+                <OwnBooks />
+            )}
+        </div>
+    )
+
+    function OwnBooks() {
+        return (
+            <>
+            <p className="diploma-books-intro">
+                Kirjat, jotka sinä tai oppilaasi olette lisänneet itse. Ne näkyvät oppilaille
+                kaikilla mantereilla lukudiplomin oman listan rinnalla.
+            </p>
             {books.length > 0 ? (
                 <>
                     <BookSearchBar
@@ -155,13 +234,6 @@ ${studentNames}`)) return
                                     ))}
                                 </tbody>
                             </table>
-                            {zoomSrc &&
-                                createPortal(
-                                    <div className="zoom-overlay" onClick={() => setZoomSrc(null)}>
-                                        <img src={zoomSrc} className="zoom-img" alt="" />
-                                    </div>,
-                                    document.body
-                                )}
                             {/* Mobile view of book list */}
                             <div className="mobile-book-list">
                                 {pageSlice.map((b) => (
@@ -291,8 +363,9 @@ ${studentNames}`)) return
                 <button type="submit" className="add-button">Lisää kirja</button>
             </form>
             {error && <p className="section-error">{error}</p>}
-        </div>
-    )
+            </>
+        )
+    }
 }
 
 export default BookManager

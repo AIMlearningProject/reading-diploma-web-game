@@ -3,6 +3,7 @@ import BooksContext from '../contexts/BooksContext'
 import InfoButton from './InfoButton'
 import InviteSection from './InviteSection'
 import StatusLegend from './StatusLegend'
+import { CONTINENTS as LEVELS } from '../constants/continents'
 import {
     createStudent,
     deleteStudent,
@@ -16,16 +17,6 @@ import {
     updateUserGrade
 } from '../services/api'
 
-const LEVELS = [
-    { level: 1, name: 'Pohjoisnapa' },
-    { level: 2, name: 'Eurooppa' },
-    { level: 3, name: 'Aasia' },
-    { level: 4, name: 'Pohjois-Amerikka' },
-    { level: 5, name: 'Etelä-Amerikka' },
-    { level: 6, name: 'Afrikka' },
-    { level: 7, name: 'Oseania' },
-    { level: 8, name: 'Etelämanner' },
-]
 
 const INFO_LEVEL_STATUS = 'Suorittamatta: Oppilaan täytyy lukea kirja loppuun tällä tasolla ja vastata avoimiin kysymyksiin suorittaakseen tason.\n\n Suoritettu: Oppilas on lukenut kirjan loppuun ja vastannut avoimiin kysymyksiin tällä tasolla.\n\n Hylätty: Opettaja on tarkistanut ja EI hyväksynyt tasolla annettuja vastauksia. Oppilas voi suorittaa tason uudestaan.\n\n Hyväksytty: Opettaja on tarkistanut ja hyväksynyt tasolla annetut, luettuun kirjaan liittyvät vastaukset.'
 
