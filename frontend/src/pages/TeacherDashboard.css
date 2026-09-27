@@ -669,7 +669,6 @@ td[data-label="Toiminnot"] {
     border-radius: 4px;
     border: 1px solid rgba(22, 45, 78, 0.12);
     border-left: 3px solid rgba(22, 45, 78, 0.35);
-    animation: widgetExpand 0.22s cubic-bezier(0.34, 1.2, 0.64, 1) both;
 }
 
 .pwd-reset-input {
@@ -783,11 +782,6 @@ td[data-label="Toiminnot"] {
 @keyframes rowSlideIn {
     from { opacity: 0; transform: translateX(-10px); }
     to   { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes widgetExpand {
-    from { opacity: 0; transform: scaleY(0.65); transform-origin: top; }
-    to   { opacity: 1; transform: scaleY(1); }
 }
 
 /* ── Progress Row ───────────────────────────────────────── */
