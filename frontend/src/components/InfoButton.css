@@ -1,43 +1,54 @@
+/* The "?" that opens a one-paragraph explanation. Used beside the status select
+   on the teacher page and inside two pupil popups.
+
+   It used to be a 22px circle with a grey tooltip box. It is a control, so it
+   takes the one control shape from TeacherDashboard.css: 34px, radius-md. The
+   tooltip is a surface, so it gets a rule and a ground rather than a box -- the
+   shadow is what lifts it off the page. */
+
 .info-container {
     position: relative;
     display: inline-block;
 }
 
 .info-button {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 1px solid #1e3a5f7f;
-    background: #ffffff;
-    color: #1e3a5f;
-    font-family: 'Nunito', sans-serif;
-    font-weight: bold;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-md);
+    border: var(--border-hairline) solid var(--brass-500);
+    background: var(--paper-warm);
+    color: var(--navy-700);
+    font-family: var(--font-body);
+    font-weight: 800;
+    font-size: var(--fs-body-sm);
     cursor: pointer;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background 0.18s, border-color 0.18s;
 }
 
 .info-button:hover {
-    background: rgba(196, 151, 58, 0.1);
-    border-color: #9E7A2A;
+    background: rgba(196, 151, 58, 0.15);
+    border-color: var(--brass-600);
 }
 
 .info-text-wrapper {
     display: none;
     position: absolute;
-    top: 26px;
+    top: 38px;
     left: 50%;
     transform: translateX(-50%);
-    min-width: 180px;
+    min-width: 220px;
 
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    background: var(--parchment-000);
+    border: none;
+    border-top: var(--border-card) solid var(--brass-500);
+    border-radius: 0;
 
-    padding: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    padding: var(--space-3);
+    box-shadow: 0 10px 24px -14px rgba(44, 30, 5, 0.55);
     z-index: 10;
 }
 
@@ -47,9 +58,10 @@
 }
 
 .info-text {
-    font-family: 'Nunito', sans-serif;
+    font-family: var(--font-body);
     margin: 0;
-    font-size: 14px;
-    color: #333;
+    font-size: var(--fs-body-sm);
+    line-height: 1.5;
+    color: var(--ink-900);
     white-space: pre-line;
 }

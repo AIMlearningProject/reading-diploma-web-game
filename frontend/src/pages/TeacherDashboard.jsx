@@ -22,7 +22,7 @@ function TeacherDashboard() {
     }
 
     return (
-        <div className="dashboard" style={{ backgroundImage: `linear-gradient(rgba(235,243,254,0.82), rgba(235,243,254,0.82)), url(${homeBG})` }}>
+        <div className="dashboard teacher-dashboard" style={{ backgroundImage: `linear-gradient(rgba(235,243,254,0.82), rgba(235,243,254,0.82)), url(${homeBG})` }}>
             <header className="dashboard-header">
                 <h1>Opettajan hallintapaneeli</h1>
                 <div className="header-right">

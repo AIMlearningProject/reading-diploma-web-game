@@ -1,7 +1,41 @@
+/* Teacher dashboard.
+ *
+ * Colours, type and spacing come from tokens.css. A literal below is one of
+ * three things and nothing else: an alpha wash over a token colour, an SVG
+ * data URI (an attribute inside a URL cannot read a custom property), or a
+ * clamp() range, which has no flat token.
+ *
+ * Page CSS is global and unscoped, so the rules this page shares with
+ * StudentDashboard.css -- .dashboard-section, .logout-button, .header-right,
+ * .empty-message -- are scoped under .teacher-dashboard here. Without that the
+ * two stylesheets define the same selectors with different values and whichever
+ * is bundled last wins.
+ *
+ * Type on this page uses four sizes and no more: body for table text, body-sm
+ * for controls and secondary text, badge for pills and counts, meta for the
+ * small uppercase labels.
+ *
+ * SHAPE LAW -- enforced by frontend/scripts/check-shapes.mjs, not by memory.
+ *
+ *   1. Radius has three tiers and no others:
+ *        0                  a surface. This page is paper, not a stack of boxes.
+ *        var(--radius-md)   anything clickable, typeable, or an image.
+ *        var(--radius-pill), var(--radius-round)
+ *                           a marker: a status, a count, a numeral, an avatar.
+ *   2. A border says "this is interactive". It is not a way to group. A
+ *      container groups with a rule -- border-top or border-left -- and a ground
+ *      tint. This is the rule that stops four panels nesting inside each other.
+ *   3. Every control sits on one 34px baseline.
+ *
+ * The deliberate exception is .level-status-select, which is a control and a
+ * status at once: it keeps a border because it is clickable, and its ground
+ * carries the state colour.
+ */
+
 /* ── Page Shell ─────────────────────────────────────────── */
 .dashboard {
     min-height: 100vh;
-    background-color: #EBF3FE;
+    background-color: var(--sky-100);
     background-size: cover;
     background-position: center;
     position: relative;
@@ -31,28 +65,37 @@
     z-index: 0;
 }
 
+/* One focus style for the whole page. Several controls below used to clear the
+   outline without putting anything back, which loses the keyboard user. */
+.teacher-dashboard :focus-visible {
+    outline: var(--border-card) solid var(--blue-400);
+    outline-offset: 2px;
+}
+
 /* ── Captain's Bridge — Sticky Header ───────────────────── */
 .dashboard-header {
-    background: linear-gradient(180deg, #162d4e 0%, #1e3a5f 55%, #2c5f8a 100%);
-    border-bottom: 2px solid #C4973A;
-    padding: 1.25rem 2.5rem;
+    background: linear-gradient(180deg, var(--navy-800) 0%, var(--navy-700) 55%, var(--navy-500) 100%);
+    border-bottom: var(--border-card) solid var(--brass-500);
+    padding: 1.25rem var(--space-7);
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--space-3);
     position: sticky;
     top: 0;
-    z-index: auto;
+    /* Above .dashboard-content, which is z-index 1. The cards used to scroll
+       over the bar because this was z-index auto. */
+    z-index: 20;
     box-shadow:
-        0 4px 24px rgba(22, 45, 78, 0.45),
+        var(--shadow-header),
         0 1px 0 rgba(196, 151, 58, 0.25) inset;
 }
 
 .dashboard-header h1 {
-    font-family: 'Cinzel Decorative', serif;
+    font-family: var(--font-display);
     font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    color: #D8B25A;
+    color: var(--brass-300);
     margin: 0;
     letter-spacing: 0.05em;
     text-shadow:
@@ -60,30 +103,32 @@
         0 0 20px rgba(196, 151, 58, 0.2);
 }
 
-.header-right {
+.teacher-dashboard .header-right {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--space-4);
     flex-wrap: wrap;
 }
 
-.header-right span {
-    color: rgba(235, 243, 254, 0.68);
-    font-size: clamp(0.95rem, 2vw, 1.1rem);
+.teacher-dashboard .header-right span {
+    color: rgba(235, 243, 254, 0.85);
+    font-size: var(--fs-body-sm);
     font-style: italic;
     letter-spacing: 0.03em;
 }
 
-/* Logout — ghost brass */
-.logout-button {
+/* Logout — ghost brass. brass-500 as a label is 2.5:1 against the bottom of
+   the header gradient; brass-300 is 5.7:1 in the middle and 3.4:1 at worst. */
+.teacher-dashboard .logout-button {
+    min-height: 34px;
     background: transparent;
-    border: 1.5px solid rgba(196, 151, 58, 0.6);
-    color: #C4973A;
-    border-radius: 4px;
-    padding: 0.55rem 1.2rem;
+    border: var(--border-frame) solid rgba(196, 151, 58, 0.6);
+    color: var(--brass-300);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-4);
     cursor: pointer;
-    font-size: 0.95rem;
-    font-family: 'Nunito', sans-serif;
+    font-size: var(--fs-body-sm);
+    font-family: var(--font-body);
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -91,10 +136,10 @@
     white-space: nowrap;
 }
 
-.logout-button:hover {
-    background: rgba(196, 151, 58, 0.15);
-    border-color: #D8B25A;
-    color: #D8B25A;
+.teacher-dashboard .logout-button:hover {
+    background: rgba(196, 151, 58, 0.18);
+    border-color: var(--brass-200);
+    color: var(--brass-200);
 }
 
 /* ── Dashboard Content ───────────────────────────────────── */
@@ -104,58 +149,39 @@
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: var(--space-7);
     position: relative;
     z-index: 1;
 }
 
-/* ── Section Cards — Cartouche Panels ────────────────────── */
-.dashboard-section {
-    background:
-        radial-gradient(ellipse 75% 50% at 10% 10%, rgba(255, 252, 225, 0.65) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 55% at 90% 90%, rgba(196, 151, 58, 0.07) 0%, transparent 65%),
-        #FDFBF4;
-    border-radius: 8px;
-    border: 2px solid #C4973A;
-    box-shadow:
-        0 6px 32px rgba(44, 30, 5, 0.13),
-        0 2px 8px rgba(44, 30, 5, 0.07);
+/* ── Section Sheets ──────────────────────────────────────── */
+/* The sheet itself lives in paper.css, which every page shares. What stays
+   here is what only this page needs: its padding, and the entrance animation
+   turned off -- a teacher re-renders this page on every edit, and every page
+   stylesheet is bundled on every route, so StudentDashboard.css would
+   otherwise hand these elements its cardRise. */
+.teacher-dashboard .dashboard-section {
     padding: clamp(2rem, 4vw, 2.75rem);
-    position: relative;
-    animation: cardRise 0.55s cubic-bezier(0.34, 1.3, 0.64, 1) both;
-}
-
-.dashboard-section:nth-child(1) { animation-delay: 0.08s; }
-.dashboard-section:nth-child(2) { animation-delay: 0.22s; }
-.dashboard-section:nth-child(3) { animation-delay: 0.36s; }
-
-/* Inner decorative frame */
-.dashboard-section::before {
-    content: '';
-    position: absolute;
-    inset: 7px;
-    border: 1px solid rgba(196, 151, 58, 0.22);
-    border-radius: 4px;
-    pointer-events: none;
+    animation: none;
 }
 
 /* Section heading */
-.dashboard-section h2 {
-    margin: 0 0 1.5rem;
-    color: #1e3a5f;
+.teacher-dashboard .dashboard-section h2 {
+    margin: 0 0 var(--space-5);
+    color: var(--navy-700);
     font-size: clamp(1.1rem, 2.5vw, 1.4rem);
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
 }
 
-.dashboard-section h2::after {
+.teacher-dashboard .dashboard-section h2::after {
     content: '';
     display: block;
     width: 40px;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #C4973A, transparent);
-    margin: 0.45rem 0 0;
+    background: linear-gradient(90deg, transparent, var(--brass-500), transparent);
+    margin: 0.5rem 0 0;
 }
 
 /* ── Logbook Table ───────────────────────────────────────── */
@@ -169,41 +195,78 @@
     min-width: 48px;
 }
 
+/* The actions column is the right-hand edge of the table. Everything in it
+   hangs off that edge, including the progress toggle on the row below, which
+   sits in a cell spanning all four columns -- the two used to be measured from
+   different sides, so nothing in this column lined up with anything else. Both
+   cells carry the same right padding, so both edges land together. */
+.data-table th:last-child,
+td[data-label="Toiminnot"] {
+    text-align: right;
+}
+
 td[data-label="Toiminnot"] {
     white-space: nowrap;
+}
+
+/* Inside the cell, a block of fields is still read left to right. */
+td[data-label="Toiminnot"] .pwd-reset-widget {
+    text-align: left;
 }
 
 .data-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-5);
 }
 
+/* 0.14em tracking pulls Finnish column names apart faster than it helps them
+   read as labels; 0.06em is the system's label tracking. */
 .data-table th {
-    color: #9E7A2A;
-    font-size: 0.88rem;
-    font-weight: 700;
+    color: var(--ink-700);
+    font-size: var(--fs-label);
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    padding: 0 1rem 0.75rem;
-    border-bottom: 1.5px solid rgba(196, 151, 58, 0.4);
+    letter-spacing: var(--ls-label);
+    padding: 0 var(--space-4) var(--space-3);
+    border-bottom: var(--border-frame) solid rgba(196, 151, 58, 0.4);
     text-align: left;
 }
 
 .data-table td {
-    padding: 0.85rem 1rem;
-    border-bottom: 1px solid rgba(196, 151, 58, 0.12);
-    font-size: clamp(1rem, 2vw, 1.1rem);
-    color: #3a2a10;
+    padding: 0.85rem var(--space-4);
+    border-bottom: var(--border-hairline) solid rgba(196, 151, 58, 0.12);
+    font-size: var(--fs-body);
+    color: var(--ink-900);
     text-align: left;
     transition: background 0.18s, box-shadow 0.18s;
+}
+
+/* A pupil is one block of two rows -- who they are, and how far they have got.
+   The rule belongs under the block, not through the middle of it, and the two
+   rows share one ground so the block reads as one thing. */
+.data-table tr.student-info-row td {
+    border-bottom: none;
+    padding-bottom: 0.35rem;
+}
+
+/* The name is where the eye lands; everything else in the row is a detail
+   about it and is set one step down. */
+.data-table td[data-label="Nimi"] {
+    font-weight: 800;
+    color: var(--navy-700);
+}
+
+.data-table td[data-label="Luokka-aste"],
+.data-table td[data-label="Sähköposti"] {
+    font-size: var(--fs-body-sm);
 }
 
 .book-cover-thumb {
     width: 48px;
     height: 64px;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     display: block;
     cursor: zoom-in;
 }
@@ -212,7 +275,7 @@ td[data-label="Toiminnot"] {
     align-self: flex-start;
     justify-self: center;
     object-fit: contain;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     display: block;
     cursor: zoom-in;
 }
@@ -220,7 +283,7 @@ td[data-label="Toiminnot"] {
 .zoom-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -233,34 +296,20 @@ td[data-label="Toiminnot"] {
     max-width: 90vw;
     max-height: 90vh;
     object-fit: contain;
-    border-radius: 4px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }
-
 
 .data-table tbody tr:last-child td {
     border-bottom: none;
 }
-
-.data-table tbody tr {
-    animation: rowSlideIn 0.38s ease both;
-}
-
-.data-table tbody tr:nth-child(1) { animation-delay: 0.04s; }
-.data-table tbody tr:nth-child(2) { animation-delay: 0.09s; }
-.data-table tbody tr:nth-child(3) { animation-delay: 0.14s; }
-.data-table tbody tr:nth-child(4) { animation-delay: 0.19s; }
-.data-table tbody tr:nth-child(5) { animation-delay: 0.24s; }
-.data-table tbody tr:nth-child(6) { animation-delay: 0.29s; }
-.data-table tbody tr:nth-child(7) { animation-delay: 0.34s; }
-.data-table tbody tr:nth-child(8) { animation-delay: 0.39s; }
 
 .data-table tbody tr.book-item-row:hover td {
     background: rgba(196, 151, 58, 0.07);
 }
 
 .data-table tbody tr.book-item-row:hover td:first-child {
-    box-shadow: inset 3px 0 0 #C4973A;
+    box-shadow: inset var(--border-accent) 0 0 var(--brass-500);
 }
 
 .data-table tbody tr.highlight-student-row td {
@@ -268,33 +317,32 @@ td[data-label="Toiminnot"] {
 }
 
 .data-table tbody tr.highlight-student-row td:first-child {
-    box-shadow: inset 3px 0 0 #C4973A;
+    box-shadow: inset var(--border-accent) 0 0 var(--brass-500);
 }
-
 
 /* ── Add Form — Logbook Entry Row ────────────────────────── */
 .add-form {
     display: flex;
-    gap: 0.75rem;
+    gap: var(--space-3);
     flex-wrap: wrap;
     align-items: flex-end;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(196, 151, 58, 0.2);
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: var(--border-hairline) solid rgba(196, 151, 58, 0.2);
 }
 
 .add-form .form-group {
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: var(--space-1);
     flex: 1 1 140px;
 }
 
 .add-form label {
-    font-size: 0.88rem;
+    font-size: var(--fs-label);
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #9E7A2A;
+    letter-spacing: var(--ls-label);
+    color: var(--ink-700);
     font-weight: 700;
 }
 
@@ -302,12 +350,12 @@ td[data-label="Toiminnot"] {
 .add-form select {
     background: transparent;
     border: none;
-    border-bottom: 1.5px solid rgba(196, 151, 58, 0.45);
+    border-bottom: var(--border-frame) solid rgba(196, 151, 58, 0.45);
     border-radius: 0;
     padding: 0.6rem 0.1rem;
-    font-size: 1.1rem;
-    font-family: 'Nunito', sans-serif;
-    color: #1e3a5f;
+    font-size: var(--fs-body);
+    font-family: var(--font-body);
+    color: var(--navy-700);
     width: 100%;
     box-sizing: border-box;
     outline: none;
@@ -318,19 +366,20 @@ td[data-label="Toiminnot"] {
 
 .add-form input:focus,
 .add-form select:focus {
-    border-bottom-color: #4A90D9;
+    border-bottom-color: var(--blue-400);
     background: rgba(74, 144, 217, 0.04);
 }
 
 /* ── Brass Add Button ────────────────────────────────────── */
 .add-button {
-    background: linear-gradient(180deg, #D8B25A 0%, #C4973A 48%, #A67E1E 100%);
-    color: #1e3a5f;
-    border: 1px solid #9E7A2A;
-    border-radius: 4px;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-family: 'Nunito', sans-serif;
+    min-height: 34px;
+    background: linear-gradient(180deg, var(--brass-300) 0%, var(--brass-500) 48%, var(--brass-700) 100%);
+    color: var(--navy-700);
+    border: var(--border-hairline) solid var(--brass-600);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-5);
+    font-size: var(--fs-body-sm);
+    font-family: var(--font-body);
     font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -345,7 +394,7 @@ td[data-label="Toiminnot"] {
 }
 
 .add-button:hover {
-    background: linear-gradient(180deg, #E0BC64 0%, #CCA040 48%, #B08826 100%);
+    background: linear-gradient(180deg, var(--brass-200) 0%, var(--brass-400) 48%, var(--brass-650) 100%);
     box-shadow:
         0 1px 0 rgba(255, 248, 200, 0.55) inset,
         0 -1px 0 rgba(0, 0, 0, 0.18) inset,
@@ -354,7 +403,7 @@ td[data-label="Toiminnot"] {
 }
 
 .add-button:active {
-    background: linear-gradient(180deg, #A67E1E 0%, #C4973A 55%, #D8B25A 100%);
+    background: linear-gradient(180deg, var(--brass-700) 0%, var(--brass-500) 55%, var(--brass-300) 100%);
     box-shadow:
         0 2px 5px rgba(0, 0, 0, 0.16) inset,
         0 2px 6px rgba(100, 60, 0, 0.1);
@@ -362,13 +411,14 @@ td[data-label="Toiminnot"] {
 }
 
 .upload-button {
-    background: #fff;
-    color: #1e3a5f;
-    border: 1px solid rgba(196, 151, 58, 0.45);
-    border-radius: 4px;
-    padding: 0.7rem 1rem;
-    font-size: 0.96rem;
-    font-family: 'Nunito', sans-serif;
+    min-height: 34px;
+    background: var(--page-white);
+    color: var(--navy-700);
+    border: var(--border-hairline) solid rgba(196, 151, 58, 0.45);
+    border-radius: var(--radius-md);
+    padding: 0.7rem var(--space-4);
+    font-size: var(--fs-body-sm);
+    font-family: var(--font-body);
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: none;
@@ -383,13 +433,8 @@ td[data-label="Toiminnot"] {
 }
 
 .upload-button:hover {
-    border-color: #C4973A;
+    border-color: var(--brass-500);
     background: rgba(196, 151, 58, 0.08);
-}
-
-.upload-button:focus {
-    outline: 2px solid #4A90D9;
-    outline-offset: 2px;
 }
 
 .upload-field-group {
@@ -397,185 +442,174 @@ td[data-label="Toiminnot"] {
 }
 
 /* ── Delete Button — Red Wax Seal ────────────────────────── */
-.delete-button {
-    background: transparent;
-    border: 1px solid rgba(139, 26, 26, 0.45);
-    color: #8B1A1A;
-    border-radius: 4px;
-    padding: 0.45rem 0.9rem;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: all 0.15s;
-}
-
-.delete-button:hover {
-    background: #8B1A1A;
-    color: #FFF8F0;
-    border-color: #8B1A1A;
-    box-shadow: 0 2px 8px rgba(139, 26, 26, 0.25);
-}
-
+.delete-button,
 .delete-profile-button {
+    min-height: 34px;
     background: transparent;
-    border: 1px solid rgba(139, 26, 26, 0.45);
-    color: #8B1A1A;
-    border-radius: 4px;
+    border: var(--border-hairline) solid rgba(139, 26, 26, 0.45);
+    color: var(--state-danger);
+    border-radius: var(--radius-md);
     padding: 0.45rem 0.9rem;
     cursor: pointer;
-    font-size: 0.9rem;
-    font-family: 'Nunito', sans-serif;
+    font-size: var(--fs-body-sm);
+    font-family: var(--font-body);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     transition: all 0.15s;
 }
 
+.delete-button:hover,
 .delete-profile-button:hover {
-    background: #8B1A1A;
-    color: #FFF8F0;
-    border-color: #8B1A1A;
+    background: var(--state-danger);
+    color: var(--paper-warm);
+    border-color: var(--state-danger);
     box-shadow: 0 2px 8px rgba(139, 26, 26, 0.25);
 }
 
 /* ── Open transfer requests button ────────────────────────── */
 .open-transfer-requests-button {
+    min-height: 34px;
     background: transparent;
-    border: 2px solid rgba(212, 175, 55, 0.55);
-    color: #C4973A;
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
+    border: var(--border-card) solid rgba(212, 175, 55, 0.55);
+    color: var(--ink-700);
+    padding: 0.6rem var(--space-4);
+    border-radius: var(--radius-md);
     text-transform: uppercase;
-    font-size: 0.9rem;
-    font-family: 'Nunito', sans-serif;
+    font-size: var(--fs-body-sm);
+    font-family: var(--font-body);
     font-weight: 700;
     letter-spacing: 0.08em;
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: all 0.2s ease;
 }
 
 .open-transfer-requests-button:hover {
     background: rgba(212, 175, 55, 0.12);
+    border-color: var(--brass-500);
+    color: var(--ink-900);
 }
 
 /* ── Reject/Accept buttons ────────────────────────── */
+/* White on these pastel fills is 2.5:1 and 3.1:1. navy-700 is 4.6:1 on the
+   accept green, and the reject button takes the danger red as its border so
+   the two differ by more than hue. */
 .accept-button,
 .reject-button {
-    padding: 0.5rem 1rem;
+    min-height: 34px;
+    padding: var(--space-2) var(--space-4);
     border: none;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    font-weight: 700;
+    border-radius: var(--radius-md);
+    font-size: var(--fs-body-sm);
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-family: 'Nunito', sans-serif;
+    font-family: var(--font-body);
 }
 
 .accept-button {
-    background: linear-gradient(135deg, #90C695 0%, #7DB085 100%);
-    color: white;
-    border: 1.5px solid #7DB085;
+    background: linear-gradient(135deg, var(--accept-300) 0%, var(--accept-500) 100%);
+    color: var(--navy-700);
+    border: var(--border-frame) solid var(--state-reviewed);
 }
 
 .accept-button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(125, 176, 133, 0.3);
+    box-shadow: 0 4px 12px rgba(125, 176, 133, 0.35);
 }
 
 .accept-button:disabled,
 .reject-button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    transform: translateY(0);
     box-shadow: none;
 }
 
 .reject-button {
-    background: linear-gradient(135deg, #E8A0A0 0%, #D97777 100%);
-    color: white;
-    border: 1.5px solid #D97777;
+    background: linear-gradient(135deg, var(--reject-300) 0%, var(--reject-500) 100%);
+    color: var(--navy-700);
+    border: var(--border-frame) solid var(--state-danger);
 }
 
 .reject-button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(217, 119, 119, 0.3);
+    box-shadow: 0 4px 12px rgba(217, 119, 119, 0.35);
 }
 
 .accept-button:active,
 .reject-button:active {
-    transform: translateY(0);
     box-shadow: none;
 }
 
 /* ── Empty & Error States ────────────────────────────────── */
-.empty-message {
-    color: #9E7A2A;
+.teacher-dashboard .empty-message {
+    color: var(--ink-700);
     font-style: italic;
-    font-size: 1.05rem;
-    opacity: 0.7;
-    margin: 0.5rem 0 1.5rem;
+    font-size: var(--fs-body-sm);
+    margin: var(--space-2) 0 var(--space-5);
 }
 
 .section-error {
-    color: #8B1A1A;
-    font-size: 1rem;
-    margin: 0.75rem 0 0;
+    color: var(--state-danger);
+    font-size: var(--fs-body-sm);
+    margin: var(--space-3) 0 0;
     font-weight: 700;
     font-style: italic;
 }
 
 /* ── Inline Table Edit Controls ─────────────────────────── */
-.icon-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0 0.3rem;
-    font-size: 1rem;
-    opacity: 0.55;
-    transition: opacity 0.15s;
-}
-
-.icon-btn:hover { opacity: 1; }
-
-/* ── Edit icon button — pen/quill variant ────────────────── */
-.icon-btn--edit {
-    background: none;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    padding: 0.2rem 0.3rem;
-    opacity: 0.75;
-    color: #9E7A2A;
-    transition: opacity 0.18s, background 0.18s;
+/* These were 20px wide at 55% opacity, which is both hard to hit and hard to
+   see. Carry the colour instead of the transparency and give them a target. */
+.icon-btn,
+.icon-btn--edit,
+.icon-btn--lock {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    min-height: 34px;
+    padding: var(--space-1);
+    background: none;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
     vertical-align: middle;
-    margin-left: 0.3rem;
+    transition: background 0.18s, color 0.18s;
 }
 
+.icon-btn,
+.icon-btn--edit {
+    color: var(--ink-700);
+}
+
+.icon-btn:hover,
 .icon-btn--edit:hover {
-    opacity: 1;
-    background: rgba(196, 151, 58, 0.15);
+    background: rgba(196, 151, 58, 0.18);
+    color: var(--ink-900);
+}
+
+.icon-btn--lock {
+    color: var(--navy-700);
+}
+
+.icon-btn--lock:hover {
+    background: rgba(22, 45, 78, 0.12);
 }
 
 /* ── Normal-state action button group ────────────────────── */
 .row-actions {
     display: flex;
     align-items: center;
-    gap: 0.55rem;
+    justify-content: flex-end;
+    gap: var(--space-2);
 }
 
 .inline-edit-input {
     background: transparent;
     border: none;
-    border-bottom: 1.5px solid #C4973A;
-    color: #3a2a10;
-    font-family: 'Nunito', sans-serif;
+    border-bottom: var(--border-frame) solid var(--brass-500);
+    color: var(--ink-900);
+    font-family: var(--font-body);
     font-size: inherit;
     padding: 0.15rem 0.25rem;
     width: 100%;
@@ -584,14 +618,15 @@ td[data-label="Toiminnot"] {
 
 /* ── Cancel Button — Ghost Secondary ────────────────────── */
 .cancel-button {
+    min-height: 34px;
     background: transparent;
-    border: 1px solid rgba(158, 122, 42, 0.4);
-    color: #9E7A2A;
-    border-radius: 4px;
+    border: var(--border-hairline) solid rgba(158, 122, 42, 0.4);
+    color: var(--ink-700);
+    border-radius: var(--radius-md);
     padding: 0.45rem 0.9rem;
     cursor: pointer;
-    font-size: 0.9rem;
-    font-family: 'Nunito', sans-serif;
+    font-size: var(--fs-body-sm);
+    font-family: var(--font-body);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -600,24 +635,24 @@ td[data-label="Toiminnot"] {
 
 .cancel-button:hover {
     background: rgba(158, 122, 42, 0.1);
-    border-color: #C4973A;
-    color: #C4973A;
+    border-color: var(--brass-500);
+    color: var(--ink-900);
 }
 
 /* ── Student count badge ─────────────────────────────────── */
 .student-count {
     display: inline-block;
     background: rgba(196, 151, 58, 0.15);
-    border: 1px solid rgba(196, 151, 58, 0.4);
-    color: #9E7A2A;
-    font-size: 0.72rem;
+    border: var(--border-hairline) solid rgba(196, 151, 58, 0.4);
+    color: var(--ink-700);
+    font-size: var(--fs-badge);
     font-weight: 800;
     letter-spacing: 0.1em;
-    border-radius: 20px;
-    padding: 0.12rem 0.6rem;
-    margin-left: 0.75rem;
+    border-radius: var(--radius-pill);
+    padding: 0.15rem 0.6rem;
+    margin-left: var(--space-3);
     vertical-align: middle;
-    font-family: 'Nunito', sans-serif;
+    font-family: var(--font-body);
     text-transform: uppercase;
 }
 
@@ -627,7 +662,7 @@ td[data-label="Toiminnot"] {
 }
 
 .data-table tr.editing-row td:first-child {
-    box-shadow: inset 3px 0 0 #C4973A;
+    box-shadow: inset var(--border-accent) 0 0 var(--brass-500);
 }
 
 /* ── Lock row — password reset mode ─────────────────────── */
@@ -636,47 +671,27 @@ td[data-label="Toiminnot"] {
 }
 
 .data-table tr.lock-row td:first-child {
-    box-shadow: inset 3px 0 0 #1e3a5f;
-}
-
-/* ── Lock icon button ────────────────────────────────────── */
-.icon-btn--lock {
-    background: none;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    padding: 0.2rem 0.35rem;
-    opacity: 0.5;
-    transition: opacity 0.2s, background 0.2s;
-    display: inline-flex;
-    align-items: center;
-    color: #1e3a5f;
-    vertical-align: middle;
-}
-
-.icon-btn--lock:hover {
-    opacity: 1;
-    background: rgba(22, 45, 78, 0.1);
+    box-shadow: inset var(--border-accent) 0 0 var(--navy-700);
 }
 
 /* ── Password Reset Widget ───────────────────────────────── */
 .pwd-reset-widget {
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
-    padding: 0.6rem 0.75rem;
+    gap: var(--space-2);
+    padding: 0.6rem var(--space-3);
     background: rgba(22, 45, 78, 0.05);
-    border-radius: 4px;
-    border: 1px solid rgba(22, 45, 78, 0.12);
-    border-left: 3px solid rgba(22, 45, 78, 0.35);
+    border: none;
+    border-left: var(--border-accent) solid rgba(22, 45, 78, 0.35);
+    border-radius: 0;
 }
 
 .pwd-reset-input {
     background: transparent;
     border: none;
-    border-bottom: 2px solid rgba(22, 45, 78, 0.35);
-    color: #1e3a5f;
-    font-family: 'Nunito', sans-serif;
+    border-bottom: var(--border-card) solid rgba(22, 45, 78, 0.35);
+    color: var(--navy-700);
+    font-family: var(--font-body);
     font-size: inherit;
     letter-spacing: 0.12em;
     padding: 0.25rem 0.1rem;
@@ -686,32 +701,33 @@ td[data-label="Toiminnot"] {
 }
 
 .pwd-reset-input:focus {
-    border-bottom-color: #1e3a5f;
+    border-bottom-color: var(--navy-700);
     background: rgba(22, 45, 78, 0.03);
 }
 
 .pwd-reset-input::placeholder {
     letter-spacing: 0.04em;
-    color: rgba(22, 45, 78, 0.35);
+    color: var(--state-neutral);
     font-style: italic;
 }
 
 .pwd-reset-actions {
     display: flex;
-    gap: 0.4rem;
+    gap: var(--space-2);
     align-items: center;
 }
 
 .pwd-save-btn {
-    background: linear-gradient(180deg, #2c5f8a 0%, #1e3a5f 100%);
-    color: #D8B25A;
-    border: 1px solid rgba(22, 45, 78, 0.5);
-    border-radius: 4px;
-    padding: 0.35rem 0.8rem;
-    font-size: 0.85rem;
-    font-family: 'Nunito', sans-serif;
+    min-height: 34px;
+    background: linear-gradient(180deg, var(--navy-500) 0%, var(--navy-700) 100%);
+    color: var(--brass-300);
+    border: var(--border-hairline) solid rgba(22, 45, 78, 0.5);
+    border-radius: var(--radius-md);
+    padding: 0.45rem 0.9rem;
+    font-size: var(--fs-body-sm);
+    font-family: var(--font-body);
     font-weight: 800;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(22, 45, 78, 0.18);
@@ -719,34 +735,21 @@ td[data-label="Toiminnot"] {
 }
 
 .pwd-save-btn:hover {
-    background: linear-gradient(180deg, #3a7ab8 0%, #2c5f8a 100%);
+    background: linear-gradient(180deg, var(--navy-500) 0%, var(--navy-600) 100%);
     box-shadow: 0 3px 12px rgba(22, 45, 78, 0.28);
-    transform: translateY(-1px);
 }
 
 .pwd-save-btn:active {
-    transform: translateY(1px);
     box-shadow: 0 1px 4px rgba(22, 45, 78, 0.12);
 }
 
 .pwd-reset-error {
-    color: #8B1A1A;
-    font-size: 0.8rem;
+    color: var(--state-danger);
+    font-size: var(--fs-body-sm);
     font-weight: 700;
     font-style: italic;
     margin: 0;
 }
-
-/* ── Avatar column centering — commented out, avatar column removed ── */
-/*
-.data-table th:first-child,
-.data-table td:first-child {
-    width: 56px;
-    text-align: center;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-}
-*/
 
 /* ── Gmail G badge ───────────────────────────────────────── */
 .gmail-g {
@@ -755,12 +758,12 @@ td[data-label="Toiminnot"] {
     justify-content: center;
     width: 18px;
     height: 18px;
-    border-radius: 50%;
-    background: #EA4335;
-    color: #fff;
-    font-size: 0.68rem;
+    border-radius: var(--radius-round);
+    background: #EA4335; /* Google's own red — a brand colour, not ours */
+    color: var(--page-white);
+    font-size: var(--fs-micro);
     font-weight: 900;
-    font-family: 'Nunito', sans-serif;
+    font-family: var(--font-body);
     margin-right: 0.45rem;
     vertical-align: middle;
     flex-shrink: 0;
@@ -769,114 +772,127 @@ td[data-label="Toiminnot"] {
 }
 
 .gmail-empty {
-    color: rgba(158, 122, 42, 0.5);
+    color: var(--state-neutral);
     font-style: italic;
-}
-
-/* ── Animations ──────────────────────────────────────────── */
-@keyframes cardRise {
-    from { opacity: 0; transform: translateY(14px) scale(0.98); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@keyframes rowSlideIn {
-    from { opacity: 0; transform: translateX(-10px); }
-    to   { opacity: 1; transform: translateX(0); }
 }
 
 /* ── Progress Row ───────────────────────────────────────── */
 .progress-row td {
-    padding: 0 1rem 0.85rem;
-    border-bottom: 1px solid rgba(196, 151, 58, 0.18);
-    background: rgba(253, 251, 244, 0.5);
+    padding: 0 var(--space-4) 0.85rem;
+    border-bottom: var(--border-hairline) solid rgba(196, 151, 58, 0.18);
 }
 
 .progress-bar-row {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--space-3);
     flex-wrap: wrap;
 }
 
-.level-badges {
+/* Scoped: StudentDashboard.css already owns a .voyage-summary, and page CSS
+   here is global.
+
+   The eight continents are one voyage, so they are drawn as one object with
+   eight legs rather than eight badges. A leg and the status select for the same
+   level carry the same colours -- that pairing is the contract between the
+   teacher side and the pupil side. */
+/* The rail needs a width of its own. As a plain flex item this column was
+   sized by its widest child, which is the caption -- so a pupil whose summary
+   read "Ei suorituksia vielä" got a longer rail than one reading "Hylätty 1". */
+.teacher-dashboard .voyage {
     display: flex;
+    flex-direction: column;
     gap: 0.35rem;
-    flex-wrap: wrap;
+    flex: 0 1 420px;
+    min-width: 0;
+    max-width: 420px;
 }
 
-.progress-level-badge {
-    display: inline-flex;
+.teacher-dashboard .voyage-rail {
+    display: flex;
+    width: 100%;
+    min-height: 26px;
+    border: var(--border-hairline) solid var(--brass-600);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+}
+
+.teacher-dashboard .voyage-leg {
+    flex: 1;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    font-size: 0.72rem;
+    background: var(--parchment-200);
+    border-right: var(--border-hairline) solid rgba(196, 151, 58, 0.4);
+    color: var(--state-neutral);
+    font-family: var(--font-body);
+    font-size: var(--fs-badge);
     font-weight: 800;
-    font-family: 'Nunito', sans-serif;
-    border: 1.5px solid #ccc;
-    color: #999;
-    background: transparent;
-    transition: all 0.2s;
+    letter-spacing: 0.04em;
+}
 
-    font-size: 0.78rem;
+.teacher-dashboard .voyage-leg:last-child {
+    border-right: none;
+}
+
+.teacher-dashboard .voyage-leg--complete {
+    background: linear-gradient(180deg, var(--brass-300), var(--brass-500));
+    color: var(--navy-700);
+}
+
+.teacher-dashboard .voyage-leg--reviewed {
+    background: var(--state-reviewed-surface);
+    color: var(--state-reviewed);
+}
+
+.teacher-dashboard .voyage-leg--resubmit {
+    background: rgba(155, 115, 245, 0.35);
+    color: var(--state-resubmit-ink);
+}
+
+/* The rail carries colour, so this line carries the words. A state is never
+   colour alone, and eight badges each holding their own numeral used to be
+   what satisfied that; now this does. */
+.teacher-dashboard .voyage-summary {
+    margin: 0;
+    /* StudentDashboard.css has its own .voyage-summary and sets it in italic. */
+    font-style: normal;
+    font-size: var(--fs-badge);
     font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.2rem 0.6rem;
-    border-radius: 20px;
-    margin-top: 0.2rem;
+    color: var(--ink-700);
+    letter-spacing: 0.04em;
 }
 
-.progress-level-badge--complete {
-    background: linear-gradient(145deg, #D8B25A, #C4973A); 
-    border-color: #9E7A2A;
-    color: #fff;
-}
-
-.progress-level-badge--reviewed {
-    background: linear-gradient(145deg, #7BCF8A, #5BAF6C);
-    border-color: #4A965A;
-    color: #fff;
-}
-
-.progress-level-badge--resubmit {
-    background: linear-gradient(145deg, #ad87ff, #865fd9);
-    border-color: #7141d7;
-    color: #fff;
-}
-
-.progress-summary {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #9E7A2A;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
+/* One leg on its own, as a swatch in the legend. */
+.teacher-dashboard .voyage-rail--swatch {
+    width: 2.4rem;
+    max-width: none;
+    flex: 0 0 auto;
 }
 
 .expand-btn {
     background: none;
-    border: 1px solid rgba(196, 151, 58, 0.35);
-    border-radius: 4px;
-    padding: 0.3rem 0.7rem;
-    font-size: 0.78rem;
-    font-family: 'Nunito', sans-serif;
+    border: var(--border-hairline) solid rgba(196, 151, 58, 0.45);
+    border-radius: var(--radius-md);
+    padding: 0.4rem 0.9rem;
+    min-height: 34px;
+    font-size: var(--fs-body-sm);
+    font-family: var(--font-body);
     font-weight: 700;
-    color: #9E7A2A;
+    color: var(--ink-700);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: var(--space-1);
     margin-left: auto;
-    margin-right: auto;
     transition: all 0.15s;
     letter-spacing: 0.04em;
 }
 
 .expand-btn:hover {
-    background: rgba(196, 151, 58, 0.1);
-    border-color: #C4973A;
-    color: #C4973A;
+    background: rgba(196, 151, 58, 0.12);
+    border-color: var(--brass-500);
+    color: var(--ink-900);
 }
 
 .expand-chevron {
@@ -890,73 +906,77 @@ td[data-label="Toiminnot"] {
 .info-button-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-2);
 }
 
+/* The select is both the status display and the control that changes it, so
+   its ground is the level's state colour. */
 .level-status-select {
-    font-size: 1em;
-    padding: 0.3em 1.8em 0.3em 0.8em;
-    font-family: inherit;
+    font-family: var(--font-body);
+    font-size: var(--fs-body-sm);
+    font-weight: 700;
+    min-height: 34px;
+    padding: 0.35rem 1.8rem 0.35rem 0.8rem;
     cursor: pointer;
-    border: 1.5px solid #C4973A;
-    border-radius: 6px;
+    border: var(--border-frame) solid var(--brass-500);
+    border-radius: var(--radius-md);
 }
 
 .level-status-select option {
-    background: #F5EFE0;
-    color: #1e3a5f;
+    background: var(--parchment-200);
+    color: var(--navy-700);
 }
 
 .level-status-select.status-incomplete {
-    background: #ededed !important;
-    border-color: #888;
-    color: #888;
+    background: var(--surface-muted) !important;
+    border-color: var(--state-neutral);
+    color: var(--state-neutral);
 }
 
 .level-status-select.status-complete {
-    background: linear-gradient(145deg, #D8B25A, #C4973A) !important;
-    border-color: #9E7A2A;
-    color: #fff;
+    background: linear-gradient(180deg, var(--brass-300), var(--brass-500)) !important;
+    border-color: var(--brass-600);
+    color: var(--navy-700);
 }
 
 .level-status-select.status-reviewed {
-    background-color: #eafbea;
-    border-color: #3c763d;
-    color: #3c763d !important;
+    background-color: var(--state-reviewed-surface);
+    border-color: var(--state-reviewed);
+    color: var(--state-reviewed) !important;
 }
 
 .level-status-select.status-resubmit {
     background: rgba(155, 115, 245, 0.35) !important;
-    border-color: #7b4ce2;
-    color: #2a1f4d;
+    border-color: var(--state-resubmit);
+    color: var(--state-resubmit-ink);
 }
 
 .book-title {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    margin: 0 0 0.5rem;
-    font-size: 0.9rem;
-    color: #3a2a10;
+    gap: var(--space-1);
+    margin: 0 0 var(--space-2);
+    font-size: var(--fs-body-sm);
+    color: var(--ink-900);
 }
 
 .book-title strong {
-    color: #9E7A2A;
-    letter-spacing: 0.06em;
+    color: var(--ink-700);
+    letter-spacing: var(--ls-label);
 }
 
 .submissions-detail {
-    margin-top: 0.75rem;
-    padding: 0.75rem 1rem;
+    margin-top: var(--space-3);
+    padding: var(--space-3) var(--space-4);
     background: rgba(253, 251, 244, 0.7);
-    border-left: 3px solid #C4973A;
-    border-radius: 0 4px 4px 0;
+    border-left: var(--border-accent) solid var(--brass-500);
+    border-radius: 0;
 }
 
 .submission-group {
-    margin-bottom: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid rgba(196, 151, 58, 0.12);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: var(--border-hairline) solid rgba(196, 151, 58, 0.12);
 }
 
 .submission-group:last-child {
@@ -965,46 +985,48 @@ td[data-label="Toiminnot"] {
     border-bottom: none;
 }
 
+/* Cinzel Decorative below 20px is unreadable and this line sits at 15px. */
 .submission-level-title {
     align-items: center;
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 0.9rem;
-    color: #1e3a5f;
-    margin: 0 0 0.5rem;
-    font-weight: 700;
+    font-family: var(--font-body);
+    font-size: var(--fs-label-strong);
+    letter-spacing: var(--ls-label-strong);
+    color: var(--navy-700);
+    margin: 0 0 var(--space-2);
+    font-weight: 800;
 }
 
 .submission-qa {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--space-1);
 }
 
 .submission-qa p {
     margin: 0;
-    font-size: 0.92rem;
-    color: #3a2a10;
+    font-size: var(--fs-body-sm);
+    color: var(--ink-900);
     line-height: 1.5;
 }
 
 .submission-qa strong {
-    color: #9E7A2A;
-    font-size: 0.82rem;
-    letter-spacing: 0.06em;
+    color: var(--ink-700);
+    font-size: var(--fs-badge);
+    letter-spacing: var(--ls-label);
 }
 
 .submission-answer {
-    padding-left: 1.5rem;
+    padding-left: var(--space-5);
     margin-bottom: 0.35rem !important;
-    color: #4a3a1a;
+    color: var(--ink-900);
 }
 
 /* ── Mobile: Compact Nav Bar ───────────────────────────── */
 @media (max-width: 600px) {
     .dashboard-header {
-        padding: 0.75rem 1rem;
+        padding: var(--space-3) var(--space-4);
         flex-wrap: nowrap;
-        gap: 0.5rem;
+        gap: var(--space-2);
     }
     .dashboard-header h1 {
         font-size: 0.95rem;
@@ -1013,24 +1035,24 @@ td[data-label="Toiminnot"] {
         text-overflow: ellipsis;
         min-width: 0;
     }
-    .header-right {
+    .teacher-dashboard .header-right {
         flex-wrap: nowrap;
-        gap: 0.5rem;
+        gap: var(--space-2);
         flex-shrink: 0;
     }
-    .header-right span {
+    .teacher-dashboard .header-right span {
         display: none;
     }
-    .logout-button {
+    .teacher-dashboard .logout-button {
         padding: 0.4rem 0.7rem;
-        font-size: 0.8rem;
+        font-size: var(--fs-badge);
     }
 }
 
 /* ── Mobile: Convert Progress Row Into Card ───────────────────────── */
 @media (max-width: 600px) {
-    .dashboard-section {
-        padding: 0.75rem !important;
+    .teacher-dashboard .dashboard-section {
+        padding: var(--space-3) !important;
     }
     .data-table thead { display: none; }
     .data-table, .data-table tbody, .data-table tr, .data-table td {
@@ -1039,30 +1061,30 @@ td[data-label="Toiminnot"] {
         box-sizing: border-box;
     }
     .data-table tr {
-        border: 1.5px solid rgba(196,151,58,0.3);
-        border-radius: 6px;
-        margin-bottom: 0.75rem;
-        background: rgba(253,251,244,0.5);
-
-        padding: 0.5rem;
+        border: none;
+        border-top: var(--border-frame) solid rgba(196, 151, 58, 0.45);
+        border-radius: 0;
+        margin-bottom: var(--space-3);
+        background: rgba(253, 251, 244, 0.5);
+        padding: var(--space-2);
     }
     .data-table td {
-        padding: 1rem 0rem;
+        padding: var(--space-4) 0;
     }
     .data-table td::before {
         content: attr(data-label);
         font-weight: 700;
-        color: #9E7A2A;
-        font-size: 0.78rem;
+        color: var(--ink-700);
+        font-size: var(--fs-badge);
         text-transform: uppercase;
         letter-spacing: 0.1em;
         min-width: 5rem;
     }
     .data-table td:first-child::before { content: ''; min-width: 0; }
-    
+
     .add-form select {
         max-width: 100vw;
-        font-size: 1rem;
+        font-size: var(--fs-body);
         padding: 0.4rem 0.5rem;
         box-sizing: border-box;
         min-width: 0;
@@ -1076,7 +1098,6 @@ td[data-label="Toiminnot"] {
         border-bottom: none;
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
-
         margin-bottom: 0;
         padding-bottom: 0;
     }
@@ -1084,61 +1105,55 @@ td[data-label="Toiminnot"] {
         padding-left: 4px;
     }
     .data-table tbody tr.highlight-student-row td {
-        box-shadow: inset 3px 0 0 #C4973A;
+        box-shadow: inset var(--border-accent) 0 0 var(--brass-500);
     }
     tr.progress-row {
         border-top: none;
         border-top-right-radius: 0;
         border-top-left-radius: 0;
         padding-top: 0;
-        padding-bottom: 0.5rem;
-        margin-bottom: 1rem;
+        padding-bottom: var(--space-2);
+        margin-bottom: var(--space-4);
     }
     tr.progress-row td {
         border: none;
-        padding-top: 0
+        padding-top: 0;
     }
     .progress-bar-row {
         padding: 0 0.7rem;
     }
 
-    .level-badges {
-        justify-content: center;
+    .teacher-dashboard .voyage-rail {
+        max-width: none;
     }
 
     .expand-btn {
         width: 100%;
         justify-content: center;
-        padding: 0.6rem 1rem;
-        margin-top: 0.5rem;
-        border-radius: 6px;
-        font-size: 0.95rem;
+        padding: 0.6rem var(--space-4);
+        margin-top: var(--space-2);
+        border-radius: var(--radius-md);
     }
 
     .submissions-detail {
         overflow-x: visible;
-        margin-top: 1rem;
-        padding: 0.75rem;
-        background: #fff;
-        border-radius: 8px;
-        border: 1px solid rgba(196,151,58,0.25);
+        margin-top: var(--space-4);
+        padding: var(--space-3);
+        background: var(--page-white);
+        border-radius: 0;
     }
 
     .submission-level-title {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
+        margin-bottom: var(--space-2);
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: var(--space-2);
         align-items: flex-start;
     }
 
     .level-status-select {
         width: fit-content;
-        border-radius: 6px;
         max-width: 100vw;
-        font-size: 1rem;
-        padding: 0.4rem 0.5rem;
         box-sizing: border-box;
         min-width: 0;
         margin-left: 0;
@@ -1151,9 +1166,9 @@ td[data-label="Toiminnot"] {
     }
 
     .submission-answer {
-        margin-bottom: 0.75rem;
-        padding-left: 0.5rem;
-        border-left: 3px solid rgba(196,151,58,0.4);
+        margin-bottom: var(--space-3);
+        padding-left: var(--space-2);
+        border-left: var(--border-accent) solid rgba(196, 151, 58, 0.4);
     }
 }
 
@@ -1162,12 +1177,18 @@ td[data-label="Toiminnot"] {
     td[data-label="Toiminnot"] {
         display: flex;
         flex-direction: column;
-        gap: 0.4rem;
+        align-items: stretch;
+        gap: var(--space-1);
         white-space: normal;
+        text-align: left;
+    }
+
+    .row-actions {
+        justify-content: flex-start;
     }
 
     .cancel-button {
-        margin-left: 0rem !important;
+        margin-left: 0 !important;
     }
 }
 
@@ -1180,17 +1201,18 @@ td[data-label="Toiminnot"] {
     .mobile-book-list {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        margin-bottom: 5px;
+        gap: var(--space-2);
+        margin-bottom: var(--space-1);
     }
 
     .mobile-book-item {
         display: flex;
-        gap: 12px;
-        padding: 10px;
-        border: 1px solid #9E7A2A;
-        border-radius: 6px;
-        color: #3a2a10;
+        gap: var(--space-2);
+        padding: var(--space-2);
+        border: none;
+        border-top: var(--border-hairline) solid rgba(196, 151, 58, 0.45);
+        border-radius: 0;
+        color: var(--ink-900);
     }
 
     .mobile-book-cover {
@@ -1199,14 +1221,14 @@ td[data-label="Toiminnot"] {
         width: 50px;
         height: 70px;
         object-fit: cover;
-        border-radius: 4px;
+        border-radius: var(--radius-md);
     }
 
     .empty-mobile-book-cover {
         align-self: flex-start;
         justify-self: flex-start;
         object-fit: contain;
-        border-radius: 4px;
+        border-radius: var(--radius-md);
     }
 
     .mobile-book-info {
@@ -1214,8 +1236,8 @@ td[data-label="Toiminnot"] {
         flex: 1 1 0%;
         flex-direction: column;
         justify-content: center;
-        font-size: 14px;
-        line-height: 1.2;
+        font-size: var(--fs-body-sm);
+        line-height: 1.3;
     }
 
     .mobile-delete-book {
@@ -1223,18 +1245,18 @@ td[data-label="Toiminnot"] {
     }
 
     .mobile-book-title {
-        font-weight: bold;
+        font-weight: 800;
         margin-bottom: 2px;
     }
 
     .mobile-book-author {
-        opacity: 0.8;
+        color: var(--ink-700);
         margin-bottom: 2px;
     }
 
     .mobile-book-type {
-        font-size: 12px;
-        opacity: 0.7;
+        font-size: var(--fs-badge);
+        color: var(--ink-700);
     }
 }
 
@@ -1264,35 +1286,27 @@ td[data-label="Toiminnot"] {
     position: absolute;
     top: 12px;
     right: 12px;
-
-    background: rgb(255, 255, 255);
-    border: 1px solid rgba(212, 175, 55, 0.35);
-    border-radius: 50%;
-
-    width: 32px;
-    height: 32px;
-
+    background: var(--page-white);
+    border: var(--border-hairline) solid rgba(196, 151, 58, 0.45);
+    border-radius: var(--radius-md);
+    width: 34px;
+    height: 34px;
     font-size: 18px;
     font-weight: 700;
-    color: #1e3a5f;
-
+    color: var(--navy-700);
     cursor: pointer;
     transition: all 0.2s ease;
     z-index: 500;
 }
 
 .tr-popup-close:hover {
-    background: rgb(255, 255, 255);
-    transform: scale(1.08);
+    background: var(--parchment-100);
+    border-color: var(--brass-500);
 }
 
 @keyframes popupFadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 /* ── Mobile Responsive popup ──────────────────────────────────────────── */
@@ -1315,22 +1329,28 @@ td[data-label="Toiminnot"] {
         flex: 1;
     }
 }
+
 /* Pupil's school year, in the student table. Decides which of the library's
    diploma book lists they see. */
+/* Inside a table row a permanent brass underline reads as emphasis on a value
+   that carries none. The field shows it is a field when you reach for it. */
 .grade-select {
-    padding: 2px 6px;
+    padding: 0.25rem 0.1rem;
+    min-height: 34px;
     background: transparent;
-    border: 1px solid #C4973A;
-    border-radius: 4px;
-    color: #3a2a10;
-    font-family: inherit;
-    font-size: 0.9rem;
+    border: none;
+    border-bottom: var(--border-frame) solid transparent;
+    border-radius: 0;
+    color: var(--ink-900);
+    font-family: var(--font-body);
+    font-size: var(--fs-body-sm);
     cursor: pointer;
+    transition: border-bottom-color 0.18s;
 }
 
+.grade-select:hover,
 .grade-select:focus {
-    outline: none;
-    border-color: #9E7A2A;
+    border-bottom-color: var(--brass-500);
 }
 
 /* The books on one continent's route, as the teacher sees them while marking.
@@ -1339,30 +1359,31 @@ td[data-label="Toiminnot"] {
    global stylesheet. */
 .node-list {
     margin: 0 0 0.6rem;
-    padding: 0.5rem 0.65rem;
+    padding: var(--space-2) 0 var(--space-2) 0.65rem;
     background: rgba(253, 246, 227, 0.75);
-    border: 1px solid rgba(196, 151, 58, 0.35);
-    border-radius: 5px;
+    border: none;
+    border-left: var(--border-frame) solid rgba(196, 151, 58, 0.45);
+    border-radius: 0;
 }
 
 .node-list-header {
-    margin-bottom: 0.4rem;
-    font-size: 0.75rem;
+    margin-bottom: var(--space-1);
+    font-size: var(--fs-meta);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #9E7A2A;
+    color: var(--ink-700);
 }
 
 .node-row {
     display: grid;
-    grid-template-columns: 1.6rem 1fr auto;
+    grid-template-columns: 1.7rem 1fr auto;
     align-items: baseline;
     gap: 0.6rem;
-    padding: 0.3rem 0;
-    font-size: 0.9rem;
-    color: #3a2a10;
-    border-top: 1px solid rgba(196, 151, 58, 0.15);
+    padding: var(--space-1) 0;
+    font-size: var(--fs-body-sm);
+    color: var(--ink-900);
+    border-top: var(--border-hairline) solid rgba(196, 151, 58, 0.15);
 }
 
 .node-row:first-of-type {
@@ -1373,13 +1394,13 @@ td[data-label="Toiminnot"] {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 1.35rem;
-    height: 1.35rem;
-    border: 1px solid #C4973A;
-    border-radius: 50%;
-    font-size: 0.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: var(--border-hairline) solid var(--brass-600);
+    border-radius: var(--radius-round);
+    font-size: var(--fs-badge);
     font-weight: 700;
-    color: #9E7A2A;
+    color: var(--ink-700);
 }
 
 .node-row-title {
@@ -1387,22 +1408,22 @@ td[data-label="Toiminnot"] {
 }
 
 .node-row-pct {
-    font-size: 0.82rem;
+    font-size: var(--fs-body-sm);
     font-weight: 700;
     letter-spacing: 0.04em;
     white-space: nowrap;
-    color: #9E7A2A;
+    color: var(--ink-700);
 }
 
 /* Read: the stop is done and the pupil moved on. */
 .node-row--done .node-row-index {
-    background: linear-gradient(#D8B25A, #C4973A, #A67E1E);
-    border-color: #A67E1E;
-    color: #FDFBF4;
+    background: linear-gradient(180deg, var(--brass-300), var(--brass-500));
+    border-color: var(--brass-600);
+    color: var(--navy-700);
 }
 
 .node-row--done .node-row-pct {
-    color: #2c5f8a;
+    color: var(--navy-500);
 }
 
 /* Started: a book is picked but not finished. */
@@ -1412,14 +1433,14 @@ td[data-label="Toiminnot"] {
 
 /* Empty: no book picked for this stop yet. */
 .node-row--empty {
-    color: #8a7a5a;
+    color: var(--ink-700);
 }
 
 .node-row--empty .node-row-index {
     border-style: dashed;
-    border-color: #c9bba0;
+    border-color: rgba(196, 151, 58, 0.55);
     background: transparent;
-    color: #b0a084;
+    color: var(--state-neutral);
 }
 
 .node-row--empty em {
@@ -1428,73 +1449,71 @@ td[data-label="Toiminnot"] {
 
 .submission-none {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: var(--fs-body-sm);
     font-style: italic;
-    color: #8a7a5a;
+    color: var(--ink-700);
 }
 
 /* Legend for the colours on a pupil's row. Collapsed by default: a teacher
    needs it once, not on every visit. */
 .status-legend {
-    margin: 0 0 1rem;
+    margin: 0 0 var(--space-4);
 }
 
+/* The same object as the invite toggle above it and the progress toggle below:
+   a label, a chevron, one shape. It used to be the only pill among them, with a
+   round brass disc inside a square row of buttons -- and the disc said nothing
+   the label was not already asking. */
 .status-legend-toggle {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.35rem 0.85rem;
-    background: transparent;
-    border: 1px solid #C4973A;
-    border-radius: 20px;
-    color: #9E7A2A;
-    font-family: inherit;
-    font-size: 0.85rem;
+    gap: var(--space-1);
+    padding: 0.4rem 0.9rem;
+    min-height: 34px;
+    background: none;
+    border: var(--border-hairline) solid rgba(196, 151, 58, 0.45);
+    border-radius: var(--radius-md);
+    color: var(--ink-700);
+    font-family: var(--font-body);
+    font-size: var(--fs-body-sm);
     font-weight: 700;
+    letter-spacing: 0.04em;
     cursor: pointer;
-    transition: background 0.18s;
+    transition: all 0.15s;
 }
 
 .status-legend-toggle:hover {
     background: rgba(196, 151, 58, 0.12);
-}
-
-.status-legend-mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.1rem;
-    height: 1.1rem;
-    background: #C4973A;
-    border-radius: 50%;
-    color: #FDFBF4;
-    font-size: 0.72rem;
-    line-height: 1;
+    border-color: var(--brass-500);
+    color: var(--ink-900);
 }
 
 .status-legend-body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.25rem 2rem;
-    margin-top: 0.75rem;
-    padding: 1rem 1.15rem;
+    gap: 1.25rem var(--space-6);
+    margin-top: var(--space-3);
+    padding: var(--space-4) 0 var(--space-4) 1.15rem;
     background: rgba(253, 246, 227, 0.72);
-    border: 1px solid rgba(196, 151, 58, 0.45);
-    border-radius: 6px;
+    border: none;
+    border-left: var(--border-frame) solid rgba(196, 151, 58, 0.45);
+    border-radius: 0;
 }
 
 .status-legend-heading {
     margin: 0 0 0.15rem;
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 0.9rem;
-    color: #1e3a5f;
+    font-family: var(--font-body);
+    font-size: var(--fs-label-strong);
+    font-weight: 800;
+    letter-spacing: var(--ls-label-strong);
+    color: var(--navy-700);
 }
 
 .status-legend-intro {
     margin: 0 0 0.6rem;
-    font-size: 0.8rem;
+    font-size: var(--fs-body-sm);
     font-style: italic;
-    color: #8a7a5a;
+    color: var(--ink-700);
 }
 
 .status-legend-list {
@@ -1508,15 +1527,15 @@ td[data-label="Toiminnot"] {
     align-items: flex-start;
     gap: 0.7rem;
     padding: 0.45rem 0;
-    border-top: 1px solid rgba(196, 151, 58, 0.15);
+    border-top: var(--border-hairline) solid rgba(196, 151, 58, 0.15);
 }
 
 .status-legend-item:first-child {
     border-top: none;
 }
 
-/* The sample badge must not stretch or shrink with the text beside it. */
-.status-legend-item > .progress-level-badge {
+/* The swatch must not stretch or shrink with the text beside it. */
+.teacher-dashboard .status-legend-item > .voyage-rail {
     flex: 0 0 auto;
     margin-top: 0.1rem;
 }
@@ -1531,12 +1550,12 @@ td[data-label="Toiminnot"] {
 }
 
 .status-legend-text {
-    font-size: 0.85rem;
-    color: #3a2a10;
+    font-size: var(--fs-body-sm);
+    color: var(--ink-900);
 }
 
 .status-legend-text strong {
-    color: #1e3a5f;
+    color: var(--navy-700);
 }
 
 .status-legend-text p {
@@ -1547,12 +1566,12 @@ td[data-label="Toiminnot"] {
 .status-legend-who {
     margin-left: 0.45rem;
     padding: 0.05rem 0.45rem;
-    border: 1px solid rgba(196, 151, 58, 0.55);
-    border-radius: 10px;
-    font-size: 0.68rem;
-    letter-spacing: 0.06em;
+    border: var(--border-hairline) solid rgba(196, 151, 58, 0.55);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-micro);
+    letter-spacing: var(--ls-label);
     text-transform: uppercase;
-    color: #9E7A2A;
+    color: var(--ink-700);
     white-space: nowrap;
 }
 
@@ -1560,9 +1579,9 @@ td[data-label="Toiminnot"] {
 
 .book-tabs {
     display: flex;
-    gap: 0.4rem;
+    gap: var(--space-1);
     margin: 0 0 0.9rem;
-    border-bottom: 1px solid rgba(196, 151, 58, 0.4);
+    border-bottom: var(--border-hairline) solid rgba(196, 151, 58, 0.4);
 }
 
 .book-tab {
@@ -1570,81 +1589,87 @@ td[data-label="Toiminnot"] {
     align-items: center;
     gap: 0.45rem;
     margin-bottom: -1px;
-    padding: 0.5rem 1rem;
+    padding: var(--space-2) var(--space-4);
+    min-height: 34px;
     background: transparent;
-    border: 1px solid transparent;
+    border: var(--border-hairline) solid transparent;
     border-bottom: none;
-    border-radius: 6px 6px 0 0;
-    color: #8a7a5a;
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 0.85rem;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    color: var(--ink-700);
+    font-family: var(--font-body);
+    font-size: var(--fs-body-sm);
+    font-weight: 700;
+    letter-spacing: 0.04em;
     cursor: pointer;
 }
 
 .book-tab:hover {
-    color: #9E7A2A;
+    color: var(--ink-900);
+    background: rgba(196, 151, 58, 0.08);
 }
 
 .book-tab--active {
     background: rgba(253, 246, 227, 0.85);
     border-color: rgba(196, 151, 58, 0.4);
-    color: #1e3a5f;
+    color: var(--navy-700);
+    font-weight: 800;
 }
 
 .book-tab-count {
     padding: 0.05rem 0.45rem;
     background: rgba(196, 151, 58, 0.22);
-    border-radius: 10px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.72rem;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-size: var(--fs-badge);
     font-weight: 700;
-    color: #9E7A2A;
+    color: var(--ink-700);
 }
 
 .diploma-books-intro {
     margin: 0 0 0.9rem;
-    font-size: 0.85rem;
+    font-size: var(--fs-body-sm);
     font-style: italic;
     line-height: 1.5;
-    color: #8a7a5a;
+    color: var(--ink-700);
 }
 
 .diploma-books-controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem 1rem;
+    gap: var(--space-3) var(--space-4);
     margin-bottom: 0.9rem;
 }
 
 .diploma-books-field {
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
-    font-size: 0.72rem;
+    gap: var(--space-1);
+    font-size: var(--fs-meta);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #9E7A2A;
+    color: var(--ink-700);
 }
 
 .diploma-books-field select,
 .diploma-books-field input {
-    padding: 0.35rem 0.6rem;
-    background: rgba(253, 251, 244, 0.9);
-    border: 1px solid #C4973A;
-    border-radius: 4px;
-    color: #3a2a10;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.9rem;
+    padding: 0.4rem 0.1rem;
+    min-height: 34px;
+    background: transparent;
+    border: none;
+    border-bottom: var(--border-frame) solid var(--brass-500);
+    border-radius: 0;
+    color: var(--ink-900);
+    font-family: var(--font-body);
+    font-size: var(--fs-body-sm);
     font-weight: 400;
     letter-spacing: normal;
     text-transform: none;
 }
 
-.diploma-books-field select:focus,
-.diploma-books-field input:focus {
-    outline: none;
-    border-color: #9E7A2A;
+.diploma-books-field select:hover,
+.diploma-books-field input:hover {
+    border-bottom-color: var(--brass-600);
 }
 
 .diploma-books-search {
@@ -1653,12 +1678,12 @@ td[data-label="Toiminnot"] {
 
 .diploma-books-summary {
     margin-bottom: 0.7rem;
-    font-size: 0.85rem;
-    color: #3a2a10;
+    font-size: var(--fs-body-sm);
+    color: var(--ink-900);
 }
 
 .diploma-books-summary strong {
-    color: #9E7A2A;
+    color: var(--ink-700);
 }
 
 /* One card per continent, so a teacher can see at a glance what each stands
@@ -1666,21 +1691,22 @@ td[data-label="Toiminnot"] {
 .continent-chip-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 0.5rem;
-    margin: 0 0 1rem;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-4);
     padding: 0;
     list-style: none;
 }
 
 .continent-chip {
+    min-height: 34px;
     display: flex;
     align-items: center;
     gap: 0.6rem;
     width: 100%;
-    padding: 0.5rem 0.65rem;
+    padding: var(--space-2) 0.65rem;
     background: rgba(253, 246, 227, 0.75);
-    border: 1px solid rgba(196, 151, 58, 0.45);
-    border-radius: 5px;
+    border: var(--border-hairline) solid rgba(196, 151, 58, 0.45);
+    border-radius: var(--radius-md);
     font-family: inherit;
     text-align: left;
     cursor: pointer;
@@ -1689,7 +1715,7 @@ td[data-label="Toiminnot"] {
 
 .continent-chip:hover {
     background: rgba(253, 246, 227, 1);
-    border-color: #C4973A;
+    border-color: var(--brass-500);
 }
 
 .continent-chip-level {
@@ -1697,38 +1723,39 @@ td[data-label="Toiminnot"] {
     align-items: center;
     justify-content: center;
     flex: 0 0 auto;
-    width: 1.55rem;
-    height: 1.55rem;
-    background: linear-gradient(#D8B25A, #C4973A, #A67E1E);
-    border-radius: 50%;
-    color: #FDFBF4;
-    font-size: 0.78rem;
-    font-weight: 700;
+    width: 1.6rem;
+    height: 1.6rem;
+    background: linear-gradient(180deg, var(--brass-300), var(--brass-500));
+    border: var(--border-hairline) solid var(--brass-600);
+    border-radius: var(--radius-round);
+    color: var(--navy-700);
+    font-size: var(--fs-badge);
+    font-weight: 800;
 }
 
 .continent-chip-body {
     display: flex;
     flex-direction: column;
     min-width: 0;
-    font-size: 0.82rem;
-    color: #3a2a10;
+    font-size: var(--fs-body-sm);
+    color: var(--ink-900);
 }
 
 .continent-chip-body strong {
-    color: #1e3a5f;
+    color: var(--navy-700);
 }
 
 .continent-chip-body span {
     overflow: hidden;
-    font-size: 0.76rem;
-    color: #8a7a5a;
+    font-size: var(--fs-badge);
+    color: var(--ink-700);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .continent-chip--free .continent-chip-level {
     background: rgba(196, 151, 58, 0.28);
-    color: #9E7A2A;
+    color: var(--ink-700);
 }
 
 .continent-chip--free .continent-chip-body span {
@@ -1737,21 +1764,21 @@ td[data-label="Toiminnot"] {
 
 .continent-chip-count {
     margin-left: auto;
-    font-size: 0.85rem;
+    font-size: var(--fs-body-sm);
     font-weight: 700;
-    color: #9E7A2A;
+    color: var(--ink-700);
 }
 
 /* A catalogue row that offers a choice rather than naming one book. */
 .diploma-books-flag {
     margin-left: 0.45rem;
     padding: 0.05rem 0.4rem;
-    border: 1px solid rgba(196, 151, 58, 0.6);
-    border-radius: 9px;
-    font-size: 0.68rem;
+    border: var(--border-hairline) solid rgba(196, 151, 58, 0.6);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-micro);
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: #9E7A2A;
+    color: var(--ink-700);
     white-space: nowrap;
     cursor: help;
 }
@@ -1760,22 +1787,28 @@ td[data-label="Toiminnot"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    gap: var(--space-3);
     margin-top: 0.8rem;
-    font-size: 0.85rem;
-    color: #3a2a10;
+    font-size: var(--fs-body-sm);
+    color: var(--ink-900);
 }
 
 .diploma-books-pager button {
-    width: 1.8rem;
-    height: 1.8rem;
+    min-height: 34px;
+    width: 34px;
     background: transparent;
-    border: 1px solid #C4973A;
-    border-radius: 4px;
-    color: #9E7A2A;
+    border: var(--border-hairline) solid var(--brass-500);
+    border-radius: var(--radius-md);
+    color: var(--ink-700);
     font-family: inherit;
     font-weight: 700;
     cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.diploma-books-pager button:hover:not(:disabled) {
+    background: rgba(196, 151, 58, 0.12);
+    color: var(--ink-900);
 }
 
 .diploma-books-pager button:disabled {
