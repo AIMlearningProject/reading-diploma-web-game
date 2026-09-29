@@ -262,6 +262,35 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
     font-size: var(--fs-body-sm);
 }
 
+/* An edit pencil used to be an inline box trailing the value, so it landed
+   wherever that value happened to end -- a different place on every row, and on
+   a narrow window a long name pushed it onto a line of its own. It belongs to
+   the cell, not to the text, so the cell lays it out: value on the left, pencil
+   against the right edge, one column of pencils down the table and no wrap. */
+.data-table td[data-label="Nimi"],
+.data-table td[data-label="Sähköposti"] {
+    display: flex;
+    align-items: center;
+    /* On a narrow window each cell carries its own label; a word longer than
+       the label's 5rem would otherwise touch the value. No effect on the wide
+       layout, where there is no label to separate from. */
+    gap: var(--space-2);
+    position: relative;
+    /* the lane the pencil is pinned in */
+    padding-right: 42px;
+    min-width: 0;
+}
+
+/* Pinned rather than pushed: a long address would otherwise shove the pencil
+   past the edge instead of wrapping under it. */
+.data-table td[data-label="Nimi"] > .icon-btn--edit,
+.data-table td[data-label="Sähköposti"] > .icon-btn--edit {
+    position: absolute;
+    top: 50%;
+    right: var(--space-2);
+    transform: translateY(-50%);
+}
+
 .book-cover-thumb {
     width: 48px;
     height: 64px;
