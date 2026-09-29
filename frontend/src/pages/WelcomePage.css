@@ -99,13 +99,7 @@
 
 /* ── Cartouche Card ──────────────────────────────────────── */
 .role-card {
-    background:
-        radial-gradient(ellipse 75% 55% at 18% 18%, rgba(255, 252, 225, 0.75) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 55% at 82% 82%, rgba(196, 151, 58, 0.09) 0%, transparent 65%),
-        var(--parchment-000);
-    border-radius: var(--radius-xl);
-    border: var(--border-card) solid var(--brass-500);
-    box-shadow: var(--shadow-card);
+    /* The sheet is in paper.css. */
     padding: clamp(2rem, 5vw, 2.8rem) clamp(2rem, 6vw, 3.5rem);
     text-align: center;
     cursor: pointer;
@@ -119,19 +113,11 @@
 .role-card:nth-child(1) { animation-delay: 0.22s; }
 .role-card:nth-child(2) { animation-delay: 0.36s; }
 
-/* Inner decorative frame — the cartouche signature */
-.role-card::before {
-    content: '';
-    position: absolute;
-    inset: 7px;
-    border: var(--border-hairline) solid rgba(196, 151, 58, 0.3);
-    border-radius: var(--radius-md);
-    pointer-events: none;
-}
-
 .role-card:hover {
     transform: translateY(-7px);
-    box-shadow: var(--shadow-card-hover);
+    box-shadow:
+        0 4px 10px -6px rgba(44, 30, 5, 0.3),
+        0 28px 48px -26px rgba(44, 30, 5, 0.6);
 }
 
 /* ── Icon Badge ──────────────────────────────────────────── */

@@ -1,0 +1,40 @@
+/* ── Paper ──────────────────────────────────────────────────
+ *
+ * Every page in this product puts its content on the same sheet: the teacher's
+ * sections, the pupil's sections, the two login cards and the role cards on the
+ * welcome page. They used to be five copies of one card -- each with its own
+ * brass border, its own radius and its own shadow, in four different
+ * stylesheets, none of them agreeing -- so this file owns the sheet and the
+ * page stylesheets own everything inside it.
+ *
+ * The sheet has no gold edge and no inset frame. What separates it from the
+ * page is the warmth of the parchment against the sky ground, and a shadow
+ * shaped like paper lying on a desk: one tight contact shadow, one soft cast.
+ *
+ * Imported in App.jsx directly after tokens.css. Do not re-declare background,
+ * border, border-radius or box-shadow for these selectors anywhere else --
+ * every page stylesheet is bundled on every route, so a second copy somewhere
+ * else means load order decides what a card looks like.
+ *
+ * Not included, on purpose:
+ *   .reward-card / .reward-card-game -- tiles that sit ON a sheet. Flattened,
+ *       they would dissolve into it; they need an edge of their own.
+ *   .progress-popup -- floats over the game canvas, where an edge is what
+ *       separates it from the artwork behind it.
+ */
+
+.dashboard-section,
+.student-login-card,
+.login-card,
+.role-card {
+    background:
+        radial-gradient(ellipse 75% 50% at 12% 12%, rgba(255, 252, 225, 0.7) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 55% at 88% 88%, rgba(196, 151, 58, 0.08) 0%, transparent 65%),
+        var(--parchment-000);
+    border: none;
+    border-radius: 0;
+    box-shadow:
+        0 2px 6px -4px rgba(44, 30, 5, 0.25),
+        0 18px 36px -24px rgba(44, 30, 5, 0.55);
+    position: relative;
+}

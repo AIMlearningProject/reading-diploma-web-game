@@ -39,15 +39,7 @@
 
 /* ── Cartouche Card ──────────────────────────────────────── */
 .student-login-card {
-    background:
-        radial-gradient(ellipse 75% 50% at 12% 12%, rgba(255, 252, 225, 0.75) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 55% at 88% 88%, rgba(196, 151, 58, 0.09) 0%, transparent 65%),
-        #FDFBF4;
-    border-radius: 8px;
-    border: 2px solid #C4973A;
-    box-shadow:
-        0 6px 32px rgba(44, 30, 5, 0.18),
-        0 2px 8px rgba(44, 30, 5, 0.1);
+    /* The sheet is in paper.css. */
     padding: clamp(2rem, 5vw, 3rem) clamp(1.5rem, 5vw, 3rem);
     width: min(100%, 480px);
     position: relative;
@@ -56,15 +48,6 @@
 }
 
 /* Inner decorative frame */
-.student-login-card::before {
-    content: '';
-    position: absolute;
-    inset: 7px;
-    border: 1px solid rgba(196, 151, 58, 0.3);
-    border-radius: 4px;
-    pointer-events: none;
-}
-
 /* ── Card Headings ───────────────────────────────────────── */
 .student-login-card h2 {
     margin: 0 0 0.35rem;
