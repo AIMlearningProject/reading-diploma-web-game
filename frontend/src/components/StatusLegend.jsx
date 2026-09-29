@@ -3,10 +3,10 @@ import { useState } from 'react'
 /**
  * What the colours on a pupil's row mean.
  *
- * Two different things are colour-coded and they are easy to mix up: the round
- * badges 1-8 are the state of a whole continent, while the little numbers
- * inside an opened level are single books on that continent's route. Both are
- * explained here, side by side, for that reason.
+ * Two different things are colour-coded and they are easy to mix up: the eight
+ * legs of the voyage rail are the state of a whole continent, while the little
+ * numbers inside an opened level are single books on that continent's route.
+ * Both are explained here, side by side, for that reason.
  *
  * Collapsed by default -- a teacher needs it once, not on every visit.
  */
@@ -55,7 +55,6 @@ export default function StatusLegend() {
                 onClick={() => setOpen(o => !o)}
                 aria-expanded={open}
             >
-                <span className="status-legend-mark" aria-hidden="true">?</span>
                 Mitä värit tarkoittavat?
                 <svg
                     className={`expand-chevron ${open ? 'expand-chevron--open' : ''}`}
@@ -72,16 +71,13 @@ export default function StatusLegend() {
                     <section className="status-legend-group">
                         <h3 className="status-legend-heading">Tason tila</h3>
                         <p className="status-legend-intro">
-                            Pyöreät numerot 1&ndash;8 oppilaan nimen alla: yksi manner kutakin.
+                            Reittipalkin kahdeksan ruutua oppilaan nimen alla: yksi manner kutakin.
                         </p>
                         <ul className="status-legend-list">
                             {LEVEL_STATES.map(({ status, label, who, text }) => (
                                 <li key={status} className="status-legend-item">
-                                    <span
-                                        className={`progress-level-badge progress-level-badge--${status}`}
-                                        aria-hidden="true"
-                                    >
-                                        1
+                                    <span className="voyage-rail voyage-rail--swatch" aria-hidden="true">
+                                        <span className={`voyage-leg voyage-leg--${status}`}>1</span>
                                     </span>
                                     <div className="status-legend-text">
                                         <strong>{label}</strong>

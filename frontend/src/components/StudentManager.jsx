@@ -198,6 +198,17 @@ function StudentManager() {
                             const progress = progressMap[s.id] || []
                             const submissions = submissionsMap[s.id]
                             const isExpanded = expandedId === s.id
+                            // The rail is one object, so the states it holds are also said in
+                            // words underneath it -- a status is never colour alone.
+                            const stateCounts = {}
+                            for (const { level } of LEVELS) {
+                                const state = progress.find(p => p.level === level)?.level_status || 'incomplete'
+                                stateCounts[state] = (stateCounts[state] || 0) + 1
+                            }
+                            const railSummary = [['complete', 'Suoritettu'], ['reviewed', 'Hyväksytty'], ['resubmit', 'Hylätty']]
+                                .filter(([key]) => stateCounts[key])
+                                .map(([key, label]) => `${label} ${stateCounts[key]}`)
+                                .join(' · ')
                             return (
                                 <React.Fragment key={s.id}>
                                     <tr
@@ -332,25 +343,34 @@ function StudentManager() {
                                         onMouseEnter={() => setHoveredStudentId(s.id)}
                                         onMouseLeave={() => setHoveredStudentId(null)}
                                     >
-                                        <td colSpan={3}>
+                                        {/* Four columns in the header, so four here -- at three the
+                                            hover tint and the brass bar stopped short of the last one. */}
+                                        <td colSpan={4}>
                                             <div className="progress-bar-row">
-                                                <div className="level-badges">
-                                                    {LEVELS.map(({ level, name: levelName }) => {
-                                                        const entry = progress.find(p => p.level === level)
-                                                        const status = entry?.level_status || 'incomplete'
-                                                        const nodes = entry?.nodes || []
-                                                        const booksDone = nodes.filter(n => n.current_progress >= 100).length
-                                                        const booksHint = nodes.length > 0 ? ` — ${booksDone}/${nodes.length} kirjaa luettu` : ''
-                                                        return (
-                                                            <span
-                                                                key={level}
-                                                                className={`progress-level-badge progress-level-badge--${status}`}
-                                                                title={`${levelName}${booksHint}${status === 'complete' || status === 'reviewed' ? ' ✓' : ''}`}
-                                                            >
-                                                                {level}
-                                                            </span>
-                                                        )
-                                                    })}
+                                                {/* One route across eight continents, drawn as one object
+                                                    rather than eight separate badges. */}
+                                                <div className="voyage">
+                                                    <div className="voyage-rail">
+                                                        {LEVELS.map(({ level, name: levelName }) => {
+                                                            const entry = progress.find(p => p.level === level)
+                                                            const status = entry?.level_status || 'incomplete'
+                                                            const nodes = entry?.nodes || []
+                                                            const booksDone = nodes.filter(n => n.current_progress >= 100).length
+                                                            const booksHint = nodes.length > 0 ? ` — ${booksDone}/${nodes.length} kirjaa luettu` : ''
+                                                            return (
+                                                                <span
+                                                                    key={level}
+                                                                    className={`voyage-leg voyage-leg--${status}`}
+                                                                    title={`${levelName}${booksHint}${status === 'complete' || status === 'reviewed' ? ' ✓' : ''}`}
+                                                                >
+                                                                    {level}
+                                                                </span>
+                                                            )
+                                                        })}
+                                                    </div>
+                                                    <p className="voyage-summary">
+                                                        {railSummary || 'Ei suorituksia vielä'}
+                                                    </p>
                                                 </div>
                                                 <button
                                                     className="expand-btn"
