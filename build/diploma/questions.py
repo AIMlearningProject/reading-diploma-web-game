@@ -53,7 +53,29 @@ HANDLING = [
     'D - other (explain in Notes)',
 ]
 
-GAME_EQUALS = ['Yes', 'No - the game should ask for fewer', 'No - other (explain)']
+RUN_SCOPE = [
+    'A - one school year (grades 1-9 = nine runs)',
+    'B - one grade band (1-2 / 3-4 / 5-6 / 7 / 8 / 9 = six runs)',
+    'C - other (explain in Notes)',
+]
+
+ALL_CONTINENTS = [
+    'A - yes: all eight',
+    'B - no: a run is fewer continents (say how many)',
+    'C - other (explain in Notes)',
+]
+
+SIXTH_GRADE_RULE = [
+    'A - yes: steer them to groups they have not used',
+    'B - no: a reminder is enough',
+    'C - not needed',
+]
+
+WIDER_DIPLOMAS = [
+    'A - yes: show them as a longer-term reward',
+    'B - no',
+    'C - other (explain in Notes)',
+]
 
 G12_OPTIONS = [
     'A - show the group names exactly as printed',
@@ -137,16 +159,17 @@ def sheet_readme(wb, src, per_grade, totals):
               'pick the "other" option and write in the Notes column.'),
         ('p', 'Please do not insert, delete or re-sort rows. The ID column is how your answers '
               'are matched back to the book list, so the numbering has to stay as it is.'),
-        ('p', 'Partial answers are useful. If a sheet is too much, sheet 01 is the one that '
-              'blocks us most.'),
+        ('p', 'Partial answers are useful. If a sheet is too much, sheet 03 is the one that '
+              'decides most of what we build next, and sheet 01 is the largest.'),
         ('', ''),
         ('h', 'The sheets'),
-        ('l', f"01_Ambiguous_entries   {totals['ambiguous']} rows that do not name one single "
-              f"book, e.g. \"jokin muu Yon talo -sarjan kirja\". The biggest question."),
+        ('l', f"01_Ambiguous_entries   {totals['ambiguous']} rows that name a series or no "
+              f"book at all. Counting the rows that offer a choice between named books, "
+              f"{totals['needs_title']} of {totals['entries']} do not point at one title."),
         ('l', '02_Continent_map       The game has 8 continents and each should stand for one '
               'kind of book. Which of your groups belongs on which continent?'),
-        ('l', '03_Book_counts         The diploma asks for 5-9 books depending on the grade; '
-              'the game has 8 stages. How should those line up?'),
+        ('l', '03_Progression         Five questions about how one journey through the map '
+              'lines up with the diploma. The most important sheet for us.'),
         ('l', '04_Grade_1_2_groups    Three of the grade 1-2 groups are about reading level '
               'rather than subject, which does not map onto a continent.'),
         ('l', f"05_All_entries         All {totals['entries']} rows, for reference. Please tell "
@@ -262,33 +285,84 @@ def sheet_map(wb, per_grade):
     dropdown(ws, [n for _, n, _ in CONTINENTS] + ['(free choice)'], 'E', first, r - 1)
 
 
-def sheet_counts(wb, per_grade):
+def sheet_progression(wb, per_grade):
     ws = sheet(
-        wb, '03_Book_counts',
-        'Q3. The diploma asks for 5-9 books, the game has 8 stages',
-        'Each continent in the game is one book. For the younger grades that is more books '
-        'than the diploma itself asks for. Should finishing the game mean finishing the '
-        'diploma, or should the game ask for fewer books than it has continents?',
+        wb, '03_Progression',
+        'Q3. How one journey through the map lines up with the diploma',
+        'These five answers decide more of the build than anything else we have asked. '
+        'The reference table underneath is what your own lists say, for comparison.',
     )
     header(
         ws, 4,
-        ['Grade', 'What the PDF says', 'Books the diploma asks for', 'Stages in the game',
-         'Should finishing the game equal finishing the diploma?',
-         'If no: how many books should the game ask for?', 'Notes'],
-        [7, 66, 22, 16, 38, 34, 30],
+        ['#', 'Question', 'Why we are asking', 'Your answer', 'If a number or "other"', 'Notes'],
+        [4, 54, 62, 44, 26, 32],
     )
+
+    questions = [
+        (
+            'Is one journey through the map one school year or one grade band?',
+            'Your page says pupils complete that grade\u2019s diploma each year and that each '
+            'one is its own performance, so we read this as one journey per school year. '
+            'Grades 1 and 2 would then read the same list twice, which the list itself seems '
+            'to expect, since it sets different rules for the two years.',
+            RUN_SCOPE
+        ),
+        (
+            'Must a pupil visit all eight continents in one journey?',
+            'The map has eight continents, so even one book each comes to eight. The 1-2 list '
+            'asks for five to six books, so for the younger years the map is already larger '
+            'than the diploma.',
+            ALL_CONTINENTS
+        ),
+        (
+            'How many books should one continent hold?',
+            'Four today, which makes a full map 32 books. One practical ceiling: the smallest '
+            'group we placed on a continent has six books, so a continent cannot ask for more '
+            'than six without a pupil running out of choices.',
+            None
+        ),
+        (
+            'Should the game steer a sixth-grader away from the groups they used in fifth grade?',
+            'The 5-6 list asks sixth-graders to choose from the groups they did not read from '
+            'in fifth grade. For the game to do that, a journey has to remember the previous '
+            'year\u2019s choices, which is a change we would rather design in than add later.',
+            SIXTH_GRADE_RULE
+        ),
+        (
+            'Should the wider 1-6 and 7-9 kirjallisuusdiplomi appear in the game?',
+            'Completing every year of a stage earns the wider diploma. Nothing in the game '
+            'marks that yet, and it would fit a longer-term reward.',
+            WIDER_DIPLOMAS
+        ),
+    ]
+
     r = 5
+    for i, (question, why, options) in enumerate(questions, start=1):
+        put(ws, r, 1, i)
+        put(ws, r, 2, question, wrap=True)
+        put(ws, r, 3, why, wrap=True)
+        put(ws, r, 4, '', ask=True, wrap=True)
+        put(ws, r, 5, '', ask=True, wrap=True)
+        put(ws, r, 6, '', ask=True, wrap=True)
+        if options:
+            dropdown(ws, options, 'D', r, r)
+        ws.row_dimensions[r].height = 62
+        r += 1
+
+    r += 2
+    ws.cell(row=r, column=1, value='What your lists say, for reference').font = Font(
+        color=GOLD, bold=True, size=12)
+    r += 1
+    header(ws, r, ['Grade', 'What the PDF says', 'Books it asks for', 'Continents in the game'],
+           [7, 78, 18, 20])
+    r += 1
     for g in GRADES:
         put(ws, r, 1, g)
         put(ws, r, 2, per_grade[g]['intro'], wrap=True)
         put(ws, r, 3, per_grade[g]['books_required'] or '(please confirm)', wrap=True)
         put(ws, r, 4, 8)
-        put(ws, r, 5, '', ask=True, wrap=True)
-        put(ws, r, 6, '', ask=True, wrap=True)
-        put(ws, r, 7, '', ask=True, wrap=True)
-        ws.row_dimensions[r].height = 58
+        ws.row_dimensions[r].height = 46
         r += 1
-    dropdown(ws, GAME_EQUALS, 'E', 5, r - 1)
 
 
 def sheet_g12(wb, per_grade):
@@ -448,6 +522,10 @@ def main():
         sys.exit(1)
 
     totals = {
+        'needs_title': sum(
+            1 for e in entries
+            if len(e['concrete_titles']) != 1 or e['series_note']
+        ),
         'entries': len(entries),
         'categories': sum(len(d['categories']) for d in per_grade.values()),
         'ambiguous': sum(1 for e in entries if e['is_ambiguous']),
@@ -458,7 +536,7 @@ def main():
     readme = sheet_readme(wb, src, per_grade, totals)
     n_amb = sheet_ambiguous(wb, entries)
     sheet_map(wb, per_grade)
-    sheet_counts(wb, per_grade)
+    sheet_progression(wb, per_grade)
     sheet_g12(wb, per_grade)
     sheet_all(wb, entries)
     n_quality = sheet_quality(wb, entries)
