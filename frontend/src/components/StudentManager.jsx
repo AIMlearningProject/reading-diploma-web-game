@@ -184,7 +184,7 @@ function StudentManager() {
             <InviteSection />
             {students.length > 0 && <StatusLegend />}
             {students.length > 0 ? (
-                <table className="data-table">
+                <table className="data-table roster-table">
                     <thead>
                         <tr>
                             <th>Nimi</th>

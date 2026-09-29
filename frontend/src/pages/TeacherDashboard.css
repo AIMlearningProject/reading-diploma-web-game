@@ -200,7 +200,9 @@
    sits in a cell spanning all four columns -- the two used to be measured from
    different sides, so nothing in this column lined up with anything else. Both
    cells carry the same right padding, so both edges land together. */
-.data-table th:last-child,
+/* .roster-table, not .data-table: the diploma book list shares the table class
+   and its last column is a continent, not a column of actions. */
+.roster-table th:last-child,
 td[data-label="Toiminnot"] {
     text-align: right;
 }
@@ -257,8 +259,8 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
     color: var(--navy-700);
 }
 
-.data-table td[data-label="Luokka-aste"],
-.data-table td[data-label="Sähköposti"] {
+.roster-table td[data-label="Luokka-aste"],
+.roster-table td[data-label="Sähköposti"] {
     font-size: var(--fs-body-sm);
 }
 
@@ -266,9 +268,12 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
    wherever that value happened to end -- a different place on every row, and on
    a narrow window a long name pushed it onto a line of its own. It belongs to
    the cell, not to the text, so the cell lays it out: value on the left, pencil
-   against the right edge, one column of pencils down the table and no wrap. */
-.data-table td[data-label="Nimi"],
-.data-table td[data-label="Sähköposti"] {
+   against the right edge, one column of pencils down the table and no wrap.
+
+   Scoped to the roster: the diploma book list has a Nimi column too, and
+   nothing in it is editable. */
+.roster-table td[data-label="Nimi"],
+.roster-table td[data-label="Sähköposti"] {
     display: flex;
     align-items: center;
     /* On a narrow window each cell carries its own label; a word longer than
@@ -283,8 +288,8 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
 
 /* Pinned rather than pushed: a long address would otherwise shove the pencil
    past the edge instead of wrapping under it. */
-.data-table td[data-label="Nimi"] > .icon-btn--edit,
-.data-table td[data-label="Sähköposti"] > .icon-btn--edit {
+.roster-table td[data-label="Nimi"] > .icon-btn--edit,
+.roster-table td[data-label="Sähköposti"] > .icon-btn--edit {
     position: absolute;
     top: 50%;
     right: var(--space-2);
@@ -1652,6 +1657,55 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
     font-size: var(--fs-badge);
     font-weight: 700;
     color: var(--ink-700);
+}
+
+/* Four columns of Finnish titles do not fit an auto-laid-out table on a narrow
+   window: the table takes its min-content width and spills past the sheet it
+   sits on, which reads as content being clipped. Fixed proportions instead --
+   and the columns then hold still while paging through the list, too.
+
+   The split is the narrowest one where all four headers stay on one line at
+   680px: below that, "Kirjoittaja" breaks across two. */
+.diploma-books-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.diploma-books-table th:nth-child(1),
+.diploma-books-table td:nth-child(1) { width: 36%; }
+
+.diploma-books-table th:nth-child(2),
+.diploma-books-table td:nth-child(2) { width: 23%; }
+
+.diploma-books-table th:nth-child(3),
+.diploma-books-table td:nth-child(3) { width: 23%; }
+
+.diploma-books-table th:nth-child(4),
+.diploma-books-table td:nth-child(4) { width: 18%; }
+
+/* break-word, not anywhere: anywhere splits a word the moment a line is tight,
+   and Finnish compounds are long -- it turned Elainystavamme into two pieces.
+   With a fixed layout the column widths no longer depend on content, so the
+   milder rule is enough. */
+.diploma-books-table th,
+.diploma-books-table td {
+    overflow-wrap: break-word;
+}
+
+/* Same hierarchy as the roster: the title is the row's subject, the other three
+   columns are details about it. */
+.diploma-books-table td:nth-child(n + 2) {
+    font-size: var(--fs-body-sm);
+}
+
+/* Narrow: buy the columns back the width the cell padding was taking, which is
+   what keeps the headers on one line. */
+@media (max-width: 900px) {
+    .diploma-books-table th,
+    .diploma-books-table td {
+        padding-left: var(--space-2);
+        padding-right: var(--space-2);
+    }
 }
 
 .diploma-books-intro {
