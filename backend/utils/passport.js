@@ -31,7 +31,13 @@ passport.use(new LocalStrategy(
     async (req, identifier, password, done) => {
         try {
             let user
-            const teacherName = req.body.teacher_name
+            // Names arrive by copy and paste often enough that a stray space is
+            // the likeliest reason a correct name does not match. Passwords are
+            // left exactly as typed.
+            identifier = typeof identifier === 'string' ? identifier.trim() : identifier
+            const teacherName = typeof req.body.teacher_name === 'string'
+                ? req.body.teacher_name.trim()
+                : req.body.teacher_name
 
             const User = (await import('../models/user.js')).default
             if (teacherName) {

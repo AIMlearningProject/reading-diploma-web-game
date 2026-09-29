@@ -49,7 +49,7 @@ function StudentSignUpPage() {
 
             const res = await createStudentWithInvite(body);
 
-            await fetchLogin(name, password, res.teacher_name);
+            await fetchLogin(name.trim(), password, res.teacher_name);
             await checkAuth();
             localStorage.setItem(LOCAL_STORAGE_KEY + teacherName, 'true');
             navigate('/game');

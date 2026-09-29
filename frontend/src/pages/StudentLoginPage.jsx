@@ -19,7 +19,12 @@ function StudentLoginPage() {
         setError('')
         setSubmitting(true)
         try {
-            await fetchLogin(studentName, password, teacherName)
+            // Trimmed here too, so the fields show what was actually sent.
+            const cleanTeacher = teacherName.trim()
+            const cleanStudent = studentName.trim()
+            setTeacherName(cleanTeacher)
+            setStudentName(cleanStudent)
+            await fetchLogin(cleanStudent, password, cleanTeacher)
             await checkAuth()
             navigate('/game')
         } catch (err) {
