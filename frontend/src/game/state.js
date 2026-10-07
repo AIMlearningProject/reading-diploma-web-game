@@ -1,9 +1,11 @@
+import { sceneForMap } from './data/puzzleScenes.js';
 import {
     addReward,
     completeLevel,
     fetchDiplomaBooks,
     fetchMyBooks,
     fetchProgress,
+    fetchRewards,
     fetchSubmissions,
     reSubmitQuiz,
     setNodeBook,
@@ -51,6 +53,13 @@ const ReadingState = {
     // one per node, across every continent.
     booksRead: 0,
     targetBooks: NODES_PER_CONTINENT * 8,
+
+    // What the pupil carries and what they have unlocked. Both live in the
+    // rewards table: reward_type 'item' holds an item id, 'scene-game' holds the
+    // id of a mini-game a solved puzzle scene granted. A scene maps 1:1 to its
+    // game, so an unlocked game is also the record that the scene is solved.
+    inventory: [],
+    unlockedGames: [],
 
     // Tracks which levels need resubmission
     levelsPendingResubmission: {},
@@ -186,6 +195,48 @@ const ReadingState = {
         return Math.round(total / nodes.length);
     },
 
+    hasItem(itemId) {
+        return this.inventory.includes(String(itemId));
+    },
+
+    /**
+     * Whether this continent's puzzle scene has been solved. There is no
+     * separate record: the mini-game it granted is the record.
+     */
+    isSceneSolved(mapKey) {
+        const scene = sceneForMap(mapKey);
+        return !!scene && this.unlockedGames.includes(scene.reward.gameId);
+    },
+
+    /**
+     * Put an item in the backpack (optimistic). Continents may be played in any
+     * order, so this only ever asks "is it already there".
+     */
+    async grantItem(userId, itemId) {
+        if (this.hasItem(itemId)) return false;
+        this.inventory = [...this.inventory, String(itemId)];
+        try {
+            await addReward(userId, 'item', String(itemId));
+        } catch (err) {
+            console.warn('Failed to save item:', err);
+        }
+        return true;
+    },
+
+    /**
+     * Unlock the mini-game a solved scene grants (optimistic).
+     */
+    async grantSceneGame(userId, gameId) {
+        if (this.unlockedGames.includes(gameId)) return false;
+        this.unlockedGames = [...this.unlockedGames, String(gameId)];
+        try {
+            await addReward(userId, 'scene-game', String(gameId));
+        } catch (err) {
+            console.warn('Failed to save mini-game reward:', err);
+        }
+        return true;
+    },
+
     /**
      * Check if a level needs resubmission (incomplete but has existing submission).
      */
@@ -205,12 +256,23 @@ const ReadingState = {
      */
     async loadFromBackend() {
         try {
-            const [submissionsData, progressData, booksData, diplomaData] = await Promise.allSettled([
+            const [submissionsData, progressData, booksData, diplomaData, rewardsData] = await Promise.allSettled([
                 fetchSubmissions(),
                 fetchProgress(),
                 fetchMyBooks(),
-                fetchDiplomaBooks()
+                fetchDiplomaBooks(),
+                fetchRewards()
             ]);
+
+            // --- 0. Backpack and unlocked mini-games ---
+            if (rewardsData.status === 'fulfilled' && Array.isArray(rewardsData.value)) {
+                this.inventory = rewardsData.value
+                    .filter((r) => r.reward_type === 'item')
+                    .map((r) => String(r.name));
+                this.unlockedGames = rewardsData.value
+                    .filter((r) => r.reward_type === 'scene-game')
+                    .map((r) => String(r.name));
+            }
 
             // --- 1. Prioritize handling the book list (ensure Book List does not disappear due to progress errors) ---
             const classBooks = (booksData.status === 'fulfilled' && Array.isArray(booksData.value))

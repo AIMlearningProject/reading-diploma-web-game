@@ -5,6 +5,8 @@ import WaypointRenderer from '../managers/WaypointRenderer.js';
 import CelebrationModal from '../modals/CelebrationModal.js';
 import VideoPopupModal from '../modals/VideoPopupModal.js';
 import ReadingState from '../state.js';
+import { itemForMap } from '../data/items.js';
+import { sceneForMap } from '../data/puzzleScenes.js';
 import { DEPTHS, uiScale as calcUiScale } from '../ui/constants.js';
 import { ICON_KEYS } from '../ui/icons.js';
 import { makeParchmentBadge } from '../ui/panels.js';
@@ -207,6 +209,8 @@ class BaseMapScene extends Phaser.Scene {
             s: uiS, anchor: 'center', fontSize: 24, depth: DEPTHS.UI
         }).container;
 
+        this.renderPuzzleMarker(width, height, uiS, margin);
+
         // A continent the teacher sent back says so, under the title, and the
         // notice is the way back to the questions.
         if (this.redoNotice) { this.redoNotice.destroy(); this.redoNotice = null; }
@@ -230,6 +234,57 @@ class BaseMapScene extends Phaser.Scene {
         const curIdx = this.tokenManager.lastPointIndex;
         this.tokenManager.setPosition(this.pointPositions[curIdx].x, this.pointPositions[curIdx].y);
         this.updateTokenPosition(false);
+    }
+
+    /**
+     * The badge that opens this continent's puzzle scene. Only four continents
+     * hold one, and it appears once every book there has been read.
+     *
+     * Continents may be played in any order, so the item the scene needs may
+     * well not be in the backpack yet. That is not a wall: the badge is dimmed,
+     * the scene still opens, and the pupil reads the story and goes looking.
+     */
+    renderPuzzleMarker(width, height, uiS, margin) {
+        if (this.puzzleMarker) { this.puzzleMarker.destroy(); this.puzzleMarker = null; }
+
+        const mapKey = this.scene.key;
+        const scene = sceneForMap(mapKey);
+        if (!scene) return;
+        if (ReadingState.continentProgress(mapKey) < 100) return;
+
+        const isSolved = ReadingState.isSceneSolved(mapKey);
+        const hasItem = ReadingState.hasItem(scene.correctItem);
+        const label = isSolved ? `${scene.title.toUpperCase()} — RATKAISTU` : scene.title.toUpperCase();
+
+        const badge = makeParchmentBadge(this, width / 2, 0, label, {
+            iconKey: isSolved ? ICON_KEYS.CHECK : ICON_KEYS.LIGHTBULB,
+            s: uiS, anchor: 'center', fontSize: 18, depth: DEPTHS.UI,
+            onClick: () => this.openPuzzleScene()
+        });
+        badge.container.y = height - margin - badge.height;
+        // Dimmed until the tool is found; still readable, still openable.
+        badge.container.setAlpha(isSolved || hasItem ? 1 : 0.62);
+        this.puzzleMarker = badge.container;
+    }
+
+    openPuzzleScene() {
+        if (window.openPuzzleScene) window.openPuzzleScene(this.scene.key);
+    }
+
+    /**
+     * Half the continents hand over a tool once the pupil is halfway through
+     * their books. It is granted once and never taken away.
+     */
+    async checkItemDrop() {
+        const mapKey = this.scene.key;
+        const item = itemForMap(mapKey);
+        if (!item) return;
+        if (ReadingState.hasItem(item.id)) return;
+        if (ReadingState.continentProgress(mapKey) < 50) return;
+
+        const userId = this.game.registry.get('userId');
+        const granted = await ReadingState.grantItem(userId, item.id);
+        if (granted && window.showItemFound) window.showItemFound(item.id);
     }
 
     _handleBookBtnClick() {
@@ -411,6 +466,8 @@ class BaseMapScene extends Phaser.Scene {
         if (this.videoCheckpoints[index]) {
             this.showVideoPopup(this.videoCheckpoints[index], index, false);
         }
+
+        this.checkItemDrop();
 
         if (ReadingState.continentProgress(this.scene.key) >= 100) {
             if (!ReadingState._continentCompletedFlags) {

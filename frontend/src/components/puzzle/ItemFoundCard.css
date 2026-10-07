@@ -1,0 +1,119 @@
+/* The item-drop card. Same surface rules as PuzzleScene.css: parchment ground,
+ * line-300 frames, brass only as a fill, warm shadows. Prefixed if- because
+ * page CSS is global. */
+
+.if-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display: grid;
+    place-items: center;
+    padding: var(--space-4);
+    background: var(--scrim-warm);
+    animation: if-fade-in 180ms ease;
+}
+
+@keyframes if-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.if-card {
+    position: relative;
+    box-sizing: border-box;
+    width: min(460px, 100%);
+    padding: 26px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: var(--font-body);
+    background: var(--parchment-100);
+    border: var(--border-frame) solid var(--line-300);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-card), 0 4px 18px rgba(196, 151, 58, 0.35);
+}
+
+.if-card::before {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border: var(--border-hairline) solid var(--frame-inset);
+    border-radius: var(--radius-md);
+    pointer-events: none;
+}
+
+.if-kicker {
+    margin: 0;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--ink-700);
+}
+
+.if-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.if-disc {
+    flex: none;
+    width: 68px;
+    height: 68px;
+    display: grid;
+    place-items: center;
+    color: var(--navy-700);
+    background: var(--parchment-000);
+    border-radius: var(--radius-round);
+    box-shadow: var(--shadow-inset-brass);
+}
+
+.if-text {
+    min-width: 0;
+}
+
+.if-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--navy-700);
+}
+
+.if-desc {
+    margin: 4px 0 0;
+    font-size: 16px;
+    line-height: 1.45;
+    color: var(--ink-900);
+}
+
+.if-found {
+    margin: 0;
+    font-size: 16.5px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink-700);
+}
+
+.if-note {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy-700);
+}
+
+.if-button {
+    min-height: 34px;
+    height: 48px;
+    margin-top: 4px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--navy-700);
+    background: var(--brass-300);
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 3px 0 var(--brass-700), 0 5px 10px rgba(44, 30, 5, 0.18);
+    cursor: pointer;
+}

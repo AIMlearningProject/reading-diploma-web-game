@@ -1,0 +1,121 @@
+/* The shell around every mini-game. Same vintage nautical surface as the rest
+ * of the pupil side: parchment ground, line-300 frames, brass only as a fill.
+ * Prefixed mg- because page CSS is global. */
+
+.mg-shell {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+    font-family: var(--font-body);
+}
+
+.mg-bar {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+}
+
+.mg-name {
+    margin: 0;
+    flex: 1;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--navy-700);
+}
+
+.mg-score {
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.mg-score-value {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--navy-700);
+}
+
+.mg-score-unit {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink-700);
+}
+
+.mg-best {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--ink-700);
+}
+
+.mg-stage {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border: var(--border-frame) solid var(--line-300);
+    border-radius: var(--radius-lg);
+    touch-action: manipulation;
+    cursor: pointer;
+}
+
+.mg-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.mg-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    text-align: center;
+    padding: var(--space-4);
+    background: var(--scrim-warm);
+}
+
+.mg-over {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--parchment-100);
+}
+
+.mg-result {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--parchment-100);
+}
+
+.mg-start {
+    min-height: 34px;
+    height: 48px;
+    padding: 0 26px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--navy-700);
+    background: var(--brass-300);
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 3px 0 var(--brass-700), 0 5px 10px rgba(44, 30, 5, 0.18);
+    cursor: pointer;
+}
+
+.mg-hint {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--parchment-100);
+    opacity: 0.85;
+}

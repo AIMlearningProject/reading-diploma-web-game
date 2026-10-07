@@ -14,7 +14,7 @@ const SRC = fileURLToPath(new URL('../src/', import.meta.url))
 const TOKENS = path.join(SRC, 'tokens.css')
 
 // Custom properties set from JSX at runtime, not design tokens.
-const RUNTIME = new Set(['--size', '--tile-size', '--tile-index', '--requiredSpace'])
+const RUNTIME = new Set(['--size', '--tile-size', '--tile-index', '--requiredSpace', '--ps-scale'])
 
 function walk(directory) {
     return readdirSync(directory).flatMap(name => {

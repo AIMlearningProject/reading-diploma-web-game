@@ -8,6 +8,10 @@ import ReadingState from '../game/state.js';
 import ReactQuiz from './popups/ReactQuiz';
 import BookListPanel from './popups/BookListPanel';
 import UpdateProgressPopup from './popups/UpdateProgressPopup'
+import PuzzleScene from './puzzle/PuzzleScene'
+import ItemFoundCard from './puzzle/ItemFoundCard'
+import { sceneForMap } from '../game/data/puzzleScenes.js'
+import items from '../game/data/items.js'
 
 export default function PhaserGame() {
   const containerRef = useRef(null);
@@ -17,6 +21,8 @@ export default function PhaserGame() {
 
   const [quizInfo, setQuizInfo] = useState({ visible: false, mapKey: null });
   const [bookListInfo, setBookListInfo] = useState({ visible: false, mapKey: null, nodeIndex: 1 });
+  const [puzzleInfo, setPuzzleInfo] = useState({ visible: false, mapKey: null });
+  const [foundItemId, setFoundItemId] = useState(null);
   const [updateProgressInfo, setUpdateProgressInfo] = useState({
     visible: false,
     mapKey: null,
@@ -75,6 +81,23 @@ export default function PhaserGame() {
         return;
       };
 
+      // React wake-up logic for the puzzle scene on a continent that holds one
+      window.openPuzzleScene = (mapKey) => {
+        if (!sceneForMap(mapKey)) return;
+        if (gameRef.current?.input) {
+          gameRef.current.input.enabled = false;
+        }
+        setPuzzleInfo({ visible: true, mapKey });
+      };
+
+      // React wake-up logic for the item drop, halfway through a continent
+      window.showItemFound = (itemId) => {
+        if (gameRef.current?.input) {
+          gameRef.current.input.enabled = false;
+        }
+        setFoundItemId(itemId);
+      };
+
       // React wake-up logic for reading scene
       window.openReactUpdateProgress = (mapKey, book, currentPct, readOnly) => {
         if (gameRef.current?.input) {
@@ -109,6 +132,8 @@ export default function PhaserGame() {
       isCancelled = true;
       window.openReactQuiz = null;
       window.openReactBookList = null;
+      window.openPuzzleScene = null;
+      window.showItemFound = null;
       if (gameRef.current) {
         if (gameRef.current._resizeObserver) {
           gameRef.current._resizeObserver.disconnect();
@@ -164,6 +189,39 @@ export default function PhaserGame() {
               if (gameRef.current.input) {
                 gameRef.current.input.enabled = true;
               }
+            }
+          }}
+        />
+      )}
+
+      {puzzleInfo.visible && (
+        <PuzzleScene
+          scene={sceneForMap(puzzleInfo.mapKey)}
+          inventory={items.filter((item) => ReadingState.hasItem(item.id))}
+          alreadySolved={ReadingState.isSceneSolved(puzzleInfo.mapKey)}
+          onSolved={(gameId) => ReadingState.grantSceneGame(user?.id, gameId)}
+          onClose={() => {
+            const mapKey = puzzleInfo.mapKey;
+            setPuzzleInfo({ visible: false, mapKey: null });
+            if (gameRef.current) {
+              // Redraw the marker, which now says the scene is solved.
+              gameRef.current.scene.getScene(mapKey)?.handleResize();
+              if (gameRef.current.input) {
+                gameRef.current.input.enabled = true;
+              }
+            }
+          }}
+          onGoToDashboard={() => navigate('/student/dashboard')}
+        />
+      )}
+
+      {foundItemId && (
+        <ItemFoundCard
+          itemId={foundItemId}
+          onClose={() => {
+            setFoundItemId(null);
+            if (gameRef.current?.input) {
+              gameRef.current.input.enabled = true;
             }
           }}
         />

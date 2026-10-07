@@ -10,6 +10,7 @@ import StudentLoginPage from './pages/StudentLoginPage'
 import StudentSignUpPage from './pages/StudentSignUpPage'
 import TeacherDashboard from './pages/TeacherDashboard'
 import StudentDashboard from './pages/StudentDashboard'
+import PuzzlePreview from './pages/PuzzlePreview'
 // Note: I think all the css of all these pages might get mixed with these imports
 // e.g. classes in TeacherDashboard.css have access to elements in StudentDashboard.jsx and vice versa, so we need to avoid using same classnames
 
@@ -57,6 +58,10 @@ function App() {
                     <Route path="/game" element={
                         <ProtectedRoute role="student"><PhaserGame /></ProtectedRoute>
                     } />
+                    {/* Development bench for the puzzle scenes; never in a build. */}
+                    {import.meta.env.DEV && (
+                        <Route path="/puzzle-preview" element={<PuzzlePreview />} />
+                    )}
                 </Routes>
             </AuthProvider>
         </BrowserRouter>

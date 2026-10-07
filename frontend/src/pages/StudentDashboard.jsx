@@ -4,6 +4,9 @@ import { useAuth } from '../contexts/AuthContext'
 import { BUDDIES, BuddySprite, BuddyIcon } from '../components/BuddyAvatar'
 import homeBG from '../assets/HomeBG1.jpg'
 import MinigameModal from '../components/minigames/MinigameModal'
+import SceneGameModal from '../components/minigames/SceneGameModal'
+import items from '../game/data/items'
+import { miniGameById } from '../game/data/miniGames'
 import './StudentDashboard.css'
 import {
     fetchProgress,
@@ -35,6 +38,7 @@ function StudentDashboard() {
     const [buddySaving, setBuddySaving] = useState(false)
     const [buddyError, setBuddyError] = useState('')
     const [openGame, setOpenGame] = useState(null);
+    const [openSceneGame, setOpenSceneGame] = useState(null);
 
     useEffect(() => {
         const load = async () => {
@@ -84,6 +88,19 @@ function StudentDashboard() {
         const entry = progress.find(p => p.level === level)
         return entry?.level_status ?? 'incomplete'
     }
+
+    // The backpack and the scene mini-games share the rewards table with the
+    // continent tile puzzles; reward_type is what tells them apart.
+    const ownedItemIds = new Set(
+        rewards.filter(r => r.reward_type === 'item').map(r => String(r.name))
+    )
+    const sceneGames = rewards
+        .filter(r => r.reward_type === 'scene-game')
+        .map(r => ({ id: r.id, game: miniGameById(String(r.name)) }))
+        .filter(entry => entry.game)
+    const continentRewards = rewards.filter(
+        r => r.reward_type !== 'item' && r.reward_type !== 'scene-game'
+    )
 
     const completedCount = progress.filter(p => p.level_status === 'complete' || p.level_status === 'reviewed').length
     const hasBuddy = !!user?.avatar
@@ -218,13 +235,80 @@ function StudentDashboard() {
                             </div>
                         </section>
 
+                        <section className="dashboard-section sd-backpack-section">
+                            <h2>Reppu</h2>
+                            <p className="sd-backpack-lead">
+                                Esineitä löytyy matkan varrelta. Jollakin toisella mantereella niistä on apua.
+                            </p>
+                            <div className="sd-backpack-grid">
+                                {items.map((item) => {
+                                    const isOwned = ownedItemIds.has(item.id)
+                                    return (
+                                        <div
+                                            key={item.id}
+                                            className={`sd-item${isOwned ? '' : ' sd-item--missing'}`}
+                                        >
+                                            <span className="sd-item-disc">
+                                                {isOwned ? (
+                                                    <svg
+                                                        width="34" height="34" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" strokeWidth="1.5"
+                                                        strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+                                                    >
+                                                        {item.icon.map((d) => <path key={d} d={d} />)}
+                                                    </svg>
+                                                ) : (
+                                                    <span className="sd-item-mark">?</span>
+                                                )}
+                                            </span>
+                                            <span className="sd-item-name">
+                                                {isOwned ? item.name : 'Vielä löytämättä'}
+                                            </span>
+                                            {isOwned && <span className="sd-item-desc">{item.desc}</span>}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </section>
+
+                        {sceneGames.length > 0 && (
+                            <section className="dashboard-section sd-scene-games-section">
+                                <h2>Kohtausten pelit</h2>
+                                <div className="rewards-grid">
+                                    {sceneGames.map(({ id, game }) => (
+                                        <button
+                                            key={id}
+                                            type="button"
+                                            className="sd-scene-game"
+                                            disabled={!game.module}
+                                            onClick={() => setOpenSceneGame(game)}
+                                        >
+                                            <span className="sd-scene-game-disc">
+                                                <svg
+                                                    width="34" height="34" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" strokeWidth="1.5"
+                                                    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+                                                >
+                                                    {game.icon.map((d) => <path key={d} d={d} />)}
+                                                </svg>
+                                            </span>
+                                            <span className="sd-scene-game-name">{game.name}</span>
+                                            <span className="sd-scene-game-pitch">
+                                                {game.module ? 'Pelaa' : 'Tulossa pian'}
+                                            </span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
                         <section className="dashboard-section rewards-section">
                             <h2>Palkinnot</h2>
-                            {rewards.length === 0 ? (
+                            {continentRewards.length === 0 ? (
                                 <p className="empty-message">Ei palkintoja vielä — lue kirjoja ansaitaksesi!</p>
                             ) : (
                                 <div className="rewards-grid">
-                                    {rewards.map((r) => (
+                                    {continentRewards.map((r) => (
                                         r.name = mapFi[r.name] ?? r.name,
                                         r.reward_type.includes('minigame') ? (
                                             <div key={r.id} className="reward-card-game" onClick={() => setOpenGame(r)}>
@@ -250,6 +334,9 @@ function StudentDashboard() {
             </div>
             {openGame && (
                 <MinigameModal reward={openGame} onClose={() => setOpenGame(null)} />
+            )}
+            {openSceneGame && (
+                <SceneGameModal game={openSceneGame} onClose={() => setOpenSceneGame(null)} />
             )}
         </div>
     )
