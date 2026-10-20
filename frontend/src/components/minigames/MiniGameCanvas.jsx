@@ -34,7 +34,12 @@ function writeBest(id, value) {
 export default function MiniGameCanvas({ game, name, onClose }) {
     const canvasRef = useRef(null)
     const stateRef = useRef(null)
-    const inputRef = useRef({ pressed: false, justPressed: false, left: false, right: false, down: false })
+    // pointerX is where a touch or a click sits across the stage, 0 at the left
+    // edge and 1 at the right, or null when nothing is held. A game that steers
+    // needs it; one that only needs a tap ignores it.
+    const inputRef = useRef({
+        pressed: false, justPressed: false, left: false, right: false, down: false, pointerX: null
+    })
     const phaseRef = useRef('ready')
     const [phase, setPhase] = useState('ready')
     const [score, setScore] = useState(0)
@@ -153,8 +158,15 @@ export default function MiniGameCanvas({ game, name, onClose }) {
         }
     }, [onClose])
 
+    const pointerAcross = (event) => {
+        const box = event.currentTarget.getBoundingClientRect()
+        if (box.width === 0) return null
+        return Math.min(Math.max((event.clientX - box.left) / box.width, 0), 1)
+    }
+
     const onPointerDown = (event) => {
         event.preventDefault()
+        inputRef.current.pointerX = pointerAcross(event)
         if (phaseRef.current === 'running') {
             inputRef.current.pressed = true
             inputRef.current.justPressed = true
@@ -163,7 +175,14 @@ export default function MiniGameCanvas({ game, name, onClose }) {
         }
     }
 
-    const onPointerUp = () => { inputRef.current.pressed = false }
+    const onPointerMove = (event) => {
+        if (inputRef.current.pressed) inputRef.current.pointerX = pointerAcross(event)
+    }
+
+    const onPointerUp = () => {
+        inputRef.current.pressed = false
+        inputRef.current.pointerX = null
+    }
 
     return (
         <div className="mg-shell">
@@ -180,6 +199,7 @@ export default function MiniGameCanvas({ game, name, onClose }) {
                 className="mg-stage"
                 style={{ aspectRatio: `${game.width} / ${game.height}` }}
                 onPointerDown={onPointerDown}
+                onPointerMove={onPointerMove}
                 onPointerUp={onPointerUp}
                 onPointerCancel={onPointerUp}
             >

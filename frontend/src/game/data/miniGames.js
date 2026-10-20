@@ -10,6 +10,9 @@
 // plain JS — { create, update, draw } — driven by <MiniGameCanvas>.
 
 import dolphinRoute from '../minigames/dolphinRoute.js'
+import iceExpedition from '../minigames/iceExpedition.js'
+import rapids from '../minigames/rapids.js'
+import seedRain from '../minigames/seedRain.js'
 
 const miniGames = {
     'koskimelonta': {
@@ -17,7 +20,7 @@ const miniGames = {
         name: 'KOSKIMELONTA',
         pitch: 'Meloo kosken läpi ja väistä kiviä. Pelaa sitä oppilaan sivulla!',
         unit: 'metriä',
-        module: null,
+        module: rapids,
         icon: [
             'M3 13.5c3.5 0 3.5 2 7 2s3.5-2 7-2 3.5 2 4 2',
             'M4.5 9.5h15l-2.5 4.2a3 3 0 0 1-2.6 1.5H9.6A3 3 0 0 1 7 13.7z',
@@ -30,7 +33,7 @@ const miniGames = {
         name: 'SIEMENSADE',
         pitch: 'Nappaa putoavat siemenet koriin ennen kuin ne katoavat jokeen. Pelaa sitä oppilaan sivulla!',
         unit: 'siementä',
-        module: null,
+        module: seedRain,
         icon: [
             'M4.5 13.5h15l-1.6 5.4a2.4 2.4 0 0 1-2.3 1.6H8.4a2.4 2.4 0 0 1-2.3-1.6z',
             'M9 10a1.6 1.6 0 1 1 3.2 0 1.6 1.6 0 0 1-3.2 0z',
@@ -55,7 +58,7 @@ const miniGames = {
         name: 'JÄÄRETKI',
         pitch: 'Juokse jäätiköllä, hyppää railojen yli ja väistä tuulenpuuskat. Pelaa sitä oppilaan sivulla!',
         unit: 'metriä',
-        module: null,
+        module: iceExpedition,
         icon: [
             'M2.5 19.5h19',
             'M6 19.5 10 9l4 6 2.5-4 3.5 8.5',
