@@ -7,8 +7,44 @@
 // Driven by <MiniGameCanvas>: create() builds the state, update() advances it by
 // a fixed step, draw() paints it. Nothing here touches the DOM.
 
+import { drawMirrored, loadArt } from './art.js'
+import banksUrl from '../../assets/minigames/koskimelonta/banks.png'
+import canoeUrl from '../../assets/minigames/koskimelonta/canoe.png'
+import hazeUrl from '../../assets/minigames/koskimelonta/haze.png'
+import rock1Url from '../../assets/minigames/koskimelonta/rock_1.png'
+import rock2Url from '../../assets/minigames/koskimelonta/rock_2.png'
+import rock3Url from '../../assets/minigames/koskimelonta/rock_3.png'
+import streaksUrl from '../../assets/minigames/koskimelonta/streaks.png'
+
 const WIDTH = 640
 const HEIGHT = 400
+
+// The art is drawn at 2x. Streaks and banks scroll; the water colour and the
+// haze (the deep-to-shallow gradient) stay put.
+const art = loadArt({
+    banks: banksUrl,
+    canoe: canoeUrl,
+    haze: hazeUrl,
+    rock1: rock1Url,
+    rock2: rock2Url,
+    rock3: rock3Url,
+    streaks: streaksUrl
+})
+const WATER = '#3e80a4'
+// How often each rock picture turns up. Rock 2 is meant to be the rare one.
+const ROCK_WEIGHTS = { rock1: 4, rock2: 2, rock3: 4 }
+const ROCK_WEIGHT_TOTAL = Object.values(ROCK_WEIGHTS).reduce((sum, weight) => sum + weight, 0)
+
+function pickRockLook() {
+    let roll = Math.random() * ROCK_WEIGHT_TOTAL
+    for (const [look, weight] of Object.entries(ROCK_WEIGHTS)) {
+        roll -= weight
+        if (roll < 0) return look
+    }
+    return 'rock1'
+}
+
+const SCROLL_PERIOD = HEIGHT * 2 // mirrored scrolling repeats every two copies
 
 // Fixed for the whole run, on purpose.
 const SPEED = 180         // px/s the river scrolls past
@@ -21,23 +57,12 @@ const ROCK_R = 40
 const SWITCH_TIME = 0.12  // s the canoe takes to slide between lanes
 const REPEAT_AFTER = 0.22 // s a held arrow waits before it moves another lane
 
-const UNIT_CIRCLE = new Path2D('M1 0A1 1 0 1 1 -1 0A1 1 0 1 1 1 0Z')
-
 const clamp = (value, low, high) => Math.min(Math.max(value, low), high)
 
 /** Whether a canoe at `x` is touching any of this row's rocks. */
 function hitsRock(x, row) {
     const blocked = LANES.filter((_, index) => !row.open.includes(index))
     return blocked.some((lane) => Math.abs(x - lane) < ROCK_R * 0.6 + CANOE_W * 0.35)
-}
-
-function disc(ctx, x, y, radius) {
-    ctx.save()
-    ctx.translate(x, y)
-    ctx.scale(radius, radius)
-    // eslint-disable-next-line unicorn/no-array-fill-with-reference-type -- CanvasRenderingContext2D#fill, not Array#fill
-    ctx.fill(UNIT_CIRCLE)
-    ctx.restore()
 }
 
 /**
@@ -66,7 +91,9 @@ function addRow(state) {
     }
     if (open.length === 0) open = [...previousOpen]
 
-    state.rows.push({ y: -ROCK_R, open, passed: false })
+    // Which rock picture each lane gets, fixed here so it does not change as the row scrolls.
+    const looks = LANES.map(() => pickRockLook())
+    state.rows.push({ y: -ROCK_R, open, passed: false, looks })
 }
 
 const rapids = {
@@ -87,11 +114,6 @@ const rapids = {
             heldFor: 0,
             rows: [],
             sinceRow: 0,
-            foam: Array.from({ length: 26 }, () => ({
-                x: Math.random() * WIDTH,
-                y: Math.random() * HEIGHT,
-                r: 2 + Math.random() * 4
-            })),
             scroll: 0,
             distance: 0,
             score: 0,
@@ -150,17 +172,9 @@ const rapids = {
             state.x = LANES[state.lane]
         }
 
-        state.scroll = (state.scroll + SPEED * dt) % 70
+        state.scroll = (state.scroll + SPEED * dt) % SCROLL_PERIOD
         state.distance += SPEED * dt
         state.score = Math.floor(state.distance / 10)
-
-        for (const fleck of state.foam) {
-            fleck.y += SPEED * 0.85 * dt
-            if (fleck.y - fleck.r > HEIGHT) {
-                fleck.y = -fleck.r
-                fleck.x = Math.random() * WIDTH
-            }
-        }
 
         state.sinceRow += dt
         if (state.sinceRow >= ROW_EVERY) {
@@ -184,69 +198,28 @@ const rapids = {
     },
 
     draw(ctx, state) {
-        const water = ctx.createLinearGradient(0, 0, 0, HEIGHT)
-        water.addColorStop(0, '#2f6e8f')
-        water.addColorStop(1, '#4a90b8')
-        ctx.fillStyle = water
+        ctx.fillStyle = WATER
         ctx.fillRect(0, 0, WIDTH, HEIGHT)
+        // Until the pictures have decoded the run is simply a stretch of water.
+        if (!art.ready) return
 
-        // Banks, so the three lanes read as a channel rather than open water.
-        ctx.fillStyle = '#3f6b4a'
-        ctx.fillRect(0, 0, 60, HEIGHT)
-        ctx.fillRect(WIDTH - 60, 0, 60, HEIGHT)
-        ctx.fillStyle = '#5b7f4b'
-        ctx.fillRect(0, 0, 44, HEIGHT)
-        ctx.fillRect(WIDTH - 44, 0, 44, HEIGHT)
+        drawMirrored(ctx, art.streaks, state.scroll, WIDTH, HEIGHT)
+        ctx.drawImage(art.haze, 0, 0, WIDTH, HEIGHT)
+        drawMirrored(ctx, art.banks, state.scroll, WIDTH, HEIGHT)
 
-        ctx.strokeStyle = 'rgba(255,255,255,0.18)'
-        ctx.lineWidth = 3
-        ctx.beginPath()
-        for (let y = -state.scroll; y < HEIGHT; y += 70) {
-            ctx.moveTo(96, y)
-            ctx.lineTo(96, y + 34)
-            ctx.moveTo(WIDTH - 96, y)
-            ctx.lineTo(WIDTH - 96, y + 34)
-        }
-        ctx.stroke()
-
-        ctx.fillStyle = 'rgba(255,255,255,0.3)'
-        for (const fleck of state.foam) disc(ctx, fleck.x, fleck.y, fleck.r)
-
+        // The art is drawn at 2x, so a picture's logical size is half its pixels.
+        const rockSize = ROCK_R * 2
         for (const row of state.rows) {
-            const blocked = LANES.filter((_, index) => !row.open.includes(index))
-            for (const lane of blocked) {
-                ctx.fillStyle = '#6b6257'
-                disc(ctx, lane, row.y, ROCK_R)
-                ctx.fillStyle = '#8a8075'
-                disc(ctx, lane - 9, row.y - 9, ROCK_R * 0.45)
-                ctx.fillStyle = 'rgba(255,255,255,0.45)'
-                disc(ctx, lane, row.y + ROCK_R * 0.85, ROCK_R * 0.5)
-            }
+            LANES.forEach((lane, index) => {
+                if (row.open.includes(index)) return
+                ctx.drawImage(art[row.looks[index]], lane - ROCK_R, row.y - ROCK_R, rockSize, rockSize)
+            })
         }
 
-        // The canoe, seen from above.
-        ctx.save()
-        ctx.translate(state.x, CANOE_Y)
-        ctx.fillStyle = '#b07a3e'
-        ctx.strokeStyle = '#4a3520'
-        ctx.lineWidth = 3
-        ctx.beginPath()
-        ctx.ellipse(0, 0, CANOE_W / 2, CANOE_H / 2, 0, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.stroke()
-        ctx.fillStyle = '#8a5a36'
-        ctx.beginPath()
-        ctx.ellipse(0, 0, CANOE_W / 2 - 9, CANOE_H / 2 - 11, 0, 0, Math.PI * 2)
-        ctx.fill()
-        ctx.fillStyle = '#1e3a5f'
-        disc(ctx, 0, -4, 11)
-        ctx.strokeStyle = '#4a3520'
-        ctx.lineWidth = 5
-        ctx.beginPath()
-        ctx.moveTo(-26, -2)
-        ctx.lineTo(26, 6)
-        ctx.stroke()
-        ctx.restore()
+        // The canoe, seen from above, paddles included; the picture is centred on the hull.
+        const canoeW = art.canoe.naturalWidth / 2
+        const canoeH = art.canoe.naturalHeight / 2
+        ctx.drawImage(art.canoe, state.x - canoeW / 2, CANOE_Y - canoeH / 2, canoeW, canoeH)
     }
 }
 
