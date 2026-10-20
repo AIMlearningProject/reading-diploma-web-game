@@ -1,5 +1,5 @@
 // The shell every mini-game runs in: the fixed-step loop, the input, the score
-// and best readout, and the start/again overlay.
+// and best readout, and the game-over/again overlay.
 //
 // A game is a plain module — { width, height, unit, hint, create, update, draw }
 // — and owns none of this. update(state, dt, input) is called at a fixed 1/60 s
@@ -40,9 +40,14 @@ export default function MiniGameCanvas({ game, name, onClose }) {
     const inputRef = useRef({
         pressed: false, justPressed: false, left: false, right: false, down: false, pointerX: null
     })
-    const phaseRef = useRef('ready')
-    const [phase, setPhase] = useState('ready')
+    // There is no start screen: a run is live from the moment the game opens and
+    // simply holds still until the pupil's first input (see `waiting`).
+    const phaseRef = useRef('running')
+    const [phase, setPhase] = useState('running')
     const [score, setScore] = useState(0)
+    // True while a run has started but the pupil has not touched anything yet: every
+    // game holds still until its first input, and this is when the controls are shown.
+    const [waiting, setWaiting] = useState(true)
     const [best, setBest] = useState(() => readBest(game.id))
 
     const setPhaseBoth = (next) => {
@@ -89,6 +94,7 @@ export default function MiniGameCanvas({ game, name, onClose }) {
 
                 const live = stateRef.current
                 setScore(live.score)
+                setWaiting(live.awake === false && !live.dead)
                 if (live.dead) {
                     setPhaseBoth('dead')
                     setBest((current) => {
@@ -99,6 +105,7 @@ export default function MiniGameCanvas({ game, name, onClose }) {
                 }
             } else {
                 inputRef.current.justPressed = false
+                setWaiting(false)
             }
 
             game.draw(ctx, stateRef.current)
@@ -205,18 +212,21 @@ export default function MiniGameCanvas({ game, name, onClose }) {
             >
                 <canvas ref={canvasRef} className="mg-canvas" />
 
-                {phase !== 'running' && (
+                {phase === 'running' && waiting && (
+                    <div className="mg-wake">
+                        <p className="mg-wake-title">Kokeile liikkua!</p>
+                        <p className="mg-wake-hint">{game.hint}</p>
+                    </div>
+                )}
+
+                {phase === 'dead' && (
                     <div className="mg-overlay">
-                        {phase === 'dead' && <p className="mg-over">Peli päättyi</p>}
-                        {phase === 'dead' && (
-                            <p className="mg-result">
-                                {score} {game.unit}
-                                {score > 0 && score >= best ? ' — uusi ennätys!' : ''}
-                            </p>
-                        )}
-                        <button className="mg-start" type="button" onClick={start}>
-                            {phase === 'dead' ? 'Pelaa uudelleen' : 'Aloita'}
-                        </button>
+                        <p className="mg-over">Peli päättyi</p>
+                        <p className="mg-result">
+                            {score} {game.unit}
+                            {score > 0 && score >= best ? ' — uusi ennätys!' : ''}
+                        </p>
+                        <button className="mg-start" type="button" onClick={start}>Pelaa uudelleen</button>
                         <p className="mg-hint">{game.hint}</p>
                     </div>
                 )}
