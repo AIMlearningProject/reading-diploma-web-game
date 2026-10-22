@@ -336,7 +336,7 @@ function StudentDashboard() {
                 <MinigameModal reward={openGame} onClose={() => setOpenGame(null)} />
             )}
             {openSceneGame && (
-                <SceneGameModal game={openSceneGame} onClose={() => setOpenSceneGame(null)} />
+                <SceneGameModal game={openSceneGame} buddy={user?.avatar} onClose={() => setOpenSceneGame(null)} />
             )}
         </div>
     )

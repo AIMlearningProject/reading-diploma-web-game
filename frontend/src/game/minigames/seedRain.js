@@ -1,4 +1,8 @@
-// G6 SIEMENSADE — catch the falling seeds before they reach the river.
+// G6 HEDELMÄSADE — catch the fruit falling from the tree before it hits the meadow.
+//
+// The game began as SIEMENSADE, seeds over a river, and is now fruit over grass.
+// The id 'siemensade' stays because it is stored in the rewards table; the file
+// and the asset names still say "seed" too.
 //
 // One endless run at constant difficulty: the fall speed, the spacing and the
 // basket never change, and there are no rounds. The only number that grows is
@@ -7,62 +11,104 @@
 // Driven by <MiniGameCanvas>: create() builds the state, update() advances it by
 // a fixed step, draw() paints it. Nothing here touches the DOM.
 
+import { loadArt } from './art.js'
+import basketUrl from '../../assets/minigames/siemensade/basket.png'
+import bgUrl from '../../assets/minigames/siemensade/bg.png'
+import charMattiUrl from '../../assets/minigames/siemensade/char_matti.png'
+import charPandaUrl from '../../assets/minigames/siemensade/char_panda.png'
+import charPpUrl from '../../assets/minigames/siemensade/char_pp.png'
+import heartEmptyUrl from '../../assets/minigames/siemensade/heart_empty.png'
+import heartFullUrl from '../../assets/minigames/siemensade/heart_full.png'
+import seed1Url from '../../assets/minigames/siemensade/seed_1.png'
+import seed2Url from '../../assets/minigames/siemensade/seed_2.png'
+import seed3Url from '../../assets/minigames/siemensade/seed_3.png'
+
 const WIDTH = 640
 const HEIGHT = 400
 
-// Fixed for the whole run, on purpose.
-const SEED_EVERY = 0.7     // s between seeds
-const FALL = 200           // px/s a seed falls
-const BASKET_SPEED = 430   // px/s the basket moves under the arrow keys
-const BASKET_W = 104
-const BASKET_H = 44
-const BASKET_Y = 312
-const REACH = 150          // px a new seed may sit from the one before it
-const MARGIN = 54
-const MISSES_ALLOWED = 3
-const SEED_R = 9
+// The art is drawn at 2x, so a picture's logical size is half its pixels, and
+// every position below is the layer's place in the 1280x800 source halved.
+const art = loadArt({
+    basket: basketUrl,
+    bg: bgUrl,
+    charMatti: charMattiUrl,
+    charPanda: charPandaUrl,
+    charPp: charPpUrl,
+    heartEmpty: heartEmptyUrl,
+    heartFull: heartFullUrl,
+    seed1: seed1Url,
+    seed2: seed2Url,
+    seed3: seed3Url
+})
+const SKY = '#a3dcf9'
+const FRUITS = ['seed1', 'seed2', 'seed3']
 
-const UNIT_CIRCLE = new Path2D('M1 0A1 1 0 1 1 -1 0A1 1 0 1 1 1 0Z')
+// The player's buddy carries the basket. Every buddy holds it the same way: hand
+// at the basket's left edge, feet on the same line, so only the height differs.
+// Offsets are from the basket's top-left corner.
+const CARRIERS = {
+    buddy_1: { look: 'charPanda', dx: 5.5, dy: -8.5 },
+    buddy_2: { look: 'charPp', dx: 5.5, dy: -49.5 },
+    buddy_3: { look: 'charMatti', dx: 5.5, dy: -56 }
+}
+
+// Fixed for the whole run, on purpose.
+const FRUIT_EVERY = 0.7    // s between fruit
+const FALL = 200           // px/s a fruit falls
+const BASKET_SPEED = 430   // px/s the basket moves under the arrow keys
+const BASKET_W = 95.5
+const BASKET_TOP = 284.5
+const RIM_TOP = BASKET_TOP + 4
+const RIM_BOTTOM = BASKET_TOP + 34
+const RIM_INSET = 8        // the basket's walls, which do not catch
+const REACH = 150          // px a new fruit may sit from the one before it
+const MISSES_ALLOWED = 3
+const FRUIT_R = 21
+const HEART_X = 29.5
+const HEART_Y = 343
+const HEART_STEP = 45.25
 
 const clamp = (value, low, high) => Math.min(Math.max(value, low), high)
 
-function disc(ctx, x, y, radius) {
-    ctx.save()
-    ctx.translate(x, y)
-    ctx.scale(radius, radius)
-    // eslint-disable-next-line unicorn/no-array-fill-with-reference-type -- CanvasRenderingContext2D#fill, not Array#fill
-    ctx.fill(UNIT_CIRCLE)
-    ctx.restore()
+const carrierOf = (buddy) => CARRIERS[buddy] ?? CARRIERS.buddy_1
+
+/** How far the basket's centre may go, so neither it nor the buddy leaves the stage. */
+function basketRange(carrier) {
+    const image = art[carrier.look]
+    const rightOfCentre = carrier.dx + image.naturalWidth / 2 - BASKET_W / 2
+    return [BASKET_W / 2, WIDTH - rightOfCentre]
 }
 
 /**
- * Seeds are placed fair by construction: the next one never lands further from
- * the last one than the basket can travel while it falls, so no pair is
- * impossible to reach.
+ * Fruit is placed fair by construction: the next one never lands further from
+ * the last one than the basket can travel while it falls, and never where the
+ * basket cannot reach.
  */
-function addSeed(state) {
-    const from = state.seeds.at(-1)?.x ?? WIDTH / 2
-    const x = clamp(
-        from + (Math.random() * 2 - 1) * REACH,
-        MARGIN,
-        WIDTH - MARGIN
-    )
-    state.seeds.push({ x, y: -SEED_R, spin: Math.random() * Math.PI })
+function addFruit(state, [low, high]) {
+    const from = state.fruits.at(-1)?.x ?? state.x
+    const x = clamp(from + (Math.random() * 2 - 1) * REACH, low, high)
+    state.fruits.push({
+        x,
+        y: -FRUIT_R * 2.5,
+        look: FRUITS[Math.floor(Math.random() * FRUITS.length)],
+        sway: Math.random() * Math.PI * 2
+    })
 }
 
 const seedRain = {
     id: 'siemensade',
     width: WIDTH,
     height: HEIGHT,
-    unit: 'siementä',
+    unit: 'hedelmää',
     // Finnish, pupil-facing.
     hint: 'Nuolet tai sormi: liikuta koria. Kolme ohi mennyttä, ja peli päättyy.',
 
-    create: () => ({
-            x: WIDTH / 2,
-            seeds: [],
-            sinceSeed: 0,
-            sprouts: [],
+    create: ({ buddy } = {}) => ({
+            buddy,
+            // Where the basket stands in the picture.
+            x: 327.75,
+            fruits: [],
+            sinceFruit: 0,
             misses: 0,
             score: 0,
             dead: false,
@@ -77,112 +123,79 @@ const seedRain = {
             state.awake = true
         }
 
+        const range = art.ready ? basketRange(carrierOf(state.buddy)) : [BASKET_W / 2, WIDTH - BASKET_W / 2]
+
         if (input.left) state.x -= BASKET_SPEED * dt
         if (input.right) state.x += BASKET_SPEED * dt
         // A finger or a held mouse drags the basket straight to it.
         if (input.pointerX !== null) state.x = input.pointerX * WIDTH
-        state.x = clamp(state.x, BASKET_W / 2, WIDTH - BASKET_W / 2)
+        state.x = clamp(state.x, range[0], range[1])
 
-        state.sinceSeed += dt
-        if (state.sinceSeed >= SEED_EVERY) {
-            state.sinceSeed -= SEED_EVERY
-            addSeed(state)
+        state.sinceFruit += dt
+        if (state.sinceFruit >= FRUIT_EVERY) {
+            state.sinceFruit -= FRUIT_EVERY
+            addFruit(state, range)
         }
 
-        const left = state.x - BASKET_W / 2
-        const right = state.x + BASKET_W / 2
+        const left = state.x - BASKET_W / 2 + RIM_INSET
+        const right = state.x + BASKET_W / 2 - RIM_INSET
         const kept = []
-        for (const seed of state.seeds) {
-            seed.y += FALL * dt
-            const isAtRim = seed.y + SEED_R >= BASKET_Y && seed.y - SEED_R <= BASKET_Y + BASKET_H
-            if (isAtRim && seed.x > left && seed.x < right) {
+        for (const fruit of state.fruits) {
+            fruit.y += FALL * dt
+            const isAtRim = fruit.y >= RIM_TOP && fruit.y <= RIM_BOTTOM
+            if (isAtRim && fruit.x > left && fruit.x < right) {
                 state.score += 1
-                state.sprouts.push({ x: seed.x, age: 0 })
                 continue
             }
-            if (seed.y - SEED_R > HEIGHT) {
+            if (fruit.y - FRUIT_R > HEIGHT) {
                 state.misses += 1
                 continue
             }
-            kept.push(seed)
+            kept.push(fruit)
         }
-        state.seeds = kept
-
-        for (const sprout of state.sprouts) sprout.age += dt
-        state.sprouts = state.sprouts.filter((sprout) => sprout.age < 1.1)
+        state.fruits = kept
 
         if (state.misses >= MISSES_ALLOWED) state.dead = true
     },
 
     draw(ctx, state) {
-        const sky = ctx.createLinearGradient(0, 0, 0, HEIGHT)
-        sky.addColorStop(0, '#f6e6c0')
-        sky.addColorStop(1, '#f0d9a8')
-        ctx.fillStyle = sky
+        ctx.fillStyle = SKY
         ctx.fillRect(0, 0, WIDTH, HEIGHT)
+        // Until the pictures have decoded the run is simply sky.
+        if (!art.ready) return
 
-        // The bare slope the seeds are meant for, and the river that takes the
-        // ones that get past.
-        ctx.fillStyle = '#c09a63'
-        ctx.fillRect(0, BASKET_Y + BASKET_H, WIDTH, HEIGHT - BASKET_Y - BASKET_H)
-        ctx.fillStyle = '#3f6b86'
-        ctx.fillRect(0, HEIGHT - 44, WIDTH, 44)
-        ctx.fillStyle = 'rgba(255,255,255,0.22)'
-        ctx.fillRect(0, HEIGHT - 44, WIDTH, 4)
+        ctx.drawImage(art.bg, 0, 0, WIDTH, HEIGHT)
 
-        for (const sprout of state.sprouts) {
-            const grow = Math.min(sprout.age / 0.5, 1)
-            // A rect rather than a stroked path: the stem is the same two
-            // points every frame, only its height changes.
-            ctx.fillStyle = '#4f8a43'
-            ctx.fillRect(sprout.x - 2, BASKET_Y + BASKET_H + 22 - 26 * grow, 4, 26 * grow)
-            ctx.fillStyle = '#5c9b4d'
-            disc(ctx, sprout.x, BASKET_Y + BASKET_H + 22 - 26 * grow, 9 * grow)
-        }
-
-        for (const seed of state.seeds) {
+        // Drawn under the basket, so a caught fruit drops into it.
+        for (const fruit of state.fruits) {
+            const image = art[fruit.look]
+            const w = image.naturalWidth / 2
+            const h = image.naturalHeight / 2
             ctx.save()
-            ctx.translate(seed.x, seed.y)
-            ctx.rotate(seed.spin + seed.y / 90)
-            ctx.fillStyle = '#6b4a2a'
-            ctx.beginPath()
-            ctx.ellipse(0, 0, SEED_R * 0.68, SEED_R, 0, 0, Math.PI * 2)
-            ctx.fill()
-            ctx.fillStyle = '#8a6a3c'
-            ctx.beginPath()
-            ctx.ellipse(-2, -2, SEED_R * 0.26, SEED_R * 0.42, 0, 0, Math.PI * 2)
-            ctx.fill()
+            ctx.translate(fruit.x, fruit.y)
+            ctx.rotate(Math.sin(fruit.sway + fruit.y / 40) * 0.25)
+            ctx.drawImage(image, -w / 2, -h / 2, w, h)
             ctx.restore()
         }
 
-        // The basket.
-        ctx.save()
-        ctx.translate(state.x, BASKET_Y)
-        ctx.fillStyle = '#b07a3e'
-        ctx.strokeStyle = '#4a3520'
-        ctx.lineWidth = 3
-        ctx.beginPath()
-        ctx.moveTo(-BASKET_W / 2, 0)
-        ctx.lineTo(BASKET_W / 2, 0)
-        ctx.lineTo(BASKET_W / 2 - 14, BASKET_H)
-        ctx.lineTo(-BASKET_W / 2 + 14, BASKET_H)
-        ctx.closePath()
-        ctx.fill()
-        ctx.stroke()
-        ctx.strokeStyle = 'rgba(74,53,32,0.45)'
-        ctx.lineWidth = 2
-        ctx.beginPath()
-        ctx.moveTo(-BASKET_W / 2 + 6, 15)
-        ctx.lineTo(BASKET_W / 2 - 6, 15)
-        ctx.moveTo(-BASKET_W / 2 + 10, 29)
-        ctx.lineTo(BASKET_W / 2 - 10, 29)
-        ctx.stroke()
-        ctx.restore()
+        const basketLeft = state.x - BASKET_W / 2
+        ctx.drawImage(art.basket, basketLeft, BASKET_TOP, BASKET_W, art.basket.naturalHeight / 2)
 
-        // Lives, as three seeds that go out.
+        // The buddy stands in front, one arm around the basket.
+        const carrier = carrierOf(state.buddy)
+        const body = art[carrier.look]
+        ctx.drawImage(
+            body,
+            basketLeft + carrier.dx,
+            BASKET_TOP + carrier.dy,
+            body.naturalWidth / 2,
+            body.naturalHeight / 2
+        )
+
+        // Lives, as three hearts that empty from the left.
         for (let i = 0; i < MISSES_ALLOWED; i++) {
-            ctx.fillStyle = i < MISSES_ALLOWED - state.misses ? '#6b4a2a' : 'rgba(107,74,42,0.22)'
-            disc(ctx, WIDTH - 28 - i * 24, 26, 8)
+            const heart = i < state.misses ? art.heartEmpty : art.heartFull
+            ctx.drawImage(heart, HEART_X + i * HEART_STEP, HEART_Y, heart.naturalWidth / 2, heart.naturalHeight / 2)
         }
     }
 }

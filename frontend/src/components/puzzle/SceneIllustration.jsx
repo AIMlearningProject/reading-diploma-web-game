@@ -287,7 +287,7 @@ const SCENES = {
         Art: BareSlope,
         label: {
             idle: 'Paljas rinne, jolta tulva on vienyt kaikki puut.',
-            solved: 'Rinteellä kasvaa uusi metsä, ja apina kiipeää puihin.'
+            solved: 'Rinteellä kasvaa uusi metsä, ja apina poimii hedelmiä puista.'
         }
     },
     'oceania-reef-maze': {

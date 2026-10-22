@@ -46,7 +46,7 @@ const puzzleScenes = [
         },
         solved: {
             praise: 'Juuri noin, se oli oikea esine!',
-            resolution: 'Siemenet itivät, ja rinteelle nousi uusi metsä.'
+            resolution: 'Siemenet itivät, ja rinteelle nousi uusi metsä täynnä hedelmiä.'
         },
         reward: { gameId: 'siemensade' }
     },

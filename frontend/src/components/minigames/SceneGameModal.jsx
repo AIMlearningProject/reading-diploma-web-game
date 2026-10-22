@@ -8,7 +8,7 @@
 import MiniGameCanvas from './MiniGameCanvas.jsx'
 import './SceneGameModal.css'
 
-export default function SceneGameModal({ game, onClose }) {
+export default function SceneGameModal({ game, buddy, onClose }) {
     if (!game?.module) return null
 
     return (
@@ -20,7 +20,7 @@ export default function SceneGameModal({ game, onClose }) {
                         <path d="M6 6 18 18M18 6 6 18" />
                     </svg>
                 </button>
-                <MiniGameCanvas game={game.module} name={game.name} onClose={onClose} />
+                <MiniGameCanvas game={game.module} name={game.name} buddy={buddy} onClose={onClose} />
             </div>
         </div>
     )

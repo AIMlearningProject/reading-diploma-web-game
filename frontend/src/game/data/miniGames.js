@@ -30,14 +30,14 @@ const miniGames = {
     },
     'siemensade': {
         id: 'siemensade',
-        name: 'SIEMENSADE',
-        pitch: 'Nappaa putoavat siemenet koriin ennen kuin ne katoavat jokeen. Pelaa sitä oppilaan sivulla!',
-        unit: 'siementä',
+        name: 'HEDELMÄSADE',
+        pitch: 'Nappaa puusta putoavat hedelmät koriin ennen kuin ne osuvat maahan. Pelaa sitä oppilaan sivulla!',
+        unit: 'hedelmää',
         module: seedRain,
         icon: [
             'M4.5 13.5h15l-1.6 5.4a2.4 2.4 0 0 1-2.3 1.6H8.4a2.4 2.4 0 0 1-2.3-1.6z',
-            'M9 10a1.6 1.6 0 1 1 3.2 0 1.6 1.6 0 0 1-3.2 0z',
-            'M14 5.5a1.4 1.4 0 1 1 2.8 0 1.4 1.4 0 0 1-2.8 0z'
+            'M12 7.2c-1.5-1-4-.5-4 2 0 2 1.7 3.8 4 3.8s4-1.8 4-3.8c0-2.5-2.5-3-4-2z',
+            'M12 7.2 12.6 4.5'
         ]
     },
     'delfiinin-reitti': {

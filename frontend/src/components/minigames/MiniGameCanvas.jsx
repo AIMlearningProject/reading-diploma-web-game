@@ -2,7 +2,8 @@
 // and best readout, and the game-over/again overlay.
 //
 // A game is a plain module — { width, height, unit, hint, create, update, draw }
-// — and owns none of this. update(state, dt, input) is called at a fixed 1/60 s
+// — and owns none of this. create() receives { buddy }, the pupil's buddy id, for
+// a game that draws it. update(state, dt, input) is called at a fixed 1/60 s
 // step so a slow frame never changes the physics.
 //
 // No rounds, no waves, no escalation: a run ends, the number is kept, the next
@@ -31,7 +32,7 @@ function writeBest(id, value) {
     }
 }
 
-export default function MiniGameCanvas({ game, name, onClose }) {
+export default function MiniGameCanvas({ game, name, buddy, onClose }) {
     const canvasRef = useRef(null)
     const stateRef = useRef(null)
     // pointerX is where a touch or a click sits across the stage, 0 at the left
@@ -56,7 +57,7 @@ export default function MiniGameCanvas({ game, name, onClose }) {
     }
 
     const start = () => {
-        stateRef.current = game.create()
+        stateRef.current = game.create({ buddy })
         setScore(0)
         setPhaseBoth('running')
     }
@@ -70,7 +71,7 @@ export default function MiniGameCanvas({ game, name, onClose }) {
         canvas.height = game.height * dpr
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
 
-        stateRef.current = game.create()
+        stateRef.current = game.create({ buddy })
 
         let raf = 0
         let previous = performance.now()
@@ -113,7 +114,7 @@ export default function MiniGameCanvas({ game, name, onClose }) {
 
         raf = requestAnimationFrame(frame)
         return () => cancelAnimationFrame(raf)
-    }, [game])
+    }, [game, buddy])
 
     // Keyboard. Space, Enter and Up all mean "act"; the arrows are there for the
     // games that steer.
