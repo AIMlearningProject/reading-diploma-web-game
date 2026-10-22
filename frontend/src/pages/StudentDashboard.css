@@ -766,45 +766,45 @@
 }
 /* ── Reppu and the scene mini-games ──────────────────────── */
 /* These two sections carry the puzzle-scene surface rather than the page's
- * older gold-bordered cards: an item has to look the same here as it does in
- * the tray the pupil picks it from. Frames are --line-500, never gold.
+ * older gold-bordered cards: an item keeps the icon disc it has in the tray
+ * the pupil picks it from. Frames are --line-500, never gold.
  * Prefixed sd- because page CSS is global. */
 
 .sd-backpack-lead {
     margin: 0.5rem 0 0;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: var(--ink-700);
 }
 
+/* Reppu is kept quiet on purpose: the scene games above it are what the pupil
+ * comes here for, and an item only matters again inside a scene. So it is a
+ * plain two-column list -- no card frames, no shadows, small discs. */
 .sd-backpack-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: 0.25rem 2rem;
+    margin-top: 0.75rem;
 }
 
 .sd-item {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 40px 1fr;
     align-items: center;
-    gap: 0.5rem;
-    padding: 1rem;
-    text-align: center;
-    background: var(--parchment-000);
-    border: var(--border-frame) solid var(--line-500);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 2px 0 rgba(44, 30, 5, 0.12), 0 3px 8px rgba(44, 30, 5, 0.08);
+    /* A row beside a taller neighbour stretches; keep name and line together. */
+    align-content: center;
+    column-gap: 0.85rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(58, 42, 16, 0.15);
 }
 
 .sd-item--missing {
-    border-style: dashed;
-    box-shadow: none;
     opacity: 0.6;
 }
 
 .sd-item-disc {
-    width: 62px;
-    height: 62px;
+    grid-row: span 2;
+    width: 40px;
+    height: 40px;
     display: grid;
     place-items: center;
     color: var(--navy-700);
@@ -813,23 +813,28 @@
     box-shadow: var(--shadow-inset-brass);
 }
 
+.sd-item-disc svg {
+    width: 22px;
+    height: 22px;
+}
+
 .sd-item-mark {
     font-family: var(--font-display);
-    font-size: 28px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--ink-700);
 }
 
 .sd-item-name {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 800;
     color: var(--navy-700);
 }
 
 .sd-item-desc {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1.4;
-    color: var(--ink-900);
+    color: var(--ink-700);
 }
 
 .sd-scene-game {

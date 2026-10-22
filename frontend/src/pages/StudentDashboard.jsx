@@ -235,6 +235,37 @@ function StudentDashboard() {
                             </div>
                         </section>
 
+                        {sceneGames.length > 0 && (
+                            <section className="dashboard-section sd-scene-games-section">
+                                <h2>Kohtausten pelit</h2>
+                                <div className="rewards-grid">
+                                    {sceneGames.map(({ id, game }) => (
+                                        <button
+                                            key={id}
+                                            type="button"
+                                            className="sd-scene-game"
+                                            disabled={!game.module}
+                                            onClick={() => setOpenSceneGame(game)}
+                                        >
+                                            <span className="sd-scene-game-disc">
+                                                <svg
+                                                    width="34" height="34" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" strokeWidth="1.5"
+                                                    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+                                                >
+                                                    {game.icon.map((d) => <path key={d} d={d} />)}
+                                                </svg>
+                                            </span>
+                                            <span className="sd-scene-game-name">{game.name}</span>
+                                            <span className="sd-scene-game-pitch">
+                                                {game.module ? 'Pelaa' : 'Tulossa pian'}
+                                            </span>
+                                        </button>
+                                    ))}
+                                </div>
+                            </section>
+                        )}
+
                         <section className="dashboard-section sd-backpack-section">
                             <h2>Reppu</h2>
                             <p className="sd-backpack-lead">
@@ -270,37 +301,6 @@ function StudentDashboard() {
                                 })}
                             </div>
                         </section>
-
-                        {sceneGames.length > 0 && (
-                            <section className="dashboard-section sd-scene-games-section">
-                                <h2>Kohtausten pelit</h2>
-                                <div className="rewards-grid">
-                                    {sceneGames.map(({ id, game }) => (
-                                        <button
-                                            key={id}
-                                            type="button"
-                                            className="sd-scene-game"
-                                            disabled={!game.module}
-                                            onClick={() => setOpenSceneGame(game)}
-                                        >
-                                            <span className="sd-scene-game-disc">
-                                                <svg
-                                                    width="34" height="34" viewBox="0 0 24 24" fill="none"
-                                                    stroke="currentColor" strokeWidth="1.5"
-                                                    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
-                                                >
-                                                    {game.icon.map((d) => <path key={d} d={d} />)}
-                                                </svg>
-                                            </span>
-                                            <span className="sd-scene-game-name">{game.name}</span>
-                                            <span className="sd-scene-game-pitch">
-                                                {game.module ? 'Pelaa' : 'Tulossa pian'}
-                                            </span>
-                                        </button>
-                                    ))}
-                                </div>
-                            </section>
-                        )}
 
                         <section className="dashboard-section rewards-section">
                             <h2>Palkinnot</h2>
