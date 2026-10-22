@@ -181,110 +181,80 @@
 }
 
 /* ── Voyage Summary ──────────────────────────────────────── */
-.voyage-summary {
-    color: #7a5c35;
-    font-size: 1.1rem;
-    font-style: italic;
-    margin: 0.75rem 0 1.75rem;
+/* Matkakirja is kept quiet the same way as Reppu: a plain two-column list with
+ * small discs and hairline rules, no card frames. Scoped to .voyage-log because
+ * .voyage-summary is also used on the teacher's side and page CSS is global. */
+.voyage-log .voyage-summary {
+    margin: 0.5rem 0 0;
+    font-size: 0.85rem;
+    color: var(--ink-700);
 }
 
-.voyage-summary strong {
-    color: #1e3a5f;
-    font-style: normal;
-    font-size: 1.25rem;
+.voyage-log .voyage-summary strong {
+    color: var(--navy-700);
 }
 
-/* ── Level Grid ──────────────────────────────────────────── */
+/* ── Level list ──────────────────────────────────────────── */
 .level-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+    gap: 0.25rem 2rem;
+    margin-top: 0.75rem;
 }
 
-@media (max-width: 820px) {
-    .level-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 480px) {
-    .level-grid { grid-template-columns: 1fr; }
-}
-
-/* ── Level Card ──────────────────────────────────────────── */
 .level-card {
-    border-radius: 6px;
-    border: 1.5px solid;
-    padding: 1.1rem 1rem;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
     align-items: center;
-    gap: 0.4rem;
-    text-align: center;
+    column-gap: 0.85rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(58, 42, 16, 0.15);
 }
 
-.level-incomplete {
-    border-color: rgba(196, 151, 58, 0.3);
-    background: rgba(253, 251, 244, 0.6);
-    box-shadow: 0 2px 8px rgba(44, 30, 5, 0.06);
-}
-
-.level-resubmit {
-    border-color: #7b4ce2;
-    background: rgba(155, 115, 245, 0.35);
-    box-shadow: 0 4px 16px rgba(123, 76, 226, 0.18);
-}
-
-.level-complete {
-    border-color: #C4973A;
-    background:
-        radial-gradient(ellipse 80% 60% at 20% 20%, rgba(255, 248, 200, 0.6) 0%, transparent 65%),
-        #FDF6E3;
-    box-shadow: 0 4px 16px rgba(196, 151, 58, 0.2);
-}
-
-.level-reviewed {
-    border-color: #549963b9;
-    background: #eafbea;
-    box-shadow: 0 4px 16px rgba(84, 153, 99, 0.2);
-}
-
+/* The number sits in the same disc as a Reppu item. */
 .level-number {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
     font-family: 'Cinzel Decorative', serif;
-    font-size: 1.6rem;
+    font-size: 1.05rem;
     font-weight: 700;
     line-height: 1;
+    background: var(--parchment-100);
+    border-radius: var(--radius-round);
+    box-shadow: var(--shadow-inset-brass);
 }
 
-.level-complete .level-number { color: #C4973A; }
+.level-complete .level-number { color: #9E7A2A; }
 .level-resubmit .level-number { color: #7b4ce2; }
-.level-incomplete .level-number { color: rgba(158, 122, 42, 0.35); }
+.level-incomplete .level-number { color: rgba(158, 122, 42, 0.45); }
 .level-reviewed .level-number { color: #3c763d; }
 
 .level-name {
-    font-size: 0.95rem;
-    font-weight: 700;
+    font-size: 0.85rem;
+    font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
 }
 
 .level-complete .level-name,
-.level-reviewed .level-name { color: #1e3a5f; }
+.level-reviewed .level-name { color: var(--navy-700); }
 .level-resubmit .level-name { color: #2a1f4d; }
-.level-incomplete .level-name { color: rgba(30, 58, 95, 0.45); }
+.level-incomplete .level-name { color: rgba(30, 58, 95, 0.5); }
 
 /* Status badge */
 .level-badge {
-    font-size: 0.78rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    padding: 0.2rem 0.6rem;
+    padding: 0.15rem 0.5rem;
     border-radius: 20px;
-    margin-top: 0.2rem;
 }
 
 .badge-incomplete {
-    background: rgba(30, 58, 95, 0.06);
-    color: rgba(30, 58, 95, 0.35);
+    color: rgba(30, 58, 95, 0.4);
     border: 1px solid rgba(30, 58, 95, 0.12);
 }
 

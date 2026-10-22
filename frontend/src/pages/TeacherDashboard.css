@@ -889,7 +889,8 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
    what satisfied that; now this does. */
 .teacher-dashboard .voyage-summary {
     margin: 0;
-    /* StudentDashboard.css has its own .voyage-summary and sets it in italic. */
+    /* StudentDashboard.css scopes its own .voyage-summary to .voyage-log now;
+       this stays as a guard in case it ever leaks again. */
     font-style: normal;
     font-size: var(--fs-badge);
     font-weight: 700;
