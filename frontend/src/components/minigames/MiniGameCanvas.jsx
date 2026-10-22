@@ -10,6 +10,7 @@
 // run starts identical. The only thing that grows is the pupil's own best.
 
 import { useEffect, useRef, useState } from 'react'
+import paperGrainUrl from '../../assets/minigames/paper_grain.jpg'
 import './MiniGameCanvas.css'
 
 const STEP = 1 / 60
@@ -212,6 +213,8 @@ export default function MiniGameCanvas({ game, name, buddy, onClose }) {
                 onPointerCancel={onPointerUp}
             >
                 <canvas ref={canvasRef} className="mg-canvas" />
+                {/* Inline because a CSS url() into src/assets does not resolve. */}
+                <div className="mg-paper" style={{ backgroundImage: `url(${paperGrainUrl})` }} aria-hidden="true" />
 
                 {phase === 'running' && waiting && (
                     <div className="mg-wake">

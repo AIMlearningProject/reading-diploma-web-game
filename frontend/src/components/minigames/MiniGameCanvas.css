@@ -69,6 +69,19 @@
     height: 100%;
 }
 
+/* Paper grain over every game, so the canvas reads as printed on the same
+ * paper as the rest of the page. The image is the fibre detail of ambientCG
+ * Paper001 (CC0) with its tone removed, centred on mid grey, so soft-light adds
+ * texture without tinting the art. Under the lettering and the overlay. */
+.mg-paper {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-size: 512px;
+    mix-blend-mode: soft-light;
+    opacity: 0.9;
+}
+
 /* Shown on the bare stage while a run waits for its first input: no scrim, just
    lettering with an outline so it reads on sand, ice, water and grass alike. */
 .mg-wake {
