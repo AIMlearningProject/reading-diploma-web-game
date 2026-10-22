@@ -17,6 +17,7 @@
     "db:make": "npx knex migrate:make --stub migration.stub --",
     "db:seed": "npx knex seed:make --stub seed.stub --",
     "db:seed:test": "npx knex seed:run --specific=01_test_data.js",
+    "db:testplayer": "node scripts/ensureMinigamePlayer.js",
     "db:seed:diploma": "npx knex seed:run --specific=00_diploma_books.js"
   },
   "dependencies": {
@@ -61,7 +62,8 @@
       "lint": "runs linter",
       "db:create": "creates production/development database",
       "db:make": "creates a knex migration template with name specified by user",
-      "db:seed": "creates a knex seed template with name specified by user"
+      "db:seed": "creates a knex seed template with name specified by user",
+      "db:testplayer": "creates or resets the student Pelaaja (every mini-game unlocked) without truncating anything"
     },
     "dependencies": {
       "bcrypt": "Used for hashing passwords, based on the blowfish cipher",
