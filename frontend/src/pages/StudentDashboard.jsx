@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { BUDDIES, BuddySprite, BuddyIcon } from '../components/BuddyAvatar'
 import homeBG from '../assets/HomeBG1.jpg'
-import MinigameModal from '../components/minigames/MinigameModal'
+// Continent tile puzzles (Palkinnot) are switched off for now; the game still records them as rewards, so uncommenting brings them back.
+// import MinigameModal from '../components/minigames/MinigameModal'
 import SceneGameModal from '../components/minigames/SceneGameModal'
 import items from '../game/data/items'
 import { miniGameById } from '../game/data/miniGames'
@@ -37,7 +38,7 @@ function StudentDashboard() {
     const [selectedBuddy, setSelectedBuddy] = useState('')
     const [buddySaving, setBuddySaving] = useState(false)
     const [buddyError, setBuddyError] = useState('')
-    const [openGame, setOpenGame] = useState(null);
+    // const [openGame, setOpenGame] = useState(null);
     const [openSceneGame, setOpenSceneGame] = useState(null);
 
     useEffect(() => {
@@ -98,9 +99,9 @@ function StudentDashboard() {
         .filter(r => r.reward_type === 'scene-game')
         .map(r => ({ id: r.id, game: miniGameById(String(r.name)) }))
         .filter(entry => entry.game)
-    const continentRewards = rewards.filter(
-        r => r.reward_type !== 'item' && r.reward_type !== 'scene-game'
-    )
+    // const continentRewards = rewards.filter(
+    //     r => r.reward_type !== 'item' && r.reward_type !== 'scene-game'
+    // )
 
     const completedCount = progress.filter(p => p.level_status === 'complete' || p.level_status === 'reviewed').length
     const hasBuddy = !!user?.avatar
@@ -113,16 +114,16 @@ function StudentDashboard() {
         "reviewed": "✓ Hyväksytty"
     }
 
-    const mapFi = {
-        'ArcticMap': 'Pohjoisnapa',
-        'EuropeMap': 'Eurooppa',
-        'AsiaMap': 'Aasia',
-        'NorthAmericaMap': 'Pohjois Amerikka',
-        'SouthAmericaMap': 'Etelä Amerikka',
-        'AfricaMap': 'Afrikka',
-        'OceaniaMap': 'Oseania',
-        'AntarcticaMap': 'Etelämanner'
-    }
+    // const mapFi = {
+    //     'ArcticMap': 'Pohjoisnapa',
+    //     'EuropeMap': 'Eurooppa',
+    //     'AsiaMap': 'Aasia',
+    //     'NorthAmericaMap': 'Pohjois Amerikka',
+    //     'SouthAmericaMap': 'Etelä Amerikka',
+    //     'AfricaMap': 'Afrikka',
+    //     'OceaniaMap': 'Oseania',
+    //     'AntarcticaMap': 'Etelämanner'
+    // }
 
     return (
         <div
@@ -302,6 +303,7 @@ function StudentDashboard() {
                             </div>
                         </section>
 
+                        {/* Palkinnot is off for now, see the note at the imports.
                         <section className="dashboard-section rewards-section">
                             <h2>Palkinnot</h2>
                             {continentRewards.length === 0 ? (
@@ -329,12 +331,15 @@ function StudentDashboard() {
                                 </div>
                             )}
                         </section>
+                        */}
                     </>
                 )}
             </div>
+            {/* Palkinnot is off for now, see the note at the imports.
             {openGame && (
                 <MinigameModal reward={openGame} onClose={() => setOpenGame(null)} />
             )}
+            */}
             {openSceneGame && (
                 <SceneGameModal game={openSceneGame} buddy={user?.avatar} onClose={() => setOpenSceneGame(null)} />
             )}
