@@ -271,15 +271,14 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
    against the right edge, one column of pencils down the table and no wrap.
 
    Scoped to the roster: the diploma book list has a Nimi column too, and
-   nothing in it is editable. */
+   nothing in it is editable.
+
+   The cell stays a table cell here. As a flex box it stopped stretching to the
+   row's height, so whenever another cell in the row grew taller (a wrapped
+   grade on a narrower window) the hover tint and the brass bar broke into
+   gaps. The flex layout is only needed in the mobile cards, see below. */
 .roster-table td[data-label="Nimi"],
 .roster-table td[data-label="Sähköposti"] {
-    display: flex;
-    align-items: center;
-    /* On a narrow window each cell carries its own label; a word longer than
-       the label's 5rem would otherwise touch the value. No effect on the wide
-       layout, where there is no label to separate from. */
-    gap: var(--space-2);
     position: relative;
     /* the lane the pencil is pinned in */
     padding-right: 42px;
@@ -1116,6 +1115,28 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
         min-width: 5rem;
     }
     .data-table td:first-child::before { content: ''; min-width: 0; }
+
+    /* Each cell carries its own label here, so label and value sit side by
+       side; the gap keeps a word longer than the label's 5rem off the value. */
+    .roster-table td[data-label="Nimi"],
+    .roster-table td[data-label="Sähköposti"] {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+    }
+
+    /* A label longer than its 5rem (SÄHKÖPOSTI) used to be squeezed back to
+       5rem and spill into the G badge. */
+    .roster-table td[data-label="Nimi"]::before,
+    .roster-table td[data-label="Sähköposti"]::before {
+        flex-shrink: 0;
+    }
+
+    /* The address may wrap, so it stays clear of the pencil's lane. */
+    .roster-email {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
 
     .add-form select {
         max-width: 100vw;

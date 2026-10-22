@@ -271,7 +271,12 @@ function StudentManager() {
                                             ) : (
                                                 <>
                                                     {s.email
-                                                        ? <><span className="gmail-g">G</span>{s.email}</>
+                                                        ? <>
+                                                            <span className="gmail-g">G</span>
+                                                            {/* A break point after the @, so a narrow card wraps the
+                                                                address at the domain rather than under the pencil. */}
+                                                            <span className="roster-email">{s.email.slice(0, s.email.indexOf('@') + 1)}<wbr />{s.email.slice(s.email.indexOf('@') + 1)}</span>
+                                                        </>
                                                         : <span className="gmail-empty">—</span>}
                                                     <button
                                                         className="icon-btn--edit"
