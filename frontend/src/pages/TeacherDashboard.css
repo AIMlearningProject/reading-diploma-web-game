@@ -874,8 +874,8 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
 }
 
 .teacher-dashboard .voyage-leg--reviewed {
-    background: var(--state-reviewed-surface);
-    color: var(--state-reviewed);
+    background: linear-gradient(180deg, var(--state-reviewed-border), var(--state-reviewed));
+    color: #fff;
 }
 
 .teacher-dashboard .voyage-leg--resubmit {
@@ -974,9 +974,9 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
 }
 
 .level-status-select.status-reviewed {
-    background-color: var(--state-reviewed-surface);
+    background: linear-gradient(180deg, var(--state-reviewed-border), var(--state-reviewed)) !important;
     border-color: var(--state-reviewed);
-    color: var(--state-reviewed) !important;
+    color: #fff !important;
 }
 
 .level-status-select.status-resubmit {
