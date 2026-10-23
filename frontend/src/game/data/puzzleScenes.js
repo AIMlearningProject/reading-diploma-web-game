@@ -36,7 +36,7 @@ const puzzleScenes = [
         sceneIndex: 1,
         sceneCount: 1,
         title: 'Paljas rinne',
-        story: 'Tulva vei rinteeltä kaikki puut. Multa valuu jokeen, eivätkä apinat löydä enää hedelmiä.',
+        story: 'Pikku apinan kotirinteellä kaikki hedelmäpuut ovat kuivuneet. Apina ei löydä enää yhtään hedelmää.',
         question: 'Mikä esine saisi rinteen vihertämään uudelleen?',
         correctItem: 'siemenpussi',
         hints: {

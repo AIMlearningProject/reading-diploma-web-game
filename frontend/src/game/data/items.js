@@ -28,7 +28,7 @@ const items = [
         name: 'Siemenpussi',
         power: 'make things grow',
         homeMapKey: 'EuropeMap',
-        desc: 'Pussillinen siemeniä. Ne itävät nopeasti ja juuret pitävät maan paikallaan.',
+        desc: 'Pussillinen siemeniä. Ne itävät nopeasti ja kasvavat isoiksi puiksi.',
         found: 'Sait vuoristokylän puutarhurilta pussillisen siemeniä.',
         icon: [
             'M6.5 9.5h11l1.2 8.5a2.2 2.2 0 0 1-2.2 2.5H7.5a2.2 2.2 0 0 1-2.2-2.5z',

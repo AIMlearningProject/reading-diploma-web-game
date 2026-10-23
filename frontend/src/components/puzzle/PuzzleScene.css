@@ -620,9 +620,15 @@
     transition: transform 2.2s ease-in-out 1.4s;
 }
 
+.ps-swap {
+    opacity: 0;
+    transition: opacity 1.2s ease 0.2s;
+}
+
 [data-state='solved'] .ps-hint  { opacity: 0; }
 [data-state='solved'] .ps-glow  { opacity: 1; }
 [data-state='solved'] .ps-trail { opacity: 1; }
+[data-state='solved'] .ps-swap  { opacity: 1; }
 [data-state='solved'] .ps-effect {
     opacity: 1;
     transform: scaleX(1);
@@ -632,12 +638,10 @@
  * the story leaves it. Both are per-scene points in the 620x400 viewBox. */
 [data-scene='oceania-reef-maze']            .ps-effect { transform-origin: 56px 264px; }
 [data-scene='south-america-river-crossing'] .ps-effect { transform-origin: 212px 280px; }
-[data-scene='africa-bare-slope']            .ps-effect { transform-origin: 96px 250px; }
 [data-scene='antarctica-lost-camp']         .ps-effect { transform-origin: 150px 300px; }
 
 [data-scene='oceania-reef-maze'][data-state='solved']            .ps-actor { transform: translate(300px, -30px); }
 [data-scene='south-america-river-crossing'][data-state='solved'] .ps-actor { transform: translate(228px, -62px); }
-[data-scene='africa-bare-slope'][data-state='solved']            .ps-actor { transform: translate(120px, -74px); }
 [data-scene='antarctica-lost-camp'][data-state='solved']         .ps-actor { transform: translate(252px, -68px); }
 
 @media (prefers-reduced-motion: reduce) {

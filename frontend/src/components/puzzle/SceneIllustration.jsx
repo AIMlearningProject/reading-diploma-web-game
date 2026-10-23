@@ -1,6 +1,7 @@
-// Placeholder illustrations for the puzzle scenes, drawn as flat shapes.
+// Illustrations for the puzzle scenes. S6 has its final art (see BareSlope);
+// the other three are placeholders drawn as flat shapes.
 //
-// They are placeholders for the art, not for the animation: every scene carries
+// The placeholders stand in for the art, not for the animation: each carries
 // the six layers the solve timeline drives — hint, target, glow, effect, trail,
 // actor — under one `data-state` on the root, so the final art can replace the
 // shapes without touching PuzzleScene or its CSS. Keep the class names.
@@ -11,6 +12,13 @@
 //   ps-effect  the item's effect, grows from its origin   hidden  -> visible
 //   ps-trail   dashed path showing the outcome            hidden  -> visible
 //   ps-actor   who is helped, moves along the trail       start   -> end position
+//
+// A scene drawn as two whole pictures uses one layer instead:
+//
+//   ps-swap    the solved picture over the unsolved one   hidden  -> visible
+
+import slopeBefore from '../../assets/puzzles/s6/before.png'
+import slopeAfter from '../../assets/puzzles/s6/after.png'
 
 const VIEW_BOX = '0 0 620 400'
 
@@ -166,62 +174,14 @@ function RiverCrossing({ state }) {
     )
 }
 
-function BareSlope({ state }) {
+// The first scene with its final art. It came as two whole pictures rather
+// than layers, so the solve is a crossfade from one to the other instead of
+// the six-layer timeline the placeholders use.
+function BareSlope() {
     return (
         <>
-            <rect x="0" y="0" width="620" height="400" fill="#f0d9a8" />
-            <path d="M0 0h620v130H0z" fill="#f6e6c0" />
-            <circle cx="520" cy="72" r="34" fill="#f2c46a" />
-            <path
-                className="ps-target"
-                d="M0 340V206q150-86 330-86t290 52v168z"
-                fill={state === 'solved' ? '#6f9e57' : '#c09a63'}
-            />
-            <path d="M0 340V206q150-86 330-86t290 52" fill="none" stroke="#8a6a3c" strokeWidth="6" />
-            <path d="M0 340h620v60H0z" fill="#3f6b86" />
-            <g stroke="#a67c45" strokeWidth="5" fill="none" opacity="0.8">
-                <path d="M90 266q22 34 6 74" />
-                <path d="M250 232q26 40 8 84" />
-                <path d="M430 240q24 38 6 80" />
-            </g>
-
-            <g className="ps-glow">
-                <ellipse cx="310" cy="250" rx="240" ry="110" fill="#ffe9a8" opacity="0.45" />
-            </g>
-
-            {/* effect: the new trees coming up along the slope */}
-            <g className="ps-effect">
-                {[120, 214, 308, 402, 496].map((x, i) => (
-                    <g key={x} transform={`translate(${x} ${226 + (i % 2) * 14})`}>
-                        <rect x="-5" y="0" width="10" height="46" rx="4" fill="#6b4a2a" />
-                        <circle cx="0" cy="-8" r="28" fill="#4f8a43" />
-                        <circle cx="-18" cy="6" r="18" fill="#5c9b4d" />
-                        <circle cx="18" cy="4" r="18" fill="#5c9b4d" />
-                    </g>
-                ))}
-            </g>
-
-            <path
-                className="ps-trail"
-                d="M96 318q110-58 210-54t222-26"
-                fill="none" stroke="#fdf6e3" strokeWidth="5" strokeLinecap="round" strokeDasharray="14 14"
-            />
-
-            {/* actor: the monkey, which climbs back up to the new trees */}
-            <g className="ps-actor">
-                <ellipse cx="96" cy="312" rx="20" ry="24" fill="#8a5a36" stroke="#4a2f18" strokeWidth="4" />
-                <circle cx="96" cy="282" r="15" fill="#8a5a36" stroke="#4a2f18" strokeWidth="4" />
-                <circle cx="96" cy="284" r="8" fill="#e0bc8c" />
-                <circle cx="80" cy="276" r="6" fill="#8a5a36" stroke="#4a2f18" strokeWidth="3" />
-                <circle cx="112" cy="276" r="6" fill="#8a5a36" stroke="#4a2f18" strokeWidth="3" />
-                <path d="M114 320q26 6 22-26" fill="none" stroke="#4a2f18" strokeWidth="5" strokeLinecap="round" />
-            </g>
-
-            <circle
-                className="ps-hint"
-                cx="300" cy="252" r="66"
-                fill="none" stroke="#8b4a2b" strokeWidth="4" strokeDasharray="12 12"
-            />
+            <image href={slopeBefore} x="0" y="0" width="620" height="400" />
+            <image className="ps-swap" href={slopeAfter} x="0" y="0" width="620" height="400" />
         </>
     )
 }
@@ -286,8 +246,8 @@ const SCENES = {
     'africa-bare-slope': {
         Art: BareSlope,
         label: {
-            idle: 'Paljas rinne, jolta tulva on vienyt kaikki puut.',
-            solved: 'Rinteellä kasvaa uusi metsä, ja apina poimii hedelmiä puista.'
+            idle: 'Kuiva rinne, jolla surullinen apina istuu kuolleiden puiden keskellä.',
+            solved: 'Rinne on taas vihreä, ja iloinen apina istuu hedelmäpuiden keskellä.'
         }
     },
     'oceania-reef-maze': {
