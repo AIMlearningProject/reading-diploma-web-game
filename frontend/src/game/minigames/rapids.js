@@ -9,27 +9,38 @@
 
 import { drawMirrored, loadArt } from './art.js'
 import banksUrl from '../../assets/minigames/koskimelonta/banks.png'
-import canoeUrl from '../../assets/minigames/koskimelonta/canoe.png'
 import hazeUrl from '../../assets/minigames/koskimelonta/haze.png'
 import rock1Url from '../../assets/minigames/koskimelonta/rock_1.png'
 import rock2Url from '../../assets/minigames/koskimelonta/rock_2.png'
 import rock3Url from '../../assets/minigames/koskimelonta/rock_3.png'
-import streaksUrl from '../../assets/minigames/koskimelonta/streaks.png'
+import charMattiUrl from '../../assets/minigames/koskimelonta/char_matti.png'
+import charPandaUrl from '../../assets/minigames/koskimelonta/char_panda.png'
+import charPpUrl from '../../assets/minigames/koskimelonta/char_pp.png'
 
 const WIDTH = 640
 const HEIGHT = 400
 
-// The art is drawn at 2x. Streaks and banks scroll; the water colour and the
-// haze (the deep-to-shallow gradient) stay put.
+// The art is drawn at 2x. The banks scroll; the water colour and the haze (the
+// deep-to-shallow gradient) stay put.
 const art = loadArt({
     banks: banksUrl,
-    canoe: canoeUrl,
+    charMatti: charMattiUrl,
+    charPanda: charPandaUrl,
+    charPp: charPpUrl,
     haze: hazeUrl,
     rock1: rock1Url,
     rock2: rock2Url,
-    rock3: rock3Url,
-    streaks: streaksUrl
+    rock3: rock3Url
 })
+
+// The player's buddy sits in the canoe; each buddy has its own picture of the
+// whole canoe, so only the picture changes.
+const PADDLERS = {
+    buddy_1: 'charPanda',
+    buddy_2: 'charPp',
+    buddy_3: 'charMatti'
+}
+const paddlerOf = (buddy) => PADDLERS[buddy] ?? PADDLERS.buddy_1
 const WATER = '#3e80a4'
 // How often each rock picture turns up. Rock 2 is meant to be the rare one.
 const ROCK_WEIGHTS = { rock1: 4, rock2: 2, rock3: 4 }
@@ -51,8 +62,11 @@ const SPEED = 180         // px/s the river scrolls past
 const ROW_EVERY = 0.9     // s between rows of rocks
 const LANES = [146, 320, 494]
 const CANOE_Y = 326
-const CANOE_W = 54
-const CANOE_H = 74
+const CANOE_SCALE = 0.8 // drawn size of the canoe picture, as a share of its pixels
+// The hit box grows with the picture (54 x 74 at half size), so a rock that
+// looks like it touches the canoe does touch it.
+const CANOE_W = 54 * CANOE_SCALE / 0.5
+const CANOE_H = 74 * CANOE_SCALE / 0.5
 const ROCK_R = 40
 const SWITCH_TIME = 0.12  // s the canoe takes to slide between lanes
 const REPEAT_AFTER = 0.22 // s a held arrow waits before it moves another lane
@@ -104,7 +118,8 @@ const rapids = {
     // Finnish, pupil-facing.
     hint: 'Nuolet tai napautus vasemmalle ja oikealle.',
 
-    create: () => ({
+    create: ({ buddy } = {}) => ({
+            buddy,
             lane: 1,
             x: LANES[1],
             fromX: LANES[1],
@@ -203,7 +218,6 @@ const rapids = {
         // Until the pictures have decoded the run is simply a stretch of water.
         if (!art.ready) return
 
-        drawMirrored(ctx, art.streaks, state.scroll, WIDTH, HEIGHT)
         ctx.drawImage(art.haze, 0, 0, WIDTH, HEIGHT)
         drawMirrored(ctx, art.banks, state.scroll, WIDTH, HEIGHT)
 
@@ -216,10 +230,11 @@ const rapids = {
             })
         }
 
-        // The canoe, seen from above, paddles included; the picture is centred on the hull.
-        const canoeW = art.canoe.naturalWidth / 2
-        const canoeH = art.canoe.naturalHeight / 2
-        ctx.drawImage(art.canoe, state.x - canoeW / 2, CANOE_Y - canoeH / 2, canoeW, canoeH)
+        // The canoe with the buddy in it, seen from above; the picture is centred on the hull.
+        const canoe = art[paddlerOf(state.buddy)]
+        const canoeW = canoe.naturalWidth * CANOE_SCALE
+        const canoeH = canoe.naturalHeight * CANOE_SCALE
+        ctx.drawImage(canoe, state.x - canoeW / 2, CANOE_Y - canoeH / 2, canoeW, canoeH)
     }
 }
 
