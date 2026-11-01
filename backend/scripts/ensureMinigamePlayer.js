@@ -31,7 +31,7 @@ const CONTINENT_GAMES = [
 // reward_type 'scene-game', name = the game id in frontend/src/game/data/miniGames.js
 const SCENE_GAMES = ['koskimelonta', 'siemensade', 'delfiinin-reitti', 'jaaretki']
 // reward_type 'item', name = the item id in frontend/src/game/data/items.js
-const ITEMS = ['kaukoputki', 'siemenpussi', 'simpukkapilli', 'mela']
+const ITEMS = ['kaukoputki', 'siemenpussi', 'korallihuilu', 'mela']
 
 async function main() {
     if (process.env.NODE_ENV === 'production') {

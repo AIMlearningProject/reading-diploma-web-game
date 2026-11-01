@@ -38,7 +38,7 @@ const DEMO_BOOKS = [
 ]
 // reward_type 'item', name = the item id in frontend/src/game/data/items.js.
 // All four, so a wrong item can be tried before the right one.
-const ITEMS = ['kaukoputki', 'siemenpussi', 'simpukkapilli', 'mela']
+const ITEMS = ['kaukoputki', 'siemenpussi', 'korallihuilu', 'mela']
 // reward_type 'scene-game', name = the game id in frontend/src/game/data/miniGames.js.
 // Never 'siemensade': that is the record that S6 is solved.
 const SCENE_GAMES = ['delfiinin-reitti']
