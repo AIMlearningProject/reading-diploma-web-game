@@ -70,9 +70,10 @@
 }
 
 /* Paper grain over every game, so the canvas reads as printed on the same
- * paper as the rest of the page. The image is the fibre detail of ambientCG
- * Paper001 (CC0) with its tone removed, centred on mid grey, so soft-light adds
- * texture without tinting the art. Under the lettering and the overlay. */
+ * paper as the rest of the page. The image is the laid-paper ribbing of Pixabay
+ * photo 2061709 with its tone removed, made tileable and centred on mid grey, so
+ * soft-light adds texture without tinting the art. Under the lettering and the
+ * overlay. */
 .mg-paper {
     position: absolute;
     inset: 0;
