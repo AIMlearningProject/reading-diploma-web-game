@@ -185,4 +185,15 @@
     --plum-500   : #6e4d6f;
     --plum-700   : #3e2a3f;
     --shadow-panel: 0 12px 40px rgba(44, 30, 5, 0.28), 0 2px 8px rgba(44, 30, 5, 0.12);
+
+    /* ── Picture-book cards ───────────────────────────── */
+    /* The item-found card and the puzzle scene: one flat paper sheet with the */
+    /* mini-games' paper grain, soft colour fills, no outlines, no shadows. */
+    --book-paper     : #fdf8ec;
+    --book-chip      : #f1e8d2;
+    --book-chip-deep : #e2d4b2;
+    --book-sun       : #e9b949;
+    --book-hint      : #f3e9f3;
+    --book-hint-ink  : #4a2f4b;
+    --book-picked-dot: #3c5c85;
 }

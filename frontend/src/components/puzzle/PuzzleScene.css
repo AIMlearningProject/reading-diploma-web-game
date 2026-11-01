@@ -1,11 +1,8 @@
-/* Puzzle scene panel. The design is fixed — see
- * .claude/skills/lukudiplomi-puzzle-scene. Three rules do most of the work:
+/* Puzzle scene panel, picture-book style. Shared with ItemFoundCard.css:
  *
- *   1. Light deep layer. The panel is parchment, never navy.
- *   2. No brass or gold as a border. Frames are --line-300, controls --line-500.
- *      Brass is a fill, a 32x2 heading rule, or a glow.
- *   3. Raised means a solid darker ledge (0 3px 0 <darker>), not a gradient and
- *      not a hover lift. Selected means pressed in.
+ *   1. One flat paper sheet with the mini-games' paper grain under the content.
+ *   2. Soft colour fills only: no outlines, no frames, no shadows.
+ *   3. Little text: the story, one question, and a hint only after a wrong try.
  *
  * Page CSS is global, so every class is prefixed ps-.
  */
@@ -43,122 +40,36 @@
 
 .ps-panel {
     position: relative;
+    isolation: isolate;
+    overflow: hidden;
     box-sizing: border-box;
-    width: 1120px;
-    height: 700px;
-    padding: 28px 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    background: var(--parchment-200);
-    border: var(--border-frame) solid var(--line-300);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-panel);
-    font-family: var(--font-body);
-}
-
-/* The double frame: a hairline sitting inside the border, on the panel and on
- * the cards. It is what makes the surface read as pressed paper. */
-.ps-panel::before,
-.ps-card::before {
-    content: '';
-    position: absolute;
-    inset: 7px;
-    border: var(--border-hairline) solid var(--frame-inset);
-    border-radius: var(--radius-md);
-    pointer-events: none;
-}
-
-.ps-backpack::before,
-.ps-use::before,
-.ps-button-primary::before {
-    content: '';
-    position: absolute;
-    inset: 5px;
-    border: var(--border-hairline) solid rgba(58, 42, 16, 0.3);
-    border-radius: var(--radius-md);
-    pointer-events: none;
-}
-
-.ps-backpack::before {
-    border-color: rgba(253, 246, 227, 0.3);
-}
-
-/* ── Header ───────────────────────────────────────────── */
-
-.ps-header {
-    height: 56px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex: none;
-}
-
-.ps-heading {
-    flex: 1;
-    min-width: 0;
-}
-
-.ps-kicker {
-    margin: 0;
-    font-size: 12.75px;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-700);
-}
-
-.ps-title {
-    margin: 2px 0 0;
-    font-family: var(--font-display);
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    line-height: 1.1;
-    color: var(--navy-700);
-}
-
-.ps-pill-scene {
-    flex: none;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: var(--navy-700);
-    border: var(--border-frame) solid var(--line-300);
-    border-radius: var(--radius-pill);
-}
-
-.ps-close {
-    flex: none;
-    width: 44px;
-    height: 44px;
+    width: 1080px;
+    padding: 36px;
     display: grid;
-    place-items: center;
-    padding: 0;
-    background: transparent;
-    color: var(--navy-700);
-    border: var(--border-frame) solid var(--line-500);
-    border-radius: var(--radius-md);
-    cursor: pointer;
+    grid-template-columns: 600px minmax(0, 1fr);
+    gap: 28px 36px;
+    background: var(--book-paper);
+    border-radius: 26px;
+    font-family: var(--font-body);
+    color: var(--ink-900);
 }
 
-/* ── Body: illustration and story card ────────────────── */
-
-.ps-body {
-    height: 400px;
-    display: flex;
-    gap: 24px;
-    flex: none;
+/* The grain sits under the content, so it tints the paper and nothing else. */
+.ps-grain {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-size: 512px;
+    mix-blend-mode: multiply;
+    opacity: 0.22;
+    pointer-events: none;
 }
 
 .ps-art-box {
-    flex: none;
-    width: 620px;
-    height: 400px;
+    width: 600px;
+    height: 387px;
     overflow: hidden;
-    border: var(--border-frame) solid var(--line-300);
-    border-radius: var(--radius-lg);
+    border-radius: 18px;
 }
 
 .ps-art {
@@ -167,422 +78,239 @@
     height: 100%;
 }
 
-.ps-card {
+/* ── Story column ─────────────────────────────────────── */
+
+.ps-text {
     position: relative;
-    flex: 1;
-    min-width: 0;
-    box-sizing: border-box;
-    padding: 26px 28px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    background: var(--parchment-000);
-    border: var(--border-frame) solid var(--line-300);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-card);
+    gap: 18px;
+    /* One height for both states, sized to the longest solved text (S8), so
+     * the panel does not grow at the moment the scene is solved. */
+    min-height: 424px;
 }
 
-.ps-card--solved {
-    background: var(--parchment-100);
-    box-shadow: var(--shadow-card), 0 4px 18px rgba(196, 151, 58, 0.35);
-}
-
-.ps-card-heading {
-    margin: 0;
-    font-family: var(--font-display);
-    font-size: var(--fs-card-heading);
-    font-weight: 700;
-    letter-spacing: var(--ls-card-heading);
-    color: var(--navy-700);
-}
-
-.ps-card-heading::after {
-    content: '';
-    display: block;
-    width: 32px;
-    height: 2px;
-    margin-top: 10px;
-    background: var(--brass-500);
-}
-
-.ps-story {
-    margin: 0;
-    font-size: 16.5px;
-    font-style: italic;
-    line-height: 1.55;
-    color: var(--ink-700);
-}
-
-.ps-question {
-    margin: 0;
-    font-size: 17px;
-    font-weight: 800;
-    color: var(--navy-700);
-}
-
-/* ── Feedback region ──────────────────────────────────── */
-
-.ps-feedback {
-    margin-top: auto;
-}
-
-.ps-feedback-choose {
-    margin: 0;
-    padding: 14px 16px;
-    font-size: 16px;
-    font-style: italic;
-    color: var(--ink-700);
-    border: var(--border-frame) dashed var(--line-500);
-    border-radius: var(--radius-lg);
-}
-
-.ps-feedback-selected {
-    padding: 14px 16px;
-    background: var(--parchment-100);
-    border: var(--border-frame) solid var(--line-300);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-tile-gold);
-}
-
-.ps-feedback-kicker {
-    margin: 0;
-    font-size: 12.5px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: var(--ink-700);
-}
-
-.ps-feedback-name {
-    margin: 4px 0 0;
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--navy-700);
-}
-
-.ps-feedback-desc {
-    margin: 4px 0 0;
-    font-size: 16px;
-    line-height: 1.45;
-    color: var(--ink-900);
-}
-
-/* Plum, never red: a retry is an invitation, not an error. */
-.ps-feedback-wrong {
-    padding: 14px 16px;
-    background: rgba(110, 77, 111, 0.07);
-    border: var(--border-frame) solid rgba(110, 77, 111, 0.45);
-    border-radius: var(--radius-lg);
-}
-
-.ps-pill-retry {
-    display: inline-block;
-    padding: 3px 10px;
-    font-size: 12.5px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: var(--page-white);
-    background: var(--plum-500);
-    border-radius: var(--radius-pill);
-}
-
-.ps-hint-text {
-    margin: 8px 0 0;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.45;
-    color: var(--plum-700);
-}
-
-/* ── Solved: the story card becomes the reward card ───── */
-
-.ps-pill-solved {
-    align-self: flex-start;
-    padding: 4px 12px;
-    font-size: 12.5px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: var(--parchment-100);
-    background: var(--navy-700);
-    border-radius: var(--radius-pill);
-}
-
-.ps-praise {
-    margin: 0;
-    font-size: 23px;
-    font-weight: 800;
-    line-height: 1.25;
-    color: var(--navy-700);
-}
-
-.ps-resolution {
-    margin: 0;
-    font-size: 16.5px;
-    font-style: italic;
-    line-height: 1.5;
-    color: var(--ink-700);
-}
-
-.ps-ticket {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
-    background: var(--parchment-000);
-    border: var(--border-frame) dashed var(--line-500);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 4px 16px rgba(196, 151, 58, 0.3);
-}
-
-.ps-ticket-disc {
-    flex: none;
-    width: 60px;
-    height: 60px;
+.ps-close {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    width: 52px;
+    height: 52px;
     display: grid;
     place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
     color: var(--navy-700);
-    background: var(--parchment-100);
-    border-radius: var(--radius-round);
-    box-shadow: inset 0 1px 4px rgba(196, 151, 58, 0.35), 0 2px 6px rgba(44, 30, 5, 0.1);
+    cursor: pointer;
 }
 
-.ps-ticket-text {
-    min-width: 0;
+.ps-close:hover {
+    background: var(--book-chip);
 }
 
-.ps-ticket-kicker {
+/* The story leads the column; the solved result uses the same size so the
+ * text does not shrink when the scene is solved. */
+.ps-story,
+.ps-result {
     margin: 0;
-    font-size: 12.5px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: var(--ink-700);
-}
-
-.ps-ticket-name {
-    margin: 2px 0 0;
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--navy-700);
-}
-
-.ps-ticket-pitch {
-    margin: 4px 0 0;
-    font-size: 15px;
+    font-size: 28px;
     font-weight: 700;
     line-height: 1.4;
     color: var(--ink-900);
 }
 
-.ps-actions {
-    margin-top: auto;
-    display: flex;
-    gap: 12px;
+.ps-story {
+    padding-right: 48px;
 }
 
-.ps-button-primary {
-    position: relative;
-    flex: 1;
-    height: 48px;
-    padding: 0 16px;
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 800;
-    color: var(--navy-700);
-    background: var(--brass-300);
-    border: none;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 3px 0 var(--brass-700), 0 5px 10px rgba(44, 30, 5, 0.18);
-    cursor: pointer;
-}
-
-.ps-button-secondary {
-    flex: 1;
-    height: 48px;
-    padding: 0 16px;
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--navy-700);
-    background: transparent;
-    border: var(--border-frame) solid var(--line-500);
-    border-radius: var(--radius-lg);
-    cursor: pointer;
-}
-
-/* ── Tray ─────────────────────────────────────────────── */
-
-.ps-tray {
-    height: 148px;
-    flex: none;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding-top: 18px;
-    border-top: var(--border-frame) solid var(--line-300);
-}
-
-.ps-backpack,
-.ps-slot,
-.ps-use {
-    height: 112px;
-    box-sizing: border-box;
-}
-
-.ps-backpack {
-    position: relative;
-    flex: none;
-    width: 124px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    color: var(--parchment-100);
-    background: var(--navy-700);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 3px 0 var(--navy-800), 0 5px 10px rgba(44, 30, 5, 0.18);
-}
-
-.ps-backpack-name {
-    font-family: var(--font-display);
+.ps-question {
+    margin: 0;
     font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-}
-
-.ps-backpack-count {
-    font-size: 14.5px;
-    font-weight: 700;
-}
-
-.ps-slots {
-    display: flex;
-    gap: 12px;
-}
-
-.ps-slot {
-    position: relative;
-    width: 104px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 0 6px;
+    font-weight: 900;
+    line-height: 1.35;
     color: var(--navy-700);
-    background: var(--parchment-000);
-    border: var(--border-frame) solid var(--line-500);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 2px 0 rgba(44, 30, 5, 0.12), 0 3px 8px rgba(44, 30, 5, 0.08);
-    cursor: pointer;
-    font-family: var(--font-body);
 }
 
-.ps-slot-name {
-    font-size: 15px;
+.ps-feedback {
+    margin-top: auto;
+}
+
+.ps-hint-bubble,
+.ps-note-bubble {
+    margin: 0;
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-size: 20px;
     font-weight: 700;
-    line-height: 1.2;
-    text-align: center;
+    line-height: 1.4;
+}
+
+.ps-hint-bubble {
+    background: var(--book-hint);
+    color: var(--book-hint-ink);
+}
+
+.ps-note-bubble {
+    background: var(--book-chip);
     color: var(--ink-900);
 }
 
-/* Selected is pressed in, not lifted. */
-.ps-slot--selected {
-    background: #ece1c8;
-    border: var(--border-card) solid var(--navy-700);
-    box-shadow: inset 0 3px 7px rgba(44, 30, 5, 0.32), inset 0 1px 2px rgba(44, 30, 5, 0.22);
-    transform: translateY(2px);
+/* ── Solved ───────────────────────────────────────────── */
+
+.ps-win {
+    margin: 0;
+    padding-right: 48px;
+    font-family: var(--font-body);
+    font-size: 46px;
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--navy-700);
 }
 
-.ps-slot--tried {
-    background: var(--parchment-000);
-    border: var(--border-card) dashed var(--plum-500);
-    box-shadow: none;
-}
-
-.ps-slot-pill {
-    position: absolute;
-    top: -11px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 2px 9px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-    color: var(--page-white);
-    background: var(--navy-700);
-    border-radius: var(--radius-pill);
-}
-
-.ps-slot-pill--tried {
-    background: var(--plum-500);
-}
-
-.ps-slot--empty {
-    opacity: 0.6;
-    border: var(--border-frame) dashed var(--line-500);
-    box-shadow: none;
-    cursor: default;
-}
-
-.ps-slot-empty-mark {
-    font-family: var(--font-display);
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--ink-700);
-}
-
-.ps-slot-empty-label {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--ink-700);
-}
-
-.ps-use-wrap {
-    flex-grow: 1;
+.ps-game {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
 }
 
-.ps-use {
-    position: relative;
-    width: 184px;
+.ps-game-disc {
+    flex: none;
+    width: 68px;
+    height: 68px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--book-chip);
+    color: var(--navy-700);
+}
+
+.ps-game-kicker {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--brass-700);
+}
+
+.ps-game-name {
+    margin: 0;
+    font-size: 27px;
+    font-weight: 900;
+    color: var(--navy-700);
+}
+
+.ps-actions {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ps-button {
+    height: 60px;
+    border: 0;
+    border-radius: 18px;
+    background: var(--book-chip);
+    color: var(--navy-700);
+    font-family: var(--font-body);
+    font-size: 20px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.ps-button--main {
+    background: var(--book-sun);
+}
+
+/* ── Backpack row ─────────────────────────────────────── */
+
+.ps-tray {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.ps-slot {
+    width: 132px;
+    height: 128px;
+    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
+    gap: 10px;
+    border: 0;
+    border-radius: 24px;
+    background: var(--book-chip);
     color: var(--navy-700);
-    background: var(--brass-300);
-    border: none;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 3px 0 var(--brass-700), 0 5px 10px rgba(44, 30, 5, 0.18);
-    cursor: pointer;
     font-family: var(--font-body);
+    cursor: pointer;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
 }
 
-.ps-use-verb {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+.ps-slot-dot {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--book-chip-deep);
 }
 
-.ps-use-object {
-    font-size: 15.5px;
+.ps-slot-name {
+    font-size: 17px;
     font-weight: 800;
 }
 
-.ps-use:disabled,
-.ps-slot:disabled {
+.ps-slot--selected {
+    background: var(--navy-700);
+    color: var(--parchment-000);
+}
+
+.ps-slot--selected .ps-slot-dot {
+    background: var(--book-picked-dot);
+}
+
+.ps-slot--tried {
     opacity: 0.5;
+}
+
+.ps-slot--empty {
+    opacity: 0.45;
     cursor: default;
 }
 
 .ps-slot:disabled {
-    opacity: 1;
+    cursor: default;
+}
+
+.ps-use {
+    margin-left: auto;
+    height: 104px;
+    padding: 0 52px;
+    border: 0;
+    border-radius: 24px;
+    background: var(--book-sun);
+    color: var(--navy-700);
+    font-family: var(--font-body);
+    font-size: 30px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.ps-use:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.ps-slot:focus-visible,
+.ps-use:focus-visible,
+.ps-button:focus-visible,
+.ps-close:focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 3px;
 }
 
 /* ── Solve animation ──────────────────────────────────── */
@@ -636,13 +364,8 @@
 
 /* The effect grows from where the item is used, and the actor travels to where
  * the story leaves it. Both are per-scene points in the 620x400 viewBox. */
-[data-scene='oceania-reef-maze']            .ps-effect { transform-origin: 56px 264px; }
 [data-scene='south-america-river-crossing'] .ps-effect { transform-origin: 212px 280px; }
-[data-scene='antarctica-lost-camp']         .ps-effect { transform-origin: 150px 300px; }
-
-[data-scene='oceania-reef-maze'][data-state='solved']            .ps-actor { transform: translate(300px, -30px); }
 [data-scene='south-america-river-crossing'][data-state='solved'] .ps-actor { transform: translate(228px, -62px); }
-[data-scene='antarctica-lost-camp'][data-state='solved']         .ps-actor { transform: translate(252px, -68px); }
 
 @media (prefers-reduced-motion: reduce) {
     .ps-scrim { animation: none; }
