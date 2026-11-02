@@ -5,6 +5,8 @@
  *                     #ink-hand filter from InkFilter.jsx. Type is never
  *                     filtered. The element must be positioned.
  *   .ink-shape--thin  a thinner outline, for small round shapes.
+ *   .ink-shape--hair  the thinnest outline, for marks inside a quiet list
+ *                     that must not read as buttons.
  *   .ink-drop         a dithered drop shadow, a 50% ink checker: no blur.
  *
  * A screen sets --book-fill per shape, hides the drop on a pressed shape and
@@ -35,6 +37,10 @@
 
 :where(.ink-shape--thin)::before {
     border-width: calc(var(--book-line) * 0.75);
+}
+
+:where(.ink-shape--hair)::before {
+    border-width: calc(var(--book-line) * 0.45);
 }
 
 :where(.ink-drop)::after {

@@ -38,3 +38,9 @@
         0 18px 36px -24px rgba(44, 30, 5, 0.55);
     position: relative;
 }
+
+/* One exception: the pupil's dashboard draws its sections in ink, like the
+ * puzzle scene, and clears this sheet under .student-dashboard in
+ * StudentDashboard.css. The scoped selector outranks this one, so load order
+ * does not decide it. It lives there because the ink radius is not one of the
+ * teacher-side tiers that scripts/check-shapes.mjs holds this file to. */

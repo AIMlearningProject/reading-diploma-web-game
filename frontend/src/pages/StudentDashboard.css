@@ -5,6 +5,9 @@
     background-size: cover;
     background-position: center;
     position: relative;
+    /* The header's ink rule overhangs both edges. clip, not hidden, so the
+     * sticky header still sticks. */
+    overflow-x: clip;
 }
 
 /* Top ocean waves — fixed */
@@ -32,9 +35,11 @@
 }
 
 /* ── Sticky Header ───────────────────────────────────────── */
+/* A paper strip with an ink rule under it, the way the puzzle scene draws a
+ * line. Everything on this page from here down is drawn in ink (ink.css):
+ * a raised, outlined shape is something to press, and nothing else is. */
 .student-header {
-    background: linear-gradient(180deg, #162d4e 0%, #1e3a5f 55%, #2c5f8a 100%);
-    border-bottom: 2px solid #C4973A;
+    background: var(--book-paper);
     padding: 1.25rem 2.5rem;
     display: flex;
     align-items: center;
@@ -44,20 +49,23 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow:
-        0 4px 24px rgba(22, 45, 78, 0.45),
-        0 1px 0 rgba(196, 151, 58, 0.25) inset;
+}
+
+.student-header::after {
+    content: '';
+    position: absolute;
+    inset: 0 -8px -3px;
+    border-bottom: var(--book-line) solid var(--book-outline);
+    filter: url('#ink-hand');
+    pointer-events: none;
 }
 
 .student-header h1 {
     font-family: 'Cinzel Decorative', serif;
     font-size: clamp(1rem, 2.5vw, 1.4rem);
-    color: #D8B25A;
+    color: var(--navy-700);
     margin: 0;
     letter-spacing: 0.05em;
-    text-shadow:
-        0 1px 3px rgba(0, 0, 0, 0.5),
-        0 0 20px rgba(196, 151, 58, 0.2);
 }
 
 .header-right {
@@ -68,75 +76,51 @@
 }
 
 .header-right span {
-    color: rgba(235, 243, 254, 0.68);
+    color: var(--ink-900);
     font-size: clamp(0.9rem, 2vw, 1rem);
     font-style: italic;
-    letter-spacing: 0.03em;
+    font-weight: 700;
 }
 
 .header-right span strong {
-    color: #D8B25A;
+    color: var(--navy-700);
     font-style: normal;
-    font-weight: 800;
+    font-weight: 900;
 }
 
-/* Play button — solid brass */
-.play-button {
-    background: linear-gradient(180deg, #D8B25A 0%, #C4973A 48%, #A67E1E 100%);
-    color: #1e3a5f;
-    border: 1px solid #9E7A2A;
-    border-radius: 4px;
-    padding: 0.5rem 1.3rem;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    box-shadow:
-        0 1px 0 rgba(255, 248, 200, 0.5) inset,
-        0 -1px 0 rgba(0, 0, 0, 0.16) inset,
-        0 3px 12px rgba(100, 60, 0, 0.25);
-    transition: all 0.15s ease;
-}
-
-.play-button:hover {
-    background: linear-gradient(180deg, #E0BC64 0%, #CCA040 48%, #B08826 100%);
-    transform: translateY(-1px);
-    box-shadow:
-        0 1px 0 rgba(255, 248, 200, 0.55) inset,
-        0 -1px 0 rgba(0, 0, 0, 0.18) inset,
-        0 5px 18px rgba(100, 60, 0, 0.3);
-}
-
-.play-button:active {
-    transform: translateY(1px);
-    background: linear-gradient(180deg, #A67E1E 0%, #C4973A 55%, #D8B25A 100%);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16) inset;
-}
-
-/* Logout — ghost brass */
-.logout-button {
+/* ── Buttons ─────────────────────────────────────────────── */
+/* Ink buttons, as in the puzzle scene: Pelaa and Tallenna on the sun fill,
+ * the rest on paper. Small, so the drop is shorter than the panel's. The
+ * teacher page reuses .logout-button and restyles it under .teacher-dashboard. */
+.play-button,
+.logout-button,
+.change-avatar-button {
+    --book-drop: 6px;
+    position: relative;
+    padding: 10px 22px;
+    border: 0;
+    border-radius: 14px;
     background: transparent;
-    border: 1.5px solid rgba(196, 151, 58, 0.6);
-    color: #C4973A;
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    transition: all 0.2s;
+    color: var(--navy-700);
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 900;
     white-space: nowrap;
+    cursor: pointer;
 }
 
-.logout-button:hover {
-    background: rgba(196, 151, 58, 0.15);
-    border-color: #D8B25A;
-    color: #D8B25A;
+.play-button {
+    --book-fill: var(--book-sun);
+}
+
+.logout-button,
+.change-avatar-button {
+    --book-fill: var(--book-paper);
+}
+
+.logout-button:hover,
+.change-avatar-button:hover {
+    --book-fill: var(--book-chip);
 }
 
 /* ── Content Area ────────────────────────────────────────── */
@@ -153,41 +137,48 @@
 
 /* ── Section Cards — Cartouche Panels ────────────────────── */
 .dashboard-section {
-    /* The sheet is in paper.css. */
+    /* The sheet is in paper.css; on this page it is drawn in ink. */
+    --book-fill: var(--book-paper);
     padding: clamp(2rem, 4vw, 2.75rem);
     animation: cardRise 0.55s cubic-bezier(0.34, 1.3, 0.64, 1) both;
+}
+
+/* The panel's drop, as long as the puzzle panel's. */
+.dashboard-section::after {
+    transform: translate(calc(var(--book-drop) * 1.5), calc(var(--book-drop) * 1.75));
 }
 
 .buddy-selection-section { animation-delay: 0s; }
 .voyage-log { animation-delay: 0.08s; }
 .rewards-section { animation-delay: 0.22s; }
 
-.dashboard-section h2 {
-    margin: 0 0 0.6rem;
-    color: #1e3a5f;
-    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+/* paper.css lays the parchment sheet; here the ink outline and the dithered
+ * drop are the sheet's edge instead, so the wash and the desk shadow give way.
+ * Scoped, because the teacher's sections share .dashboard-section. */
+.student-dashboard .dashboard-section {
+    background: transparent;
+    border-radius: 26px;
+    box-shadow: none;
 }
 
-.dashboard-section h2::after {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #C4973A, transparent);
-    margin: 0.45rem 0 0;
+.dashboard-section h2 {
+    margin: 0 0 0.25rem;
+    color: var(--navy-700);
+    font-family: var(--font-body);
+    font-size: clamp(1.5rem, 3vw, 1.9rem);
+    font-weight: 900;
 }
 
 /* ── Voyage Summary ──────────────────────────────────────── */
-/* Matkakirja is kept quiet the same way as Reppu: a plain two-column list with
- * small discs and hairline rules, no card frames. Scoped to .voyage-log because
+/* Matkakirja is kept quiet the same way as Reppu: a plain list with dotted
+ * rules, discs in a hairline and flat status tags. No row is outlined or
+ * raised, because none of them can be pressed. Scoped to .voyage-log because
  * .voyage-summary is also used on the teacher's side and page CSS is global. */
 .voyage-log .voyage-summary {
-    margin: 0.5rem 0 0;
-    font-size: 0.85rem;
-    color: var(--ink-700);
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink-900);
 }
 
 .voyage-log .voyage-summary strong {
@@ -208,72 +199,67 @@
     align-items: center;
     column-gap: 0.85rem;
     padding: 0.6rem 0;
-    border-bottom: 1px solid rgba(58, 42, 16, 0.15);
+    border-bottom: 3px dotted rgba(58, 42, 16, 0.32);
 }
 
 /* The number sits in the same disc as a Reppu item. */
 .level-number {
+    --book-fill: var(--book-chip);
+    position: relative;
     width: 40px;
     height: 40px;
     display: grid;
     place-items: center;
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 1.05rem;
-    font-weight: 700;
+    font-family: var(--font-body);
+    font-size: 20px;
+    font-weight: 900;
     line-height: 1;
-    background: var(--parchment-100);
+    color: var(--navy-700);
     border-radius: var(--radius-round);
-    box-shadow: var(--shadow-inset-brass);
 }
 
-.level-complete .level-number { color: #9E7A2A; }
-.level-resubmit .level-number { color: #7b4ce2; }
-.level-incomplete .level-number { color: rgba(158, 122, 42, 0.45); }
-.level-reviewed .level-number { color: #3c763d; }
+.level-incomplete .level-number { color: var(--ink-500); }
 
 .level-name {
-    font-size: 0.85rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: 17px;
+    font-weight: 900;
 }
 
 .level-complete .level-name,
 .level-reviewed .level-name { color: var(--navy-700); }
-.level-resubmit .level-name { color: #2a1f4d; }
+.level-resubmit .level-name { color: var(--book-hint-ink); }
 .level-incomplete .level-name { color: rgba(30, 58, 95, 0.5); }
 
-/* Status badge */
+/* Status tag: a flat colour block, never outlined, so it does not read as a
+ * button. */
 .level-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
-    padding: 0.15rem 0.5rem;
-    border-radius: 20px;
+    white-space: nowrap;
+    padding: 4px 11px;
+    border-radius: 10px;
 }
 
 .badge-incomplete {
-    color: rgba(30, 58, 95, 0.4);
-    border: 1px solid rgba(30, 58, 95, 0.12);
+    background: var(--book-chip);
+    color: var(--ink-500);
 }
 
 .badge-resubmit {
-    background: rgba(123, 76, 226, 0.12);
-    color: #7b4ce2;
-    border: 1px solid rgba(123, 76, 226, 0.35);
+    background: var(--book-hint);
+    color: var(--book-hint-ink);
 }
 
 .badge-complete {
-    background: rgba(196, 151, 58, 0.15);
-    color: #9E7A2A;
-    border: 1px solid rgba(196, 151, 58, 0.4);
+    background: var(--book-sun);
+    color: var(--navy-700);
 }
 
 .badge-reviewed {
-    background: rgba(101, 209, 101, 0.15);
-    color: #3c763d;
-    border: 1px solid rgba(60, 118, 61, 0.318);
+    background: #cfe6c4;
+    color: var(--state-reviewed);
 }
 
 /* ── Rewards Grid ────────────────────────────────────────── */
@@ -405,23 +391,21 @@
 }
 
 /* ── Play Button Disabled ────────────────────────────────── */
+/* Disabled, as KÄYTÄ in the puzzle scene: faded and already pressed down. */
 .play-button:disabled {
-    background: linear-gradient(180deg, #b8a87a 0%, #9e8e68 48%, #837252 100%);
-    opacity: 0.55;
+    opacity: 0.4;
     cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
 }
 
 /* ── Buddy Selection Section ─────────────────────────────── */
-.buddy-selection-section--prominent {
-    border-color: #C4973A;
-    animation: cardRise 0.55s cubic-bezier(0.34, 1.3, 0.64, 1) both, prominentPulse 2.4s 0.6s ease-in-out infinite;
+/* Until a buddy is chosen the section breathes: its drop slides out and back. */
+.buddy-selection-section--prominent::after {
+    animation: prominentPulse 2.4s 0.6s ease-in-out infinite;
 }
 
 @keyframes prominentPulse {
-    0%, 100% { box-shadow: 0 6px 32px rgba(196, 151, 58, 0.15), 0 0 0 0 rgba(196, 151, 58, 0); }
-    50%       { box-shadow: 0 6px 32px rgba(196, 151, 58, 0.28), 0 0 0 5px rgba(196, 151, 58, 0); }
+    0%, 100% { transform: translate(calc(var(--book-drop) * 1.5), calc(var(--book-drop) * 1.75)); }
+    50%       { transform: translate(calc(var(--book-drop) * 2.2), calc(var(--book-drop) * 2.5)); }
 }
 
 .buddy-current {
@@ -453,33 +437,15 @@
 }
 
 .buddy-current-name {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #1e3a5f;
+    font-family: var(--font-body);
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--navy-700);
     margin: 0.25rem 0 0;
-    letter-spacing: 0.05em;
 }
 
 .change-avatar-button {
-    background: transparent;
-    border: 1.5px solid rgba(196, 151, 58, 0.6);
-    color: #C4973A;
-    border-radius: 4px;
-    padding: 0.4rem 0.9rem;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    transition: all 0.2s;
     width: fit-content;
-}
-
-.change-avatar-button:hover {
-    background: rgba(196, 151, 58, 0.12);
-    border-color: #C4973A;
 }
 
 /* ── Buddy Picker ────────────────────────────────────────── */
@@ -498,49 +464,26 @@
     .char-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* Each buddy is a raised ink card, like a backpack slot in the puzzle scene;
+ * the chosen one turns navy and is pressed down. */
 .char-option {
-    background:
-        radial-gradient(ellipse 80% 45% at 50% 85%, rgba(196, 151, 58, 0.10) 0%, transparent 70%),
-        rgba(253, 251, 244, 0.6);
-    border: 2.5px solid rgba(196, 151, 58, 0.18);
-    border-radius: 12px;
+    --book-fill: var(--book-paper);
+    --book-drop: 8px;
+    position: relative;
     padding: 1.5rem 0.75rem 1.25rem;
-    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
-    transition: transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1), border-color 0.2s, background 0.2s, box-shadow 0.25s;
-    font-family: 'Nunito', sans-serif;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Subtle stage shine at the bottom */
-.char-option::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 10%;
-    right: 10%;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, rgba(196, 151, 58, 0.25), transparent);
-    border-radius: 2px;
-    opacity: 0;
-    transition: opacity 0.25s;
+    border: 0;
+    border-radius: 22px;
+    background: transparent;
+    font-family: var(--font-body);
+    cursor: pointer;
 }
 
 .char-option:hover {
-    border-color: rgba(196, 151, 58, 0.5);
-    background:
-        radial-gradient(ellipse 80% 45% at 50% 85%, rgba(196, 151, 58, 0.18) 0%, transparent 70%),
-        rgba(253, 251, 244, 0.95);
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 8px 28px rgba(196, 151, 58, 0.18);
-}
-
-.char-option:hover::after {
-    opacity: 1;
+    --book-fill: var(--book-chip);
 }
 
 /* Bounce the sprite on hover */
@@ -555,14 +498,9 @@
     100% { transform: translateY(0); }
 }
 
-.char-option--selected {
-    border-color: #C4973A;
-    background:
-        radial-gradient(ellipse 80% 50% at 50% 80%, rgba(196, 151, 58, 0.15) 0%, transparent 65%),
-        rgba(253, 246, 227, 0.85);
-    box-shadow:
-        0 0 0 1px rgba(196, 151, 58, 0.3),
-        0 6px 24px rgba(196, 151, 58, 0.22);
+.char-option--selected,
+.char-option--selected:hover {
+    --book-fill: var(--navy-700);
 }
 
 .char-option-stage {
@@ -574,27 +512,29 @@
     position: absolute;
     bottom: 2px;
     right: -6px;
-    width: 26px;
-    height: 26px;
-    background: linear-gradient(135deg, #D8B25A, #C4973A);
-    color: #fff;
+    width: 28px;
+    height: 28px;
+    background: var(--book-sun);
+    color: var(--navy-700);
     border-radius: 50%;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 900;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2.5px solid #FDFBF4;
-    box-shadow: 0 2px 8px rgba(196, 151, 58, 0.35);
+    border: 2.5px solid var(--book-outline);
     z-index: 1;
 }
 
 .char-label {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #1e3a5f;
-    letter-spacing: 0.06em;
+    font-family: var(--font-body);
+    font-size: 19px;
+    font-weight: 900;
+    color: var(--navy-700);
+}
+
+.char-option--selected .char-label {
+    color: var(--parchment-000);
 }
 
 .avatar-picker-actions {
@@ -633,9 +573,10 @@
     .header-right span {
         display: none;
     }
-    .logout-button {
-        padding: 0.4rem 0.7rem;
-        font-size: 0.8rem;
+    .student-header .play-button,
+    .student-header .logout-button {
+        padding: 7px 12px;
+        font-size: 14px;
     }
 }
 
@@ -741,14 +682,15 @@
  * Prefixed sd- because page CSS is global. */
 
 .sd-backpack-lead {
-    margin: 0.5rem 0 0;
-    font-size: 0.85rem;
-    color: var(--ink-700);
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink-900);
 }
 
 /* Reppu is kept quiet on purpose: the scene games above it are what the pupil
  * comes here for, and an item only matters again inside a scene. So it is a
- * plain two-column list -- no card frames, no shadows, small discs. */
+ * plain two-column list -- dotted rules, no outlines, no drops, small discs. */
 .sd-backpack-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
@@ -764,7 +706,7 @@
     align-content: center;
     column-gap: 0.85rem;
     padding: 0.6rem 0;
-    border-bottom: 1px solid rgba(58, 42, 16, 0.15);
+    border-bottom: 3px dotted rgba(58, 42, 16, 0.32);
 }
 
 .sd-item--missing {
@@ -772,15 +714,15 @@
 }
 
 .sd-item-disc {
+    --book-fill: var(--book-chip);
+    position: relative;
     grid-row: span 2;
     width: 40px;
     height: 40px;
     display: grid;
     place-items: center;
     color: var(--navy-700);
-    background: var(--parchment-100);
     border-radius: var(--radius-round);
-    box-shadow: var(--shadow-inset-brass);
 }
 
 .sd-item-disc svg {
@@ -789,66 +731,73 @@
 }
 
 .sd-item-mark {
-    font-family: var(--font-display);
-    font-size: 18px;
-    font-weight: 700;
+    font-family: var(--font-body);
+    font-size: 20px;
+    font-weight: 900;
     color: var(--ink-700);
 }
 
 .sd-item-name {
-    font-size: 0.95rem;
-    font-weight: 800;
+    font-size: 17px;
+    font-weight: 900;
     color: var(--navy-700);
 }
 
 .sd-item-desc {
-    font-size: 0.85rem;
+    font-size: 15px;
+    font-weight: 600;
     line-height: 1.4;
     color: var(--ink-700);
 }
 
+/* The scene games are the one thing on the page meant to be pressed, so they
+ * are the raised cards. */
+.sd-scene-games-section .rewards-grid {
+    gap: 24px;
+}
+
 .sd-scene-game {
+    --book-fill: var(--book-paper);
+    --book-drop: 8px;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
     min-height: 34px;
-    padding: 1rem 1.25rem;
+    padding: 22px 16px 18px;
     font-family: var(--font-body);
-    background: var(--parchment-100);
-    border: var(--border-frame) solid var(--line-500);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 2px 0 rgba(44, 30, 5, 0.12), 0 3px 8px rgba(44, 30, 5, 0.08);
+    border: 0;
+    border-radius: 22px;
+    background: transparent;
     cursor: pointer;
 }
 
-.sd-scene-game:active {
-    box-shadow: inset 0 3px 7px rgba(44, 30, 5, 0.32);
-    transform: translateY(2px);
+.sd-scene-game:not(:disabled):hover {
+    --book-fill: var(--book-chip);
 }
 
 .sd-scene-game-disc {
+    --book-fill: var(--book-chip-deep);
+    position: relative;
     width: 62px;
     height: 62px;
     display: grid;
     place-items: center;
     color: var(--navy-700);
-    background: var(--parchment-000);
     border-radius: var(--radius-round);
-    box-shadow: var(--shadow-inset-brass);
 }
 
 .sd-scene-game-name {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    font-family: var(--font-body);
+    font-size: 21px;
+    font-weight: 900;
     color: var(--navy-700);
 }
 
 .sd-scene-game-pitch {
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 800;
     color: var(--ink-700);
 }
 
@@ -857,7 +806,34 @@
     cursor: default;
 }
 
-.sd-scene-game:disabled:active {
-    box-shadow: 0 2px 0 rgba(44, 30, 5, 0.12), 0 3px 8px rgba(44, 30, 5, 0.08);
-    transform: none;
+/* ── Pressed ─────────────────────────────────────────────── */
+/* As in the puzzle scene: a pressed shape drops onto its shadow, and the
+ * shadow goes. A disabled Pelaa and the chosen buddy stay down. */
+.play-button:not(:disabled):active,
+.student-dashboard .logout-button:active,
+.change-avatar-button:active,
+.sd-scene-game:not(:disabled):active,
+.char-option:active,
+.play-button:disabled,
+.char-option--selected {
+    transform: translate(calc(var(--book-drop) * 0.65), calc(var(--book-drop) * 0.75));
+}
+
+.play-button:not(:disabled):active::after,
+.student-dashboard .logout-button:active::after,
+.change-avatar-button:active::after,
+.sd-scene-game:not(:disabled):active::after,
+.char-option:active::after,
+.play-button:disabled::after,
+.char-option--selected::after {
+    display: none;
+}
+
+.play-button:focus-visible,
+.student-dashboard .logout-button:focus-visible,
+.change-avatar-button:focus-visible,
+.sd-scene-game:focus-visible,
+.char-option:focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 3px;
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { BUDDIES, BuddySprite, BuddyIcon } from '../components/BuddyAvatar'
+import InkFilter from '../components/ink/InkFilter'
 import homeBG from '../assets/HomeBG1.jpg'
 // Continent tile puzzles (Palkinnot) are switched off for now; the game still records them as rewards, so uncommenting brings them back.
 // import MinigameModal from '../components/minigames/MinigameModal'
@@ -130,6 +131,7 @@ function StudentDashboard() {
             className="student-dashboard"
             style={{ backgroundImage: `linear-gradient(rgba(235,243,254,0.82), rgba(235,243,254,0.82)), url(${homeBG})` }}
         >
+            <InkFilter />
             <header className="student-header">
                 <h1>Matkapäiväkirja</h1>
                 <div className="header-right">
@@ -139,14 +141,14 @@ function StudentDashboard() {
                         : <>Tervetuloa, {user?.name}</>
                     }</span>
                     <button
-                        className="play-button"
+                        className="play-button ink-shape ink-shape--thin ink-drop"
                         onClick={hasBuddy ? handlePlay : undefined}
                         disabled={!hasBuddy}
                         title={hasBuddy ? undefined : 'Valitse ensin seikkailukaveri'}
                     >
                         ▶ Pelaa
                     </button>
-                    <button className="logout-button" onClick={handleLogout}>
+                    <button className="logout-button ink-shape ink-shape--thin ink-drop" onClick={handleLogout}>
                         Kirjaudu ulos
                     </button>
                 </div>
@@ -157,7 +159,7 @@ function StudentDashboard() {
                     <p className="loading-text">Ladataan...</p>
                 ) : (
                     <>
-                        <section className={`dashboard-section buddy-selection-section${hasBuddy ? '' : ' buddy-selection-section--prominent'}`}>
+                        <section className={`dashboard-section ink-shape ink-drop buddy-selection-section${hasBuddy ? '' : ' buddy-selection-section--prominent'}`}>
                             <h2>Seikkailukaveri</h2>
                             {showPicker ? (
                                 <div className="buddy-picker">
@@ -166,7 +168,7 @@ function StudentDashboard() {
                                             <button
                                                 key={id}
                                                 type="button"
-                                                className={`char-option${selectedBuddy === id ? ' char-option--selected' : ''}`}
+                                                className={`char-option ink-shape ink-shape--thin ink-drop${selectedBuddy === id ? ' char-option--selected' : ''}`}
                                                 onClick={() => setSelectedBuddy(id)}
                                             >
                                                 <div className="char-option-stage">
@@ -180,14 +182,14 @@ function StudentDashboard() {
                                     {buddyError && <p className="avatar-error">{buddyError}</p>}
                                     <div className="avatar-picker-actions">
                                         <button
-                                            className="play-button"
+                                            className="play-button ink-shape ink-shape--thin ink-drop"
                                             onClick={handleBuddySave}
                                             disabled={!selectedBuddy || buddySaving}
                                         >
                                             {buddySaving ? 'Tallennetaan...' : 'Tallenna'}
                                         </button>
                                         {buddySelecting && (
-                                            <button className="logout-button" onClick={() => setBuddySelecting(false)}>
+                                            <button className="logout-button ink-shape ink-shape--thin ink-drop" onClick={() => setBuddySelecting(false)}>
                                                 Peruuta
                                             </button>
                                         )}
@@ -203,7 +205,7 @@ function StudentDashboard() {
                                         {BUDDIES.find(b => b.id === user.avatar)?.name ?? user.avatar}
                                     </p>
                                     <button
-                                        className="change-avatar-button"
+                                        className="change-avatar-button ink-shape ink-shape--thin ink-drop"
                                         onClick={() => {
                                             setSelectedBuddy(user.avatar)
                                             setBuddySelecting(true)
@@ -215,7 +217,7 @@ function StudentDashboard() {
                             )}
                         </section>
 
-                        <section className="dashboard-section voyage-log">
+                        <section className="dashboard-section ink-shape ink-drop voyage-log">
                             <h2>Matkakirja</h2>
                             <p className="voyage-summary">
                                 Olet suorittanut <strong>{completedCount}</strong> / <strong>8</strong> matkaa
@@ -225,7 +227,7 @@ function StudentDashboard() {
                                     const levelStat = getStatus(level)
                                     return (
                                         <div key={level} className={`level-card level-${levelStat}`}>
-                                            <span className="level-number">{level}</span>
+                                            <span className="level-number ink-shape ink-shape--hair">{level}</span>
                                             <span className="level-name">{name}</span>
                                             <span className={`level-badge badge-${levelStat}`}>
                                                 {statusFi[levelStat] ?? levelStat}
@@ -237,18 +239,18 @@ function StudentDashboard() {
                         </section>
 
                         {sceneGames.length > 0 && (
-                            <section className="dashboard-section sd-scene-games-section">
+                            <section className="dashboard-section ink-shape ink-drop sd-scene-games-section">
                                 <h2>Kohtausten pelit</h2>
                                 <div className="rewards-grid">
                                     {sceneGames.map(({ id, game }) => (
                                         <button
                                             key={id}
                                             type="button"
-                                            className="sd-scene-game"
+                                            className="sd-scene-game ink-shape ink-shape--thin ink-drop"
                                             disabled={!game.module}
                                             onClick={() => setOpenSceneGame(game)}
                                         >
-                                            <span className="sd-scene-game-disc">
+                                            <span className="sd-scene-game-disc ink-shape ink-shape--thin">
                                                 <svg
                                                     width="34" height="34" viewBox="0 0 24 24" fill="none"
                                                     stroke="currentColor" strokeWidth="1.5"
@@ -267,7 +269,7 @@ function StudentDashboard() {
                             </section>
                         )}
 
-                        <section className="dashboard-section sd-backpack-section">
+                        <section className="dashboard-section ink-shape ink-drop sd-backpack-section">
                             <h2>Reppu</h2>
                             <p className="sd-backpack-lead">
                                 Esineitä löytyy matkan varrelta. Jollakin toisella mantereella niistä on apua.
@@ -280,7 +282,7 @@ function StudentDashboard() {
                                             key={item.id}
                                             className={`sd-item${isOwned ? '' : ' sd-item--missing'}`}
                                         >
-                                            <span className="sd-item-disc">
+                                            <span className="sd-item-disc ink-shape ink-shape--hair">
                                                 {isOwned ? (
                                                     <svg
                                                         width="34" height="34" viewBox="0 0 24 24" fill="none"
