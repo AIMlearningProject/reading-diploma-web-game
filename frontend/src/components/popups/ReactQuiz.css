@@ -1,0 +1,151 @@
+/* The three questions at the end of a level, drawn in ink like the puzzle
+ * scene (ink.css): a paper sheet, the answer on book paper, SEURAAVA and
+ * LÄHETÄ on the sun fill. Prefixed rq- because page CSS is global. */
+
+.rq-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    background: var(--scrim-warm);
+    animation: popupFadeIn 180ms ease-out;
+}
+
+.rq-box {
+    --book-fill: var(--book-paper);
+    position: relative;
+    box-sizing: border-box;
+    width: min(520px, 100%);
+    padding: 26px 30px 28px;
+    border-radius: 26px;
+    text-align: center;
+    color: var(--ink-900);
+    font-family: var(--font-body);
+}
+
+.rq-box::after {
+    transform: translate(calc(var(--book-drop) * 1.5), calc(var(--book-drop) * 1.75));
+}
+
+/* The book the answers are about, as a small line over the heading. */
+.rq-book {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: var(--brass-700);
+}
+
+.rq-title {
+    margin: 0 0 14px;
+    font-family: var(--font-body);
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--navy-700);
+}
+
+.rq-question {
+    min-height: 50px;
+    margin: 0 0 14px;
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.4;
+    color: var(--ink-900);
+}
+
+/* The answer sits in a drawn ink box (.ink-box in ink.css). */
+.rq-answer-box {
+    --book-fill: var(--parchment-000);
+    position: relative;
+    margin-bottom: 22px;
+    border-radius: 16px;
+}
+
+.rq-answer-box--read-only {
+    --book-fill: var(--book-chip);
+}
+
+.rq-answer-box:focus-within {
+    --book-outline: var(--navy-700);
+}
+
+.rq-answer {
+    height: 140px;
+    max-height: 40vh;
+    padding: 14px 16px;
+    color: var(--ink-900);
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.45;
+    resize: vertical;
+}
+
+.rq-answer::placeholder {
+    color: var(--ink-500);
+}
+
+.rq-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.rq-buttons {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    justify-content: center;
+}
+
+.rq-button {
+    --book-drop: 8px;
+    position: relative;
+    flex: 1;
+    height: 54px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 16px;
+    background: transparent;
+    color: var(--navy-700);
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.rq-button--next {
+    --book-fill: var(--book-sun);
+}
+
+.rq-button--prev {
+    --book-fill: var(--book-paper);
+}
+
+.rq-button--prev:hover {
+    --book-fill: var(--book-chip);
+}
+
+/* Pressed: the button drops onto its shadow, and the shadow goes. */
+.rq-button:active {
+    transform: translate(calc(var(--book-drop) * 0.65), calc(var(--book-drop) * 0.75));
+}
+
+.rq-button:active::after {
+    display: none;
+}
+
+.rq-button:focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 3px;
+}
+
+.rq-step {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--ink-700);
+}

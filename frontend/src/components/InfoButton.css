@@ -65,3 +65,49 @@
     color: var(--ink-900);
     white-space: pre-line;
 }
+
+/* --- Ink: the pupil's popups pass `ink`, and the button and its note are
+   drawn like the rest of those screens (ink.css). The radii stay on the
+   shared tiers, since scripts/check-shapes.mjs holds this file to them. --- */
+.info-button--ink {
+    --book-fill: var(--book-paper);
+    --book-drop: 5px;
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: var(--radius-round);
+    background: transparent;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.info-button--ink:hover {
+    --book-fill: var(--book-chip);
+    background: transparent;
+}
+
+.info-button--ink:active {
+    transform: translate(calc(var(--book-drop) * 0.65), calc(var(--book-drop) * 0.75));
+}
+
+.info-button--ink:active::after {
+    display: none;
+}
+
+.info-button--ink:focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 3px;
+}
+
+.info-text-wrapper--ink {
+    --book-fill: var(--book-paper);
+    top: 46px;
+    padding: var(--space-3) var(--space-4);
+    border: none;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    box-shadow: none;
+    color: var(--ink-900);
+    font-weight: 700;
+}

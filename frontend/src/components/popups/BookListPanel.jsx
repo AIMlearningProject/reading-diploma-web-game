@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import ReadingState from '../../game/state.js';
 import BookSearchBar from '../BookSearchBar.jsx';
 import AddBookPopup from './AddBookPopup.jsx';
+import InkFilter from '../ink/InkFilter.jsx';
 import './BookListPanel.css'
 
 export default function BookListPanel({ mapKey, nodeIndex = 1, onSelect, onClose, pageSize = 10 }) {
@@ -111,16 +112,19 @@ export default function BookListPanel({ mapKey, nodeIndex = 1, onSelect, onClose
             onMouseDown={(e) => e.stopPropagation()}
             onMouseUp={(e) => e.stopPropagation()}
         >
-            <div className='booklist-header'>
-                <div>
-                    <h3 className='booklist-header-title'>
-                        Valitse kirja &mdash; etappi {nodeIndex}/{nodeCount}
-                    </h3>
-                    <p className='booklist-header-genre'>{genre.label}</p>
+            <InkFilter />
+            <div className='booklist-container ink-shape ink-drop'>
+                <div className='booklist-header'>
+                    <div>
+                        <h3 className='booklist-header-title'>
+                            Valitse kirja &mdash; etappi {nodeIndex}/{nodeCount}
+                        </h3>
+                        <p className='booklist-header-genre'>{genre.label}</p>
+                    </div>
+                    <button className='close-booklist-button ink-shape ink-shape--thin ink-drop' onClick={onClose}>
+                        X Peruuta
+                    </button>
                 </div>
-                <button className='close-booklist-button' onClick={onClose}>X Peruuta</button>
-            </div>
-            <div className='booklist-container'>
                 <div className='book-searchbar'>
                     <BookSearchBar
                         query={query}
@@ -142,7 +146,7 @@ export default function BookListPanel({ mapKey, nodeIndex = 1, onSelect, onClose
                 <div className='booklist'>
                     {pageSlice.map(book => {
                         const rowClasses = [
-                            "book-row",
+                            "book-row ink-shape ink-shape--thin ink-drop",
                             book.isCurrent && "book-row-current",
                             book.isCompleted && "book-row-completed",
                             book.isFailedQuizBook && "book-row-resubmit"
@@ -210,11 +214,14 @@ function ChooseTitlePanel({ book, onCancel, onConfirm }) {
             onMouseDown={(e) => e.stopPropagation()}
             onMouseUp={(e) => e.stopPropagation()}
         >
-            <div className='booklist-header'>
-                <h3 className='booklist-header-title'>Mitä kirjaa luet?</h3>
-                <button className='close-booklist-button' onClick={onCancel}>X Peruuta</button>
-            </div>
-            <div className='booklist-container choose-title'>
+            <InkFilter />
+            <div className='booklist-container choose-title ink-shape ink-drop'>
+                <div className='booklist-header'>
+                    <h3 className='booklist-header-title'>Mitä kirjaa luet?</h3>
+                    <button className='close-booklist-button ink-shape ink-shape--thin ink-drop' onClick={onCancel}>
+                        X Peruuta
+                    </button>
+                </div>
                 <p className='choose-title-printed'>{book.title}</p>
                 {book.author && <p className='choose-title-author'>{book.author}</p>}
 
@@ -224,7 +231,7 @@ function ChooseTitlePanel({ book, onCancel, onConfirm }) {
                             <button
                                 key={title}
                                 type='button'
-                                className={picked === title ? 'choose-title-chip is-picked' : 'choose-title-chip'}
+                                className={`choose-title-chip ink-shape ink-shape--thin ink-drop${picked === title ? ' is-picked' : ''}`}
                                 onClick={() => { setPicked(title); setTyped(''); }}
                             >
                                 {title}
@@ -242,20 +249,22 @@ function ChooseTitlePanel({ book, onCancel, onConfirm }) {
                 <label className='choose-title-label' htmlFor='choose-title-input'>
                     Kirjan nimi
                 </label>
-                <input
-                    id='choose-title-input'
-                    className='choose-title-input'
-                    type='text'
-                    maxLength={200}
-                    value={typed}
-                    placeholder='Kirjoita lukemasi kirjan nimi'
-                    onChange={(e) => { setTyped(e.target.value); setPicked(''); }}
-                />
+                <span className='choose-title-field ink-field'>
+                    <input
+                        id='choose-title-input'
+                        className='choose-title-input'
+                        type='text'
+                        maxLength={200}
+                        value={typed}
+                        placeholder='Kirjoita lukemasi kirjan nimi'
+                        onChange={(e) => { setTyped(e.target.value); setPicked(''); }}
+                    />
+                </span>
 
                 <div className='choose-title-actions'>
                     <button
                         type='button'
-                        className='choose-title-confirm'
+                        className='choose-title-confirm ink-shape ink-shape--thin ink-drop'
                         disabled={!value}
                         onClick={() => onConfirm(value)}
                     >

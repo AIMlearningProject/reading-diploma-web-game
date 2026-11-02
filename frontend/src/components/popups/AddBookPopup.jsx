@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { createBook } from '../../services/api'
 import ReadingState from '../../game/state';
 import InfoButton from '../InfoButton'
+import InkFilter from '../ink/InkFilter.jsx'
 import './AddBookPopup.css'
 
 function AddBookPopup({ open, onClose, onSelect, mapKey }) {
@@ -67,20 +68,16 @@ function AddBookPopup({ open, onClose, onSelect, mapKey }) {
 
     return (
         <div className="student-add-book-overlay" onClick={onClose}>
-            <div className="student-add-book-panel" onClick={(e) => e.stopPropagation()}>
+            <InkFilter />
+            <div className="student-add-book-panel ink-shape ink-drop" onClick={(e) => e.stopPropagation()}>
                 <div className="student-add-book-header">
                     <h2>Lisää kirja</h2>
                     <div>
                         <InfoButton
+                            ink
                             info={'Jos et löydä listasta kirjaa, jota haluat lukea, voit lisätä sen täällä itse. Kirjan lisääminen ei anna sinulle kirjaa, vaan se lisätään näkymään luokan yhteiseen listaan.'}
-                            buttonStyle={{
-                                marginRight: '10px',
-                                fontSize: '16px',
-                                fontWeight: '700',
-                                boxShadow: '0 1px 4px rgba(0,0,0,0.3)'
-                            }}
                         />
-                        <button className="student-add-book-close-btn" onClick={onClose}>
+                        <button className="student-add-book-close-btn ink-shape ink-shape--thin ink-drop" onClick={onClose}>
                             X Sulje
                         </button>
                     </div>
@@ -95,28 +92,32 @@ function AddBookPopup({ open, onClose, onSelect, mapKey }) {
                     <div className="student-add-book-form-group group-title">
                         <label>
                             <div>Kirjan nimi <span className="popup-section-error">*</span></div>
-                            <textarea
-                                name="book-title"
-                                type="textarea"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                                className="student-add-book-textarea"
-                                rows={3}
-                                required
-                            />
+                            <span className="student-add-book-field ink-field">
+                                <textarea
+                                    name="book-title"
+                                    type="textarea"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    className="student-add-book-textarea"
+                                    rows={3}
+                                    required
+                                />
+                            </span>
                         </label>
                     </div>
 
                     <div className="student-add-book-form-group">
                         <label>
                             <div>Kirjoittaja <span className="popup-section-error">*</span></div>
-                            <input
-                                name="book-author"
-                                type="text"
-                                value={author}
-                                onChange={(e) => setAuthor(e.target.value)}
-                                required
-                            />
+                            <span className="student-add-book-field ink-field">
+                                <input
+                                    name="book-author"
+                                    type="text"
+                                    value={author}
+                                    onChange={(e) => setAuthor(e.target.value)}
+                                    required
+                                />
+                            </span>
                         </label>
                     </div>
 
@@ -124,15 +125,17 @@ function AddBookPopup({ open, onClose, onSelect, mapKey }) {
                         <div className="student-add-book-form-group">
                             <label>
                                 Tyyppi
-                                <select
-                                    name="book-type"
-                                    value={booktype}
-                                    onChange={(e) => setBooktype(e.target.value)}
-                                >
-                                    <option value="physical">Fyysinen</option>
-                                    <option value="e-book">E-kirja</option>
-                                    <option value="audio">Äänikirja</option>
-                                </select>
+                                <span className="student-add-book-field ink-field ink-field--select">
+                                    <select
+                                        name="book-type"
+                                        value={booktype}
+                                        onChange={(e) => setBooktype(e.target.value)}
+                                    >
+                                        <option value="physical">Fyysinen</option>
+                                        <option value="e-book">E-kirja</option>
+                                        <option value="audio">Äänikirja</option>
+                                    </select>
+                                </span>
                             </label>
                         </div>
 
@@ -140,22 +143,24 @@ function AddBookPopup({ open, onClose, onSelect, mapKey }) {
                             <div className="student-add-book-form-group">
                                 <label>
                                     <div>Sivumäärä <span className="popup-section-error">*</span></div>
-                                    <input
-                                        name="book-page-count"
-                                        className="page-count-input"
-                                        type="number"
-                                        min="1"
-                                        value={pageCount}
-                                        onChange={(e) => setPageCount(e.target.value)}
-                                        required
-                                    />
+                                    <span className="student-add-book-field ink-field">
+                                        <input
+                                            name="book-page-count"
+                                            className="page-count-input"
+                                            type="number"
+                                            min="1"
+                                            value={pageCount}
+                                            onChange={(e) => setPageCount(e.target.value)}
+                                            required
+                                        />
+                                    </span>
                                 </label>
                             </div>
                         )}
 
                         <button
                             type="submit"
-                            className="student-add-book-submit-btn"
+                            className="student-add-book-submit-btn ink-shape ink-shape--thin ink-drop"
                             disabled={loading}
                         >
                             {loading ? (

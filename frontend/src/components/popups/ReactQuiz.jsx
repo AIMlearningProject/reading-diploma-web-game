@@ -1,6 +1,8 @@
 import { useState, useMemo } from 'react';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 import ReadingState from '../../game/state.js';
+import InkFilter from '../ink/InkFilter.jsx';
+import './ReactQuiz.css';
 
 export default function ReactQuiz({ mapKey, onClose }) {
     const { user } = useAuth()
@@ -76,97 +78,49 @@ export default function ReactQuiz({ mapKey, onClose }) {
 
     return (
         <div
-            style={styles.overlay}
+            className="rq-overlay"
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
             onMouseUp={(e) => e.stopPropagation()}
         >
-            <div style={styles.titleBox}>
-                <span style={styles.title}>{bookTitle}</span>
-            </div>
-            <div style={styles.box} onClick={(e) => e.stopPropagation()}>
-                <h2 style={styles.title}>{isReadOnly ? "OMAT VASTAUKSET" : "TARINAKYSELY"}</h2>
-                <div style={styles.divider}></div>
-                
-                <p style={styles.question}>{questions[step]}</p>
-                
-                <textarea
-                    autoFocus
-                    readOnly={isReadOnly}
-                    value={answers[step]}
-                    onChange={(e) => {
-                        const newAns = [...answers];
-                        newAns[step] = e.target.value;
-                        setAnswers(newAns);
-                    }}
-                    placeholder="Kirjoita vastauksesi tähän..."
-                    style={{
-                        ...styles.textarea,
-                        backgroundColor: isReadOnly ? '#dcd7ca' : '#fdf6e3'
-                    }}
-                />
+            <InkFilter />
+            <div className="rq-box ink-shape ink-drop" onClick={(e) => e.stopPropagation()}>
+                {bookTitle && <p className="rq-book">{bookTitle}</p>}
+                <h2 className="rq-title">{isReadOnly ? "OMAT VASTAUKSET" : "TARINAKYSELY"}</h2>
 
-                <div style={styles.footer}>
-                    <div style={styles.btnGroup}>
+                <p className="rq-question">{questions[step]}</p>
+
+                <div className={`rq-answer-box ink-box ink-shape ink-shape--thin${isReadOnly ? ' rq-answer-box--read-only' : ''}`}>
+                    <textarea
+                        autoFocus
+                        readOnly={isReadOnly}
+                        value={answers[step]}
+                        onChange={(e) => {
+                            const newAns = [...answers];
+                            newAns[step] = e.target.value;
+                            setAnswers(newAns);
+                        }}
+                        placeholder="Kirjoita vastauksesi tähän..."
+                        className="rq-answer"
+                    />
+                </div>
+
+                <div className="rq-footer">
+                    <div className="rq-buttons">
                         {step > 0 && (
-                            <button onClick={handlePrev} style={styles.prevButton}>
+                            <button onClick={handlePrev} className="rq-button rq-button--prev ink-shape ink-shape--thin ink-drop">
                                 EDELLINEN
                             </button>
                         )}
-                        
-                        <button onClick={handleNext} style={styles.nextButton}>
+
+                        <button onClick={handleNext} className="rq-button rq-button--next ink-shape ink-shape--thin ink-drop">
                             {step === questions.length - 1 ? (isReadOnly ? "SULJE" : "LÄHETÄ") : "SEURAAVA"}
                         </button>
                     </div>
-                    <span style={styles.stepInfo}>Vaihe {step + 1} / 3</span>
+                    <span className="rq-step">Vaihe {step + 1} / 3</span>
                 </div>
                 {error && <p className="section-error">{error}</p>}
             </div>
         </div>
     );
 }
-
-const styles = {
-    overlay: {
-        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-        backgroundColor: 'rgba(10, 25, 47, 0.9)',
-        display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 100000,
-        flexDirection: 'column'
-    },
-    titleBox: {
-        width: '92%', maxWidth: '420px', maxHeight: '90vh',
-        backgroundColor: '#1e3a5f', border: '3px solid #c4973a',
-        borderRadius: '12px', padding: '20px', textAlign: 'center',
-        color: 'white', fontFamily: 'Nunito, sans-serif', boxSizing: 'border-box',
-        overflowY: 'auto', marginBottom: '5px',
-    },
-    box: {
-        width: '92%', maxWidth: '420px', maxHeight: '90vh',
-        backgroundColor: '#1e3a5f', border: '3px solid #c4973a',
-        borderRadius: '12px', padding: '20px', textAlign: 'center',
-        color: 'white', fontFamily: 'Nunito, sans-serif', boxSizing: 'border-box',
-        overflowY: 'auto'
-    },
-    title: { color: '#c4973a', fontSize: '24px', margin: '0 0 10px 0', fontFamily: 'Cinzel Decorative, serif' },
-    divider: { height: '2px', backgroundColor: '#c4973a', margin: '0 auto 15px', width: '40%' },
-    question: { fontSize: '18px', marginBottom: '15px', minHeight: '50px', lineHeight: '1.4' },
-    textarea: {
-        width: '100%', height: '130px', padding: '12px', fontSize: '16px',
-        borderRadius: '8px', border: '1px solid #c4973a', outline: 'none',
-        color: '#1e3a5f', boxSizing: 'border-box', marginBottom: '20px',
-        minWidth: '50%', maxWidth: '100%', maxHeight: '40vh'
-    },
-    footer: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' },
-    btnGroup: { display: 'flex', gap: '10px', width: '100%', justifyContent: 'center' },
-    nextButton: {
-        backgroundColor: '#c4973a', color: 'white', border: 'none',
-        padding: '10px 20px', fontSize: '16px', fontWeight: 'bold',
-        cursor: 'pointer', borderRadius: '4px', flex: 1
-    },
-    prevButton: {
-        backgroundColor: 'transparent', color: '#c4973a', border: '2px solid #c4973a',
-        padding: '8px 20px', fontSize: '16px', fontWeight: 'bold',
-        cursor: 'pointer', borderRadius: '4px', flex: 1
-    },
-    stepInfo: { fontSize: '14px', color: '#c4973a', opacity: 0.8 }
-};

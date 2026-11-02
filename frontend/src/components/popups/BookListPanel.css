@@ -1,132 +1,277 @@
+/* The pupil's book list over the game map, drawn in ink like the puzzle scene
+ * (ink.css): one paper sheet holding the title, the search and the books.
+ * Every book row can be pressed, so every row is a raised shape; the current
+ * book is pressed down and navy, as a picked slot in the puzzle's backpack.
+ *
+ * Page CSS is global, and BookSearchBar and .book-info are shared with the
+ * teacher page, so their rules here sit under .booklist-container. */
+
 .game-overlay {
     position: fixed;
     inset: 0;
     z-index: 9999;
     display: flex;
     flex-direction: column;
-    background: #0a192fcc;
     align-items: center;
-    justify-content: flex-start;
-    pointer-events: auto;
-}
-
-.booklist-header {
-    position: relative;
-    display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    top: 10px;
-    z-index: 10000;
-    gap: 12px;
+    padding: var(--space-4);
+    background: var(--scrim-warm);
     pointer-events: auto;
-    width: 80%;
-    max-width: 900px;
-    padding: 6px 12px;
-    background: transparent;
-}
-
-.booklist-header-title {
-    font-size: 20px;
-    margin: 0;
-    color: #d4af37;
-    font-family: 'Cinzel Decorative', serif;
-}
-
-.close-booklist-button {
-    background: #1e3a5f;
-    color: #fff;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.booklist-container {
-    position: relative;
-    width: 80%;
-    max-width: 900px;
-    margin-top: 20px;
-    background: #0a192f;
-    color: #fff;
-    border-radius: 8px;
-    padding: 16px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
     animation: popupFadeIn 180ms ease-out;
 }
 
-.booklist {
-    max-height: 54vh;
-    overflow-y: auto;
-    padding: 0px 4px;
+/* ── Sheet ───────────────────────────────────────────────── */
+
+.booklist-container {
+    --book-fill: var(--book-paper);
+    position: relative;
+    box-sizing: border-box;
+    width: min(900px, 100%);
+    padding: 24px 28px 28px;
+    border-radius: 26px;
+    color: var(--ink-900);
+    font-family: var(--font-body);
 }
+
+.booklist-container::after {
+    transform: translate(calc(var(--book-drop) * 1.5), calc(var(--book-drop) * 1.75));
+}
+
+.booklist-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.booklist-header-title {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--navy-700);
+}
+
+/* Which group of the library's list this continent holds for the pupil's year. */
+.booklist-header-genre {
+    margin: 2px 0 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink-700);
+}
+
+.close-booklist-button {
+    --book-fill: var(--book-paper);
+    --book-drop: 6px;
+    position: relative;
+    flex: none;
+    padding: 8px 18px;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--navy-700);
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.close-booklist-button:hover {
+    --book-fill: var(--book-chip);
+}
+
+/* ── Search, filter, pager (BookSearchBar) ───────────────── */
 
 .book-searchbar {
     position: sticky;
-    background: #0a192f;
     top: 0;
     z-index: 10;
-    padding-bottom: 8px;
-    overflow: hidden;
+    padding-bottom: 4px;
 }
 
-/* --- Hide Read books button --- */
-.hide-read-label {
+/* Fields are ruled in ink (.ink-field in ink.css): only buttons are outlined. */
+.booklist-container .sb-search-field {
+    flex: 1;
+}
+
+.booklist-container .search-input,
+.booklist-container .booktype-select,
+.booklist-container .booktype-select.sb-student {
+    min-height: 40px;
+    padding: 4px 2px;
+    border: 0;
+    background: transparent;
+    color: var(--ink-900);
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.booklist-container .search-input {
+    width: 100%;
+}
+
+.booklist-container .booktype-select {
+    padding-right: 28px;
+}
+
+.booklist-container .search-input::placeholder {
+    color: var(--ink-500);
+}
+
+.booklist-container .pager-row {
+    gap: 18px;
+}
+
+.booklist-container .hide-read-label {
     display: inline-flex;
     align-items: center;
-    color: #ffffff;
+    gap: var(--space-2);
+    color: var(--ink-900);
+    font-weight: 800;
     cursor: pointer;
     user-select: none;
 }
-.hide-Read-checkbox {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-}
-.hide-read-text { font-size: 14px; }
 
-.add-book-btn {
-    padding: 4px 6px;
-    border-radius: 6px;
-    border: 2px solid #9c9c9c;
-    cursor: pointer;
-    color: #fff;
-    background-color: #1e3a5f;
+/* Drawn by .ink-check; BookSearchBar.css would otherwise hold it at 20px. */
+.booklist-container .hide-read-checkbox {
+    width: 26px;
+    height: 26px;
 }
 
-/* --- Book row item --- */
+.booklist-container .hide-read-text {
+    font-size: 16px;
+}
+
+.booklist-container .add-book-btn,
+.booklist-container .pager-button {
+    --book-fill: var(--book-paper);
+    --book-drop: 5px;
+    position: relative;
+    min-height: 38px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--navy-700);
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.booklist-container .add-book-btn {
+    padding: 4px 16px;
+}
+
+.booklist-container .pager-button {
+    min-width: 38px;
+    padding: 4px 10px;
+}
+
+.booklist-container .add-book-btn:hover,
+.booklist-container .pager-button:not(.sb-disabled):hover {
+    --book-fill: var(--book-chip);
+}
+
+.booklist-container .pager-button.sb-disabled {
+    opacity: 0.4;
+}
+
+.booklist-container .pager-status {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--navy-700);
+}
+
+/* ── Book rows ───────────────────────────────────────────── */
+
+/* Room on the right and below for the rows' outlines and drops. */
+.booklist {
+    max-height: 52vh;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 8px 14px 12px 6px;
+}
+
 .book-row {
+    --book-fill: var(--book-paper);
+    --book-drop: 5px;
+    position: relative;
     display: flex;
-    padding: 12px;
-    background: #1e3a5f;
-    margin-bottom: 8px;
-    border-radius: 6px;
-    border: 2px solid #d4af37;
-    cursor: pointer;
+    align-items: center;
     gap: 12px;
+    margin-bottom: 14px;
+    padding: 12px 18px;
+    border-radius: 16px;
+    cursor: pointer;
 }
-.book-row-current {
-    background: #2d4a77;
-    border: 2px solid #ffffff;
-}
-.book-row-completed {
-    opacity: 0.7;
-    border: 2px solid #4a5568;
-}
-.book-row-resubmit { background: #7041d7b5; }
 
-.book-info {
+.book-row:hover {
+    --book-fill: var(--book-chip);
+}
+
+/* The book on this stop now: pressed down, as a picked backpack slot. */
+.book-row-current,
+.book-row-current:hover {
+    --book-fill: var(--navy-700);
+    color: var(--parchment-000);
+}
+
+/* Read already: faded and dashed, as a tried slot in the puzzle scene. */
+.book-row-completed {
+    opacity: 0.6;
+}
+
+.book-row-completed::before {
+    border-style: dashed;
+}
+
+.book-row-resubmit {
+    --book-fill: var(--book-hint);
+}
+
+.book-row:active,
+.book-row-current {
+    transform: translate(calc(var(--book-drop) * 0.65), calc(var(--book-drop) * 0.75));
+}
+
+.book-row:active::after,
+.book-row-current::after,
+.book-row-completed::after {
+    display: none;
+}
+
+.booklist .book-info {
     flex: 1;
 }
 
 .book-row-title {
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--navy-700);
 }
 
 .book-row-author {
-    font-size: 13px;
-    color: #e6d8b8;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink-700);
+}
+
+.book-row-current .book-row-title,
+.book-row-current .book-row-author {
+    color: var(--parchment-000);
+}
+
+.book-row-tag {
+    margin-left: 8px;
+    padding: 1px 8px;
+    border-radius: 8px;
+    background: var(--book-chip-deep);
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--ink-900);
+    white-space: nowrap;
 }
 
 .book-actions {
@@ -135,155 +280,181 @@
 }
 
 .book-progress {
-    font-weight: bold;
-    color: #d4af37;
-}
-.book-progress-done { color: #00ff88; }
-.book-progress-resubmit { color: #ffffff; }
-
-/* Which group of the library's list this continent holds for the pupil's year,
-   under the panel title. Italic grey when the continent has no group of its own
-   and the whole year's list is on offer. */
-.booklist-header-genre {
-    margin: 2px 0 0;
-    font-size: 13px;
-    letter-spacing: 0.04em;
-    color: #e6d8b8;
-    text-align: center;
+    font-size: 17px;
+    font-weight: 900;
+    color: var(--navy-700);
 }
 
-.book-row-tag {
-    margin-left: 8px;
-    padding: 1px 7px;
-    border: 1px solid #c4973a;
-    border-radius: 9px;
-    font-size: 11px;
-    color: #d4af37;
-    white-space: nowrap;
+.book-progress-done {
+    color: var(--state-reviewed);
+}
+
+.book-progress-resubmit {
+    color: var(--book-hint-ink);
+}
+
+.book-row-current .book-progress {
+    color: var(--book-sun);
 }
 
 .booklist-empty {
     padding: 24px 8px;
     text-align: center;
-    color: #e6d8b8;
-    font-style: italic;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--ink-700);
 }
 
-/* Picking which book was actually read, when the list offers a choice. */
+/* ── Picking which book was actually read ────────────────── */
+
 .choose-title {
-    padding: 20px 24px 24px;
-    color: #f4ecd8;
+    width: min(620px, 100%);
 }
 
 .choose-title-printed {
     margin: 0;
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 900;
     line-height: 1.4;
+    color: var(--navy-700);
 }
 
 .choose-title-author {
-    margin: 4px 0 16px;
-    font-size: 13px;
-    color: #e6d8b8;
+    margin: 4px 0 18px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink-700);
 }
 
 .choose-title-options {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 14px;
+    gap: 14px;
+    margin-bottom: 18px;
 }
 
 .choose-title-chip {
-    padding: 7px 14px;
+    --book-fill: var(--book-paper);
+    --book-drop: 5px;
+    position: relative;
+    padding: 8px 16px;
+    border: 0;
+    border-radius: 14px;
     background: transparent;
-    border: 1px solid #c4973a;
-    border-radius: 16px;
-    color: #f4ecd8;
-    font: inherit;
-    font-size: 14px;
+    color: var(--navy-700);
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 800;
     cursor: pointer;
 }
 
-.choose-title-chip:hover { background: rgba(196, 151, 58, 0.18); }
+.choose-title-chip:hover {
+    --book-fill: var(--book-chip);
+}
 
 .choose-title-chip.is-picked {
-    background: linear-gradient(#d8b25a, #c4973a, #a67e1e);
-    border-color: #a67e1e;
-    color: #1e3a5f;
-    font-weight: 700;
+    --book-fill: var(--navy-700);
+    color: var(--parchment-000);
+    transform: translate(calc(var(--book-drop) * 0.65), calc(var(--book-drop) * 0.75));
+}
+
+.choose-title-chip.is-picked::after {
+    display: none;
 }
 
 .choose-title-note {
-    margin: 0 0 14px;
-    font-size: 13px;
+    margin: 0 0 16px;
+    font-size: 15px;
+    font-weight: 600;
     line-height: 1.5;
-    color: #e6d8b8;
+    color: var(--ink-700);
 }
 
 .choose-title-label {
     display: block;
     margin-bottom: 4px;
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #d4af37;
+    font-size: 15px;
+    font-weight: 900;
+    color: var(--navy-700);
 }
 
-/* Logbook style: a ruled line rather than a box, as on the other forms. */
+/* Ruled in ink by its .ink-field wrapper. */
+.choose-title-field {
+    display: flex;
+}
+
 .choose-title-input {
+    box-sizing: border-box;
     width: 100%;
     padding: 6px 2px;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #c4973a;
-    color: #f4ecd8;
-    font: inherit;
-    font-size: 15px;
-}
-
-.choose-title-input:focus {
-    outline: none;
-    border-bottom-color: #d4af37;
+    color: var(--ink-900);
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 700;
 }
 
 .choose-title-actions {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 24px;
 }
 
 .choose-title-confirm {
-    padding: 8px 22px;
-    background: linear-gradient(#d8b25a, #c4973a, #a67e1e);
-    border: none;
-    border-radius: 4px;
-    color: #1e3a5f;
-    font: inherit;
-    font-weight: 700;
+    --book-fill: var(--book-sun);
+    --book-drop: 8px;
+    position: relative;
+    height: 52px;
+    padding: 0 30px;
+    border: 0;
+    border-radius: 16px;
+    background: transparent;
+    color: var(--navy-700);
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 900;
     cursor: pointer;
 }
 
 .choose-title-confirm:disabled {
-    opacity: 0.45;
+    opacity: 0.4;
     cursor: not-allowed;
 }
 
+/* ── Pressed and focus, shared by the buttons above ──────── */
+
+.close-booklist-button:active,
+.booklist-container .add-book-btn:active,
+.booklist-container .pager-button:not(.sb-disabled):active,
+.choose-title-chip:active,
+.choose-title-confirm:not(:disabled):active,
+.choose-title-confirm:disabled {
+    transform: translate(calc(var(--book-drop) * 0.65), calc(var(--book-drop) * 0.75));
+}
+
+.close-booklist-button:active::after,
+.booklist-container .add-book-btn:active::after,
+.booklist-container .pager-button:not(.sb-disabled):active::after,
+.choose-title-chip:active::after,
+.choose-title-confirm:not(:disabled):active::after,
+.choose-title-confirm:disabled::after {
+    display: none;
+}
+
+.close-booklist-button:focus-visible,
+.booklist-container .add-book-btn:focus-visible,
+.booklist-container .pager-button:focus-visible,
+.choose-title-chip:focus-visible,
+.choose-title-confirm:focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 3px;
+}
+
 @media (max-height: 480px) {
-    .booklist-header {
-        flex-direction: row;
-        justify-content: space-around;
+    .booklist-container {
+        max-height: 92vh;
+        overflow-y: auto;
     }
 
-    .booklist-container {
-        max-height: 70vh;
-        overflow-y: auto;
-        padding: 0 16px;
-        border-top: 16px solid #0a192f;
-        border-bottom: 16px solid #0a192f;
-    }
-    
     .book-searchbar { position: static; }
-    .booklist { overflow-y: visible; }    
+    .booklist { max-height: none; overflow-y: visible; }
 }

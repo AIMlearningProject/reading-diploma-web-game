@@ -1,6 +1,7 @@
 import { useState } from "react"
 import InfoButton from "../InfoButton"
 import LiveBook from "./LiveBook"
+import InkFilter from "../ink/InkFilter.jsx"
 import "./UpdateProgressPopup.css"
 
 function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }) {
@@ -17,82 +18,85 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
             onMouseDown={(e) => e.stopPropagation()}
             onMouseUp={(e) => e.stopPropagation()}
         >
-            <div className="progress-popup" onClick={(e) => e.stopPropagation()}>
-                {/* Title + Author + info/close buttons */}
-                <div className="progress-popup-info-wrapper">
-                    {readOnly && (
-                        <div className="progress-popup-info-btn">
-                            <InfoButton
-                                info={'Olet jo lukenut tämän kirjan. Et voi lukea samaa kirjaa monta kertaa.'}
-                                textboxStyle={{ left: '120px' }}
-                                buttonStyle={{
-                                    width: '28px',
-                                    height: '28px',
-                                    fontSize: '16px',
-                                    fontWeight: '700',
-                                    border: '1px solid rgba(212, 175, 55, 0.35)',
-                                    boxShadow: '0 1px 4px rgba(0,0,0,0.3)'
-                                }}
-                            />
-                        </div>
-                    )}
-                </div>
-                <div className="progress-popup-close-wrapper">
-                    <button className="progress-popup-close-btn" onClick={() => onClose(pct)}>
-                        ✕
-                    </button>
-                </div>
-                <h3 className="popup-book-title">{book.title}</h3>
-                <p className="popup-book-author">{book.author}</p>
-
-                <div className="popup-book-container">
-                    <LiveBook pct={pct} isReadOnly={readOnly} />
-                </div>
-
-                {!readOnly && (<>
-                    {/* Update Progress form */}
-                    <h2>Päivitä edistyminen</h2>
-
-                    <div className="progress-update-form">
-                        {book.pageCount && (
-                            <div className="editable-field">
-                                <span>Sivu</span>
-                                <input
-                                    type="number"
-                                    min={0}
-                                    max={book.pageCount}
-                                    value={Math.round((pct / 100) * book.pageCount)}
-                                    onChange={(e) => handlePageChange(e.target.value)}
+            <InkFilter />
+            {/* The sheet carries the ink; the body inside it scrolls, so the
+                drop shadow is never clipped. */}
+            <div className="progress-popup ink-shape ink-drop" onClick={(e) => e.stopPropagation()}>
+                <div className="progress-popup-body">
+                    {/* Title + Author + info/close buttons */}
+                    <div className="progress-popup-info-wrapper">
+                        {readOnly && (
+                            <div className="progress-popup-info-btn">
+                                <InfoButton
+                                    ink
+                                    info={'Olet jo lukenut tämän kirjan. Et voi lukea samaa kirjaa monta kertaa.'}
+                                    textboxStyle={{ left: '120px' }}
                                 />
-                                <span>/ {book.pageCount}</span>
                             </div>
                         )}
+                    </div>
+                    <div className="progress-popup-close-wrapper">
+                        <button className="progress-popup-close-btn ink-shape ink-shape--thin" onClick={() => onClose(pct)}>
+                            ✕
+                        </button>
+                    </div>
+                    <h3 className="popup-book-title">{book.title}</h3>
+                    <p className="popup-book-author">{book.author}</p>
 
-                        <div className="progress-pct">
-                            <input
-                                type="range"
-                                min={0}
-                                max={100}
-                                value={pct}
-                                onChange={(e) => setPct(Number(e.target.value))}
-                                className="progress-slider-bar"
-                            />
-                            
-                            <div className="editable-field">
+                    <div className="popup-book-container">
+                        <LiveBook pct={pct} isReadOnly={readOnly} />
+                    </div>
+
+                    {!readOnly && (<>
+                        {/* Update Progress form */}
+                        <h2>Päivitä edistyminen</h2>
+
+                        <div className="progress-update-form">
+                            {book.pageCount && (
+                                <div className="editable-field">
+                                    <span>Sivu</span>
+                                    <span className="ink-field">
+                                        <input
+                                            type="number"
+                                            min={0}
+                                            max={book.pageCount}
+                                            value={Math.round((pct / 100) * book.pageCount)}
+                                            onChange={(e) => handlePageChange(e.target.value)}
+                                        />
+                                    </span>
+                                    <span>/ {book.pageCount}</span>
+                                </div>
+                            )}
+
+                            <div className="progress-pct">
                                 <input
-                                    type="number"
-                                    value={pct}
+                                    type="range"
                                     min={0}
                                     max={100}
+                                    value={pct}
                                     onChange={(e) => setPct(Number(e.target.value))}
+                                    className="progress-slider-bar ink-range"
+                                    style={{ '--ink-value': `${pct}%` }}
                                 />
-                                <span>%</span>
+                            
+                                <div className="editable-field">
+                                    <span className="ink-field">
+                                        <input
+                                            type="number"
+                                            value={pct}
+                                            min={0}
+                                            max={100}
+                                            onChange={(e) => setPct(Number(e.target.value))}
+                                        />
+                                    </span>
+                                    <span>%</span>
+                                </div>
                             </div>
-                        </div>
                         
-                    </div>
-                    <button className="save-progress-button" onClick={() => onClose(pct)}>Tallenna</button>
-                </>)}
+                        </div>
+                        <button className="save-progress-button ink-shape ink-shape--thin ink-drop" onClick={() => onClose(pct)}>Tallenna</button>
+                    </>)}
+                </div>
             </div>
         </div>
     );

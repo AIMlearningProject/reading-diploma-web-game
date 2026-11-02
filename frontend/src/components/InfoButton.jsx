@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react"
 import "./InfoButton.css"
 
-function InfoButton({ buttonStyle, textboxStyle, info }) {
+// ink: draw the button and its note in ink (ink.css), on the pupil's screens.
+function InfoButton({ buttonStyle, textboxStyle, info, ink = false }) {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef(null);
 
@@ -19,7 +20,7 @@ function InfoButton({ buttonStyle, textboxStyle, info }) {
     return (
         <div className="info-container" ref={containerRef}>
             <button
-                className="info-button"
+                className={ink ? "info-button info-button--ink ink-shape ink-shape--thin ink-drop" : "info-button"}
                 aria-label="Info"
                 onClick={() => setIsOpen(!isOpen)}
                 style={buttonStyle}
@@ -27,7 +28,7 @@ function InfoButton({ buttonStyle, textboxStyle, info }) {
                 i
             </button>
             <div
-                className={`info-text-wrapper ${isOpen ? "open" : ""}`}
+                className={`info-text-wrapper ${isOpen ? "open" : ""}${ink ? " info-text-wrapper--ink ink-shape ink-shape--thin" : ""}`}
                 style={textboxStyle}
             >
                 <p className="info-text">
