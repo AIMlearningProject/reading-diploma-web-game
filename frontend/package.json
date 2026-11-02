@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "lint:tokens": "node scripts/check-tokens.mjs",
-    "lint:shapes": "node scripts/check-shapes.mjs"
+    "lint:shapes": "node scripts/check-shapes.mjs",
+    "lint:ink": "node scripts/check-ink-fields.mjs"
   },
   "dependencies": {
     "phaser": "^3.60.0",
@@ -19,6 +20,7 @@
     "react-router-dom": "^7.13.0"
   },
   "devDependencies": {
+    "@babel/parser": "^7.29.8",
     "@eslint/js": "^10.0.1",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^10.5.0",
