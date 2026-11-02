@@ -28,6 +28,7 @@ const FILES = [
     'pages/StudentDashboard.jsx',
     'pages/StudentLoginPage.jsx',
     'pages/StudentSignUpPage.jsx',
+    'pages/WelcomePage.jsx',
     'components/BookSearchBar.jsx',
     'components/popups/BookListPanel.jsx',
     'components/popups/AddBookPopup.jsx',

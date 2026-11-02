@@ -161,6 +161,75 @@
     line-height: var(--lh-prose-italic);
 }
 
+/* ── Role cards, in ink ──────────────────────────────────── */
+/* Drawn like the puzzle scene (components/ink/ink.css): an outline and a
+ * dithered drop instead of the paper.css sheet. Both cards are drawn, at a
+ * quieter weight than the pupil's screens (a thinner line, a shorter drop),
+ * so the entrance is shared by teacher and pupil and favours neither. A card
+ * is pressed, so it stays raised and drops onto its shadow; it does not lift
+ * on hover. */
+.role-card--ink {
+    --book-fill: var(--book-paper);
+    --book-drop: 6px;
+    background: transparent;
+    border-radius: 26px;
+    box-shadow: none;
+}
+
+.role-card--ink::before {
+    border-width: calc(var(--book-line) * 0.6);
+}
+
+.role-card--ink::after {
+    transform: translate(calc(var(--book-drop) * 1.2), calc(var(--book-drop) * 1.35));
+}
+
+.role-card--ink:hover {
+    --book-fill: var(--book-chip);
+    transform: none;
+    box-shadow: none;
+}
+
+.role-card--ink:active {
+    transform: translate(calc(var(--book-drop) * 0.65), calc(var(--book-drop) * 0.75));
+}
+
+.role-card--ink:active::after {
+    display: none;
+}
+
+.role-card--ink .role-icon {
+    --book-fill: var(--book-chip-deep);
+    position: relative;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
+
+.role-card--ink .role-icon::before {
+    border-width: calc(var(--book-line) * 0.45);
+}
+
+.role-card--ink h2 {
+    font-family: var(--font-body);
+    font-size: clamp(1.4rem, 3vw, 1.7rem);
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.role-card--ink h2::after {
+    display: none;
+}
+
+.role-card--ink p {
+    margin-top: 0.4rem;
+    color: var(--ink-700);
+    font-size: clamp(0.95rem, 2vw, 1.05rem);
+    font-style: normal;
+    font-weight: 700;
+}
+
 /* ── Footer ──────────────────────────────────────────────── */
 .welcome-footer {
     margin-top: var(--space-8);
