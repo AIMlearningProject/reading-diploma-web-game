@@ -1,6 +1,6 @@
-/* The item-drop card. Picture-book style, shared with PuzzleScene.css: one flat
- * paper sheet with the mini-games' grain under the content, soft colour fills,
- * no outlines and no shadows. Prefixed if- because page CSS is global. */
+/* The item-drop card, drawn in ink like the puzzle scene (ink.css): the
+ * picture-book palette, a hand-wobbled outline on every shape, a dithered
+ * shadow under the raised ones. Prefixed if- because page CSS is global. */
 
 .if-scrim {
     position: fixed;
@@ -19,9 +19,8 @@
 }
 
 .if-card {
+    --book-fill: var(--book-paper);
     position: relative;
-    isolation: isolate;
-    overflow: hidden;
     box-sizing: border-box;
     width: min(460px, 100%);
     padding: 34px 34px 30px;
@@ -31,19 +30,11 @@
     gap: 14px;
     text-align: center;
     font-family: var(--font-body);
-    background: var(--book-paper);
     border-radius: 22px;
 }
 
-/* The grain sits under the content, so it tints the paper and nothing else. */
-.if-grain {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-size: 512px;
-    mix-blend-mode: multiply;
-    opacity: 0.22;
-    pointer-events: none;
+.if-card::after {
+    transform: translate(calc(var(--book-drop) * 1.5), calc(var(--book-drop) * 1.75));
 }
 
 .if-kicker {
@@ -56,12 +47,13 @@
 
 /* Room for the hand-drawn item picture. */
 .if-picture {
+    --book-fill: var(--book-chip);
+    position: relative;
     width: 180px;
     height: 180px;
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: var(--book-chip);
     color: var(--navy-700);
 }
 
@@ -83,17 +75,28 @@
 }
 
 .if-button {
+    --book-fill: var(--book-sun);
+    position: relative;
     width: 100%;
     height: 60px;
     margin-top: 8px;
     border: 0;
     border-radius: 18px;
-    background: var(--book-sun);
+    background: transparent;
     color: var(--navy-700);
     font-family: var(--font-body);
     font-size: 20px;
     font-weight: 900;
     cursor: pointer;
+}
+
+/* Pressed: the button drops onto its shadow. */
+.if-button:active {
+    transform: translate(calc(var(--book-drop) * 0.65), calc(var(--book-drop) * 0.75));
+}
+
+.if-button:active::after {
+    display: none;
 }
 
 .if-button:focus-visible {

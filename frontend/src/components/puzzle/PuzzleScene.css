@@ -1,10 +1,11 @@
-/* Puzzle scene panel, picture-book style. Shared with ItemFoundCard.css:
+/* Puzzle scene panel, drawn the way the scene art is drawn (ink.css): every
+ * shape a hand-wobbled ink outline over its fill, a dithered drop shadow
+ * under the raised ones, and a pressed shape dropped onto its shadow. The
+ * picture-book palette and type, and little text: the story, one question,
+ * and a hint only after a wrong try.
  *
- *   1. One flat paper sheet with the mini-games' paper grain under the content.
- *   2. Soft colour fills only: no outlines, no frames, no shadows.
- *   3. Little text: the story, one question, and a hint only after a wrong try.
- *
- * Page CSS is global, so every class is prefixed ps-.
+ * A shape sets its fill through --book-fill. Page CSS is global, so every
+ * class is prefixed ps-.
  */
 
 .ps-scrim {
@@ -38,44 +39,48 @@
     transform-origin: center;
 }
 
+/* ── Panel ────────────────────────────────────────────── */
+
 .ps-panel {
+    --book-fill: var(--book-paper);
     position: relative;
-    isolation: isolate;
-    overflow: hidden;
     box-sizing: border-box;
     width: 1080px;
     padding: 36px;
     display: grid;
     grid-template-columns: 600px minmax(0, 1fr);
     gap: 28px 36px;
-    background: var(--book-paper);
     border-radius: 26px;
     font-family: var(--font-body);
     color: var(--ink-900);
 }
 
-/* The grain sits under the content, so it tints the paper and nothing else. */
-.ps-grain {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-size: 512px;
-    mix-blend-mode: multiply;
-    opacity: 0.22;
-    pointer-events: none;
+.ps-panel::after {
+    transform: translate(calc(var(--book-drop) * 1.5), calc(var(--book-drop) * 1.75));
 }
 
+/* The picture keeps its rounded clip; the frame around it is drawn. */
 .ps-art-box {
+    position: relative;
     width: 600px;
     height: 387px;
-    overflow: hidden;
-    border-radius: 18px;
 }
 
 .ps-art {
     display: block;
     width: 100%;
     height: 100%;
+    clip-path: inset(0 round 18px);
+}
+
+.ps-art-box::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: calc(var(--book-line) * 1.5) solid var(--book-outline);
+    border-radius: 21px;
+    filter: url('#ink-hand');
+    pointer-events: none;
 }
 
 /* ── Story column ─────────────────────────────────────── */
@@ -90,7 +95,9 @@
     min-height: 424px;
 }
 
+/* A drawn ring only on hover. */
 .ps-close {
+    --book-fill: transparent;
     position: absolute;
     top: -12px;
     right: -12px;
@@ -105,8 +112,12 @@
     cursor: pointer;
 }
 
+.ps-close:not(:hover)::before {
+    border-color: transparent;
+}
+
 .ps-close:hover {
-    background: var(--book-chip);
+    --book-fill: var(--book-chip);
 }
 
 /* The story leads the column; the solved result uses the same size so the
@@ -138,6 +149,7 @@
 
 .ps-hint-bubble,
 .ps-note-bubble {
+    position: relative;
     margin: 0;
     padding: 16px 20px;
     border-radius: 16px;
@@ -147,12 +159,11 @@
 }
 
 .ps-hint-bubble {
-    background: var(--book-hint);
+    --book-fill: var(--book-hint);
     color: var(--book-hint-ink);
 }
 
 .ps-note-bubble {
-    background: var(--book-chip);
     color: var(--ink-900);
 }
 
@@ -175,13 +186,13 @@
 }
 
 .ps-game-disc {
+    position: relative;
     flex: none;
     width: 68px;
     height: 68px;
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: var(--book-chip);
     color: var(--navy-700);
 }
 
@@ -208,10 +219,11 @@
 }
 
 .ps-button {
+    position: relative;
     height: 60px;
     border: 0;
     border-radius: 18px;
-    background: var(--book-chip);
+    background: transparent;
     color: var(--navy-700);
     font-family: var(--font-body);
     font-size: 20px;
@@ -220,7 +232,7 @@
 }
 
 .ps-button--main {
-    background: var(--book-sun);
+    --book-fill: var(--book-sun);
 }
 
 /* ── Backpack row ─────────────────────────────────────── */
@@ -233,6 +245,7 @@
 }
 
 .ps-slot {
+    position: relative;
     width: 132px;
     height: 128px;
     padding: 0;
@@ -243,20 +256,25 @@
     gap: 10px;
     border: 0;
     border-radius: 24px;
-    background: var(--book-chip);
+    background: transparent;
     color: var(--navy-700);
     font-family: var(--font-body);
     cursor: pointer;
-    transition: background-color 0.15s ease, opacity 0.15s ease;
+    transition: opacity 0.15s ease;
+}
+
+.ps-slot:not(:disabled):hover {
+    --book-fill: var(--book-chip-deep);
 }
 
 .ps-slot-dot {
+    --book-fill: var(--book-chip-deep);
+    position: relative;
     width: 58px;
     height: 58px;
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: var(--book-chip-deep);
 }
 
 .ps-slot-name {
@@ -264,13 +282,14 @@
     font-weight: 800;
 }
 
-.ps-slot--selected {
-    background: var(--navy-700);
+.ps-slot--selected,
+.ps-slot--selected:not(:disabled):hover {
+    --book-fill: var(--navy-700);
     color: var(--parchment-000);
 }
 
 .ps-slot--selected .ps-slot-dot {
-    background: var(--book-picked-dot);
+    --book-fill: var(--book-picked-dot);
 }
 
 .ps-slot--tried {
@@ -282,17 +301,24 @@
     cursor: default;
 }
 
+.ps-slot--tried::before,
+.ps-slot--empty::before {
+    border-style: dashed;
+}
+
 .ps-slot:disabled {
     cursor: default;
 }
 
 .ps-use {
+    --book-fill: var(--book-sun);
+    position: relative;
     margin-left: auto;
     height: 104px;
     padding: 0 52px;
     border: 0;
     border-radius: 24px;
-    background: var(--book-sun);
+    background: transparent;
     color: var(--navy-700);
     font-family: var(--font-body);
     font-size: 30px;
@@ -303,6 +329,23 @@
 .ps-use:disabled {
     opacity: 0.4;
     cursor: default;
+}
+
+/* Pressed: the shape drops onto its shadow, and the shadow goes. */
+.ps-slot--selected,
+.ps-use:disabled,
+.ps-use:not(:disabled):active,
+.ps-button:active {
+    transform: translate(calc(var(--book-drop) * 0.65), calc(var(--book-drop) * 0.75));
+}
+
+.ps-slot--selected::after,
+.ps-slot--tried::after,
+.ps-slot--empty::after,
+.ps-use:disabled::after,
+.ps-use:not(:disabled):active::after,
+.ps-button:active::after {
+    display: none;
 }
 
 .ps-slot:focus-visible,

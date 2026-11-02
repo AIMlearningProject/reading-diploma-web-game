@@ -1,16 +1,16 @@
 // The puzzle scene panel: a story over the continent map, an item picked out of
 // the backpack, and a mini-game as the reward for picking the right one.
 //
-// Picture-book style: one flat paper sheet with the mini-games' paper grain,
-// soft colour fills, no outlines and no shadows, and as little text as the
-// story allows. The 1280x800 frame scales to the viewport rather than
-// reflowing. Page CSS is global, so every class here is prefixed `ps-`.
+// Drawn the way the scene art is drawn: hand-wobbled ink outlines and dithered
+// shadows over the picture-book palette, and as little text as the story
+// allows. The 1280x800 frame scales to the viewport rather than reflowing.
+// Page CSS is global, so every class here is prefixed `ps-`.
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import SceneIllustration from './SceneIllustration.jsx'
 import allItems from '../../game/data/items.js'
 import { miniGameById } from '../../game/data/miniGames.js'
-import paperGrainUrl from '../../assets/minigames/paper_grain.jpg'
+import InkFilter from '../ink/InkFilter.jsx'
 import './PuzzleScene.css'
 
 function Icon({ paths, size }) {
@@ -97,17 +97,15 @@ export default function PuzzleScene({
 
     return (
         <div className="ps-scrim" role="dialog" aria-modal="true" aria-label={scene.title}>
+            <InkFilter />
             <div className="ps-frame" ref={frameRef}>
-                <div className="ps-panel">
-                    {/* Inline because a CSS url() into src/assets does not resolve. */}
-                    <div className="ps-grain" style={{ backgroundImage: `url(${paperGrainUrl})` }} aria-hidden="true" />
-
+                <div className="ps-panel ink-shape ink-drop">
                     <div className="ps-art-box">
                         <SceneIllustration sceneId={scene.id} solved={isSolved} />
                     </div>
 
                     <section className="ps-text">
-                        <button className="ps-close" type="button" aria-label="Sulje kohtaus" onClick={onClose}>
+                        <button className="ps-close ink-shape ink-shape--thin" type="button" aria-label="Sulje kohtaus" onClick={onClose}>
                             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 strokeWidth="2" strokeLinecap="round" aria-hidden="true">
                                 <path d="M6 6 18 18M18 6 6 18" />
@@ -120,7 +118,7 @@ export default function PuzzleScene({
                                 <p className="ps-result">{scene.solved.resolution}</p>
                                 {game && (
                                     <div className="ps-game">
-                                        <span className="ps-game-disc">
+                                        <span className="ps-game-disc ink-shape ink-shape--thin">
                                             <Icon paths={game.icon} size={34} />
                                         </span>
                                         <div>
@@ -130,10 +128,10 @@ export default function PuzzleScene({
                                     </div>
                                 )}
                                 <div className="ps-actions">
-                                    <button className="ps-button ps-button--main" type="button" onClick={onClose}>
+                                    <button className="ps-button ps-button--main ink-shape ink-drop" type="button" onClick={onClose}>
                                         Jatka matkaa
                                     </button>
-                                    <button className="ps-button" type="button" onClick={onGoToDashboard}>
+                                    <button className="ps-button ink-shape ink-drop" type="button" onClick={onGoToDashboard}>
                                         Kokeile peliä
                                     </button>
                                 </div>
@@ -144,9 +142,9 @@ export default function PuzzleScene({
                                 <p className="ps-question">{scene.question}</p>
                                 <div className="ps-feedback" aria-live="polite">
                                     {feedback === 'wrong' && pickedItem ? (
-                                        <p className="ps-hint-bubble">{scene.hints[pickedItem.id]}</p>
+                                        <p className="ps-hint-bubble ink-shape">{scene.hints[pickedItem.id]}</p>
                                     ) : hasAnswer ? null : (
-                                        <p className="ps-note-bubble">
+                                        <p className="ps-note-bubble ink-shape">
                                             Tähän tarvitaan jotakin, mitä repussa ei vielä ole. Etsi lisää muilta mantereilta.
                                         </p>
                                     )}
@@ -161,10 +159,10 @@ export default function PuzzleScene({
                                 return (
                                     <div
                                         key={item.id}
-                                        className="ps-slot ps-slot--empty"
+                                        className="ps-slot ps-slot--empty ink-shape"
                                         aria-label="Tyhjä paikka, esine löytyy myöhemmin"
                                     >
-                                        <span className="ps-slot-dot" />
+                                        <span className="ps-slot-dot ink-shape ink-shape--thin" />
                                     </div>
                                 )
                             }
@@ -175,7 +173,7 @@ export default function PuzzleScene({
                                     key={item.id}
                                     type="button"
                                     className={
-                                        'ps-slot'
+                                        'ps-slot ink-shape ink-drop'
                                         + (isSelected ? ' ps-slot--selected' : '')
                                         + (isTried ? ' ps-slot--tried' : '')
                                     }
@@ -183,7 +181,7 @@ export default function PuzzleScene({
                                     disabled={isSolved}
                                     onClick={() => pick(item.id)}
                                 >
-                                    <span className="ps-slot-dot">
+                                    <span className="ps-slot-dot ink-shape ink-shape--thin">
                                         <Icon paths={item.icon} size={30} />
                                     </span>
                                     <span className="ps-slot-name">{item.name}</span>
@@ -193,7 +191,7 @@ export default function PuzzleScene({
 
                         <button
                             type="button"
-                            className="ps-use"
+                            className="ps-use ink-shape ink-drop"
                             aria-label="Käytä esinettä"
                             disabled={isUseDisabled}
                             onClick={use}

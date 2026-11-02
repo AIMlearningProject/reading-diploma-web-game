@@ -187,8 +187,8 @@
     --shadow-panel: 0 12px 40px rgba(44, 30, 5, 0.28), 0 2px 8px rgba(44, 30, 5, 0.12);
 
     /* ── Picture-book cards ───────────────────────────── */
-    /* The item-found card and the puzzle scene: one flat paper sheet with the */
-    /* mini-games' paper grain, soft colour fills, no outlines, no shadows. */
+    /* The item-found card and the puzzle scene share these colours. The */
+    /* card is a flat paper sheet; the scene draws its shapes in ink. */
     --book-paper     : #fdf8ec;
     --book-chip      : #f1e8d2;
     --book-chip-deep : #e2d4b2;
@@ -196,4 +196,13 @@
     --book-hint      : #f3e9f3;
     --book-hint-ink  : #4a2f4b;
     --book-picked-dot: #3c5c85;
+
+    /* Puzzle scene drawing: each shape sets --book-fill for itself and */
+    /* inherits it otherwise; line, drop and dot were tuned by eye on the */
+    /* scene art. */
+    --book-fill      : var(--book-paper);
+    --book-outline   : var(--ink-900);
+    --book-line      : 7px;
+    --book-drop      : 11px;
+    --book-dot       : 2px;
 }

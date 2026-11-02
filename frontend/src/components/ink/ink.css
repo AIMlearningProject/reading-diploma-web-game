@@ -1,0 +1,52 @@
+/* Ink drawing, shared by the screens drawn the way the scene art is drawn.
+ *
+ *   .ink-shape        the shape becomes a layer behind its content: the fill
+ *                     (--book-fill) inside an ink outline, passed through the
+ *                     #ink-hand filter from InkFilter.jsx. Type is never
+ *                     filtered. The element must be positioned.
+ *   .ink-shape--thin  a thinner outline, for small round shapes.
+ *   .ink-drop         a dithered drop shadow, a 50% ink checker: no blur.
+ *
+ * A screen sets --book-fill per shape, hides the drop on a pressed shape and
+ * moves the shape onto it. Line, drop and dot are tokens in tokens.css. The
+ * rules sit in :where() so any screen rule overrides them, whatever order the
+ * stylesheets load in.
+ */
+
+.ink-defs {
+    position: absolute;
+}
+
+:where(.ink-shape) {
+    isolation: isolate;
+}
+
+:where(.ink-shape)::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border: var(--book-line) solid var(--book-outline);
+    border-radius: inherit;
+    background: var(--book-fill);
+    filter: url('#ink-hand');
+    pointer-events: none;
+}
+
+:where(.ink-shape--thin)::before {
+    border-width: calc(var(--book-line) * 0.75);
+}
+
+:where(.ink-drop)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    border-radius: inherit;
+    transform: translate(calc(var(--book-drop) * 0.9), var(--book-drop));
+    background: conic-gradient(
+        var(--book-outline) 25%, transparent 0 50%, var(--book-outline) 0 75%, transparent 0
+    ) 0 0 / calc(var(--book-dot) * 2) calc(var(--book-dot) * 2);
+    pointer-events: none;
+}
+
