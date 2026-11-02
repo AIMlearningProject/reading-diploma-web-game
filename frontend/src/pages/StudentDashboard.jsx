@@ -129,7 +129,7 @@ function StudentDashboard() {
     return (
         <div
             className="student-dashboard"
-            style={{ backgroundImage: `linear-gradient(rgba(235,243,254,0.82), rgba(235,243,254,0.82)), url(${homeBG})` }}
+            style={{ '--page-art': `url(${homeBG})` }}
         >
             <InkFilter />
             <header className="student-header">

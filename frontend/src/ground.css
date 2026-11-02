@@ -1,0 +1,42 @@
+/* ── Ground ─────────────────────────────────────────────────
+ *
+ * The one picture behind every page: HomeBG1, a hand-drawn harbour in the same
+ * thick black line as the ink style. Both sides stand on it, so the product
+ * reads as one; how loud it is depends on who the page is for.
+ *
+ *   Pupil pages (and the shared welcome page) show it nearly in full, under a
+ *   15% sky wash: it belongs to the picture-book side.
+ *   Teacher pages calm it under a 90% wash, so tables and forms read cleanly.
+ *
+ * The page passes the picture in as --page-art from its inline style, because a
+ * CSS url() into src/assets does not resolve. Nothing else about the ground
+ * belongs in a page stylesheet.
+ *
+ * Imported in App.jsx after paper.css.
+ */
+
+.welcome-page,
+.student-login-page,
+.student-dashboard,
+.teacher-login-page,
+.teacher-dashboard {
+    background-color: var(--sky-100);
+    background-size: cover;
+    background-position: center bottom;
+    background-attachment: fixed;
+}
+
+.welcome-page,
+.student-login-page,
+.student-dashboard {
+    background-image:
+        linear-gradient(color-mix(in srgb, var(--sky-100) 15%, transparent), color-mix(in srgb, var(--sky-100) 15%, transparent)),
+        var(--page-art);
+}
+
+.teacher-login-page,
+.teacher-dashboard {
+    background-image:
+        linear-gradient(color-mix(in srgb, var(--sky-100) 90%, transparent), color-mix(in srgb, var(--sky-100) 90%, transparent)),
+        var(--page-art);
+}

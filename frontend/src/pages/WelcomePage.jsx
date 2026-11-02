@@ -7,7 +7,7 @@ function WelcomePage() {
     const navigate = useNavigate()
 
     return (
-        <div className="welcome-page" style={{ backgroundImage: `linear-gradient(rgba(235,243,254,0.78), rgba(235,243,254,0.78)), url(${homeBG})` }}>
+        <div className="welcome-page" style={{ '--page-art': `url(${homeBG})` }}>
             <InkFilter />
             <h1 className="welcome-title">Lukudiplomi</h1>
             <p className="welcome-subtitle">Valitse roolisi jatkaaksesi</p>
