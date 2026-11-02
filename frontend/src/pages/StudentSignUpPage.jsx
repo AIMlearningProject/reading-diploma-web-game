@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import homeBG from '../assets/HomeBG1.jpg';
+import InkFilter from '../components/ink/InkFilter';
 import { createStudentWithInvite, fetchLogin } from '../services/api';
 
 const LOCAL_STORAGE_KEY = 'hasUsedStudentInvite';
@@ -64,8 +65,9 @@ function StudentSignUpPage() {
 
     return (
         <div className="student-login-page" style={{ backgroundImage: `linear-gradient(rgba(235,243,254,0.78), rgba(235,243,254,0.78)), url(${homeBG})` }}>
+            <InkFilter />
             <h1 className="site-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>Lukudiplomi</h1>
-            <div className="student-login-card">
+            <div className="student-login-card ink-shape ink-drop">
                 <h2>Oppilaan rekisteröinti</h2>
                 <p className="subtitle">Liity opettajan {<strong>{teacherName}</strong>} oppilaaksi.</p>
 
@@ -74,43 +76,49 @@ function StudentSignUpPage() {
                         <label>
                             Nimi
                             <span className="section-error">*</span>
-                            <input
-                                name='nimi'
-                                type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                required
-                                minLength={3}
-                            />
+                            <span className="ink-field">
+                                <input
+                                    name='nimi'
+                                    type="text"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    required
+                                    minLength={3}
+                                />
+                            </span>
                         </label>
                     </div>
                     <div className="form-group">
                         <label>
                             Sähköposti
-                            <input
-                                name='sähköposti'
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
+                            <span className="ink-field">
+                                <input
+                                    name='sähköposti'
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </span>
                         </label>
                     </div>
                     <div className="form-group">
                         <label>
                             Salasana
                             <span className="section-error">*</span>
-                            <input
-                                name='salasana'
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                minLength={3}
-                            />
+                            <span className="ink-field">
+                                <input
+                                    name='salasana'
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    minLength={3}
+                                />
+                            </span>
                         </label>
                     </div>
                     {error && <p className="error-message">{error}</p>}
-                    <button type="submit" className="login-submit" disabled={submitting}>
+                    <button type="submit" className="login-submit ink-shape ink-shape--thin ink-drop" disabled={submitting}>
                         {submitting ? 'Rekisteröidytään...' : 'Rekisteröidy'}
                     </button>
                 </form>

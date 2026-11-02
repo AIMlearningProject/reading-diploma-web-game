@@ -26,6 +26,8 @@ const SRC = fileURLToPath(new URL('../src/', import.meta.url))
 // The screens drawn in ink. Add a screen here when it moves to ink.css.
 const FILES = [
     'pages/StudentDashboard.jsx',
+    'pages/StudentLoginPage.jsx',
+    'pages/StudentSignUpPage.jsx',
     'components/BookSearchBar.jsx',
     'components/popups/BookListPanel.jsx',
     'components/popups/AddBookPopup.jsx',
