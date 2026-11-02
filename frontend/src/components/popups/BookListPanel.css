@@ -227,8 +227,10 @@
     border-style: dashed;
 }
 
+/* Sent back by the teacher: the --state-resubmit status colour, as on the
+ * dashboard and the teacher's progress rail. */
 .book-row-resubmit {
-    --book-fill: var(--book-hint);
+    --book-fill: color-mix(in srgb, var(--state-resubmit) 18%, var(--book-paper));
 }
 
 .book-row:active,
@@ -290,7 +292,7 @@
 }
 
 .book-progress-resubmit {
-    color: var(--book-hint-ink);
+    color: var(--state-resubmit-ink);
 }
 
 .book-row-current .book-progress {

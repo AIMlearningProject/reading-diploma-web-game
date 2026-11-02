@@ -227,7 +227,7 @@
 
 .level-complete .level-name,
 .level-reviewed .level-name { color: var(--navy-700); }
-.level-resubmit .level-name { color: var(--book-hint-ink); }
+.level-resubmit .level-name { color: var(--state-resubmit-ink); }
 .level-incomplete .level-name { color: rgba(30, 58, 95, 0.5); }
 
 /* Status tag: a flat colour block, never outlined, so it does not read as a
@@ -247,9 +247,12 @@
     color: var(--ink-500);
 }
 
+/* Status colours come from the --state-* tokens, the same ones the teacher's
+ * progress rail uses: one status, one colour on both sides. --book-hint is the
+ * puzzle's hint and means something else. */
 .badge-resubmit {
-    background: var(--book-hint);
-    color: var(--book-hint-ink);
+    background: color-mix(in srgb, var(--state-resubmit) 16%, transparent);
+    color: var(--state-resubmit-ink);
 }
 
 .badge-complete {
