@@ -7,6 +7,7 @@
 
 import { useState } from 'react'
 import PuzzleScene from '../components/puzzle/PuzzleScene.jsx'
+import ItemFoundCard from '../components/puzzle/ItemFoundCard.jsx'
 import MiniGameCanvas from '../components/minigames/MiniGameCanvas.jsx'
 import puzzleScenes from '../game/data/puzzleScenes.js'
 import items from '../game/data/items.js'
@@ -18,6 +19,7 @@ export default function PuzzlePreview() {
     const [openScene, setOpenScene] = useState(null)
     const [openGame, setOpenGame] = useState(null)
     const [solved, setSolved] = useState([])
+    const [foundItem, setFoundItem] = useState(null)
 
     const toggle = (id) => setOwned((current) => (
         current.includes(id) ? current.filter((x) => x !== id) : [...current, id]
@@ -45,6 +47,22 @@ export default function PuzzlePreview() {
                             {item.name}
                             <span className="pv-muted">{item.homeMapKey}</span>
                         </label>
+                    ))}
+                </div>
+            </section>
+
+            <section className="pv-block">
+                <h2>Esinekortti</h2>
+                <div className="pv-row">
+                    {items.map((item) => (
+                        <button
+                            key={item.id}
+                            type="button"
+                            className="pv-button"
+                            onClick={() => setFoundItem(item.id)}
+                        >
+                            <strong>{item.name}</strong>
+                        </button>
                     ))}
                 </div>
             </section>
@@ -99,6 +117,8 @@ export default function PuzzlePreview() {
                     </div>
                 )}
             </section>
+
+            {foundItem && <ItemFoundCard itemId={foundItem} onClose={() => setFoundItem(null)} />}
 
             {openScene && (
                 <PuzzleScene
