@@ -1,4 +1,6 @@
-/* Window around a scene mini-game. Prefixed sg- because page CSS is global. */
+/* Window around a scene mini-game, drawn in ink like the puzzle scene panel
+ * (ink.css): a hand-wobbled outline over book paper and a dithered drop.
+ * Prefixed sg- because page CSS is global. */
 
 .sg-scrim {
     position: fixed;
@@ -11,41 +13,49 @@
 }
 
 .sg-window {
+    --book-fill: var(--book-paper);
     position: relative;
     box-sizing: border-box;
     width: min(760px, 100%);
-    padding: 24px 26px;
-    background: var(--parchment-200);
-    border: var(--border-frame) solid var(--line-300);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-panel);
+    padding: 26px 28px 30px;
+    border-radius: 26px;
 }
 
-.sg-window::before {
-    content: '';
-    position: absolute;
-    inset: 7px;
-    border: var(--border-hairline) solid var(--frame-inset);
-    border-radius: var(--radius-md);
-    pointer-events: none;
+.sg-window::after {
+    transform: translate(calc(var(--book-drop) * 1.5), calc(var(--book-drop) * 1.75));
 }
 
+/* As the puzzle scene's close button: a drawn ring only on hover. */
 .sg-close {
+    --book-fill: transparent;
     position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 44px;
-    height: 44px;
+    top: 14px;
+    right: 14px;
+    width: 52px;
+    height: 52px;
     min-height: 34px;
     display: grid;
     place-items: center;
     padding: 0;
+    border: 0;
+    border-radius: 50%;
     background: transparent;
     color: var(--navy-700);
-    border: var(--border-frame) solid var(--line-500);
-    border-radius: var(--radius-md);
     cursor: pointer;
     z-index: 1;
+}
+
+.sg-close:not(:hover)::before {
+    border-color: transparent;
+}
+
+.sg-close:hover {
+    --book-fill: var(--book-chip);
+}
+
+.sg-close:focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 3px;
 }
 
 /* Keep the score readout clear of the close button in the corner. */

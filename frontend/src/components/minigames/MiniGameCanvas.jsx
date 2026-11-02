@@ -11,6 +11,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import paperGrainUrl from '../../assets/minigames/paper_grain.jpg'
+import InkFilter from '../ink/InkFilter.jsx'
 import './MiniGameCanvas.css'
 
 const STEP = 1 / 60
@@ -195,6 +196,7 @@ export default function MiniGameCanvas({ game, name, buddy, onClose }) {
 
     return (
         <div className="mg-shell">
+            <InkFilter />
             <div className="mg-bar">
                 <h3 className="mg-name">{name}</h3>
                 <p className="mg-score">
@@ -204,36 +206,41 @@ export default function MiniGameCanvas({ game, name, buddy, onClose }) {
                 <p className="mg-best">Paras: <strong>{best}</strong></p>
             </div>
 
-            <div
-                className="mg-stage"
-                style={{ aspectRatio: `${game.width} / ${game.height}` }}
-                onPointerDown={onPointerDown}
-                onPointerMove={onPointerMove}
-                onPointerUp={onPointerUp}
-                onPointerCancel={onPointerUp}
-            >
-                <canvas ref={canvasRef} className="mg-canvas" />
-                {/* Inline because a CSS url() into src/assets does not resolve. */}
-                <div className="mg-paper" style={{ backgroundImage: `url(${paperGrainUrl})` }} aria-hidden="true" />
+            {/* The box carries the drawn frame; the stage inside keeps its rounded clip. */}
+            <div className="mg-stage-box">
+                <div
+                    className="mg-stage"
+                    style={{ aspectRatio: `${game.width} / ${game.height}` }}
+                    onPointerDown={onPointerDown}
+                    onPointerMove={onPointerMove}
+                    onPointerUp={onPointerUp}
+                    onPointerCancel={onPointerUp}
+                >
+                    <canvas ref={canvasRef} className="mg-canvas" />
+                    {/* Inline because a CSS url() into src/assets does not resolve. */}
+                    <div className="mg-paper" style={{ backgroundImage: `url(${paperGrainUrl})` }} aria-hidden="true" />
 
-                {phase === 'running' && waiting && (
-                    <div className="mg-wake">
-                        <p className="mg-wake-title">Kokeile liikkua!</p>
-                        <p className="mg-wake-hint">{game.hint}</p>
-                    </div>
-                )}
+                    {phase === 'running' && waiting && (
+                        <div className="mg-wake">
+                            <p className="mg-wake-title">Kokeile liikkua!</p>
+                            <p className="mg-wake-hint">{game.hint}</p>
+                        </div>
+                    )}
 
-                {phase === 'dead' && (
-                    <div className="mg-overlay">
-                        <p className="mg-over">Peli päättyi</p>
-                        <p className="mg-result">
-                            {score} {game.unit}
-                            {score > 0 && score >= best ? ' — uusi ennätys!' : ''}
-                        </p>
-                        <button className="mg-start" type="button" onClick={start}>Pelaa uudelleen</button>
-                        <p className="mg-hint">{game.hint}</p>
-                    </div>
-                )}
+                    {phase === 'dead' && (
+                        <div className="mg-overlay">
+                            <p className="mg-over">Peli päättyi</p>
+                            <p className="mg-result">
+                                {score} {game.unit}
+                                {score > 0 && score >= best ? ' — uusi ennätys!' : ''}
+                            </p>
+                            <button className="mg-start ink-shape ink-shape--thin ink-drop" type="button" onClick={start}>
+                                Pelaa uudelleen
+                            </button>
+                            <p className="mg-hint">{game.hint}</p>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )
