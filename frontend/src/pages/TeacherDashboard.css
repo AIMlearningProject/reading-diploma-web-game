@@ -403,12 +403,16 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
     background: rgba(74, 144, 217, 0.04);
 }
 
-/* ── Brass Add Button ────────────────────────────────────── */
+/* ── Primary Button ──────────────────────────────────────── */
+/* The one warm button per view, on the same flat --book-sun as the pupil's
+ * main buttons, so a primary action looks the same on both sides. The pupil's
+ * is drawn in ink; this one keeps the teacher page's straight hairline, its
+ * 34px baseline and its radius tier. */
 .add-button {
     min-height: 34px;
-    background: linear-gradient(180deg, var(--brass-300) 0%, var(--brass-500) 48%, var(--brass-700) 100%);
+    background: var(--book-sun);
     color: var(--navy-700);
-    border: var(--border-hairline) solid var(--brass-600);
+    border: var(--border-hairline) solid var(--brass-700);
     border-radius: var(--radius-md);
     padding: var(--space-3) var(--space-5);
     font-size: var(--fs-body-sm);
@@ -419,27 +423,15 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
     cursor: pointer;
     white-space: nowrap;
     align-self: flex-end;
-    box-shadow:
-        0 1px 0 rgba(255, 248, 200, 0.5) inset,
-        0 -1px 0 rgba(0, 0, 0, 0.16) inset,
-        0 3px 10px rgba(100, 60, 0, 0.2);
-    transition: all 0.15s ease;
+    transition: background 0.15s ease;
 }
 
 .add-button:hover {
-    background: linear-gradient(180deg, var(--brass-200) 0%, var(--brass-400) 48%, var(--brass-650) 100%);
-    box-shadow:
-        0 1px 0 rgba(255, 248, 200, 0.55) inset,
-        0 -1px 0 rgba(0, 0, 0, 0.18) inset,
-        0 5px 16px rgba(100, 60, 0, 0.28);
-    transform: translateY(-1px);
+    background: var(--brass-200);
 }
 
 .add-button:active {
-    background: linear-gradient(180deg, var(--brass-700) 0%, var(--brass-500) 55%, var(--brass-300) 100%);
-    box-shadow:
-        0 2px 5px rgba(0, 0, 0, 0.16) inset,
-        0 2px 6px rgba(100, 60, 0, 0.1);
+    background: var(--brass-300);
     transform: translateY(1px);
 }
 
