@@ -9,6 +9,19 @@
  *                     that must not read as buttons.
  *   .ink-drop         a dithered drop shadow, a 50% ink checker: no blur.
  *
+ * Form fields. A native field draws itself in straight lines, so on an ink
+ * screen every one of them is wrapped or classed below; scripts/check-ink-
+ * fields.mjs fails the lint when one is not.
+ *   .ink-field          wraps an input, select or textarea and rules an ink
+ *                       line under it. A field cannot carry a pseudo-element,
+ *                       so the wrapper draws the line.
+ *   .ink-field--select  adds a drawn chevron in place of the native arrow.
+ *   .ink-box            wraps a textarea in an ink outline instead (.ink-shape
+ *                       plus the field reset); set --book-fill on it.
+ *   .ink-check          on a checkbox: a drawn box, filled navy with a tick.
+ *   .ink-range          on a range input: a drawn track filled to --ink-value
+ *                       and a sun-coloured knob. The screen sets --ink-value.
+ *
  * A screen sets --book-fill per shape, hides the drop on a pressed shape and
  * moves the shape onto it. Line, drop and dot are tokens in tokens.css. The
  * rules sit in :where() so any screen rule overrides them, whatever order the
@@ -56,3 +69,135 @@
     pointer-events: none;
 }
 
+/* ── Form fields ─────────────────────────────────────────── */
+
+:where(.ink-field) {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+:where(.ink-field, .ink-box) > :where(input, select, textarea) {
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    outline: none;
+}
+
+:where(.ink-field)::after {
+    content: '';
+    position: absolute;
+    inset: 0 -2px -3px;
+    border-bottom: calc(var(--book-line) * 0.5) solid var(--book-outline);
+    filter: url('#ink-hand-small');
+    pointer-events: none;
+}
+
+:where(.ink-field):focus-within::after {
+    border-bottom-color: var(--navy-700);
+    border-bottom-width: calc(var(--book-line) * 0.65);
+}
+
+/* !important on the one property the chevron needs: a screen's padding
+ * shorthand on the select would otherwise outrank :where() and put the text
+ * under the chevron. */
+:where(.ink-field--select) > select {
+    appearance: none;
+    padding-right: 28px !important;
+    cursor: pointer;
+}
+
+/* The chevron: an SVG data URI, which cannot read a custom property, so the
+ * colour is --ink-900 written out. */
+:where(.ink-field--select)::before {
+    content: '';
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    width: 16px;
+    height: 10px;
+    transform: translateY(-50%);
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 10'%3E%3Cpath d='M2 2l6 6 6-6' fill='none' stroke='%233a2a10' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+    filter: url('#ink-hand-small');
+    pointer-events: none;
+}
+
+:where(.ink-box) > textarea {
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+:where(.ink-check) {
+    appearance: none;
+    flex: none;
+    width: 26px;
+    height: 26px;
+    margin: 0;
+    border: calc(var(--book-line) * 0.5) solid var(--book-outline);
+    border-radius: 7px;
+    background: var(--book-paper) center / 16px no-repeat;
+    filter: url('#ink-hand-small');
+    cursor: pointer;
+}
+
+:where(.ink-check):checked {
+    background-color: var(--navy-700);
+    /* The tick: --parchment-000 written out, as for the chevron. */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3.5 3.5L13 4' fill='none' stroke='%23fdfbf4' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+:where(.ink-check):focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 3px;
+}
+
+:where(.ink-range) {
+    --ink-value: 0%;
+    appearance: none;
+    height: 30px;
+    margin: 0;
+    background: transparent;
+    filter: url('#ink-hand-small');
+    cursor: pointer;
+}
+
+:where(.ink-range)::-webkit-slider-runnable-track {
+    height: 12px;
+    border: calc(var(--book-line) * 0.4) solid var(--book-outline);
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--navy-700) var(--ink-value), var(--book-paper) var(--ink-value));
+}
+
+:where(.ink-range)::-moz-range-track {
+    height: 12px;
+    border: calc(var(--book-line) * 0.4) solid var(--book-outline);
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--navy-700) var(--ink-value), var(--book-paper) var(--ink-value));
+}
+
+:where(.ink-range)::-webkit-slider-thumb {
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    margin-top: -7px; /* centred on the 12px track: (12 - 26) / 2 */
+    border: calc(var(--book-line) * 0.5) solid var(--book-outline);
+    border-radius: 50%;
+    background: var(--book-sun);
+}
+
+:where(.ink-range)::-moz-range-thumb {
+    box-sizing: border-box;
+    width: 26px;
+    height: 26px;
+    border: calc(var(--book-line) * 0.5) solid var(--book-outline);
+    border-radius: 50%;
+    background: var(--book-sun);
+}
+
+:where(.ink-range):focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 4px;
+}
