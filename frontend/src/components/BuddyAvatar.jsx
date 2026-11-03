@@ -2,10 +2,11 @@ import buddySpriteSheet from '../assets/buddyAvatar/diploma_buddies-Sheet.png'
 import pandaIcon from '../assets/buddyAvatar/panda/panda_icon.png'
 import './BuddyAvatar.css'
 
+// Listed in the order they stand on the sprite sheet; the ids stay as saved in users.avatar
 export const BUDDIES = [
+    { id: 'buddy_3', name: 'Matti' },
     { id: 'buddy_1', name: 'Panda' },
     { id: 'buddy_2', name: 'P.P.' },
-    { id: 'buddy_3', name: 'Matti' },
 ]
 
 const BUDDY_ICONS = {
