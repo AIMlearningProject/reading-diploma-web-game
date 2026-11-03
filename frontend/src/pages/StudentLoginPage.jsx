@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import InkFilter from '../components/ink/InkFilter'
 import './StudentLoginPage.css'
 import homeBG from '../assets/HomeBG1.jpg'
+import SiteLogo from '../components/SiteLogo'
 import { fetchLogin } from '../services/api'
 
 function StudentLoginPage() {
@@ -37,7 +38,7 @@ function StudentLoginPage() {
     return (
         <div className="student-login-page" style={{ '--page-art': `url(${homeBG})` }}>
             <InkFilter />
-            <h1 className="site-logo">Lukudiplomi</h1>
+            <SiteLogo />
             <div className="student-login-card ink-shape ink-drop">
                 <button className="back-button ink-shape ink-shape--thin ink-drop" onClick={() => navigate('/')}>
                     &larr; Takaisin

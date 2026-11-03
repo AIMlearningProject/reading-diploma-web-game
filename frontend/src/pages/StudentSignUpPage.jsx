@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import homeBG from '../assets/HomeBG1.jpg';
 import InkFilter from '../components/ink/InkFilter';
+import SiteLogo from '../components/SiteLogo';
 import { createStudentWithInvite, fetchLogin } from '../services/api';
 
 const LOCAL_STORAGE_KEY = 'hasUsedStudentInvite';
@@ -66,7 +67,7 @@ function StudentSignUpPage() {
     return (
         <div className="student-login-page" style={{ '--page-art': `url(${homeBG})` }}>
             <InkFilter />
-            <h1 className="site-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>Lukudiplomi</h1>
+            <SiteLogo onClick={() => navigate('/')} style={{ cursor: 'pointer' }} />
             <div className="student-login-card ink-shape ink-drop">
                 <h2>Oppilaan rekisteröinti</h2>
                 <p className="subtitle">Liity opettajan {<strong>{teacherName}</strong>} oppilaaksi.</p>

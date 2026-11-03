@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import './TeacherLoginPage.css'
 import homeBG from '../assets/HomeBG1.jpg'
+import SiteLogo from '../components/SiteLogo'
 
 function TeacherLoginPage() {
     const navigate = useNavigate()
@@ -11,7 +12,7 @@ function TeacherLoginPage() {
 
     return (
         <div className="teacher-login-page" style={{ '--page-art': `url(${homeBG})` }}>
-            <h1 className="site-logo">Lukudiplomi</h1>
+            <SiteLogo />
             <div className="login-card">
                 <button className="back-button" onClick={() => navigate('/')}>
                     &larr; Takaisin
