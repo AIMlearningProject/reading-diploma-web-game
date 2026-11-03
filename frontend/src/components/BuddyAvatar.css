@@ -22,7 +22,7 @@
 }
 
 .buddy-sprite__figure {
-    background-repeat: no-repeat;
+    display: block;
 }
 
 .buddy-sprite--empty {

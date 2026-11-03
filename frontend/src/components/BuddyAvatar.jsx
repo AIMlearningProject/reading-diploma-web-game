@@ -1,4 +1,6 @@
-import buddySpriteSheet from '../assets/buddyAvatar/diploma_buddies-Sheet.png'
+import mattiFigure from '../assets/buddyAvatar/figures/matti.png'
+import pandaFigure from '../assets/buddyAvatar/figures/panda.png'
+import ppFigure from '../assets/buddyAvatar/figures/pp.png'
 import pandaIcon from '../assets/buddyAvatar/panda/panda_icon.png'
 import './BuddyAvatar.css'
 
@@ -13,37 +15,20 @@ const BUDDY_ICONS = {
     buddy_1: pandaIcon,
 }
 
-// diploma_buddies-Sheet.png is 1339×1034 and its three figures have different
-// widths (the cat's paw and Matti's hair share columns), so each buddy has its
-// own bounding box instead of an equal third of the sheet.
-const SHEET_W = 1339
-const SHEET_H = 1034
-
-const BUDDY_FRAMES = {
-    buddy_1: { x: 436, y: 0, w: 473, h: 617 },
-    buddy_2: { x: 915, y: 0, w: 424, h: 1021 },
-    buddy_3: { x: 0, y: 0, w: 436, h: 1034 },
-}
-
-// Square head crops for the nav-bar icon of buddies without a dedicated icon
-const BUDDY_HEADS = {
-    buddy_2: { x: 915, y: 0, size: 424 },
-    buddy_3: { x: 0, y: 0, size: 436 },
+// One PNG per figure, cut out of diploma_buddies-Sheet.png (1440×1080) along
+// each figure's own pixels, since their bounding boxes overlap on the sheet.
+// w and h are the crop sizes in sheet pixels, which keeps the sheet's scale.
+const BUDDY_FIGURES = {
+    buddy_1: { src: pandaFigure, w: 479, h: 618 },
+    buddy_2: { src: ppFigure, w: 429, h: 1022 },
+    buddy_3: { src: mattiFigure, w: 441, h: 1034 },
 }
 
 // Every buddy is drawn at one shared scale inside a frame as wide as the widest
 // figure and as tall as the tallest, standing on the frame's bottom edge
-const FRAME_W = Math.max(...Object.values(BUDDY_FRAMES).map(f => f.w))
-const FRAME_H = Math.max(...Object.values(BUDDY_FRAMES).map(f => f.h))
+const FRAME_W = Math.max(...Object.values(BUDDY_FIGURES).map(f => f.w))
+const FRAME_H = Math.max(...Object.values(BUDDY_FIGURES).map(f => f.h))
 const FRAME_ASPECT = FRAME_H / FRAME_W
-
-function sheetCrop(x, y, scale) {
-    return {
-        backgroundImage: `url(${buddySpriteSheet})`,
-        backgroundSize: `${SHEET_W * scale}px ${SHEET_H * scale}px`,
-        backgroundPosition: `${-x * scale}px ${-y * scale}px`,
-    }
-}
 
 export function BuddyIcon({ buddyId, size = 36 }) {
     const icon = BUDDY_ICONS[buddyId]
@@ -57,25 +42,27 @@ export function BuddyIcon({ buddyId, size = 36 }) {
             />
         )
     }
-    // Fallback: head crop from the sprite sheet for buddies without a dedicated icon
-    const head = BUDDY_HEADS[buddyId]
-    if (head == null) return null
+    // Fallback: the top square of the figure (its head) for buddies without a dedicated icon
+    const figure = BUDDY_FIGURES[buddyId]
+    if (figure == null) return null
     return (
         <div
             className="buddy-icon buddy-icon--sprite"
             style={{
                 width: size,
                 height: size,
-                ...sheetCrop(head.x, head.y, size / head.size),
+                backgroundImage: `url(${figure.src})`,
+                backgroundSize: '100% auto',
+                backgroundPosition: '0 0',
             }}
         />
     )
 }
 
 export function BuddySprite({ buddyId, size = 120 }) {
-    const frame = BUDDY_FRAMES[buddyId]
+    const figure = BUDDY_FIGURES[buddyId]
     const h = Math.round(size * FRAME_ASPECT)
-    if (frame == null) {
+    if (figure == null) {
         return (
             <div
                 className="buddy-sprite buddy-sprite--empty"
@@ -88,13 +75,12 @@ export function BuddySprite({ buddyId, size = 120 }) {
     const scale = size / FRAME_W
     return (
         <div className="buddy-sprite" style={{ width: size, height: h }}>
-            <div
+            <img
                 className="buddy-sprite__figure"
-                style={{
-                    width: frame.w * scale,
-                    height: frame.h * scale,
-                    ...sheetCrop(frame.x, frame.y, scale),
-                }}
+                src={figure.src}
+                alt=""
+                width={Math.round(figure.w * scale)}
+                height={Math.round(figure.h * scale)}
             />
         </div>
     )
