@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { BUDDIES, BuddySprite, BuddyIcon } from '../components/BuddyAvatar'
 import InkFilter from '../components/ink/InkFilter'
 import homeBG from '../assets/HomeBG1.jpg'
+import siteBoat from '../assets/siteBoat.png'
 // Continent tile puzzles (Palkinnot) are switched off for now; the game still records them as rewards, so uncommenting brings them back.
 // import MinigameModal from '../components/minigames/MinigameModal'
 import SceneGameModal from '../components/minigames/SceneGameModal'
@@ -133,7 +134,10 @@ function StudentDashboard() {
         >
             <InkFilter />
             <header className="student-header">
-                <h1>Matkapäiväkirja</h1>
+                <h1>
+                    <img className="student-header-boat" src={siteBoat} alt="" width="75" height="73" />
+                    <span>Matkapäiväkirja</span>
+                </h1>
                 <div className="header-right">
                     {hasBuddy && <BuddyIcon buddyId={user.avatar} size={38} />}
                     <span>{hasBuddy
