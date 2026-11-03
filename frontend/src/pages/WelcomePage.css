@@ -172,43 +172,52 @@
 }
 
 /* ── Footer ──────────────────────────────────────────────── */
-.welcome-footer {
-    margin-top: var(--space-8);
-    color: var(--ink-650);
-    font-size: 1rem;
-    font-style: italic;
-    text-align: center;
+/* The two lines are one note: one block, one size, one weight, set close.
+   They sit straight on the harbour drawing, so they carry the same
+   sky-coloured rim as the logo to lift them off it, and stay smaller and
+   lighter than the role cards above. */
+.welcome-notes {
+    margin-top: var(--space-7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
     position: relative;
     z-index: 1;
     animation: fadeSlideDown 0.65s 0.48s cubic-bezier(0.34, 1.2, 0.64, 1) both;
 }
 
-.welcome-feedback {
-    margin-top: var(--space-6);
-    margin-bottom: calc(var(--space-6) * -1);
-    color: var(--ink-650);
-    font-size: 1.1rem;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-    animation: fadeSlideDown 0.65s 0.18s cubic-bezier(0.34, 1.2, 0.64, 1) both;
-}
-
-/* The one appearance change in this pass. Was brass-500, which reads 2.4:1
-   against the page ground's sky-100 base; ink-700 keeps the warmth at 5.5:1.
-   The real ground is HomeBG1 under a 0.78 wash, so the shipped ratio varies
-   with the photo — sky-100 is the light end and therefore the worst case. */
-.welcome-feedback a {
-    color: var(--ink-700);
+.welcome-notes p {
+    margin: 0;
+    color: var(--ink-900);
+    font-size: 1rem;
     font-weight: var(--fw-label);
-    text-decoration: none;
-    border-bottom: var(--border-hairline) solid rgba(196, 151, 58, 0.4);
-    transition: color 0.15s, border-bottom-color 0.15s;
+    line-height: 1.5;
+    text-align: center;
+    text-shadow:
+        2px 0 0 var(--sky-100), -2px 0 0 var(--sky-100),
+        0 2px 0 var(--sky-100), 0 -2px 0 var(--sky-100),
+        1.5px 1.5px 0 var(--sky-100), -1.5px 1.5px 0 var(--sky-100),
+        1.5px -1.5px 0 var(--sky-100), -1.5px -1.5px 0 var(--sky-100);
 }
 
-.welcome-feedback a:hover {
-    color: var(--brass-600);
-    border-bottom-color: var(--brass-600);
+/* Navy and heavier, so the link reads as a link next to the brown text. On
+   hover it lies on the flat sun, as the primary button does, with no fade. */
+.welcome-notes a {
+    padding: 0 0.2em;
+    color: var(--navy-700);
+    font-weight: var(--fw-label-strong);
+    text-decoration: none;
+}
+
+.welcome-notes a:hover {
+    background: var(--book-sun);
+    text-shadow: none;
+}
+
+.welcome-notes a:focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 2px;
 }
 
 /* ── Animations ──────────────────────────────────────────── */
