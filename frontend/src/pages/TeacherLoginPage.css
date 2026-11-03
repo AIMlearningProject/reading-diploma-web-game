@@ -35,13 +35,14 @@
     text-transform: uppercase;
 }
 
+/* A short flat bar in the primary button's sun, not a fading brass line. */
 .login-card h2::after {
     content: '';
     display: block;
-    width: 48px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #C4973A, transparent);
-    margin: 0.5rem auto 0;
+    width: 40px;
+    height: 3px;
+    background: var(--book-sun);
+    margin: 0.6rem auto 0;
 }
 
 .login-card p {
