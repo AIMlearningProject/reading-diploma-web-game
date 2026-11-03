@@ -7,6 +7,7 @@ import TeacherProfileCard from '../components/TeacherProfileCard'
 import TransferRequestPopup from '../components/popups/TransferRequestPopup'
 import AccountDeletionPopup from '../components/popups/AccountDeletionPopup'
 import homeBG from '../assets/HomeBG1.jpg'
+import siteBoat from '../assets/siteBoat.png'
 import './TeacherDashboard.css'
 import { BooksProvider } from '../contexts/BooksContext'
 
@@ -24,7 +25,10 @@ function TeacherDashboard() {
     return (
         <div className="dashboard teacher-dashboard" style={{ '--page-art': `url(${homeBG})` }}>
             <header className="dashboard-header">
-                <h1>Opettajan hallintapaneeli</h1>
+                <h1>
+                    <img className="dashboard-header-boat" src={siteBoat} alt="" width="75" height="73" />
+                    <span>Opettajan hallintapaneeli</span>
+                </h1>
                 <div className="header-right">
                     <span>Tervetuloa, {user?.name || user?.email}</span>
                     <button className="logout-button" onClick={handleLogout}>
