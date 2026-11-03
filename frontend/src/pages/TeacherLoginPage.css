@@ -53,68 +53,83 @@
     font-style: italic;
 }
 
+/* Both buttons are scoped to this page. StudentLoginPage.css still carries
+ * unscoped .back-button and .google-button rules (the old brass gradient and
+ * colour fade), and page CSS is global, so every property they set is
+ * overridden here, hover and active included. */
+
 /* ── Back Button ─────────────────────────────────────────── */
-.back-button {
-    background: none;
-    border: none;
-    color: #9E7A2A;
+/* A secondary button, drawn as the teacher side draws one on paper (the
+ * invite section's copy button): transparent, a brass hairline, the radius
+ * tier, and a faint brass wash on hover. */
+.teacher-login-page .back-button {
+    background: transparent;
+    border: var(--border-hairline) solid var(--brass-500);
+    border-radius: var(--radius-md);
+    box-shadow: none;
+    color: var(--navy-700);
     cursor: pointer;
-    font-size: 0.9rem;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
+    font-size: 0.85rem;
+    font-family: var(--font-body);
+    font-weight: 800;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 0;
+    min-height: 34px;
+    padding: 0 var(--space-4);
     margin-bottom: 1.75rem;
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-    transition: color 0.2s;
+    transition: background 0.18s, border-color 0.18s;
 }
 
-.back-button:hover {
-    color: #C4973A;
+.teacher-login-page .back-button:hover {
+    background: rgba(196, 151, 58, 0.15);
+    border-color: var(--brass-600);
+    color: var(--navy-700);
 }
 
-/* ── Brass Google Button ─────────────────────────────────── */
-.google-button {
+.teacher-login-page .back-button:focus-visible,
+.teacher-login-page .google-button:focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 2px;
+}
+
+/* ── Google Button ───────────────────────────────────────── */
+/* The page's primary action, drawn as the teacher dashboard's primary button
+ * (.add-button): flat --book-sun, a straight hairline, the radius tier. */
+.teacher-login-page .google-button {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
-    background: linear-gradient(180deg, #D8B25A 0%, #C4973A 48%, #A67E1E 100%);
-    color: #1e3a5f;
-    border: 1px solid #9E7A2A;
-    border-radius: 4px;
+    width: 100%;
+    min-height: 34px;
+    background: var(--book-sun);
+    color: var(--navy-700);
+    border: var(--border-hairline) solid var(--brass-700);
+    border-radius: var(--radius-md);
+    box-shadow: none;
     padding: 0.9rem 2rem;
     font-size: 1rem;
-    font-family: 'Nunito', sans-serif;
+    font-family: var(--font-body);
     font-weight: 800;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
-    width: 100%;
-    justify-content: center;
-    box-shadow:
-        0 1px 0 rgba(255, 248, 200, 0.5) inset,
-        0 -1px 0 rgba(0, 0, 0, 0.16) inset,
-        0 4px 14px rgba(100, 60, 0, 0.22);
-    transition: all 0.15s ease;
+    transform: none;
+    transition: background 0.15s ease;
 }
 
-.google-button:hover {
-    background: linear-gradient(180deg, #E0BC64 0%, #CCA040 48%, #B08826 100%);
-    box-shadow:
-        0 1px 0 rgba(255, 248, 200, 0.55) inset,
-        0 -1px 0 rgba(0, 0, 0, 0.18) inset,
-        0 6px 20px rgba(100, 60, 0, 0.28);
-    transform: translateY(-1px);
+.teacher-login-page .google-button:hover {
+    background: var(--brass-200);
+    box-shadow: none;
+    transform: none;
 }
 
-.google-button:active {
-    background: linear-gradient(180deg, #A67E1E 0%, #C4973A 55%, #D8B25A 100%);
-    box-shadow:
-        0 2px 5px rgba(0, 0, 0, 0.16) inset,
-        0 2px 6px rgba(100, 60, 0, 0.12);
+.teacher-login-page .google-button:active {
+    background: var(--brass-300);
+    box-shadow: none;
     transform: translateY(1px);
 }
 
