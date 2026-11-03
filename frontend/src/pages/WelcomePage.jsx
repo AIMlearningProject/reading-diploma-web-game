@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import InkFilter from '../components/ink/InkFilter'
 import './WelcomePage.css'
 import homeBG from '../assets/HomeBG1.jpg'
+import SiteLogo from '../components/SiteLogo'
 
 function WelcomePage() {
     const navigate = useNavigate()
@@ -9,8 +10,7 @@ function WelcomePage() {
     return (
         <div className="welcome-page" style={{ '--page-art': `url(${homeBG})` }}>
             <InkFilter />
-            <h1 className="welcome-title">Lukudiplomi</h1>
-            <p className="welcome-subtitle">Valitse roolisi jatkaaksesi</p>
+            <SiteLogo className="welcome-title" />
 
             <div className="role-cards">
                 {/* Both cards are drawn in ink, at the same quieter weight, so neither
