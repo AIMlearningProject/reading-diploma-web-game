@@ -15,8 +15,14 @@
 
 /* ── Buddy Sprite (full body) ────────────────────────────── */
 .buddy-sprite {
-    background-repeat: no-repeat;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
     flex-shrink: 0;
+}
+
+.buddy-sprite__figure {
+    background-repeat: no-repeat;
 }
 
 .buddy-sprite--empty {
