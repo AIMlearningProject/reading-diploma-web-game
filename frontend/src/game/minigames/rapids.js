@@ -59,10 +59,10 @@ const SCROLL_PERIOD = HEIGHT * 2 // mirrored scrolling repeats every two copies
 
 // Fixed for the whole run, on purpose.
 const SPEED = 180         // px/s the river scrolls past
-const ROW_EVERY = 0.9     // s between rows of rocks
+const ROW_EVERY = 1.15    // s between rows of rocks
 const LANES = [146, 320, 494]
 const CANOE_Y = 326
-const CANOE_SCALE = 0.8 // drawn size of the canoe picture, as a share of its pixels
+const CANOE_SCALE = 0.65 // drawn size of the canoe picture, as a share of its pixels
 // The hit box grows with the picture (54 x 74 at half size), so a rock that
 // looks like it touches the canoe does touch it.
 const CANOE_W = 54 * CANOE_SCALE / 0.5
