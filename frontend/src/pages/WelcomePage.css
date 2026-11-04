@@ -173,9 +173,9 @@
 
 /* ── Footer ──────────────────────────────────────────────── */
 /* The two lines are one note: one block, one size, one weight, set close.
-   They sit straight on the harbour drawing, so they carry the same
-   sky-coloured rim as the logo to lift them off it, and stay smaller and
-   lighter than the role cards above. */
+   They sit straight on the harbour drawing, so they carry a sky-coloured
+   rim to lift them off it, and stay smaller and lighter than the role
+   cards above. */
 .welcome-notes {
     margin-top: var(--space-7);
     display: flex;
