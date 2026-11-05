@@ -16,6 +16,9 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 22
+      # Public test period only, see "Test period" in CLAUDE.md
+      - key: TEST_ACCOUNT_RESET
+        value: "true"
       - key: PUBLIC_URL
         value: https://lukudiplomi-peli.onrender.com/
       - key: SESSION_SECRET

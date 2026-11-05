@@ -1,4 +1,4 @@
-import { test, expect, describe, beforeEach } from 'vitest'
+import { test, expect, describe, beforeEach, afterEach } from 'vitest'
 import supertest from 'supertest'
 import express from 'express'
 import middleware from '../../utils/middleware.js'
@@ -10,6 +10,9 @@ import booksRouter from '../../controllers/books.js'
 import rewardsRouter from '../../controllers/rewards.js'
 import progressRouter from '../../controllers/progresses.js'
 import submissionsRouter from '../../controllers/submissions.js'
+
+import TestAccountService from '../../services/testAccountService.js'
+import { STUDENTS, TEACHER_BOOKS, writeStudentState } from '../../db/seeds/data/testStudents.js'
 
 // Fixtures, inserted by db/seeds/users_seed.js with fixed ids.
 const TEACHER = { id: 1, name: 'John', role: 'teacher', teacher_id: null }
@@ -697,5 +700,135 @@ describe('Reward endpoints', () => {
         loginAs(CLASSMATE)
         const response = await api.get('/api/rewards').expect(200)
         expect(response.body).toStrictEqual([])
+    })
+})
+
+describe('public test account reset', () => {
+    const SEEDED_AINO = STUDENTS.find((student) => student.name === 'Aino')
+    let aino
+    let progressIds
+
+    // `expire` is a session's last request plus one day, see testAccountService.js
+    const addSession = (userId, minutesSinceLastRequest) => db('session').insert({
+        sid: `${userId}-${minutesSinceLastRequest}`,
+        sess: JSON.stringify({ passport: { user: userId } }),
+        expire: db.raw('now() + interval \'1 day\' - make_interval(mins => ?)', [minutesSinceLastRequest])
+    })
+
+    // What a visitor can do to the account: the profile, a book, progress, a reward.
+    const playOnAino = async () => {
+        await db('users').where({ id: aino.id }).update({ name: 'Vierailija', avatar: 'panda', grade: 2, email: 'visitor@example.com' })
+        await addBook(aino.id, { title: 'Kavijan oma kirja' })
+        await db('progress').where({ user: aino.id, level: 3 }).update({ current_progress: 100, level_status: 'complete' })
+        await db('rewards').insert({ owner: aino.id, reward_type: 'minigame', name: 'AsiaMap' })
+    }
+
+    const expectSeededAino = async () => {
+        const user = await db('users').where({ id: aino.id }).first()
+        expect(user.name).toBe('Aino')
+        expect(user.avatar).toBe('')
+        expect(user.grade).toBe(SEEDED_AINO.grade)
+        expect(user.email).toBe(SEEDED_AINO.email)
+
+        const levelThree = await db('progress').where({ user: aino.id, level: 3 }).first()
+        expect(levelThree.current_progress).toBe(40)
+        expect(levelThree.level_status).toBe('incomplete')
+
+        const rewards = await db('rewards').where({ owner: aino.id }).orderBy('name').pluck('name')
+        expect(rewards).toStrictEqual(['ArcticMap', 'EuropeMap'])
+        expect(await db('submissions').where({ user: aino.id })).toHaveLength(2)
+
+        const ownBooks = await db('books').where({ added_by: aino.id }).pluck('title')
+        expect(ownBooks.sort()).toStrictEqual(SEEDED_AINO.addedBooks.map((book) => book.title).sort())
+    }
+
+    beforeEach(async () => {
+        process.env.TEST_ACCOUNT_RESET = 'true'
+        await db('session').del()
+
+        const books = await db('books')
+            .insert(TEACHER_BOOKS.map((book) => ({ ...book, added_by: TEACHER.id })))
+            .returning(['id', 'title'])
+        ;[aino] = await db('users')
+            .insert({
+                name: 'Aino',
+                email: SEEDED_AINO.email,
+                password_hash: 'unused',
+                avatar: '',
+                grade: SEEDED_AINO.grade,
+                role: 'student',
+                teacher_id: TEACHER.id,
+                test_account: 'Aino'
+            })
+            .returning(['id'])
+        await db('books').insert(SEEDED_AINO.addedBooks.map((book) => ({ ...book, added_by: aino.id })))
+        await writeStudentState(db, { studentId: aino.id, student: SEEDED_AINO, books })
+        progressIds = await db('progress').where({ user: aino.id }).orderBy('level').pluck('id')
+    })
+
+    afterEach(() => {
+        delete process.env.TEST_ACCOUNT_RESET
+    })
+
+    test('puts the account back to its seeded state', async () => {
+        await playOnAino()
+
+        await TestAccountService.resetIfUnused(aino.id)
+
+        await expectSeededAino()
+    })
+
+    test('keeps the progress row ids a browser left open still holds', async () => {
+        await playOnAino()
+
+        await TestAccountService.resetIfUnused(aino.id)
+
+        expect(await db('progress').where({ user: aino.id }).orderBy('level').pluck('id')).toStrictEqual(progressIds)
+    })
+
+    test('finishes the reset when a seeded book has been deleted', async () => {
+        await db('books').where({ title: TEACHER_BOOKS[0].title, added_by: TEACHER.id }).del()
+        await playOnAino()
+
+        await TestAccountService.resetIfUnused(aino.id)
+
+        const levelOne = await db('progress').where({ user: aino.id, level: 1 }).first()
+        expect(levelOne.book).toBeNull()
+        expect((await db('users').where({ id: aino.id }).first()).name).toBe('Aino')
+    })
+
+    test('leaves the account alone while someone else is playing on it', async () => {
+        await playOnAino()
+        await addSession(aino.id, 5)
+
+        await TestAccountService.resetIfUnused(aino.id)
+
+        expect((await db('users').where({ id: aino.id }).first()).name).toBe('Vierailija')
+    })
+
+    test('ignores a session whose visitor left without logging out', async () => {
+        await playOnAino()
+        await addSession(aino.id, 45)
+
+        await TestAccountService.resetIfUnused(aino.id)
+
+        await expectSeededAino()
+    })
+
+    test('never touches an ordinary student', async () => {
+        await db('users').where({ id: STUDENT.id }).update({ avatar: 'panda' })
+
+        await TestAccountService.resetIfUnused(STUDENT.id)
+
+        expect((await db('users').where({ id: STUDENT.id }).first()).avatar).toBe('panda')
+    })
+
+    test('does nothing without TEST_ACCOUNT_RESET', async () => {
+        delete process.env.TEST_ACCOUNT_RESET
+        await playOnAino()
+
+        await TestAccountService.resetIfUnused(aino.id)
+
+        expect((await db('users').where({ id: aino.id }).first()).name).toBe('Vierailija')
     })
 })

@@ -2,6 +2,7 @@ import express from 'express'
 import passport from 'passport'
 import { rateLimit, ipKeyGenerator } from 'express-rate-limit'
 import middleware from '../utils/middleware.js'
+import TestAccountService from '../services/testAccountService.js'
 
 const authRouter = express.Router()
 
@@ -87,25 +88,29 @@ authRouter.post('/login', loginLimiter, middleware.requireAuthentication(false),
         if (err) return next(err)
         if (!user) return response.status(401).json({ error: info?.message || 'Väärä nimi tai salasana' })
 
-        // Creates the session
-        request.logIn(user, (err) => {
-            if (err) return next(err)
+        TestAccountService.resetIfUnused(user.id).then(() => {
+            // Creates the session
+            request.logIn(user, (err) => {
+                if (err) return next(err)
 
-            return response.status(200).json({
-                id: user.id,
-                email: user.email,
-                username: user.name,
-                role: user.role
+                return response.status(200).json({
+                    id: user.id,
+                    email: user.email,
+                    username: user.name,
+                    role: user.role
+                })
             })
         })
     })(request, response, next)
 })
 
 authRouter.post('/logout', middleware.requireAuthentication(true), (request, response, next) => {
+    const userId = request.user.id
     request.logout((err) => {
         if (err) return next(err)
-        request.session.destroy((err) => {
+        request.session.destroy(async (err) => {
             if (err) return next(err)
+            await TestAccountService.resetIfUnused(userId)
             response.clearCookie('connect.sid')
             response.clearCookie('X-CSRF-TOKEN')
             return response.status(204).end()
