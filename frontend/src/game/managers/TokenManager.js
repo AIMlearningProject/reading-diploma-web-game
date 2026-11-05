@@ -1,10 +1,12 @@
 import { DEPTHS } from '../ui/constants.js';
+import { buddyHeight, buddyKey } from '../ui/buddy.js';
 import ReadingState from '../state.js';
+import { routeCurve, routeSample } from './PathRenderer.js';
 
 export default class TokenManager {
     constructor() {
         this.token = null;
-        this.baseTokenScale = 0.25;
+        this.tokenHeight = 0;
         // The buddy stands just above the node it is on, rather than on top of
         // it: a node carries its number, and being covered is what a pupil
         // would have to click through to open it.
@@ -12,29 +14,26 @@ export default class TokenManager {
     }
 
     create(scene, savedIndex) {
-        // Create animation from atlas frames (once globally)
-        if (!scene.anims.exists('buddy_idle')) {
-            const frames = scene.anims.generateFrameNames('buddyIdle');
-            scene.anims.create({
-                key: 'buddy_idle',
-                frames: frames,
-                frameRate: 3,
-                repeat: -1
-            });
-        }
-
-        this.token = scene.add.sprite(0, 0, 'buddyIdle');
-        this.token.setScale(this.baseTokenScale);
+        this.token = scene.add.image(0, 0, buddyKey(scene));
+        this.tokenHeight = buddyHeight(scene);
         this.token.setDepth(DEPTHS.TOKEN);
         this.token.lastPointIndex = savedIndex;
-        this.token.play('buddy_idle');
+        // A still figure sways a little, so it reads as standing there alive.
+        scene.tweens.add({
+            targets: this.token,
+            angle: { from: -2.5, to: 2.5 },
+            duration: 1400,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+        });
         return this.token;
     }
 
     updateScale(baseScale) {
         this.nodeOffsetY = 40 * baseScale;
         if (this.token) {
-            this.token.setScale(this.baseTokenScale * baseScale);
+            this.token.setScale((this.tokenHeight * baseScale) / this.token.height);
         }
     }
 
@@ -56,6 +55,8 @@ export default class TokenManager {
             return;
         }
 
+        const curve = routeCurve(pointPositions);
+
         const moveStep = (current) => {
             if (current === toIndex) {
                 this.token.lastPointIndex = toIndex;
@@ -66,13 +67,17 @@ export default class TokenManager {
             }
 
             const nextI = (current < toIndex) ? current + 1 : current - 1;
+            const along = { at: routeSample(current) };
 
             scene.tweens.add({
-                targets: this.token,
-                x: pointPositions[nextI].x,
-                y: pointPositions[nextI].y - this.nodeOffsetY,
+                targets: along,
+                at: routeSample(nextI),
                 duration: 300,
                 ease: 'Linear',
+                onUpdate: () => {
+                    const p = curve[Math.round(along.at)];
+                    this.setPosition(p.x, p.y);
+                },
                 onComplete: () => {
                     moveStep(nextI);
                 }

@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { DEPTHS, CSS_COLORS, FONTS } from '../ui/constants.js';
-import { ICON_KEYS, INLINE_SVGS } from '../ui/icons.js';
-import { drawParchmentPlate, makeParchmentButton } from '../ui/panels.js';
+import { ICON_KEYS, INLINE_ICONS, iconImage } from '../ui/icons.js';
+import { makeInkButton, makeInkPanel } from '../ui/panels.js';
 
 export default class VideoPopupModal {
     constructor(scene) {
@@ -23,7 +23,7 @@ export default class VideoPopupModal {
         this.popupUI = this.scene.add.group();
 
         // Overlay
-        const overlay = this.scene.add.rectangle(0, 0, width, height, 0x0a192f, 0.85)
+        const overlay = this.scene.add.rectangle(0, 0, width, height, 0x3a2a10, 0.4)
             .setOrigin(0).setScrollFactor(0).setDepth(depthBase).setInteractive();
         this.popupUI.add(overlay);
 
@@ -31,36 +31,37 @@ export default class VideoPopupModal {
         const boxW = 450 * s;
         const boxH = 300 * s;
 
-        const plate = this.scene.add.graphics().setScrollFactor(0).setDepth(depthBase + 1);
-        drawParchmentPlate(plate, width / 2 - boxW / 2, height / 2 - boxH / 2, boxW, boxH, 12 * s, { s });
+        const plate = makeInkPanel(this.scene, width / 2 - boxW / 2, height / 2 - boxH / 2, boxW, boxH, s)
+            .setScrollFactor(0).setDepth(depthBase + 1);
         this.popupUI.add(plate);
 
         // Title with lightbulb icon
         const title = this.scene.add.text(width / 2 + (10 * s), height / 2 - (100 * s), 'LUKUVINKKI AVATTU', {
-            fontFamily: FONTS.HEADING,
+            fontFamily: FONTS.BODY,
             fontSize: (26 * s) + 'px',
-            color: '#9e7a2a',
-            fontStyle: 'bold'
+            color: CSS_COLORS.NAVY,
+            fontStyle: '800'
         }).setOrigin(0.5).setScrollFactor(0).setDepth(depthBase + 2);
         this.popupUI.add(title);
 
-        const bulbIcon = this.scene.add.image(
-            title.x - title.width / 2 - (24 * s), height / 2 - (100 * s), ICON_KEYS.LIGHTBULB
-        ).setDisplaySize(30 * s, 30 * s).setScrollFactor(0).setDepth(depthBase + 2);
+        const bulbIcon = iconImage(
+            this.scene, title.x - title.width / 2 - (24 * s), height / 2 - (100 * s), ICON_KEYS.LIGHTBULB, 30 * s
+        ).setScrollFactor(0).setDepth(depthBase + 2);
         this.popupUI.add(bulbIcon);
 
         // Subtitle
         const subTitle = this.scene.add.text(width / 2, height / 2 - (40 * s), videoData.title, {
             fontFamily: FONTS.BODY,
             fontSize: (18 * s) + 'px',
-            color: '#1e3a5f',
+            color: CSS_COLORS.INK,
+            fontStyle: '700',
             align: 'center',
             wordWrap: { width: boxW - 60 * s }
         }).setOrigin(0.5).setScrollFactor(0).setDepth(depthBase + 2);
         this.popupUI.add(subTitle);
 
         // Watch button
-        const watchBtn = makeParchmentButton(this.scene, width / 2, height / 2 + (50 * s), 'KATSO TÄSSÄ', {
+        const watchBtn = makeInkButton(this.scene, width / 2, height / 2 + (50 * s), 'KATSO TÄSSÄ', {
             s, fontSize: 20, minWidth: 260 * s, depth: depthBase + 2
         });
         this.popupUI.add(watchBtn.container);
@@ -97,18 +98,18 @@ export default class VideoPopupModal {
             videoOverlay.innerHTML = `
                 <div style="display: flex; flex-direction: column; align-items: flex-end; width: min(92vw, 160vh); max-width: 1000px;">
                     <button id="close-dom-video" style="
-                        background: #c4973a; color: #1e3a5f;
-                        border: none; padding: 10px 25px;
+                        background: #e9b949; color: #3a2a10;
+                        border: 3px solid #3a2a10; padding: 10px 25px;
                         margin-bottom: 8px;
                         font-weight: bold; cursor: pointer;
-                        border-radius: 4px; font-size: 16px;
-                        font-family: sans-serif;
-                    ">${INLINE_SVGS.CROSS} SULJE </button>
+                        border-radius: 12px; font-size: 16px;
+                        font-family: Nunito, sans-serif;
+                    ">${INLINE_ICONS.CROSS} SULJE </button>
                     <div style="
                         width: 100%;
                         aspect-ratio: 16/9;
                         max-height: 70vh;
-                        border: 3px solid #c4973a;
+                        border: 5px solid #3a2a10;
                         background: #000;
                     ">
                         <iframe width="100%" height="100%" src="${embedUrl}"

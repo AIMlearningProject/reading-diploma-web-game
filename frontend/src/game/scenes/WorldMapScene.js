@@ -1,11 +1,12 @@
 import Phaser from 'phaser';
 import ReadingState from '../state.js';
 import { preloadIcons, ICON_KEYS } from '../ui/icons.js';
-import { COLORS, FONTS, uiScale as calcUiScale } from '../ui/constants.js';
-import { makeParchmentBadge, makeParchmentTooltip, makeMedallion } from '../ui/panels.js';
+import { INK, uiScale as calcUiScale } from '../ui/constants.js';
+import { makeContinentSign, makeInkBadge, makeInkTooltip } from '../ui/panels.js';
 import { preloadDesk, createDeskBackdrop, fitRect } from '../ui/desk.js';
+import { buddyHeight, buddyKey, preloadBuddy } from '../ui/buddy.js';
+import { inkDrawing, strokeDashed } from '../ui/ink.js';
 import overallMapImg from '../../assets/overallMap.jpg';
-import pandaWorldImg from '../../assets/buddyAvatar/panda/panda_world.png';
 
 // Native pixel size of overallMap.jpg. Every continent position below is
 // expressed in these coordinates and scaled to whatever the canvas is.
@@ -28,8 +29,8 @@ class WorldMapScene extends Phaser.Scene {
     constructor() {
         super('WorldMap');
         this.pointGroup = null;
-        this.pandaBuddy = null;
-        this.pandaFloatTween = null;
+        this.buddy = null;
+        this.buddyFloatTween = null;
         // Set by layoutMap(): how the native map coordinates map onto the canvas.
         this.mapScale = 1;
         this.mapOffsetX = 0;
@@ -38,7 +39,7 @@ class WorldMapScene extends Phaser.Scene {
 
     preload() {
         this.load.image('overallMap', overallMapImg);
-        this.load.image('pandaWorld', pandaWorldImg);
+        preloadBuddy(this);
         preloadDesk(this);
         preloadIcons(this);
     }
@@ -66,156 +67,86 @@ class WorldMapScene extends Phaser.Scene {
         const mapX = (x) => this.mapOffsetX + x * this.mapScale;
         const mapY = (y) => this.mapOffsetY + y * this.mapScale;
 
-        // --- 2. Continent markers ---
+        // --- 2. Continent signs ---
         this.pointGroup = this.add.group();
-        this.routeGraphics = this.add.graphics().setDepth(4);
 
         const drawRoute = () => {
-            this.routeGraphics.clear();
-            const s = this.mapScale;
-            this.routeGraphics.lineStyle(Math.max(1.5, 2.5 * s), COLORS.GOLD, 0.5);
+            const { width: w, height: h } = this.scale;
+            const key = `world-route-${w}x${h}`;
+            if (this.routeImage) this.routeImage.destroy();
 
-            for (let i = 0; i < CONTINENTS.length - 1; i++) {
-                const from = CONTINENTS[i];
-                const to = CONTINENTS[i + 1];
-                this.drawDashedLine(
-                    this.routeGraphics,
-                    mapX(from.x), mapY(from.y),
-                    mapX(to.x), mapY(to.y),
-                    10 * s, 8 * s, 30 * s
-                );
-            }
+            const s = this.mapScale;
+            this.routeImage = inkDrawing(this, key, w, h, (g) => {
+                g.strokeStyle = INK.OUTLINE;
+                g.lineWidth = Math.max(2, INK.SMALL * s);
+                g.lineCap = 'round';
+                for (let i = 0; i < CONTINENTS.length - 1; i++) {
+                    const ax = mapX(CONTINENTS[i].x);
+                    const ay = mapY(CONTINENTS[i].y);
+                    const bx = mapX(CONTINENTS[i + 1].x);
+                    const by = mapY(CONTINENTS[i + 1].y);
+                    const total = Phaser.Math.Distance.Between(ax, ay, bx, by);
+                    const nx = (bx - ax) / total;
+                    const ny = (by - ay) / total;
+                    // A gap at each end, so the dashes do not run under the markers.
+                    const inset = 48 * s;
+                    strokeDashed(g, [
+                        { x: ax + nx * inset, y: ay + ny * inset },
+                        { x: bx - nx * inset, y: by - ny * inset }
+                    ], 16 * s, 13 * s);
+                }
+            }, { seed: 8 }).setDepth(4);
         };
 
         const renderPoints = () => {
             if (!this.pointGroup || !this.pointGroup.scene || !this.pointGroup.active) return;
 
             this.pointGroup.clear(true, true);
-            if (this.pandaBuddy) { this.pandaBuddy.destroy(); this.pandaBuddy = null; }
-            if (this.pandaFloatTween) { this.pandaFloatTween.remove(); this.pandaFloatTween = null; }
+            if (this.buddyFloatTween) { this.buddyFloatTween.remove(); this.buddyFloatTween = null; }
+            this.buddy = null;
 
             const s = this.mapScale;
+            const k = s / INK.WORLD_SCALE;
             const currentMapKey = ReadingState.getCurrentContinent();
 
             CONTINENTS.forEach((pos, index) => {
                 const finalX = mapX(pos.x);
                 const finalY = mapY(pos.y);
-                const isUnlocked = true;
                 const isCurrent = pos.mapKey === currentMapKey;
-                const isCompleted = ReadingState._continentCompletedFlags?.[pos.mapKey] === true;
-                const isResubmittable = ReadingState.isLevelPendingResubmission(pos.mapKey);
 
-                // The panda stands in for the marker on the continent the player is on.
-                if (!isCurrent) {
-                    const marker = makeMedallion(
-                        this, index + 1, s,
-                        { isUnlocked, isCompleted, isResubmittable },
-                        isUnlocked ? () => this.scene.start(pos.mapKey) : null
-                    );
-                    marker.setPosition(finalX, finalY).setDepth(6);
-                    this.pointGroup.add(marker);
-                }
-
-                // --- Label ---
-                // The continent's name, and under it what kind of book it holds
-                // for this pupil's year. Both sit inside one parchment plate, so
-                // the genre stays readable wherever it lands on the map.
-                const genre = ReadingState.genreFor(pos.mapKey);
-                const labelFontSize = Math.max(12, Math.round(15 * s));
-                const txt = this.add.text(0, 0, pos.name, {
-                    fontFamily: FONTS.BODY, fontSize: `${labelFontSize}px`,
-                    color: isUnlocked ? '#1e3a5f' : '#6b7280', fontStyle: '800'
-                }).setOrigin(0.5);
-                txt.setLetterSpacing(Math.max(0.5, 1 * s));
-
-                const genreFontSize = Math.max(11, Math.round(13 * s));
-                const genreTxt = genre.label
-                    ? this.add.text(0, 0, genre.label.toUpperCase(), {
-                        fontFamily: FONTS.BODY, fontSize: `${genreFontSize}px`,
-                        color: genre.free ? '#7a6a4a' : '#8a5a12', fontStyle: '700',
-                        align: 'center', wordWrap: { width: Math.max(140, 190 * s) }
-                    }).setOrigin(0.5)
-                    : null;
-                if (genreTxt) genreTxt.setLetterSpacing(Math.max(0.3, 0.6 * s));
-
-                // Sent back by the teacher: say so on the plate, not only in the
-                // colour of the marker, which means nothing on its own.
-                const redoFontSize = Math.max(10, Math.round(12 * s));
-                const redoTxt = isResubmittable
-                    ? this.add.text(0, 0, 'TEE UUDELLEEN', {
-                        fontFamily: FONTS.BODY, fontSize: `${redoFontSize}px`,
-                        color: '#FDFBF4', fontStyle: '800', align: 'center'
-                    }).setOrigin(0.5)
-                    : null;
-                if (redoTxt) redoTxt.setLetterSpacing(Math.max(0.4, 0.8 * s));
-
-                const gapY = genreTxt ? 5 * s : 0;
-                const redoGapY = redoTxt ? 6 * s : 0;
-                const redoH = redoTxt ? redoTxt.height + 6 * s : 0;
-                const innerW = Math.max(
-                    txt.width,
-                    genreTxt ? genreTxt.width : 0,
-                    redoTxt ? redoTxt.width + 16 * s : 0
-                );
-                const innerH = txt.height + gapY + (genreTxt ? genreTxt.height : 0)
-                    + redoGapY + redoH;
-
-                const pillPadH = 14 * s;
-                const pillPadV = 7 * s;
-                const pillW = innerW + pillPadH * 2;
-                const pillH = innerH + pillPadV * 2;
-                const radius = Math.min(pillH / 2, 12 * s);
-
-                txt.setY(-innerH / 2 + txt.height / 2);
-                if (genreTxt) {
-                    genreTxt.setY(-innerH / 2 + txt.height + gapY + genreTxt.height / 2);
-                }
-                if (redoTxt) redoTxt.setY(innerH / 2 - redoH / 2);
-
-                const pillBg = this.add.graphics();
-                pillBg.fillStyle(COLORS.PARCHMENT, isUnlocked ? 0.96 : 0.75)
-                    .fillRoundedRect(-pillW / 2, -pillH / 2, pillW, pillH, radius);
-                pillBg.lineStyle(Math.max(1, 1.5 * s), COLORS.GOLD, isUnlocked ? 0.9 : 0.4)
-                    .strokeRoundedRect(-pillW / 2, -pillH / 2, pillW, pillH, radius);
-
-                // A hairline between the name and the genre, as on the other plates.
-                if (genreTxt) {
-                    const ruleY = txt.y + txt.height / 2 + gapY / 2;
-                    pillBg.lineStyle(Math.max(1, 1 * s), COLORS.GOLD, 0.45)
-                        .lineBetween(-innerW / 2, ruleY, innerW / 2, ruleY);
-                }
-
-                // The redo tag sits on its own filled strip, in the same violet
-                // the marker uses for this state.
-                if (redoTxt) {
-                    const tagW = redoTxt.width + 16 * s;
-                    const tagR = Math.min(redoH / 2, 8 * s);
-                    pillBg.fillStyle(0x865fd9, 0.95)
-                        .fillRoundedRect(-tagW / 2, redoTxt.y - redoH / 2, tagW, redoH, tagR);
-                }
-
-                const labelParts = [pillBg, txt, genreTxt, redoTxt].filter(Boolean);
-                const labelContainer = this.add.container(
-                    finalX, finalY + (58 * s) + pillH / 2 - (12 * s), labelParts
-                ).setDepth(5);
-                this.pointGroup.add(labelContainer);
+                // The buddy stands in for the marker on the continent the player is on.
+                const sign = makeContinentSign(this, {
+                    level: index + 1,
+                    name: pos.name,
+                    genre: ReadingState.genreFor(pos.mapKey),
+                    state: {
+                        isCompleted: ReadingState._continentCompletedFlags?.[pos.mapKey] === true,
+                        isResubmittable: ReadingState.isLevelPendingResubmission(pos.mapKey)
+                    },
+                    withMarker: !isCurrent,
+                    s,
+                    onClick: () => this.scene.start(pos.mapKey)
+                });
+                sign.setPosition(finalX, finalY).setDepth(6);
+                this.pointGroup.add(sign);
 
                 if (isCurrent) {
-                    this.pandaBuddy = this.add.image(finalX, finalY, 'pandaWorld')
-                        .setScale(s * 0.09).setDepth(10);
-                    this.pandaBuddy.setInteractive({ useHandCursor: true })
+                    const height = buddyHeight(this) * 0.65 * k;
+                    this.buddy = this.add.image(finalX, finalY - height / 2 + 14 * k, buddyKey(this)).setDepth(10);
+                    this.buddy.setScale(height / this.buddy.height);
+                    this.buddy.setInteractive({ useHandCursor: true })
                         .on('pointerdown', () => this.scene.start(pos.mapKey));
-                    this.pointGroup.add(this.pandaBuddy);
+                    this.pointGroup.add(this.buddy);
 
-                    const pandaTooltip = makeParchmentTooltip(
-                        this, finalX, finalY - 34 * s, 'Klikkaa tutkiaksesi!', { s, depth: 11 }
+                    const tooltip = makeInkTooltip(
+                        this, finalX, finalY - height + 8 * k, 'Klikkaa tutkiaksesi!', { s: k, depth: 11 }
                     ).setAlpha(0);
-                    this.pointGroup.add(pandaTooltip);
-                    this.tweens.add({ targets: pandaTooltip, alpha: 1, duration: 600, delay: 400 });
+                    this.pointGroup.add(tooltip);
+                    this.tweens.add({ targets: tooltip, alpha: 1, duration: 600, delay: 400 });
 
-                    this.pandaFloatTween = this.tweens.add({
-                        targets: this.pandaBuddy,
-                        y: finalY - 10 * s,
+                    this.buddyFloatTween = this.tweens.add({
+                        targets: this.buddy,
+                        y: this.buddy.y - 7 * k,
                         duration: 1200,
                         yoyo: true,
                         repeat: -1,
@@ -233,7 +164,7 @@ class WorldMapScene extends Phaser.Scene {
         const uiS = calcUiScale(initW);
         const margin = 18;
 
-        const kirjat = makeParchmentBadge(
+        const kirjat = makeInkBadge(
             this, margin, margin,
             `Luetut kirjat: ${ReadingState.booksRead}/${ReadingState.targetBooks}`,
             { iconKey: ICON_KEYS.BOOK, s: uiS, anchor: 'left' }
@@ -241,7 +172,7 @@ class WorldMapScene extends Phaser.Scene {
         this.bookCountText = kirjat.container;
         this.bookCountLabel = kirjat.label;
 
-        const poistu = makeParchmentBadge(
+        const poistu = makeInkBadge(
             this, initW - margin, margin, 'POISTU',
             {
                 iconKey: ICON_KEYS.DOOR_EXIT, s: uiS, anchor: 'right',
@@ -266,27 +197,6 @@ class WorldMapScene extends Phaser.Scene {
         this.events.on('shutdown', () => {
             this.scale.off('resize', onResize);
         });
-    }
-
-    /**
-     * Dashed line with a gap left around each end so the dashes do not run
-     * under the continent markers.
-     */
-    drawDashedLine(graphics, x1, y1, x2, y2, dash, gap, inset) {
-        const total = Phaser.Math.Distance.Between(x1, y1, x2, y2);
-        if (total <= inset * 2) return;
-        const nx = (x2 - x1) / total;
-        const ny = (y2 - y1) / total;
-
-        let travelled = inset;
-        while (travelled < total - inset) {
-            const end = Math.min(travelled + dash, total - inset);
-            graphics.lineBetween(
-                x1 + nx * travelled, y1 + ny * travelled,
-                x1 + nx * end, y1 + ny * end
-            );
-            travelled = end + gap;
-        }
     }
 }
 

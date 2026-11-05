@@ -1,36 +1,35 @@
 import Phaser from 'phaser';
 
-export const COLORS = {
-    NAVY:          0x1e3a5f,
-    DARK_NAVY:     0x0a192f,
-    GOLD:          0xc4973a,
-    GOLD_HOVER:    0xd4a74a,
-    PARCHMENT:     0xfdf6e3,
-    WHITE:         0xffffff,
-    BROWN_DARK:    0x3d2b1f,
-    BROWN_LIGHT:   0x5d4037,
-    BOOK_RED:      0xa52a2a,
-    BOOK_PAGE:     0xfff5e1,
-    BACK_FILL:     0x6d7a7a,
-    BACK_STROKE:   0x2c3e50,
-    VIDEO_BLUE:    0x3b88c3,
+// The canvas cannot read tokens.css, so these repeat it: when a colour changes
+// there, change it here. Stroke weights are at the 1280-wide reference size.
+export const INK = {
+    OUTLINE:         '#3a2a10',
+    OUTLINE_INT:     0x3a2a10,
+    PAPER:           '#fdf8ec',
+    PAPER_INT:       0xfdf8ec,
+    SUN:             '#e9b949',
+    GREEN:           '#90c695',
+    VIOLET:          '#c9b3f7',
+    VIOLET_DEEP_INT: 0x865fd9,
+    BIG:             6,
+    MID:             5,
+    SMALL:           4,
+    PANEL:           11,
+    DOT:             2,
+    // World map sheet scale at the reference size, which the sign sizes assume.
+    WORLD_SCALE:     0.74,
+    SIGN_MIN_SCALE:  0.7,
 };
 
 export const CSS_COLORS = {
-    GOLD:       '#c4973a',
-    WHITE:      '#ffffff',
     NAVY:       '#1e3a5f',
-    PARCHMENT:  '#fdf6e3',
-    GREY:       '#888888',
-    LIGHT_BLUE: '#a9c1de',
+    INK:        '#3a2a10',
 };
 
 export const DEPTHS = {
     PATH:           5,
     TOKEN:          50,
-    WAYPOINT:       10,
-    WAYPOINT_TEXT:  11,
-    // The book nodes sit above the buddy: they carry the stop's number and are
+    // The stops sit above the buddy: they carry the stop's number and are
     // what the pupil clicks, so the character must never cover one.
     BOOK_NODE:      60,
     BOOK_NODE_TEXT: 61,
@@ -42,7 +41,6 @@ export const DEPTHS = {
 };
 
 export const FONTS = {
-    HEADING: '"Cinzel Decorative", serif',
     BODY:    'Nunito, sans-serif',
 };
 

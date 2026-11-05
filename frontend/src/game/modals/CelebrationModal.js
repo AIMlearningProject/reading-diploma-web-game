@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 import ReadingState from '../state.js';
-import { DEPTHS, FONTS } from '../ui/constants.js';
-import { ICON_KEYS } from '../ui/icons.js';
-import { drawParchmentPlate, makeParchmentButton } from '../ui/panels.js';
+import { CSS_COLORS, DEPTHS, FONTS } from '../ui/constants.js';
+import { ICON_KEYS, iconImage } from '../ui/icons.js';
+import { makeInkButton, makeInkPanel } from '../ui/panels.js';
 
 export default class CelebrationModal {
     constructor(scene) {
@@ -32,7 +32,7 @@ export default class CelebrationModal {
             this.celebrationUI = null;
         });
 
-        const overlay = this.scene.add.rectangle(0, 0, width, height, 0x0a192f, 0.85)
+        const overlay = this.scene.add.rectangle(0, 0, width, height, 0x3a2a10, 0.4)
             .setOrigin(0).setInteractive().setScrollFactor(0);
         this.celebrationUI.add(overlay);
 
@@ -44,34 +44,33 @@ export default class CelebrationModal {
         const panel = this.scene.add.container(width / 2, height / 2).setScrollFactor(0);
         this.celebrationUI.add(panel);
 
-        const plate = this.scene.add.graphics();
-        drawParchmentPlate(plate, -boxW / 2, -boxH / 2, boxW, boxH, 12 * s, { s });
-        panel.add(plate);
+        panel.add(makeInkPanel(this.scene, -boxW / 2, -boxH / 2, boxW, boxH, s));
 
         const titleMsg = this.scene.add.text(10 * s, -60 * s, 'ONNITTELUT!', {
             fontSize: `${32 * s}px`,
-            color: '#9e7a2a',
-            fontFamily: FONTS.HEADING,
-            fontStyle: 'bold'
+            color: CSS_COLORS.NAVY,
+            fontFamily: FONTS.BODY,
+            fontStyle: '800'
         }).setOrigin(0.5);
         panel.add(titleMsg);
 
-        const partyIcon = this.scene.add.image(
-            titleMsg.x - titleMsg.width / 2 - 26 * s, -60 * s, ICON_KEYS.PARTY
-        ).setDisplaySize(36 * s, 36 * s);
+        const partyIcon = iconImage(
+            this.scene, titleMsg.x - titleMsg.width / 2 - 26 * s, -60 * s, ICON_KEYS.PARTY, 38 * s
+        );
         panel.add(partyIcon);
 
         const subMsg = this.scene.add.text(0, 15 * s,
             'Olet suorittanut tutkimusmatkan loppuun ja ansainnut palkinnon!', {
                 fontSize: `${20 * s}px`,
-                color: '#1e3a5f',
+                color: CSS_COLORS.INK,
                 fontFamily: FONTS.BODY,
+                fontStyle: '700',
                 align: 'center',
                 wordWrap: { width: boxW - 60 * s }
             }).setOrigin(0.5);
         panel.add(subMsg);
 
-        const okBtn = makeParchmentButton(this.scene, 0, 90 * s, 'SELVÄ', {
+        const okBtn = makeInkButton(this.scene, 0, 90 * s, 'SELVÄ', {
             s, fontSize: 22, minWidth: 180 * s, onClick: () => this.destroy()
         });
         panel.add(okBtn.container);

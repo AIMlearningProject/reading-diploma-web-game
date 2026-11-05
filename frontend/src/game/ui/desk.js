@@ -1,6 +1,5 @@
-// Placeholder desk texture: "Old wooden dark board" by Wirestock, Wikimedia
-// Commons, CC BY 4.0. Swap for the hand-drawn version when it is ready.
-import woodDeskImg from '../../assets/woodDesk.jpg';
+// Drawn by build/maps/draw_desk.py, in the same ink style as the map sheets.
+import woodDeskImg from '../../assets/maps/desk.jpg';
 
 /**
  * The wooden desk every map sheet is laid on. Maps are fitted whole into the
@@ -59,6 +58,28 @@ function ensureVignetteTexture(scene) {
 }
 
 /**
+ * The sheet's shadow on the desk: a tight contact shadow and a wide soft one,
+ * both centred under the sheet, so it falls the same on every side. It is soft
+ * on purpose, unlike the dithered drop under the ink shapes.
+ */
+function ensureMapShadowTexture(scene, key, width, height, blur) {
+    if (scene.textures.exists(key)) return;
+    const margin = Math.ceil(blur * 3);
+    const canvas = document.createElement('canvas');
+    canvas.width = width + margin * 2;
+    canvas.height = height + margin * 2;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#2c1e05';
+    // A blur keeps only half its strength at the edge it starts from.
+    [[blur * 2.6, 0.95], [blur * 0.9, 0.95]].forEach(([spread, alpha]) => {
+        ctx.shadowColor = `rgba(44, 30, 5, ${alpha})`;
+        ctx.shadowBlur = spread;
+        ctx.fillRect(margin, margin, width, height);
+    });
+    scene.textures.addCanvas(key, canvas);
+}
+
+/**
  * Build the desk layers. Call the returned `layout(w, h, mapRect)` from the
  * scene's resize handler; `mapRect` is a fitRect() result for the map sheet
  * and may be omitted to skip the sheet's drop shadow.
@@ -72,7 +93,8 @@ export function createDeskBackdrop(scene) {
     ensureVignetteTexture(scene);
     const vignette = scene.add.image(0, 0, VIGNETTE_KEY)
         .setOrigin(0).setDepth(DESK_DEPTHS.VIGNETTE).setScrollFactor(0);
-    const mapShadow = scene.add.graphics().setDepth(DESK_DEPTHS.MAP_SHADOW).setScrollFactor(0);
+    let mapShadow = null;
+    let mapShadowKey = null;
 
     const layout = (w, h, mapRect) => {
         if (!desk.active) return;
@@ -87,20 +109,22 @@ export function createDeskBackdrop(scene) {
         shade.fillStyle(0x0a192f, 0.1).fillRect(0, 0, w, h);
         vignette.setDisplaySize(w, h);
 
-        // Drop shadow, so the map reads as a sheet lying on the desk.
-        mapShadow.clear();
+        // Shadow, so the map reads as a sheet lying on the desk. Stretching one
+        // texture would stretch its blur, so each sheet size gets its own.
+        if (mapShadow) mapShadow.destroy();
+        mapShadow = null;
         if (!mapRect) return;
-        const spread = Math.max(8, Math.round(Math.min(mapRect.width, mapRect.height) * 0.025));
-        for (let i = spread; i > 0; i--) {
-            mapShadow.fillStyle(0x000000, 0.05).fillRoundedRect(
-                mapRect.x - i,
-                mapRect.y - i + spread * 0.45,
-                mapRect.width + i * 2,
-                mapRect.height + i * 2,
-                i
-            );
+        const width = Math.round(mapRect.width);
+        const height = Math.round(mapRect.height);
+        const key = `desk-map-shadow-${width}x${height}`;
+        if (mapShadowKey && mapShadowKey !== key && scene.textures.exists(mapShadowKey)) {
+            scene.textures.remove(mapShadowKey);
         }
+        mapShadowKey = key;
+        ensureMapShadowTexture(scene, key, width, height, Math.max(10, Math.min(width, height) * 0.035));
+        mapShadow = scene.add.image(mapRect.x + width / 2, mapRect.y + height / 2, key)
+            .setDepth(DESK_DEPTHS.MAP_SHADOW).setScrollFactor(0);
     };
 
-    return { desk, shade, vignette, mapShadow, layout };
+    return { desk, shade, vignette, layout };
 }

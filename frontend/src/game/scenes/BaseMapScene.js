@@ -7,9 +7,9 @@ import VideoPopupModal from '../modals/VideoPopupModal.js';
 import ReadingState from '../state.js';
 import { itemForMap } from '../data/items.js';
 import { sceneForMap } from '../data/puzzleScenes.js';
-import { DEPTHS, uiScale as calcUiScale } from '../ui/constants.js';
-import { ICON_KEYS } from '../ui/icons.js';
-import { makeParchmentBadge } from '../ui/panels.js';
+import { DEPTHS, INK, uiScale as calcUiScale } from '../ui/constants.js';
+import { ICON_KEYS, iconImage } from '../ui/icons.js';
+import { makeInkBadge } from '../ui/panels.js';
 import { createDeskBackdrop, fitRect } from '../ui/desk.js';
 
 // A continent is a route of this many nodes, one book each. Mirrors
@@ -58,7 +58,7 @@ class BaseMapScene extends Phaser.Scene {
     create() {
         // Managers
         this.waypointRenderer = new WaypointRenderer(this);
-        this.pathRenderer = new PathRenderer();
+        this.pathRenderer = new PathRenderer(this);
         this.tokenManager = new TokenManager();
         this.videoPopupModal = new VideoPopupModal(this);
         this.celebrationModal = new CelebrationModal(this);
@@ -67,10 +67,6 @@ class BaseMapScene extends Phaser.Scene {
         // world map, fitted whole rather than cropped.
         this.deskBackdrop = createDeskBackdrop(this);
         this.bg = this.add.image(0, 0, this.assetKey).setOrigin(0);
-
-        // Path graphics layer
-        this.pathGraphics = this.add.graphics();
-        this.pathGraphics.setDepth(DEPTHS.PATH);
 
         // Title, back and book badges are all built in handleResize().
 
@@ -104,6 +100,7 @@ class BaseMapScene extends Phaser.Scene {
         this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
             this.scale.off('resize', this.handleResize, this);
             this.waypointRenderer.destroy();
+            this.pathRenderer.clear();
             this.videoPopupModal.destroy();
             this.celebrationModal.destroy();
 
@@ -144,11 +141,9 @@ class BaseMapScene extends Phaser.Scene {
 
         // Render waypoints. The book nodes are the ones the pupil acts on; the
         // other points are bends in the route.
-        const currentIdx = this.tokenManager.lastPointIndex;
         this.nodeWaypoints = nodeWaypointIndices(this.pointPositions.length);
         this.waypointRenderer.render(
-            this.pointPositions, this.baseScale, currentIdx,
-            this.themeColor, this.videoCheckpoints,
+            this.pointPositions, this.baseScale, this.videoCheckpoints,
             (videoData, index) => {
                 if (this.tokenManager.lastPointIndex >= index) {
                     this.showVideoPopup(videoData, index, true);
@@ -162,7 +157,7 @@ class BaseMapScene extends Phaser.Scene {
             }
         );
 
-        // --- UI: parchment badges, same family as the world map ---
+        // --- UI: ink badges, same family as the world map ---
         const isNarrow = width < 600;
         const margin = isNarrow ? 12 : 20;
 
@@ -171,7 +166,7 @@ class BaseMapScene extends Phaser.Scene {
         if (this.titleBadge) this.titleBadge.destroy();
 
         // Back badge
-        const back = makeParchmentBadge(this, margin, margin, 'TAKAISIN', {
+        const back = makeInkBadge(this, margin, margin, 'TAKAISIN', {
             iconKey: ICON_KEYS.ARROW_LEFT, s: uiS, anchor: 'left', depth: DEPTHS.UI,
             onClick: () => {
                 if (this.mapBgm) this.mapBgm.stop();
@@ -181,8 +176,8 @@ class BaseMapScene extends Phaser.Scene {
         this.backIconContainer = back.container;
 
         // Book badge, with the done/loading icons stacked in the same slot
-        const book = makeParchmentBadge(this, width - margin, margin, 'AVAA KIRJA', {
-            iconKey: ICON_KEYS.BOOK, s: uiS, anchor: 'right', depth: DEPTHS.UI,
+        const book = makeInkBadge(this, width - margin, margin, 'AVAA KIRJA', {
+            iconKey: ICON_KEYS.BOOK, s: uiS, anchor: 'right', fill: INK.SUN, depth: DEPTHS.UI,
             onClick: () => this._handleBookBtnClick()
         });
         this.bookIconContainer = book.container;
@@ -191,23 +186,22 @@ class BaseMapScene extends Phaser.Scene {
         const mapKey = this.scene.key;
         const isContinentCompleted = ReadingState._continentCompletedFlags?.[mapKey];
 
-        const readBookImg = this.add.image(book.iconX, book.iconY, ICON_KEYS.CHECKMARK)
-            .setDisplaySize(book.iconSize, book.iconSize)
+        const readBookImg = iconImage(this, book.iconX, book.iconY, ICON_KEYS.CHECK, book.iconSize)
             .setVisible(!!isContinentCompleted);
         readBookImg.name = 'readBookIcon';
         this.bookIconContainer.add(readBookImg);
 
-        const loadingIcon = this.add.image(book.iconX, book.iconY, ICON_KEYS.HOURGLASS)
-            .setDisplaySize(book.iconSize, book.iconSize)
+        const loadingIcon = iconImage(this, book.iconX, book.iconY, ICON_KEYS.HOURGLASS, book.iconSize)
             .setVisible(false);
         loadingIcon.name = 'loadingIcon';
         this.bookIconContainer.add(loadingIcon);
 
         // Title badge, tucked under the corner badges on narrow screens
         const titleY = isNarrow ? margin + back.height + 8 : margin;
-        this.titleBadge = makeParchmentBadge(this, width / 2, titleY, this.title, {
+        const title = makeInkBadge(this, width / 2, titleY, this.title, {
             s: uiS, anchor: 'center', fontSize: 24, depth: DEPTHS.UI
-        }).container;
+        });
+        this.titleBadge = title.container;
 
         this.renderPuzzleMarker(width, height, uiS, margin);
 
@@ -215,8 +209,8 @@ class BaseMapScene extends Phaser.Scene {
         // notice is the way back to the questions.
         if (this.redoNotice) { this.redoNotice.destroy(); this.redoNotice = null; }
         if (ReadingState.isLevelPendingResubmission(mapKey)) {
-            const noticeY = titleY + this.titleBadge.getBounds().height + 10;
-            const notice = makeParchmentBadge(
+            const noticeY = titleY + title.height + 10;
+            const notice = makeInkBadge(
                 this, width / 2, noticeY,
                 this.needsRedo()
                     ? 'OPETTAJA PYYTÄÄ VASTAAMAAN UUDELLEEN — KLIKKAA TÄSTÄ'
@@ -256,7 +250,7 @@ class BaseMapScene extends Phaser.Scene {
         const hasItem = ReadingState.hasItem(scene.correctItem);
         const label = isSolved ? `${scene.title.toUpperCase()} — RATKAISTU` : scene.title.toUpperCase();
 
-        const badge = makeParchmentBadge(this, width / 2, 0, label, {
+        const badge = makeInkBadge(this, width / 2, 0, label, {
             iconKey: isSolved ? ICON_KEYS.CHECK : ICON_KEYS.LIGHTBULB,
             s: uiS, anchor: 'center', fontSize: 18, depth: DEPTHS.UI,
             onClick: () => this.openPuzzleScene()
@@ -448,7 +442,7 @@ class BaseMapScene extends Phaser.Scene {
         targetIndex = Phaser.Math.Clamp(targetIndex, 0, this.pointPositions.length - 1);
 
         // Draw path
-        this.pathRenderer.draw(this.pathGraphics, this.pointPositions, targetIndex, this.themeColor);
+        this.pathRenderer.draw(this.pointPositions, targetIndex, this.baseScale);
 
         if (shouldAnimate) {
             const currentIndex = this.tokenManager.lastPointIndex;
