@@ -70,6 +70,7 @@ const STUDENT_BOOKS = [
  * Students of the main test teacher, each covering one state the UI has to
  * handle. `levels` only lists the entries that differ from the default
  * (incomplete, 0 %, no book). `book` is an index into TEACHER_BOOKS.
+ * `extraRewards` lists rewards that do not come from a level, as { type, name }.
  * `publicTestAccount` marks the ones offered on the student login page during the
  * public test period, which TestAccountService puts back to this state.
  */
@@ -128,7 +129,14 @@ export const STUDENTS = [
         publicTestAccount: true,
         grade: 9,
         email: 'onni@lukudiplomi.test',
-        // Whole diploma finished: every level reviewed, every minigame unlocked.
+        // Whole diploma finished: every level reviewed, every continent puzzle, scene
+        // game and backpack item unlocked, so a visitor can open the games at once.
+        extraRewards: [
+            ...['koskimelonta', 'siemensade', 'delfiinin-reitti', 'jaaretki']
+                .map((name) => ({ type: 'scene-game', name })),
+            ...['kaukoputki', 'siemenpussi', 'korallihuilu', 'mela']
+                .map((name) => ({ type: 'item', name }))
+        ],
         levels: MAP_ORDER.map((_, i) => ({
             level: i + 1,
             status: 'reviewed',
@@ -234,5 +242,12 @@ export async function writeStudentState(knex, { studentId, student, books }) {
             reward_type: 'minigame',
             name: MAP_ORDER[entry.level - 1]
         }))
-    if (rewards.length > 0) await knex('rewards').insert(rewards)
+    const extraRewards = (student.extraRewards ?? []).map(({ type, name }) => ({
+        owner: studentId,
+        reward_type: type,
+        name
+    }))
+    if (rewards.length + extraRewards.length > 0) {
+        await knex('rewards').insert([...rewards, ...extraRewards])
+    }
 }
