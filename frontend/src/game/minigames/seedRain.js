@@ -17,8 +17,6 @@ import bgUrl from '../../assets/minigames/siemensade/bg.png'
 import charMattiUrl from '../../assets/minigames/siemensade/char_matti.png'
 import charPandaUrl from '../../assets/minigames/siemensade/char_panda.png'
 import charPpUrl from '../../assets/minigames/siemensade/char_pp.png'
-import heartEmptyUrl from '../../assets/minigames/siemensade/heart_empty.png'
-import heartFullUrl from '../../assets/minigames/siemensade/heart_full.png'
 import seed1Url from '../../assets/minigames/siemensade/seed_1.png'
 import seed2Url from '../../assets/minigames/siemensade/seed_2.png'
 import seed3Url from '../../assets/minigames/siemensade/seed_3.png'
@@ -34,8 +32,6 @@ const art = loadArt({
     charMatti: charMattiUrl,
     charPanda: charPandaUrl,
     charPp: charPpUrl,
-    heartEmpty: heartEmptyUrl,
-    heartFull: heartFullUrl,
     seed1: seed1Url,
     seed2: seed2Url,
     seed3: seed3Url
@@ -43,13 +39,13 @@ const art = loadArt({
 const SKY = '#a3dcf9'
 const FRUITS = ['seed1', 'seed2', 'seed3']
 
-// The player's buddy carries the basket. Every buddy holds it the same way: hand
-// at the basket's left edge, feet on the same line, so only the height differs.
-// Offsets are from the basket's top-left corner.
+// The player's buddy carries the basket. Every buddy faces left with an arm out,
+// so it stands to the right of the basket with that hand on the basket's wall and
+// its feet on the same line. Offsets are from the basket's top-left corner.
 const CARRIERS = {
-    buddy_1: { look: 'charPanda', dx: 5.5, dy: -8.5 },
-    buddy_2: { look: 'charPp', dx: 5.5, dy: -49.5 },
-    buddy_3: { look: 'charMatti', dx: 5.5, dy: -56 }
+    buddy_1: { look: 'charPanda', dx: 55, dy: -8.5 },
+    buddy_2: { look: 'charPp', dx: 64, dy: -49.5 },
+    buddy_3: { look: 'charMatti', dx: 64.5, dy: -56 }
 }
 
 // Fixed for the whole run, on purpose.
@@ -60,17 +56,78 @@ const BASKET_W = 95.5
 const BASKET_TOP = 284.5
 const RIM_TOP = BASKET_TOP + 4
 const RIM_BOTTOM = BASKET_TOP + 34
-const RIM_INSET = 8        // the basket's walls, which do not catch
+const CATCH_MARGIN = 8     // px past each side of the basket that still catches, so a fruit on the rim counts
+// The lower edge of the basket's opening, from its top. The picture tilts, so the
+// edge sits lower on the right. Everything below it is the basket's front.
+const LIP_LEFT = 20.7
+const LIP_RIGHT = 22.85
+const SINK_DEPTH = 50      // how far below BASKET_TOP a caught fruit is gone
+const SINK_CENTRE = 8      // px from the basket's centre a caught fruit settles
+const SINK_PULL = 260      // px/s a caught fruit slides towards the opening
 const REACH = 150          // px a new fruit may sit from the one before it
 const MISSES_ALLOWED = 3
 const FRUIT_R = 21
-const HEART_X = 29.5
-const HEART_Y = 343
-const HEART_STEP = 45.25
+const LAND_Y = 356         // a fruit's centre when its underside reaches the grass
+// A fruit that lands leaves a solid stain in its own colour, a little wider than
+// the fruit. A newer stain lies over an older one.
+const SPLAT_Y = 379
+const SPLAT_SPREAD = 4     // px a stain may sit above or below SPLAT_Y
+const SPLAT_LIFE = 2.6     // s a stain lasts
+const SPLAT_SHRINK = 0.4   // s of that spent shrinking away
+const SPLAT_COLOURS = { seed1: '#ff1600', seed2: '#ff9a00', seed3: '#9a6add' }
 
 const clamp = (value, low, high) => Math.min(Math.max(value, low), high)
 
 const carrierOf = (buddy) => CARRIERS[buddy] ?? CARRIERS.buddy_1
+
+const between = (low, high) => low + Math.random() * (high - low)
+
+/** Every stain gets its own rough outline, built around (0, 0). */
+function makeSplat(fruit) {
+    const rx = between(27, 32)
+    const ry = rx * 0.36
+    const points = Array.from({ length: 9 }, (_, i) => {
+        const angle = (i / 9) * Math.PI * 2
+        const bump = between(0.72, 1.22)
+        return [Math.cos(angle) * rx * bump, Math.sin(angle) * ry * bump]
+    })
+    const middle = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]
+
+    const path = new Path2D()
+    path.moveTo(...middle(points.at(-1), points[0]))
+    points.forEach((point, i) => {
+        path.quadraticCurveTo(...point, ...middle(point, points[(i + 1) % points.length]))
+    })
+    path.closePath()
+    return {
+        path,
+        x: fruit.x,
+        y: SPLAT_Y + between(-SPLAT_SPREAD, SPLAT_SPREAD),
+        colour: SPLAT_COLOURS[fruit.look],
+        age: 0
+    }
+}
+
+function drawSplat(ctx, splat) {
+    const size = clamp((SPLAT_LIFE - splat.age) / SPLAT_SHRINK, 0, 1)
+    ctx.save()
+    ctx.translate(splat.x, splat.y)
+    ctx.scale(size, size)
+    ctx.fillStyle = splat.colour
+    ctx.fill(splat.path)
+    ctx.restore()
+}
+
+function drawFruit(ctx, fruit, x) {
+    const image = art[fruit.look]
+    const w = image.naturalWidth / 2
+    const h = image.naturalHeight / 2
+    ctx.save()
+    ctx.translate(x, fruit.y)
+    ctx.rotate(Math.sin(fruit.sway + fruit.y / 40) * 0.25)
+    ctx.drawImage(image, -w / 2, -h / 2, w, h)
+    ctx.restore()
+}
 
 /** How far the basket's centre may go, so neither it nor the buddy leaves the stage. */
 function basketRange(carrier) {
@@ -100,14 +157,17 @@ const seedRain = {
     width: WIDTH,
     height: HEIGHT,
     unit: 'hedelmää',
+    lives: MISSES_ALLOWED,
     // Finnish, pupil-facing.
     hint: 'Nuolet tai sormi: liikuta koria. Kolme ohi mennyttä, ja peli päättyy.',
 
     create: ({ buddy } = {}) => ({
             buddy,
-            // Where the basket stands in the picture.
-            x: 327.75,
+            // Where the basket starts, so basket and buddy stand mid-stage together.
+            x: 287,
             fruits: [],
+            sinking: [],
+            splats: [],
             sinceFruit: 0,
             misses: 0,
             score: 0,
@@ -137,23 +197,36 @@ const seedRain = {
             addFruit(state, range)
         }
 
-        const left = state.x - BASKET_W / 2 + RIM_INSET
-        const right = state.x + BASKET_W / 2 - RIM_INSET
+        const left = state.x - BASKET_W / 2 - CATCH_MARGIN
+        const right = state.x + BASKET_W / 2 + CATCH_MARGIN
         const kept = []
         for (const fruit of state.fruits) {
             fruit.y += FALL * dt
             const isAtRim = fruit.y >= RIM_TOP && fruit.y <= RIM_BOTTOM
             if (isAtRim && fruit.x > left && fruit.x < right) {
                 state.score += 1
+                state.sinking.push({ ...fruit, offset: fruit.x - state.x })
                 continue
             }
-            if (fruit.y - FRUIT_R > HEIGHT) {
+            if (fruit.y >= LAND_Y) {
                 state.misses += 1
+                state.splats.push(makeSplat(fruit))
                 continue
             }
             kept.push(fruit)
         }
         state.fruits = kept
+
+        // A caught fruit keeps falling into the basket and rides along with it.
+        for (const fruit of state.sinking) {
+            fruit.y += FALL * dt
+            const settled = clamp(fruit.offset, -SINK_CENTRE, SINK_CENTRE)
+            fruit.offset += clamp(settled - fruit.offset, -SINK_PULL * dt, SINK_PULL * dt)
+        }
+        state.sinking = state.sinking.filter((fruit) => fruit.y < BASKET_TOP + SINK_DEPTH)
+
+        for (const splat of state.splats) splat.age += dt
+        state.splats = state.splats.filter((splat) => splat.age < SPLAT_LIFE)
 
         if (state.misses >= MISSES_ALLOWED) state.dead = true
     },
@@ -166,22 +239,29 @@ const seedRain = {
 
         ctx.drawImage(art.bg, 0, 0, WIDTH, HEIGHT)
 
-        // Drawn under the basket, so a caught fruit drops into it.
-        for (const fruit of state.fruits) {
-            const image = art[fruit.look]
-            const w = image.naturalWidth / 2
-            const h = image.naturalHeight / 2
-            ctx.save()
-            ctx.translate(fruit.x, fruit.y)
-            ctx.rotate(Math.sin(fruit.sway + fruit.y / 40) * 0.25)
-            ctx.drawImage(image, -w / 2, -h / 2, w, h)
-            ctx.restore()
-        }
+        for (const splat of state.splats) drawSplat(ctx, splat)
 
         const basketLeft = state.x - BASKET_W / 2
-        ctx.drawImage(art.basket, basketLeft, BASKET_TOP, BASKET_W, art.basket.naturalHeight / 2)
+        const basketH = art.basket.naturalHeight / 2
+        ctx.drawImage(art.basket, basketLeft, BASKET_TOP, BASKET_W, basketH)
 
-        // The buddy stands in front, one arm around the basket.
+        // Fruit passes over the back of the rim and behind the front of the basket,
+        // so a caught fruit is seen dropping in through the opening.
+        for (const fruit of state.fruits) drawFruit(ctx, fruit, fruit.x)
+        for (const fruit of state.sinking) drawFruit(ctx, fruit, state.x + fruit.offset)
+
+        ctx.save()
+        ctx.beginPath()
+        ctx.moveTo(basketLeft, BASKET_TOP + LIP_LEFT)
+        ctx.lineTo(basketLeft + BASKET_W, BASKET_TOP + LIP_RIGHT)
+        ctx.lineTo(basketLeft + BASKET_W, BASKET_TOP + basketH)
+        ctx.lineTo(basketLeft, BASKET_TOP + basketH)
+        ctx.closePath()
+        ctx.clip()
+        ctx.drawImage(art.basket, basketLeft, BASKET_TOP, BASKET_W, basketH)
+        ctx.restore()
+
+        // The buddy stands beside the basket, one hand on its wall.
         const carrier = carrierOf(state.buddy)
         const body = art[carrier.look]
         ctx.drawImage(
@@ -191,12 +271,6 @@ const seedRain = {
             body.naturalWidth / 2,
             body.naturalHeight / 2
         )
-
-        // Lives, as three hearts that empty from the left.
-        for (let i = 0; i < MISSES_ALLOWED; i++) {
-            const heart = i < state.misses ? art.heartEmpty : art.heartFull
-            ctx.drawImage(heart, HEART_X + i * HEART_STEP, HEART_Y, heart.naturalWidth / 2, heart.naturalHeight / 2)
-        }
     }
 }
 

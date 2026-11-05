@@ -13,21 +13,37 @@
 
 .mg-bar {
     display: flex;
+    flex-wrap: wrap; /* on a phone the bar takes two rows rather than widening the window */
     align-items: baseline;
-    gap: var(--space-4);
+    gap: 2px var(--space-4);
 }
 
 .mg-name {
     margin: 0;
-    flex: 1;
     font-family: var(--font-body);
     font-size: 26px;
     font-weight: 900;
     color: var(--navy-700);
 }
 
+/* Fills the gap between the name and the score, with the hearts centred in it. */
+.mg-lives {
+    flex: 1;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    gap: 2px;
+}
+
+/* The baked icon carries 10px of clear margin around its 34px heart. */
+.mg-heart {
+    width: 54px;
+    height: 54px;
+    margin: -10px -7px;
+}
+
 .mg-score {
-    margin: 0;
+    margin: 0 0 0 auto;
     display: flex;
     align-items: baseline;
     gap: 6px;

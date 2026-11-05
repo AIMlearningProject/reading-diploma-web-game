@@ -4,12 +4,15 @@
 // A game is a plain module — { width, height, unit, hint, create, update, draw }
 // — and owns none of this. create() receives { buddy }, the pupil's buddy id, for
 // a game that draws it. update(state, dt, input) is called at a fixed 1/60 s
-// step so a slow frame never changes the physics.
+// step so a slow frame never changes the physics. A game that has lives sets
+// `lives` to how many and keeps `state.misses`; the bar then shows them as hearts.
 //
 // No rounds, no waves, no escalation: a run ends, the number is kept, the next
 // run starts identical. The only thing that grows is the pupil's own best.
 
 import { useEffect, useRef, useState } from 'react'
+import heartUrl from '../../assets/icons/heart.png'
+import heartEmptyUrl from '../../assets/icons/heart_empty.png'
 import paperGrainUrl from '../../assets/minigames/paper_grain.jpg'
 import InkFilter from '../ink/InkFilter.jsx'
 import './MiniGameCanvas.css'
@@ -48,6 +51,7 @@ export default function MiniGameCanvas({ game, name, buddy, onClose }) {
     const phaseRef = useRef('running')
     const [phase, setPhase] = useState('running')
     const [score, setScore] = useState(0)
+    const [misses, setMisses] = useState(0)
     // True while a run has started but the pupil has not touched anything yet: every
     // game holds still until its first input, and this is when the controls are shown.
     const [waiting, setWaiting] = useState(true)
@@ -61,6 +65,7 @@ export default function MiniGameCanvas({ game, name, buddy, onClose }) {
     const start = () => {
         stateRef.current = game.create({ buddy })
         setScore(0)
+        setMisses(0)
         setPhaseBoth('running')
     }
 
@@ -97,6 +102,7 @@ export default function MiniGameCanvas({ game, name, buddy, onClose }) {
 
                 const live = stateRef.current
                 setScore(live.score)
+                setMisses(live.misses ?? 0)
                 setWaiting(live.awake === false && !live.dead)
                 if (live.dead) {
                     setPhaseBoth('dead')
@@ -199,6 +205,14 @@ export default function MiniGameCanvas({ game, name, buddy, onClose }) {
             <InkFilter />
             <div className="mg-bar">
                 <h3 className="mg-name">{name}</h3>
+                {game.lives > 0 && (
+                    <div className="mg-lives" role="img" aria-label={`Elämiä jäljellä: ${game.lives - misses}`}>
+                        {/* The hearts empty from the left. */}
+                        {Array.from({ length: game.lives }, (_, i) => (
+                            <img key={i} className="mg-heart" src={i < misses ? heartEmptyUrl : heartUrl} alt="" />
+                        ))}
+                    </div>
+                )}
                 <p className="mg-score">
                     <span className="mg-score-value">{score}</span>
                     <span className="mg-score-unit">{game.unit}</span>
