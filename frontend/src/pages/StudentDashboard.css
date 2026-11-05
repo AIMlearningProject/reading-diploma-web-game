@@ -721,11 +721,6 @@
     border-radius: var(--radius-round);
 }
 
-.sd-item-disc svg {
-    width: 22px;
-    height: 22px;
-}
-
 .sd-item-mark {
     font-family: var(--font-body);
     font-size: 20px;

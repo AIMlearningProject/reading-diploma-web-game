@@ -117,7 +117,7 @@
 }
 
 .role-card--ink::before {
-    border-width: calc(var(--book-line) * 0.6);
+    border-width: calc(var(--book-line) * 0.75);
 }
 
 .role-card--ink::after {
@@ -138,21 +138,12 @@
     display: none;
 }
 
-.role-card--ink .role-icon svg {
-    width: 50px;
-    height: 50px;
-}
-
 .role-card--ink .role-icon {
     --book-fill: var(--book-chip-deep);
     position: relative;
     border: none;
     background: transparent;
     box-shadow: none;
-}
-
-.role-card--ink .role-icon::before {
-    border-width: calc(var(--book-line) * 0.45);
 }
 
 .role-card--ink h2 {

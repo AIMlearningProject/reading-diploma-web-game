@@ -7,16 +7,20 @@
 // share of the shape's own box, so on a 24px checkbox or a field's rule the
 // 5% of #ink-hand is about a pixel and would clip the wobble flat.
 //
+// #ink-hand-round is a slower, gentler wobble for small round shapes. On a ring
+// the two edges of the line sit close together, and the faster noise moves them
+// apart or together, so the line pinches thin in places.
+//
 // Two screens open at once render two identical filters under one id; url()
 // takes the first, which draws the same.
 
 import './ink.css'
 
-function InkStroke() {
+function InkStroke({ frequency = 0.06, scale = 5 }) {
     return (
         <>
-            <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="4" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" xChannelSelector="R" yChannelSelector="G" />
+            <feTurbulence type="fractalNoise" baseFrequency={frequency} numOctaves="2" seed="4" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale={scale} xChannelSelector="R" yChannelSelector="G" />
             <feComponentTransfer>
                 <feFuncA type="discrete" tableValues="0 1" />
             </feComponentTransfer>
@@ -32,6 +36,9 @@ export default function InkFilter() {
             </filter>
             <filter id="ink-hand-small" x="-30%" y="-30%" width="160%" height="160%">
                 <InkStroke />
+            </filter>
+            <filter id="ink-hand-round" x="-30%" y="-30%" width="160%" height="160%">
+                <InkStroke frequency={0.035} scale={3.5} />
             </filter>
         </svg>
     )

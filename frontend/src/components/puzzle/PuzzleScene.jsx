@@ -10,27 +10,10 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import SceneIllustration from './SceneIllustration.jsx'
 import allItems from '../../game/data/items.js'
 import { miniGameById } from '../../game/data/miniGames.js'
+import closeIcon from '../../assets/icons/close_26.png'
 import InkFilter from '../ink/InkFilter.jsx'
+import InkIcon from '../ink/InkIcon.jsx'
 import './PuzzleScene.css'
-
-function Icon({ paths, size }) {
-    return (
-        <svg
-            className="ps-icon"
-            width={size}
-            height={size}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-        >
-            {paths.map((d) => <path key={d} d={d} />)}
-        </svg>
-    )
-}
 
 // Game names are stored in capitals for the dashboard tiles; the card reads
 // them as an ordinary name.
@@ -105,11 +88,8 @@ export default function PuzzleScene({
                     </div>
 
                     <section className="ps-text">
-                        <button className="ps-close ink-shape ink-shape--thin" type="button" aria-label="Sulje kohtaus" onClick={onClose}>
-                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-                                <path d="M6 6 18 18M18 6 6 18" />
-                            </svg>
+                        <button className="ps-close ink-shape ink-shape--round ink-shape--thin" type="button" aria-label="Sulje kohtaus" onClick={onClose}>
+                            <InkIcon src={closeIcon} size={26} />
                         </button>
 
                         {isSolved ? (
@@ -118,8 +98,8 @@ export default function PuzzleScene({
                                 <p className="ps-result">{scene.solved.resolution}</p>
                                 {game && (
                                     <div className="ps-game">
-                                        <span className="ps-game-disc ink-shape ink-shape--thin">
-                                            <Icon paths={game.icon} size={34} />
+                                        <span className="ps-game-disc ink-shape ink-shape--round ink-shape--thin">
+                                            <InkIcon src={game.icon} size={34} />
                                         </span>
                                         <div>
                                             <p className="ps-game-kicker">UUSI PELI</p>
@@ -162,7 +142,7 @@ export default function PuzzleScene({
                                         className="ps-slot ps-slot--empty ink-shape"
                                         aria-label="Tyhjä paikka, esine löytyy myöhemmin"
                                     >
-                                        <span className="ps-slot-dot ink-shape ink-shape--thin" />
+                                        <span className="ps-slot-dot ink-shape ink-shape--round ink-shape--thin" />
                                     </div>
                                 )
                             }
@@ -181,8 +161,8 @@ export default function PuzzleScene({
                                     disabled={isSolved}
                                     onClick={() => pick(item.id)}
                                 >
-                                    <span className="ps-slot-dot ink-shape ink-shape--thin">
-                                        <Icon paths={item.icon} size={30} />
+                                    <span className="ps-slot-dot ink-shape ink-shape--round ink-shape--thin">
+                                        <InkIcon src={item.icon[30]} size={30} />
                                     </span>
                                     <span className="ps-slot-name">{item.name}</span>
                                 </button>

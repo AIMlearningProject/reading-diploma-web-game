@@ -289,7 +289,7 @@
 }
 
 .ps-slot--selected .ps-slot-dot {
-    --book-fill: var(--book-picked-dot);
+    --book-fill: var(--book-chip); /* light, so the dark ink icon stays readable on the navy tile */
 }
 
 .ps-slot--tried {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { BUDDIES, BuddySprite, BuddyIcon } from '../components/BuddyAvatar'
+import InkIcon from '../components/ink/InkIcon'
 import InkFilter from '../components/ink/InkFilter'
 import homeBG from '../assets/HomeBG1.jpg'
 import siteBoat from '../assets/siteBoat.png'
@@ -231,7 +232,7 @@ function StudentDashboard() {
                                     const levelStat = getStatus(level)
                                     return (
                                         <div key={level} className={`level-card level-${levelStat}`}>
-                                            <span className="level-number ink-shape ink-shape--hair">{level}</span>
+                                            <span className="level-number ink-shape ink-shape--round ink-shape--hair">{level}</span>
                                             <span className="level-name">{name}</span>
                                             <span className={`level-badge badge-${levelStat}`}>
                                                 {statusFi[levelStat] ?? levelStat}
@@ -254,14 +255,8 @@ function StudentDashboard() {
                                             disabled={!game.module}
                                             onClick={() => setOpenSceneGame(game)}
                                         >
-                                            <span className="sd-scene-game-disc ink-shape ink-shape--thin">
-                                                <svg
-                                                    width="34" height="34" viewBox="0 0 24 24" fill="none"
-                                                    stroke="currentColor" strokeWidth="1.5"
-                                                    strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
-                                                >
-                                                    {game.icon.map((d) => <path key={d} d={d} />)}
-                                                </svg>
+                                            <span className="sd-scene-game-disc ink-shape ink-shape--round ink-shape--thin">
+                                                <InkIcon src={game.icon} size={34} />
                                             </span>
                                             <span className="sd-scene-game-name">{game.name}</span>
                                             <span className="sd-scene-game-pitch">
@@ -286,15 +281,9 @@ function StudentDashboard() {
                                             key={item.id}
                                             className={`sd-item${isOwned ? '' : ' sd-item--missing'}`}
                                         >
-                                            <span className="sd-item-disc ink-shape ink-shape--hair">
+                                            <span className="sd-item-disc ink-shape ink-shape--round ink-shape--hair">
                                                 {isOwned ? (
-                                                    <svg
-                                                        width="34" height="34" viewBox="0 0 24 24" fill="none"
-                                                        stroke="currentColor" strokeWidth="1.5"
-                                                        strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
-                                                    >
-                                                        {item.icon.map((d) => <path key={d} d={d} />)}
-                                                    </svg>
+                                                    <InkIcon src={item.icon[28]} size={28} />
                                                 ) : (
                                                     <span className="sd-item-mark">?</span>
                                                 )}

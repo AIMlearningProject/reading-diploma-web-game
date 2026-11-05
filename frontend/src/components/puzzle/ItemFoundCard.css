@@ -46,6 +46,12 @@
 }
 
 /* Room for the hand-drawn item picture. */
+/* The 96px icon draws a line of nearly 10px, so its ring needs more than the
+ * thin outline to hold it. */
+.if-picture::before {
+    border-width: calc(var(--book-line) * 1.25);
+}
+
 .if-picture {
     --book-fill: var(--book-chip);
     position: relative;

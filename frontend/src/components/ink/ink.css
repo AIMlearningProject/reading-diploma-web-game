@@ -7,6 +7,8 @@
  *   .ink-shape--thin  a thinner outline, for small round shapes.
  *   .ink-shape--hair  the thinnest outline, for marks inside a quiet list
  *                     that must not read as buttons.
+ *   .ink-shape--round a gentler wobble for small round shapes, so a ring keeps
+ *                     an even line. Combines with --thin and --hair.
  *   .ink-drop         a dithered drop shadow, a 50% ink checker: no blur.
  *
  * Form fields. A native field draws itself in straight lines, so on an ink
@@ -54,6 +56,10 @@
 
 :where(.ink-shape--hair)::before {
     border-width: calc(var(--book-line) * 0.45);
+}
+
+:where(.ink-shape--round)::before {
+    filter: url('#ink-hand-round');
 }
 
 :where(.ink-drop)::after {

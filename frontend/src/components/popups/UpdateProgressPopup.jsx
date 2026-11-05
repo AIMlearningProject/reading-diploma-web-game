@@ -36,7 +36,7 @@ function UpdateProgressPopup({ book, currentPct = 0, readOnly = false, onClose }
                         )}
                     </div>
                     <div className="progress-popup-close-wrapper">
-                        <button className="progress-popup-close-btn ink-shape ink-shape--thin" onClick={() => onClose(pct)}>
+                        <button className="progress-popup-close-btn ink-shape ink-shape--round ink-shape--thin" onClick={() => onClose(pct)}>
                             ✕
                         </button>
                     </div>

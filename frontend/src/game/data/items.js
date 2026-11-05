@@ -4,9 +4,22 @@
 // There is no fixed exploration order, so nothing here may assume one: an item
 // is simply owned or not owned.
 //
-// Finnish copy is pupil-facing and must not be translated. `icon` is a
-// placeholder line drawing on a 24 viewBox, stroke only, replaced by the real
-// art later.
+// Finnish copy is pupil-facing and must not be translated. `icon` holds the
+// item's ink icon by the size it was baked at, for <InkIcon>: 28 in the backpack,
+// 30 on a scene's tile, 96 on the item-found card.
+
+import kaukoputki28 from '../../assets/icons/item_kaukoputki_28.png'
+import kaukoputki30 from '../../assets/icons/item_kaukoputki_30.png'
+import kaukoputki96 from '../../assets/icons/item_kaukoputki_96.png'
+import siemenpussi28 from '../../assets/icons/item_siemenpussi_28.png'
+import siemenpussi30 from '../../assets/icons/item_siemenpussi_30.png'
+import siemenpussi96 from '../../assets/icons/item_siemenpussi_96.png'
+import korallihuilu28 from '../../assets/icons/item_korallihuilu_28.png'
+import korallihuilu30 from '../../assets/icons/item_korallihuilu_30.png'
+import korallihuilu96 from '../../assets/icons/item_korallihuilu_96.png'
+import mela28 from '../../assets/icons/item_mela_28.png'
+import mela30 from '../../assets/icons/item_mela_30.png'
+import mela96 from '../../assets/icons/item_mela_96.png'
 
 const items = [
     {
@@ -16,12 +29,7 @@ const items = [
         homeMapKey: 'ArcticMap',
         desc: 'Messinkiputki, jolla erotat pienenkin asian kaukaa.',
         found: 'Löysitte hylätyltä tutkimusasemalta vanhan kaukoputken. Sillä näkee pienenkin asian kaukaa.',
-        icon: [
-            'M4.5 16.5 15 6l3 3L7.5 19.5z',
-            'M2.5 21.5 5.5 18.5',
-            'M16 5.5 18.5 3',
-            'M12.5 12.5 14.5 14.5'
-        ]
+        icon: { 28: kaukoputki28, 30: kaukoputki30, 96: kaukoputki96 }
     },
     {
         id: 'siemenpussi',
@@ -30,12 +38,7 @@ const items = [
         homeMapKey: 'EuropeMap',
         desc: 'Pussillinen siemeniä. Ne itävät nopeasti ja kasvavat isoiksi puiksi.',
         found: 'Vuoristokylän puutarhuri antoi teille pussillisen siemeniä. Ne kasvavat nopeasti isoiksi puiksi.',
-        icon: [
-            'M6.5 9.5h11l1.2 8.5a2.2 2.2 0 0 1-2.2 2.5H7.5a2.2 2.2 0 0 1-2.2-2.5z',
-            'M9 9.5V7.5a3 3 0 0 1 6 0v2',
-            'M10.5 14.5h.01',
-            'M13.5 16.5h.01'
-        ]
+        icon: { 28: siemenpussi28, 30: siemenpussi30, 96: siemenpussi96 }
     },
     {
         id: 'korallihuilu',
@@ -44,13 +47,7 @@ const items = [
         homeMapKey: 'AsiaMap',
         desc: 'Korallista tehty huilu. Sen sävel antaa kuulijalle rohkeutta.',
         found: 'Löysitte rannalta huilun, joka näyttää korallista tehdyltä. Kun kokeilitte puhaltaa, se soi kauniisti.',
-        icon: [
-            'M3.5 17.5 17.5 3.5l3 3-14 14z',
-            'M6 15l3 3',
-            'M11 13h.01',
-            'M13.5 10.5h.01',
-            'M16 8h.01'
-        ]
+        icon: { 28: korallihuilu28, 30: korallihuilu30, 96: korallihuilu96 }
     },
     {
         id: 'mela',
@@ -59,11 +56,7 @@ const items = [
         homeMapKey: 'NorthAmericaMap',
         desc: 'Kevyt puumela. Sillä vene kulkee minne haluat.',
         found: 'Löysitte joen rannalta kevyen melan. Sillä vene kulkee minne haluatte.',
-        icon: [
-            'M12 3c2.4 0 4.2 2.4 4.2 5.4S14.4 14 12 14s-4.2-2.6-4.2-5.6S9.6 3 12 3z',
-            'M12 14v6.5',
-            'M10 20.5h4'
-        ]
+        icon: { 28: mela28, 30: mela30, 96: mela96 }
     }
 ]
 

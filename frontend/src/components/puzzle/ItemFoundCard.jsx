@@ -7,6 +7,7 @@
 
 import { itemById } from '../../game/data/items.js'
 import InkFilter from '../ink/InkFilter.jsx'
+import InkIcon from '../ink/InkIcon.jsx'
 import './ItemFoundCard.css'
 
 export default function ItemFoundCard({ itemId, onClose }) {
@@ -19,13 +20,8 @@ export default function ItemFoundCard({ itemId, onClose }) {
             <div className="if-card ink-shape ink-drop">
 
                 <p className="if-kicker">LÖYSIT ESINEEN</p>
-                <span className="if-picture ink-shape ink-shape--thin">
-                    <svg
-                        width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
-                    >
-                        {item.icon.map((d) => <path key={d} d={d} />)}
-                    </svg>
+                <span className="if-picture ink-shape ink-shape--round ink-shape--thin">
+                    <InkIcon src={item.icon[96]} size={96} />
                 </span>
                 <h2 className="if-name">{item.name}</h2>
                 <p className="if-found">{item.found}</p>

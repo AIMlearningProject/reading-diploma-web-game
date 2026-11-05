@@ -20,7 +20,7 @@ function InfoButton({ buttonStyle, textboxStyle, info, ink = false }) {
     return (
         <div className="info-container" ref={containerRef}>
             <button
-                className={ink ? "info-button info-button--ink ink-shape ink-shape--thin ink-drop" : "info-button"}
+                className={ink ? "info-button info-button--ink ink-shape ink-shape--round ink-shape--thin ink-drop" : "info-button"}
                 aria-label="Info"
                 onClick={() => setIsOpen(!isOpen)}
                 style={buttonStyle}
