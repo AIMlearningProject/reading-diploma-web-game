@@ -1,0 +1,30 @@
+# Render Blueprint for the public test site. The database is hosted outside Render,
+# because a free Render Postgres is deleted after 30 days + a 14 day grace period.
+services:
+  - type: web
+    name: lukudiplomi-peli
+    runtime: node
+    plan: free
+    region: frankfurt
+    branch: main
+    autoDeploy: true
+    # --ignore-scripts: the backend's install scripts create a local database and .env.
+    # --include=dev: vite is a devDependency of the frontend.
+    buildCommand: npm ci --prefix backend --omit=dev --ignore-scripts && npm ci --prefix frontend --include=dev && npm run build --prefix frontend
+    # Runs the migrations, then starts the server
+    startCommand: node backend/scripts/entrypoint.js
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: PUBLIC_URL
+        value: https://lukudiplomi-peli.onrender.com/
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: INVITE_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false

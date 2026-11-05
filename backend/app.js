@@ -17,6 +17,8 @@ import session from 'express-session'
 // Memorystore ∨∨∨ is good for single instance apps (dev/small app), Redis might be better for scaling,
 // because it provides multi-instance rate limit counters. Whomever it may consern: Consider this before scaling.
 import memorystore from 'memorystore'
+import connectPgSimple from 'connect-pg-simple'
+import knexConfig from './knexfile.js'
 import passport from './utils/passport.js'
 import lusca from 'lusca'
 import { rateLimit, ipKeyGenerator } from 'express-rate-limit'
@@ -34,6 +36,7 @@ logger.info('Connecting')
 // Check environment mode development/production/test
 const environmentMode = process.env.NODE_ENV || 'development'
 const domainUrl = (process.env.PUBLIC_URL || '').replace(/\/$/, '') // Also removes trailing slash
+const isOnRender = environmentMode === 'production' && process.env.RENDER === 'true' // Render sets RENDER itself
 
 if (environmentMode === 'production' && !domainUrl.startsWith('http://') && !domainUrl.startsWith('https://')) {
     logger.error(`Invalid PUBLIC_URL ${process.env.PUBLIC_URL}. Needs to begin with http:// or https://`)
@@ -55,6 +58,20 @@ const CORS_OPTIONS = {
 
 app.use(cors(CORS_OPTIONS))
 const MemoryStore = memorystore(session)
+const PgStore = connectPgSimple(session)
+
+// Production sessions live in PostgreSQL, so a restart or a Render free tier spin-down doesn't log everyone out
+const productionDbConnection = knexConfig.production.connection
+const sessionStore = environmentMode === 'production'
+    ? new PgStore({
+        ...(typeof productionDbConnection === 'string'
+            ? { conString: productionDbConnection }
+            : { conObject: productionDbConnection }),
+        createTableIfMissing: true
+    })
+    : new MemoryStore({
+        checkPeriod: 43200000 // prune expired entries every 12h, to avoid memory leaks
+    })
 
 // Express session middleware
 const sessionCookieSecure = environmentMode === 'production' && domainUrl.startsWith('https://')
@@ -62,9 +79,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     name: 'sessionId',
     secure: sessionCookieSecure,
-    store: new MemoryStore({
-        checkPeriod: 43200000 // prune expired entries every 12h, to avoid memory leaks
-    }),
+    store: sessionStore,
     resave: false,
     saveUninitialized: false,
     cookie: { sameSite: 'lax' } // Google OAuth doesn't work in production if this is 'strict'
@@ -89,8 +104,10 @@ if (environmentMode === 'production') {
         nosniff: true,
     }))
 
-    if (domainUrl === 'https://lukudiplomi.onrender.com') {
-        app.set('trust proxy', ['74.220.51.0/24', '74.220.59.0/24'])
+    // One hop: the app is only reachable through Render's proxy. Without this
+    // Google's redirect_uri comes out as http:// and every client shares one req.ip
+    if (isOnRender) {
+        app.set('trust proxy', 1)
     }
 } else {
     // prints all requests in the console (not required during production)
@@ -115,7 +132,7 @@ const makeLimiter = ({ windowMs, max, message }) => {
             })
         }
     }
-    if (process.env.NODE_ENV === 'production' && domainUrl === 'https://lukudiplomi.onrender.com') {
+    if (isOnRender) {
         return rateLimit({
             ...baseLimiterOptions,
             keyGenerator: (req) => {

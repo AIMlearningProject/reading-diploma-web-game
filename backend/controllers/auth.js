@@ -14,7 +14,7 @@ const makeLimiter = ({ windowMs, max, handler }) => {
         legacyHeaders: false,
         handler
     }
-    if (process.env.NODE_ENV === 'production' && process.env.PUBLIC_URL === 'https://lukudiplomi.onrender.com/') {
+    if (process.env.NODE_ENV === 'production' && process.env.RENDER === 'true') {
         return rateLimit({
             ...baseLimiterOptions,
             keyGenerator: (req) => {

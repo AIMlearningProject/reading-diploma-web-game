@@ -15,7 +15,6 @@ try {
 
     const envVariables = {
         PORT: PORT,
-        DB_PASSWORD: DB_PASSWORD,
         GOOGLE_CLIENT_ID: GOOGLE_CLIENT_ID,
         GOOGLE_CLIENT_SECRET: GOOGLE_CLIENT_SECRET,
         SESSION_SECRET: SESSION_SECRET,
@@ -24,6 +23,11 @@ try {
 
     if (process.env.NODE_ENV === 'production') {
         envVariables.PUBLIC_URL = process.env.PUBLIC_URL
+    }
+
+    // In production a DATABASE_URL carries its own password (see knexfile.js)
+    if (process.env.NODE_ENV !== 'production' || !process.env.DATABASE_URL) {
+        envVariables.DB_PASSWORD = DB_PASSWORD
     }
 
     const entries = Object.entries(envVariables)
