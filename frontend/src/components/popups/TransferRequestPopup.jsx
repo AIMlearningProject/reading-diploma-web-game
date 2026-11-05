@@ -12,7 +12,6 @@ import './TransferRequestPopup.css'
 function TransferRequestPopup({ open, onClose }) {
     const [incomingRequests, setIncomingRequests] = useState([])
     const [sentRequests, setSentRequests] = useState([])
-    const [loading, setLoading] = useState(true)
     const [processing, setProcessing] = useState(null)
     const [toast, setToast] = useState(null)
     const [error, setError] = useState('')
@@ -34,27 +33,21 @@ function TransferRequestPopup({ open, onClose }) {
 
     const loadIncomingRequests = async () => {
         try {
-            setLoading(true)
             const data = await fetchTransferRequestsInbox()
             setIncomingRequests(data || [])
         } catch (err) {
             console.error('Failed to load incoming transfer requests:', err)
             setIncomingRequests([])
-        } finally {
-            setLoading(false)
         }
     }
 
     const loadSentRequests = async () => {
         try {
-            setLoading(true)
             const data = await fetchTransferRequestsOutbox()
             setSentRequests(data || [])
         } catch (err) {
             console.error('Failed to load sent transfer requests:', err)
             setSentRequests([])
-        } finally {
-            setLoading(false)
         }
     }
 

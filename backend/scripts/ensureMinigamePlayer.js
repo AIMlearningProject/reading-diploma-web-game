@@ -76,9 +76,7 @@ async function main() {
             await Progress.createNodes(created.id, NODES_PER_CONTINENT, trx)
         }
 
-        // GET /api/submissions answers 404 for a pupil who has none, and the dashboard
-        // loads progress, rewards and submissions together, so with no submission it
-        // never shows the rewards at all. Level 1 is therefore handed in and accepted.
+        // Level 1 is handed in and accepted, so the account opens with a finished level.
         const levelOne = await trx('progress').where({ user: student.id, level: 1 }).first()
         await trx('progress').where({ id: levelOne.id }).update({ level_status: 'reviewed', current_progress: 100 })
         await trx('level_nodes').where({ progress_id: levelOne.id }).update({ current_progress: 100 })

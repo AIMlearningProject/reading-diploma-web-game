@@ -15,7 +15,6 @@ import './StudentDashboard.css'
 import {
     fetchProgress,
     fetchRewards,
-    fetchSubmissions,
     updateUserAvatar,
 } from '../services/api'
 
@@ -34,7 +33,6 @@ function StudentDashboard() {
     const { user, logout, checkAuth } = useAuth()
     const navigate = useNavigate()
     const [progress, setProgress] = useState([])
-    const [submissions, setSubmissions] = useState([]) // Submissions not yet used in the student dashboard
     const [rewards, setRewards] = useState([])
     const [loading, setLoading] = useState(true)
     const [buddySelecting, setBuddySelecting] = useState(false)
@@ -47,15 +45,13 @@ function StudentDashboard() {
     useEffect(() => {
         const load = async () => {
             try {
-                const [prog, rew, subs] = await Promise.all([
+                const [prog, rew] = await Promise.all([
                     fetchProgress(),
                     fetchRewards(),
-                    fetchSubmissions(),
                 ])
 
                 setProgress(prog)
                 setRewards(Array.isArray(rew) ? rew : [])
-                setSubmissions(Array.isArray(subs) ? subs : [])
             } finally {
                 setLoading(false)
             }
