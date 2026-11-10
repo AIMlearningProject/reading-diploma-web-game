@@ -422,6 +422,10 @@
     cursor: not-allowed;
 }
 
+.choose-title-confirm:not(:disabled):hover {
+    --book-fill: var(--book-sun-deep);
+}
+
 /* ── Pressed and focus, shared by the buttons above ──────── */
 
 .close-booklist-button:active,

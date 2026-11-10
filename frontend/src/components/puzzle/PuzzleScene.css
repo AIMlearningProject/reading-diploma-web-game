@@ -235,6 +235,10 @@
     --book-fill: var(--book-sun);
 }
 
+.ps-button--main:not(:disabled):hover {
+    --book-fill: var(--book-sun-deep);
+}
+
 /* ── Backpack row ─────────────────────────────────────── */
 
 .ps-tray {
@@ -329,6 +333,10 @@
 .ps-use:disabled {
     opacity: 0.4;
     cursor: default;
+}
+
+.ps-use:not(:disabled):hover {
+    --book-fill: var(--book-sun-deep);
 }
 
 /* Pressed: the shape drops onto its shadow, and the shadow goes. */

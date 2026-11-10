@@ -176,6 +176,10 @@
     cursor: default;
 }
 
+.student-add-book-submit-btn:not(:disabled):hover {
+    --book-fill: var(--book-sun-deep);
+}
+
 /* Pressed: the button drops onto its shadow, and the shadow goes. */
 .student-add-book-close-btn:active,
 .student-add-book-submit-btn:not(:disabled):active {

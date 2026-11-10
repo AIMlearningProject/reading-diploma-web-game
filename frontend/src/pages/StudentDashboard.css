@@ -100,6 +100,10 @@
     --book-fill: var(--book-sun);
 }
 
+.play-button:not(:disabled):hover {
+    --book-fill: var(--book-sun-deep);
+}
+
 .logout-button,
 .change-avatar-button {
     --book-fill: var(--book-paper);

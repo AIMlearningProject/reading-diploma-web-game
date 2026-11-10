@@ -122,6 +122,10 @@
     --book-fill: var(--book-sun);
 }
 
+.rq-button--next:not(:disabled):hover {
+    --book-fill: var(--book-sun-deep);
+}
+
 .rq-button--prev {
     --book-fill: var(--book-paper);
 }

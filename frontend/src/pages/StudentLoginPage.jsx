@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import InkFilter from '../components/ink/InkFilter'
@@ -24,6 +24,7 @@ function StudentLoginPage() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [submitting, setSubmitting] = useState(false)
+    const formRef = useRef(null)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -44,6 +45,19 @@ function StudentLoginPage() {
         }
     }
 
+    // Fills the form from the test accounts card. On a narrow screen the card sits
+    // above the form, so the form is scrolled into view to show what was filled.
+    const fillTestAccount = (account) => {
+        setTeacherName(TEST_TEACHER)
+        setStudentName(account.name)
+        setPassword(account.password)
+        setError('')
+        const form = formRef.current
+        if (form && form.getBoundingClientRect().top > window.innerHeight / 2) {
+            form.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+    }
+
     return (
         <div className="student-login-page" style={{ '--page-art': `url(${homeBG})` }}>
             <InkFilter />
@@ -56,7 +70,7 @@ function StudentLoginPage() {
                     <h2>Oppilaan kirjautuminen</h2>
                     <p className="subtitle">Kirjaudu opettajasi antamilla tunnuksilla</p>
 
-                    <form className="login-form" onSubmit={handleSubmit}>
+                    <form className="login-form" onSubmit={handleSubmit} ref={formRef}>
                         <div className="form-group">
                             <label>Opettajan nimi</label>
                             <span className="ink-field">
@@ -103,19 +117,30 @@ function StudentLoginPage() {
                 <aside className="student-login-card student-login-test-card ink-shape ink-drop">
                     <h2>Testitunnukset</h2>
                     <p className="subtitle">Testijakson aikana voit kokeilla peliä näillä tunnuksilla.</p>
+                    {/* translate="no" and notranslate keep browser translators off the
+                        names and passwords, which have to be typed exactly as shown. */}
                     <dl className="student-login-test-row">
                         <dt>Opettajan nimi</dt>
-                        <dd>{TEST_TEACHER}</dd>
+                        <dd translate="no" className="notranslate">{TEST_TEACHER}</dd>
                     </dl>
                     {TEST_ACCOUNTS.map(account => (
                         <div className="student-login-test-account" key={account.name}>
                             <dl className="student-login-test-row">
                                 <dt>Oppilaan nimi</dt>
-                                <dd>{account.name}</dd>
+                                <dd translate="no" className="notranslate">{account.name}</dd>
                                 <dt>Salasana</dt>
-                                <dd>{account.password}</dd>
+                                <dd translate="no" className="notranslate">{account.password}</dd>
                             </dl>
-                            <p className="student-login-test-note">{account.note}</p>
+                            <div className="student-login-test-footer">
+                                <p className="student-login-test-note">{account.note}</p>
+                                <button
+                                    type="button"
+                                    className="student-login-test-fill ink-shape ink-shape--thin ink-drop"
+                                    onClick={() => fillTestAccount(account)}
+                                >
+                                    Täytä
+                                </button>
+                            </div>
                         </div>
                     ))}
                     <p className="student-login-test-warning">Tunnukset ovat yhteisiä ja palautuvat alkutilaan, kun kirjaudut ulos. Älä kirjoita niihin oikeita tietoja.</p>

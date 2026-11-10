@@ -193,6 +193,7 @@
     --book-chip      : #f1e8d2;
     --book-chip-deep : #e2d4b2;
     --book-sun       : #e9b949;
+    --book-sun-deep  : #e4ab25; /* hover on the sun fill: the same step down as paper to chip */
     --book-hint      : #f3e9f3;
     --book-hint-ink  : #4a2f4b;
 

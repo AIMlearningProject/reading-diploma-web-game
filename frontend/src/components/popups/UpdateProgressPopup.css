@@ -205,6 +205,10 @@
     cursor: pointer;
 }
 
+.save-progress-button:not(:disabled):hover {
+    --book-fill: var(--book-sun-deep);
+}
+
 /* Pressed: the button drops onto its shadow, and the shadow goes. */
 .save-progress-button:active {
     transform: translate(calc(var(--book-drop) * 0.65), calc(var(--book-drop) * 0.75));
