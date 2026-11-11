@@ -40,11 +40,12 @@ function writeBest(id, value) {
 export default function MiniGameCanvas({ game, name, buddy, onClose }) {
     const canvasRef = useRef(null)
     const stateRef = useRef(null)
-    // pointerX is where a touch or a click sits across the stage, 0 at the left
-    // edge and 1 at the right, or null when nothing is held. A game that steers
-    // needs it; one that only needs a tap ignores it.
+    // pointerX and pointerY are where a touch or a click sits on the stage, 0 at
+    // the left and top edges and 1 at the right and bottom, or null when nothing
+    // is held. A game that steers needs them; one that only needs a tap ignores them.
     const inputRef = useRef({
-        pressed: false, justPressed: false, left: false, right: false, down: false, pointerX: null
+        pressed: false, justPressed: false, left: false, right: false, down: false,
+        pointerX: null, pointerY: null
     })
     // There is no start screen: a run is live from the moment the game opens and
     // simply holds still until the pupil's first input (see `waiting`).
@@ -132,6 +133,9 @@ export default function MiniGameCanvas({ game, name, buddy, onClose }) {
             if (down) inputRef.current.justPressed = true
         }
         const onDown = (event) => {
+            // The arrows steer the game, so the page behind must not scroll with
+            // them, held keys included.
+            if (event.key.startsWith('Arrow')) event.preventDefault()
             if (event.repeat) return
             switch (event.key) {
                 case ' ': case 'Spacebar': case 'Enter': case 'ArrowUp': {
@@ -174,15 +178,18 @@ export default function MiniGameCanvas({ game, name, buddy, onClose }) {
         }
     }, [onClose])
 
-    const pointerAcross = (event) => {
+    const share = (offset, size) => Math.min(Math.max(offset / size, 0), 1)
+
+    const placePointer = (event) => {
         const box = event.currentTarget.getBoundingClientRect()
-        if (box.width === 0) return null
-        return Math.min(Math.max((event.clientX - box.left) / box.width, 0), 1)
+        if (box.width === 0 || box.height === 0) return
+        inputRef.current.pointerX = share(event.clientX - box.left, box.width)
+        inputRef.current.pointerY = share(event.clientY - box.top, box.height)
     }
 
     const onPointerDown = (event) => {
         event.preventDefault()
-        inputRef.current.pointerX = pointerAcross(event)
+        placePointer(event)
         if (phaseRef.current === 'running') {
             inputRef.current.pressed = true
             inputRef.current.justPressed = true
@@ -192,12 +199,13 @@ export default function MiniGameCanvas({ game, name, buddy, onClose }) {
     }
 
     const onPointerMove = (event) => {
-        if (inputRef.current.pressed) inputRef.current.pointerX = pointerAcross(event)
+        if (inputRef.current.pressed) placePointer(event)
     }
 
     const onPointerUp = () => {
         inputRef.current.pressed = false
         inputRef.current.pointerX = null
+        inputRef.current.pointerY = null
     }
 
     return (

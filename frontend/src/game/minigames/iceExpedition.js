@@ -8,30 +8,72 @@
 // Driven by <MiniGameCanvas>: create() builds the state, update() advances it by
 // a fixed step, draw() paints it. Nothing here touches the DOM.
 
+import { loadArt } from './art.js'
+import bgUrl from '../../assets/minigames/jaaretki/bg.png'
+import charMattiUrl from '../../assets/minigames/jaaretki/char_matti.png'
+import charPandaUrl from '../../assets/minigames/jaaretki/char_panda.png'
+import charPpUrl from '../../assets/minigames/jaaretki/char_pp.png'
+import crevasseUrl from '../../assets/minigames/jaaretki/crevasse.png'
+import gustUrl from '../../assets/minigames/jaaretki/gust.png'
+
 const WIDTH = 640
 const HEIGHT = 400
-const GROUND = 318
+
+// The art is drawn at 2x, so a picture's logical size is half its pixels, and
+// every position below is the layer's place in the 1280x800 source halved.
+const art = loadArt({
+    bg: bgUrl,
+    charMatti: charMattiUrl,
+    charPanda: charPandaUrl,
+    charPp: charPpUrl,
+    crevasse: crevasseUrl,
+    gust: gustUrl
+})
+const SKY = '#c6d2fa'
+const ICE_MARK = '#c9d4f8'
+
+const GROUND = 319          // the top of the ice
+const FEET = 331            // where the buddies stand, a little into the snow
 
 // Fixed for the whole run, on purpose.
 const SPEED = 220           // px/s the glacier scrolls past
 const GAP_MIN = 1.15        // s between obstacles, low end
 const GAP_MAX = 1.6         // s between obstacles, high end
-const GRAVITY = 1900        // px/s²
-const JUMP = -620           // px/s given by one jump
-const RUNNER_X = 112
-const RUNNER_W = 28
-const STAND_H = 48
-const DUCK_H = 28
+const GRAVITY = 1500        // px/s²
+// One jump: 0.9 s in the air, 154 px up. The crevasse is wide, so this is what
+// leaves about half a second in which a press still clears it.
+const JUMP = -680           // px/s given by one jump
+const RUNNER_CX = 118       // the runner's centre across the stage
+const RUNNER_W = 44         // the body that collides, narrower than the picture
+const DUCK = 0.58           // how tall a ducking buddy stays
+const HAIR = 8              // px of hair on top that a gust may brush
+const LOW_HALF = 0.5        // a touch or click below this share of the stage ducks
 
-const CREVASSE_W = 40       // a hole in the ice: jump it
-const GUST_TOP = 248        // a gust blows across at head height: duck under it
-const GUST_BOTTOM = 288
-const GUST_W = 74
+const CREVASSE_HOLE = [12, 98]   // the part of the crevasse picture you fall into
+// The cloud is drawn smaller than the art, hanging from the same bottom edge so
+// it still blows at head height. Its body, without the loose snowflakes, is
+// measured on the art and scaled with it.
+const GUST_SCALE = 0.8
+const GUST_BOTTOM = 230
+const GUST_H = 106 * GUST_SCALE
+const GUST_Y = GUST_BOTTOM - GUST_H
+const GUST_BODY_X = [22 * GUST_SCALE, 148 * GUST_SCALE]
+const GUST_BODY_Y = [GUST_Y + 16 * GUST_SCALE, GUST_Y + 96 * GUST_SCALE]
 
-// Shapes that never change are built once from path data and reused.
-const UNIT_CIRCLE = new Path2D('M1 0A1 1 0 1 1 -1 0A1 1 0 1 1 1 0Z')
-// A peak drawn in a unit box, scaled to each mountain's width and height.
-const UNIT_PEAK = new Path2D('M0 0L0.5 -1L1 0Z')
+// The buddy runs: same picture for everyone, only the height differs.
+const RUNNERS = {
+    buddy_1: 'charPanda',
+    buddy_2: 'charPp',
+    buddy_3: 'charMatti'
+}
+const lookOf = (buddy) => RUNNERS[buddy] ?? RUNNERS.buddy_1
+
+/** The runner's height on screen, standing or ducking. */
+function runnerHeight(state) {
+    const image = art[lookOf(state.buddy)]
+    const standing = art.ready ? image.naturalHeight / 2 : 150
+    return state.isDucking ? standing * DUCK : standing
+}
 
 function addObstacle(state) {
     // Alternating is predictable and gusts alone are unreadable, so the kind is
@@ -40,16 +82,7 @@ function addObstacle(state) {
     const previous = state.obstacles.at(-1)
     const canGust = !previous || previous.kind !== 'gust'
     const kind = canGust && Math.random() < 0.42 ? 'gust' : 'crevasse'
-    state.obstacles.push({ kind, x: WIDTH + 40 })
-}
-
-function disc(ctx, x, y, radius) {
-    ctx.save()
-    ctx.translate(x, y)
-    ctx.scale(radius, radius)
-    // eslint-disable-next-line unicorn/no-array-fill-with-reference-type -- CanvasRenderingContext2D#fill, not Array#fill
-    ctx.fill(UNIT_CIRCLE)
-    ctx.restore()
+    state.obstacles.push({ kind, x: WIDTH + 20 })
 }
 
 const iceExpedition = {
@@ -58,53 +91,53 @@ const iceExpedition = {
     height: HEIGHT,
     unit: 'metriä',
     // Finnish, pupil-facing.
-    hint: 'Näppäin tai napautus = hyppy. Nuoli alas = kyykky.',
+    hint: 'Hyppy: näppäin tai napautus yläosaan. Kyykky: nuoli alas tai paina alaosaa.',
 
-    create() {
-        const state = {
-            y: GROUND,            // the runner's feet
-            vy: 0,
-            isDucking: false,
-            isAirborne: false,
-            obstacles: [],
-            nextIn: 1.6,
-            peaks: Array.from({ length: 9 }, (_, i) => ({
-                x: i * 90,
-                h: 40 + Math.random() * 54
-            })),
-            stride: 0,
-            scroll: 0,
-            distance: 0,
-            score: 0,
-            dead: false,
-            awake: false
-        }
-        return state
-    },
+    create: ({ buddy } = {}) => ({
+        buddy,
+        y: FEET,              // the runner's feet
+        vy: 0,
+        isDucking: false,
+        isAirborne: false,
+        obstacles: [],
+        nextIn: 1.6,
+        stride: 0,
+        scroll: 0,
+        distance: 0,
+        score: 0,
+        dead: false,
+        awake: false
+    }),
 
     update(state, dt, input) {
         if (state.dead) return
 
-        // The run waits until the first jump, so nothing is lost while the
+        // With a mouse or a finger, the upper half of the stage jumps and holding
+        // the lower half ducks, as the up and down keys do.
+        const isPointerLow = input.pointerY !== null && input.pointerY >= LOW_HALF
+        const wantsJump = input.justPressed && !isPointerLow
+        const wantsDuck = input.down || (input.pressed && isPointerLow)
+
+        // The run waits until the first press, so nothing is lost while the
         // pupil gets ready.
         if (!state.awake) {
             if (!input.justPressed) return
             state.awake = true
         }
 
-        if (input.justPressed && !state.isAirborne) {
+        if (wantsJump && !state.isAirborne) {
             state.vy = JUMP
             state.isAirborne = true
         }
         // Ducking in mid-air would be a second, hidden mechanic; keep it on the
         // ground where the pupil can see what it does.
-        state.isDucking = input.down && !state.isAirborne
+        state.isDucking = wantsDuck && !state.isAirborne
 
         if (state.isAirborne) {
             state.vy += GRAVITY * dt
             state.y += state.vy * dt
-            if (state.y >= GROUND) {
-                state.y = GROUND
+            if (state.y >= FEET) {
+                state.y = FEET
                 state.vy = 0
                 state.isAirborne = false
             }
@@ -115,14 +148,6 @@ const iceExpedition = {
         state.distance += SPEED * dt
         state.score = Math.floor(state.distance / 10)
 
-        for (const peak of state.peaks) {
-            peak.x -= SPEED * 0.25 * dt
-            if (peak.x + 90 < 0) {
-                peak.x += 9 * 90
-                peak.h = 40 + Math.random() * 54
-            }
-        }
-
         state.nextIn -= dt
         if (state.nextIn <= 0) {
             state.nextIn = GAP_MIN + Math.random() * (GAP_MAX - GAP_MIN)
@@ -130,24 +155,26 @@ const iceExpedition = {
         }
 
         for (const obstacle of state.obstacles) obstacle.x -= SPEED * dt
-        state.obstacles = state.obstacles.filter((obstacle) => obstacle.x + 120 > 0)
+        state.obstacles = state.obstacles.filter((obstacle) => obstacle.x + 200 > 0)
 
-        const height = state.isDucking ? DUCK_H : STAND_H
-        const top = state.y - height
-        const left = RUNNER_X
-        const right = RUNNER_X + RUNNER_W
+        const top = state.y - runnerHeight(state) + HAIR
+        const left = RUNNER_CX - RUNNER_W / 2
+        const right = RUNNER_CX + RUNNER_W / 2
 
         for (const obstacle of state.obstacles) {
             if (obstacle.kind === 'crevasse') {
                 // Only the ice carries you: over the hole, you are in it.
-                const isOverHole = right > obstacle.x && left < obstacle.x + CREVASSE_W
-                if (isOverHole && state.y >= GROUND) {
+                const holeLeft = obstacle.x + CREVASSE_HOLE[0]
+                const holeRight = obstacle.x + CREVASSE_HOLE[1]
+                const isOverHole = right > holeLeft && left < holeRight
+                if (isOverHole && state.y >= FEET) {
                     state.dead = true
                     return
                 }
             } else {
-                const isWithinX = right > obstacle.x && left < obstacle.x + GUST_W
-                if (isWithinX && top < GUST_BOTTOM && state.y > GUST_TOP) {
+                const isWithinX = right > obstacle.x + GUST_BODY_X[0] && left < obstacle.x + GUST_BODY_X[1]
+                const isWithinY = top < GUST_BODY_Y[1] && state.y > GUST_BODY_Y[0]
+                if (isWithinX && isWithinY) {
                     state.dead = true
                     return
                 }
@@ -156,91 +183,53 @@ const iceExpedition = {
     },
 
     draw(ctx, state) {
-        const sky = ctx.createLinearGradient(0, 0, 0, HEIGHT)
-        sky.addColorStop(0, '#9fc4e4')
-        sky.addColorStop(1, '#dfeaf4')
-        ctx.fillStyle = sky
+        ctx.fillStyle = SKY
         ctx.fillRect(0, 0, WIDTH, HEIGHT)
+        // Until the pictures have decoded the run is simply sky.
+        if (!art.ready) return
 
-        ctx.fillStyle = '#eef5fb'
-        for (const peak of state.peaks) {
-            ctx.save()
-            ctx.translate(peak.x - 10, GROUND)
-            ctx.scale(110, peak.h)
-            // eslint-disable-next-line unicorn/no-array-fill-with-reference-type -- CanvasRenderingContext2D#fill, not Array#fill
-            ctx.fill(UNIT_PEAK)
-            ctx.restore()
-        }
+        ctx.drawImage(art.bg, 0, 0, WIDTH, HEIGHT)
 
-        // The ice, with the crevasses cut out of it.
-        ctx.fillStyle = '#ffffff'
-        ctx.fillRect(0, GROUND, WIDTH, HEIGHT - GROUND)
-        ctx.strokeStyle = '#c9dcec'
-        ctx.lineWidth = 2
+        // Short marks on the ice, so the ground is seen to move.
+        ctx.strokeStyle = ICE_MARK
+        ctx.lineWidth = 3
+        ctx.lineCap = 'round'
         ctx.beginPath()
         for (let x = -state.scroll; x < WIDTH; x += 64) {
-            ctx.moveTo(x, GROUND + 18)
-            ctx.lineTo(x + 34, GROUND + 18)
+            ctx.moveTo(x, GROUND + 30)
+            ctx.lineTo(x + 22, GROUND + 30)
+            ctx.moveTo(x + 32, GROUND + 58)
+            ctx.lineTo(x + 46, GROUND + 58)
         }
         ctx.stroke()
 
         for (const obstacle of state.obstacles) {
             if (obstacle.kind === 'crevasse') {
-                const hole = ctx.createLinearGradient(0, GROUND, 0, HEIGHT)
-                hole.addColorStop(0, '#5c93b8')
-                hole.addColorStop(1, '#0c3149')
-                ctx.fillStyle = hole
-                ctx.fillRect(obstacle.x, GROUND, CREVASSE_W, HEIGHT - GROUND)
-                // The lip of the hole, as a rect rather than a stroked path:
-                // the same two points every frame are not worth a new path.
-                ctx.fillStyle = '#9fc4e4'
-                ctx.fillRect(obstacle.x, GROUND - 2, CREVASSE_W, 4)
-            } else {
-                ctx.strokeStyle = 'rgba(255,255,255,0.95)'
-                ctx.lineWidth = 5
-                ctx.lineCap = 'round'
-                ctx.beginPath()
-                for (let i = 0; i < 3; i++) {
-                    const y = GUST_TOP + 8 + i * 14
-                    ctx.moveTo(obstacle.x, y)
-                    ctx.quadraticCurveTo(obstacle.x + GUST_W / 2, y - 9, obstacle.x + GUST_W, y)
-                }
-                ctx.stroke()
-                ctx.strokeStyle = 'rgba(159,196,228,0.85)'
-                ctx.lineWidth = 3
-                ctx.beginPath()
-                for (let i = 0; i < 3; i++) {
-                    const y = GUST_TOP + 14 + i * 14
-                    ctx.moveTo(obstacle.x + 12, y)
-                    ctx.quadraticCurveTo(obstacle.x + GUST_W / 2, y - 7, obstacle.x + GUST_W - 10, y)
-                }
-                ctx.stroke()
+                const image = art.crevasse
+                ctx.drawImage(image, obstacle.x, GROUND, image.naturalWidth / 2, image.naturalHeight / 2)
             }
         }
 
-        // The runner: a bundled-up walker, red hood so it reads against the ice.
-        const height = state.isDucking ? DUCK_H : STAND_H
-        const top = state.y - height
-        ctx.fillStyle = '#b8402f'
-        ctx.strokeStyle = '#1e3a5f'
-        ctx.lineWidth = 3
-        ctx.beginPath()
-        ctx.roundRect(RUNNER_X, top, RUNNER_W, height, 8)
-        ctx.fill()
-        ctx.stroke()
-        ctx.fillStyle = '#f0dfc0'
-        disc(ctx, RUNNER_X + RUNNER_W / 2 + (state.isDucking ? 4 : 0), top + 10, 8)
+        // The buddy, bobbing as it runs and squashed down when it ducks.
+        const image = art[lookOf(state.buddy)]
+        const w = image.naturalWidth / 2
+        const h = image.naturalHeight / 2
+        const bob = state.isAirborne ? 0 : Math.abs(Math.sin(state.stride)) * 4
+        const tilt = state.isAirborne ? -0.08 : Math.sin(state.stride * 2) * 0.04
+        ctx.save()
+        ctx.translate(RUNNER_CX, state.y - bob)
+        ctx.rotate(tilt)
+        if (state.isDucking) ctx.scale(1.12, DUCK)
+        ctx.drawImage(image, -w / 2, -h, w, h)
+        ctx.restore()
 
-        if (!state.isAirborne) {
-            const swing = Math.sin(state.stride * 2) * 8
-            ctx.strokeStyle = '#1e3a5f'
-            ctx.lineWidth = 4
-            ctx.beginPath()
-            ctx.moveTo(RUNNER_X + 9, state.y)
-            ctx.lineTo(RUNNER_X + 9 - swing, state.y + 8)
-            ctx.moveTo(RUNNER_X + 19, state.y)
-            ctx.lineTo(RUNNER_X + 19 + swing, state.y + 8)
-            ctx.stroke()
+        // Gusts blow in front of the buddy.
+        for (const obstacle of state.obstacles) {
+            if (obstacle.kind === 'gust') {
+                const cloud = art.gust
+                const w = (cloud.naturalWidth / 2) * GUST_SCALE
+                ctx.drawImage(cloud, obstacle.x, GUST_Y, w, GUST_H)
+            }
         }
     }
 }
