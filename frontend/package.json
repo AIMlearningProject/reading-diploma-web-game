@@ -10,7 +10,9 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "lint:tokens": "node scripts/check-tokens.mjs",
     "lint:shapes": "node scripts/check-shapes.mjs",
-    "lint:ink": "node scripts/check-ink-fields.mjs"
+    "lint:ink": "node scripts/check-ink-fields.mjs",
+    "lint:case": "node scripts/check-import-case.mjs",
+    "deploy:wait": "node scripts/wait-for-deploy.mjs"
   },
   "dependencies": {
     "phaser": "^3.60.0",
