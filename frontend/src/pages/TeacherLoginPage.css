@@ -60,6 +60,25 @@
  * colour fade), and page CSS is global, so every property they set is
  * overridden here, hover and active included. */
 
+/* Why only Google: a plain line under the button it is about, a size smaller. */
+.login-card p.teacher-login-google-note {
+    margin: 1rem 0 0;
+    color: var(--ink-700);
+    font-size: 0.85rem;
+    font-style: normal;
+    line-height: 1.5;
+}
+
+.teacher-login-google-note a {
+    color: var(--navy-700);
+    font-weight: 800;
+}
+
+.teacher-login-google-note a:focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 2px;
+}
+
 /* ── Back Button ─────────────────────────────────────────── */
 /* A secondary button, drawn as the teacher side draws one on paper (the
  * invite section's copy button): transparent, a brass hairline, the radius

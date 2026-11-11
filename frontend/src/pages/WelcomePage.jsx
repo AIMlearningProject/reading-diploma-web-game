@@ -1,6 +1,7 @@
 import bookIcon from '../assets/icons/book_50.png'
 import compassIcon from '../assets/icons/compass_50.png'
 import InkIcon from '../components/ink/InkIcon'
+import { FEEDBACK_FORM_URL } from '../links'
 import { useNavigate } from 'react-router-dom'
 import InkFilter from '../components/ink/InkFilter'
 import './WelcomePage.css'
@@ -38,7 +39,7 @@ function WelcomePage() {
             <div className="welcome-notes">
                 <p>
                     Jätä palautetta / leave feedback{' '}
-                    <a href='https://docs.google.com/forms/d/e/1FAIpQLSc7E9irvWsfvF8Zb4D505cs5p9U9kiqt4TQwRHINyRFFnQkXg/viewform?usp=publish-editor' target="_blank" rel="noopener noreferrer">
+                    <a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener noreferrer">
                         Google Forms
                     </a>
                 </p>

@@ -5,6 +5,7 @@ import './TeacherLoginPage.css'
 import homeBG from '../assets/HomeBG1.jpg'
 import SiteLogo from '../components/SiteLogo'
 import { fetchTestTeacherLogin } from '../services/api'
+import { FEEDBACK_FORM_URL } from '../links'
 
 function TeacherLoginPage() {
     const navigate = useNavigate()
@@ -43,6 +44,14 @@ function TeacherLoginPage() {
                     <button className="google-button" onClick={handleGoogleLogin}>
                         Kirjaudu Google-tilillä
                     </button>
+                    <p className="teacher-login-google-note">
+                        Kirjautuminen on toistaiseksi mahdollista vain Google-tilillä, koska se on
+                        turvallinen ja nopea tapa. Jos tarvitset jonkin muun kirjautumistavan, kerro
+                        siitä meille{' '}
+                        <a href={FEEDBACK_FORM_URL} target="_blank" rel="noopener noreferrer">
+                            palautelomakkeella
+                        </a>.
+                    </p>
                 </div>
                 {/* Public test period only. When it ends, remove this card, its
                     handler above and its section in TeacherLoginPage.css. */}
