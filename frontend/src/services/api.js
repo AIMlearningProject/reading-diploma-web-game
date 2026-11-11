@@ -48,6 +48,11 @@ export async function fetchLogin(identifier, password, teacher_name) {
         })
     })
 }
+// Public test period only: logs in as a new test teacher with a copy of the test class.
+export async function fetchTestTeacherLogin() {
+    await fetch('/auth/csrf-token')
+    return request('/auth/test-teacher', { method: 'POST' })
+}
 // Book endpoints
 export function fetchBooks() { return request('/api/books'); } // Unused
 export function fetchMyBooks() { return request('/api/books/my-books'); }

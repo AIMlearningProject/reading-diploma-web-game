@@ -251,3 +251,34 @@ export async function writeStudentState(knex, { studentId, student, books }) {
         await knex('rewards').insert([...rewards, ...extraRewards])
     }
 }
+
+/**
+ * Creates a student with its progress, nodes, submissions and rewards.
+ *
+ * With `copy` the student goes into a visitor's own test class
+ * (services/testAccountService.js): no email, which must be unique, and no
+ * `test_account` mark, because the copy is deleted rather than reset.
+ *
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<number> } the new student's id
+ */
+export async function insertStudent(knex, { student, teacherId, books, passwordHash = student.passwordHash, copy = false }) {
+    const readingBook = student.readingBook === undefined ? null : books[student.readingBook]
+    const [row] = await knex('users')
+        .insert({
+            email: copy ? null : student.email,
+            name: student.name,
+            password_hash: passwordHash,
+            avatar: '',
+            currently_reading: readingBook ? readingBook.id : null,
+            grade: student.grade,
+            role: 'student',
+            teacher_id: teacherId,
+            test_account: !copy && student.publicTestAccount ? student.name : null
+        })
+        .returning('id')
+
+    await writeStudentState(knex, { studentId: row.id, student, books })
+
+    return row.id
+}

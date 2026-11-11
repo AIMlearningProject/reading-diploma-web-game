@@ -1,7 +1,9 @@
 /* ── Page Shell ──────────────────────────────────────────── */
 .teacher-login-page {
     /* The ground is in ground.css. */
-    height: 100vh;
+    /* min-height: with the test card the page can be taller than the screen,
+     * and a fixed height would cut its top off. */
+    min-height: 100vh;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -90,7 +92,8 @@
 }
 
 .teacher-login-page .back-button:focus-visible,
-.teacher-login-page .google-button:focus-visible {
+.teacher-login-page .google-button:focus-visible,
+.teacher-login-page .teacher-login-test-button:focus-visible {
     outline: 3px solid var(--navy-700);
     outline-offset: 2px;
 }
@@ -98,7 +101,8 @@
 /* ── Google Button ───────────────────────────────────────── */
 /* The page's primary action, drawn as the teacher dashboard's primary button
  * (.add-button): flat --book-sun, a straight hairline, the radius tier. */
-.teacher-login-page .google-button {
+.teacher-login-page .google-button,
+.teacher-login-page .teacher-login-test-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -121,16 +125,91 @@
     transition: background 0.15s ease;
 }
 
-.teacher-login-page .google-button:hover {
+.teacher-login-page .google-button:hover,
+.teacher-login-page .teacher-login-test-button:not(:disabled):hover {
     background: var(--brass-200);
     box-shadow: none;
     transform: none;
 }
 
-.teacher-login-page .google-button:active {
+.teacher-login-page .google-button:active,
+.teacher-login-page .teacher-login-test-button:not(:disabled):active {
     background: var(--brass-300);
     box-shadow: none;
     transform: translateY(1px);
+}
+
+/* ── Test Card ───────────────────────────────────────────── */
+/* Only for the public test period, see handleTestTeacherLogin in
+ * TeacherLoginPage.jsx. Beside the login card on a wide screen, and first on a
+ * narrow one, where below it a tester would not know it is there. Drawn in the
+ * teacher pages' flat style, as the login card beside it. */
+.teacher-login-columns {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+}
+
+/* border-box: with the padding outside the width a card was wider than a phone
+ * screen. 576px is what the login card measured on a desktop before. */
+.teacher-login-page .login-card {
+    box-sizing: border-box;
+    width: min(100%, 576px);
+}
+
+.teacher-login-page .login-card.teacher-login-test-card {
+    width: min(100%, 480px);
+    text-align: left;
+}
+
+.teacher-login-test-card h3 {
+    margin: 1.5rem 0 0.4rem;
+    color: var(--navy-700);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.login-card.teacher-login-test-card p {
+    margin: 0 0 0.75rem;
+    color: var(--ink-700);
+    font-size: 0.95rem;
+    font-style: normal;
+    line-height: 1.5;
+}
+
+/* A plain line under the button it is about, a size smaller. */
+.login-card.teacher-login-test-card .teacher-login-test-notice {
+    font-size: 0.85rem;
+}
+
+.login-card.teacher-login-test-card .teacher-login-test-error {
+    color: var(--state-danger);
+    font-weight: 800;
+}
+
+.teacher-login-page .teacher-login-test-button {
+    margin: 0.25rem 0 0.5rem;
+}
+
+.teacher-login-page .teacher-login-test-button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+@media (max-width: 1140px) {
+    .teacher-login-columns {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .teacher-login-page .login-card.teacher-login-test-card {
+        order: -1;
+        width: min(100%, 576px);
+    }
 }
 
 /* ── Animations ──────────────────────────────────────────── */

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import { seed as seedDiplomaBooks } from './00_diploma_books.js'
-import { STUDENTS, TEACHER_BOOKS, writeStudentState } from './data/testStudents.js'
+import { STUDENTS, TEACHER_BOOKS, insertStudent } from './data/testStudents.js'
 
 /**
  * Development test data.
@@ -31,26 +31,6 @@ const OTHER_TEACHER_BOOKS = [
 const OTHER_STUDENTS = [
     { name: 'Elias', password: 'Test123!', grade: 3, email: null, levels: [] }
 ]
-
-async function insertStudent(knex, { student, teacherId, books }) {
-    const [row] = await knex('users')
-        .insert({
-            email: student.email,
-            name: student.name,
-            password_hash: student.passwordHash,
-            avatar: '',
-            currently_reading: student.readingBook === undefined ? null : books[student.readingBook].id,
-            grade: student.grade,
-            role: 'student',
-            teacher_id: teacherId,
-            test_account: student.publicTestAccount ? student.name : null
-        })
-        .returning('id')
-
-    await writeStudentState(knex, { studentId: row.id, student, books })
-
-    return row.id
-}
 
 export async function seed(knex) {
     // Wipes all application data and resets the id sequences so the test set is

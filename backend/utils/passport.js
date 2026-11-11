@@ -98,6 +98,9 @@ passport.deserializeUser(async (id, done) => {
         }
         done(null, user)
     } catch (error) {
+        // The user was deleted while logged in: a pupil removed by the teacher, or a
+        // visitor's test teacher and its class. Ends the session like a logout.
+        if (error.status === 404) return done(null, false)
         done(error, null)
     }
 })

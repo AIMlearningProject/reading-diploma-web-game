@@ -832,3 +832,105 @@ describe('public test account reset', () => {
         expect((await db('users').where({ id: aino.id }).first()).name).toBe('Vierailija')
     })
 })
+
+describe('visitor test teacher', () => {
+    const addSession = (userId, minutesSinceLastRequest) => db('session').insert({
+        sid: `teacher-${userId}-${minutesSinceLastRequest}`,
+        sess: JSON.stringify({ passport: { user: userId } }),
+        expire: db.raw('now() + interval \'1 day\' - make_interval(mins => ?)', [minutesSinceLastRequest])
+    })
+    const exists = async (id) => Boolean(await db('users').where({ id }).first('id'))
+    const makeOld = (id) => db('users').where({ id }).update({ test_account: `teacher:${Date.now() - 60 * 60 * 1000}` })
+
+    beforeEach(async () => {
+        process.env.TEST_ACCOUNT_RESET = 'true'
+        await db('session').del()
+    })
+
+    afterEach(() => {
+        delete process.env.TEST_ACCOUNT_RESET
+    })
+
+    test('gets a copy of the seeded class', async () => {
+        const teacher = await TestAccountService.createTestTeacher()
+
+        expect(teacher.role).toBe('teacher')
+        expect(teacher.name).toMatch(/^Testiopettaja \d{4}$/)
+        expect(teacher.password_hash).toBeNull()
+        expect(teacher.test_account.startsWith('teacher:')).toBe(true)
+
+        const students = await db('users').where({ teacher_id: teacher.id }).orderBy('name')
+        expect(students.map((student) => student.name).sort()).toStrictEqual(STUDENTS.map((student) => student.name).sort())
+        expect(students.every((student) => student.email === null && student.test_account === null)).toBe(true)
+        for (const student of students) {
+            expect(await db('progress').where({ user: student.id })).toHaveLength(8)
+        }
+
+        expect(await db('books').where({ added_by: teacher.id })).toHaveLength(TEACHER_BOOKS.length)
+        const aino = students.find((student) => student.name === 'Aino')
+        expect(await db('books').where({ added_by: aino.id })).toHaveLength(2)
+        expect(await db('rewards').where({ owner: aino.id })).toHaveLength(2)
+    })
+
+    test('gives two visitors two different teachers', async () => {
+        const first = await TestAccountService.createTestTeacher()
+        const second = await TestAccountService.createTestTeacher()
+
+        expect(second.id).not.toBe(first.id)
+        expect(second.name).not.toBe(first.name)
+    })
+
+    test('is deleted with its whole class on logout', async () => {
+        const teacher = await TestAccountService.createTestTeacher()
+        const studentIds = await db('users').where({ teacher_id: teacher.id }).pluck('id')
+
+        await TestAccountService.resetIfUnused(teacher.id)
+
+        expect(await exists(teacher.id)).toBe(false)
+        expect(await db('users').whereIn('id', studentIds)).toHaveLength(0)
+        expect(await db('books').where({ added_by: teacher.id })).toHaveLength(0)
+    })
+
+    test('is kept while another of its sessions is in use', async () => {
+        const teacher = await TestAccountService.createTestTeacher()
+        await addSession(teacher.id, 5)
+
+        await TestAccountService.resetIfUnused(teacher.id)
+
+        expect(await exists(teacher.id)).toBe(true)
+    })
+
+    test('left without logging out is deleted when the next visitor starts', async () => {
+        const abandoned = await TestAccountService.createTestTeacher()
+        await makeOld(abandoned.id)
+
+        await TestAccountService.createTestTeacher()
+
+        expect(await exists(abandoned.id)).toBe(false)
+        expect(await db('users').where({ teacher_id: abandoned.id })).toHaveLength(0)
+    })
+
+    test('is kept while its session is less than a day old', async () => {
+        const away = await TestAccountService.createTestTeacher()
+        await makeOld(away.id)
+        await addSession(away.id, 120)
+
+        await TestAccountService.createTestTeacher()
+
+        expect(await exists(away.id)).toBe(true)
+    })
+
+    test('is kept when it was just created and its session is not saved yet', async () => {
+        const fresh = await TestAccountService.createTestTeacher()
+
+        await TestAccountService.createTestTeacher()
+
+        expect(await exists(fresh.id)).toBe(true)
+    })
+
+    test('is refused without TEST_ACCOUNT_RESET', async () => {
+        delete process.env.TEST_ACCOUNT_RESET
+
+        await expect(TestAccountService.createTestTeacher()).rejects.toMatchObject({ status: 404 })
+    })
+})

@@ -104,6 +104,26 @@ authRouter.post('/login', loginLimiter, middleware.requireAuthentication(false),
     })(request, response, next)
 })
 
+// Public test period only: a visitor's own test teacher with a copy of the seeded class.
+// Deleted again on logout, see TestAccountService.
+authRouter.post('/test-teacher', loginLimiter, middleware.requireAuthentication(false), async (request, response, next) => {
+    try {
+        const teacher = await TestAccountService.createTestTeacher()
+        request.logIn(teacher, (err) => {
+            if (err) return next(err)
+
+            return response.status(200).json({
+                id: teacher.id,
+                email: teacher.email,
+                username: teacher.name,
+                role: teacher.role
+            })
+        })
+    } catch (error) {
+        next(error)
+    }
+})
+
 authRouter.post('/logout', middleware.requireAuthentication(true), (request, response, next) => {
     const userId = request.user.id
     request.logout((err) => {

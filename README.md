@@ -270,12 +270,19 @@ cd backend && npm run db:seed:test
 Then open `http://localhost:5173`, and run this in the browser console (F12):
 
 ```js
-fetch('/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ identifier: 'teacher', password: 'teacher' })
-}).then(r => r.json()).then(d => { console.log(d); window.location.href = '/teacher/dashboard' })
+fetch('/auth/csrf-token')
+    .then(r => r.status === 200 ? r.json() : {})
+    .then(({ csrf }) => fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...(csrf && { 'X-CSRF-TOKEN': csrf }) },
+        body: JSON.stringify({ identifier: 'teacher', password: 'teacher' })
+    }))
+    .then(r => r.json()).then(d => { console.log(d); window.location.href = '/teacher/dashboard' })
 ```
+
+The same snippet works on a production build, such as the public test site. There the CSRF
+check is on, so it first fetches a token from `/auth/csrf-token`. In development that route
+answers 204 without a token, and the snippet logs in without one.
 
 The seed creates two teachers, `teacher` / `teacher` and `Virtanen` / `Test123!`, and a
 class of pupils covering every state the dashboard has to show. Pupils log in normally at
