@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { INK } from './constants.js';
+import { INK, renderScale } from './constants.js';
 
 /**
  * The hand-drawn edge of ink.css, for the canvas. The canvas cannot use the
@@ -13,6 +13,8 @@ import { INK } from './constants.js';
  */
 
 const PAD = 10;
+// The padding holds the displaced edge, so it grows with the pixel ratio.
+const pad = () => PAD * renderScale();
 const FIELD = 512;
 const PANEL_AMOUNT = 9;
 const SMALL_AMOUNT = 5;
@@ -76,13 +78,16 @@ function displacePixel(from, to, x, y, cw, ch, at, amount) {
     to[b + 3] = 255;
 }
 
+// `amount` is the displacement in CSS pixels.
 function bake(width, height, paint, { amount = PANEL_AMOUNT, seed = 0 } = {}) {
     ensureField();
+    const rs = renderScale();
+    const p = pad();
     const canvas = document.createElement('canvas');
-    canvas.width = Math.ceil(width + PAD * 2);
-    canvas.height = Math.ceil(height + PAD * 2);
+    canvas.width = Math.ceil(width + p * 2);
+    canvas.height = Math.ceil(height + p * 2);
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
-    ctx.translate(PAD, PAD);
+    ctx.translate(p, p);
     paint(ctx);
 
     const { width: cw, height: ch } = canvas;
@@ -91,10 +96,13 @@ function bake(width, height, paint, { amount = PANEL_AMOUNT, seed = 0 } = {}) {
     const offX = Math.round(seed * 53.7);
     const offY = Math.round(seed * 91.3);
 
+    // The field is read in CSS pixels, so a wobble keeps its wavelength and its
+    // depth relative to the shape whatever the pixel ratio is.
+    const amp = amount * rs;
     for (let y = 0; y < ch; y++) {
-        const row = ((y + offY) & (FIELD - 1)) * FIELD;
+        const row = ((Math.round(y / rs) + offY) & (FIELD - 1)) * FIELD;
         for (let x = 0; x < cw; x++) {
-            displacePixel(from.data, to.data, x, y, cw, ch, row + ((x + offX) & (FIELD - 1)), amount);
+            displacePixel(from.data, to.data, x, y, cw, ch, row + ((Math.round(x / rs) + offX) & (FIELD - 1)), amp);
         }
     }
 
@@ -110,11 +118,12 @@ function addTexture(scene, key, canvas) {
 
 function ditherTile() {
     const tile = document.createElement('canvas');
-    tile.width = tile.height = INK.DOT * 2;
+    const dot = INK.DOT * renderScale();
+    tile.width = tile.height = dot * 2;
     const g = tile.getContext('2d');
     g.fillStyle = INK.OUTLINE;
-    g.fillRect(0, 0, INK.DOT, INK.DOT);
-    g.fillRect(INK.DOT, INK.DOT, INK.DOT, INK.DOT);
+    g.fillRect(0, 0, dot, dot);
+    g.fillRect(dot, dot, dot, dot);
     return tile;
 }
 
@@ -134,7 +143,7 @@ export function inkShape(scene, x, y, width, height, options = {}) {
     if (!scene.textures.exists(key)) {
         const shape = bake(w, h, (g) => {
             g.beginPath();
-            g.roundRect(l / 2, l / 2, w - l, h - l, Math.max(1, r - l / 2));
+            g.roundRect(l / 2, l / 2, w - l, h - l, Math.max(renderScale(), r - l / 2));
             if (fill) {
                 g.fillStyle = fill;
                 g.fill();
@@ -142,7 +151,7 @@ export function inkShape(scene, x, y, width, height, options = {}) {
             g.lineWidth = l;
             g.strokeStyle = INK.OUTLINE;
             g.stroke();
-        }, { seed, amount: Math.min(w, h) < 80 ? SMALL_AMOUNT : PANEL_AMOUNT });
+        }, { seed, amount: Math.min(w, h) < 80 * renderScale() ? SMALL_AMOUNT : PANEL_AMOUNT });
 
         const canvas = document.createElement('canvas');
         canvas.width = shape.width + d;
@@ -151,7 +160,7 @@ export function inkShape(scene, x, y, width, height, options = {}) {
         if (d) {
             ctx.save();
             ctx.beginPath();
-            ctx.roundRect(PAD + d * 0.9, PAD + d, w, h, r);
+            ctx.roundRect(pad() + d * 0.9, pad() + d, w, h, r);
             ctx.clip();
             ctx.fillStyle = ctx.createPattern(ditherTile(), 'repeat');
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -162,14 +171,14 @@ export function inkShape(scene, x, y, width, height, options = {}) {
     }
 
     const image = scene.add.image(x, y, key);
-    return image.setOrigin(PAD / image.width, PAD / image.height);
+    return image.setOrigin(pad() / image.width, pad() / image.height);
 }
 
 /** A round shape, placed by its centre. */
 export function inkCircle(scene, x, y, radius, options = {}) {
     const image = inkShape(scene, 0, 0, radius * 2, radius * 2, { ...options, radius });
     return image
-        .setOrigin((PAD + radius) / image.width, (PAD + radius) / image.height)
+        .setOrigin((pad() + radius) / image.width, (pad() + radius) / image.height)
         .setPosition(x, y);
 }
 
@@ -183,13 +192,13 @@ export function inkDrawing(scene, key, width, height, paint, options = {}) {
         addTexture(scene, key, bake(width, height, paint, { amount: 6, ...options }));
     }
     const image = scene.add.image(0, 0, key);
-    return image.setOrigin(PAD / image.width, PAD / image.height);
+    return image.setOrigin(pad() / image.width, pad() / image.height);
 }
 
 /** A hit area for an image from inkCircle(), in its texture's coordinates. */
 export function circleHitArea(radius) {
     return {
-        hitArea: new Phaser.Geom.Circle(PAD + radius, PAD + radius, radius),
+        hitArea: new Phaser.Geom.Circle(pad() + radius, pad() + radius, radius),
         hitAreaCallback: Phaser.Geom.Circle.Contains,
         useHandCursor: true
     };

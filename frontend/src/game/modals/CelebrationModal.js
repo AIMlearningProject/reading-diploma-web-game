@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import ReadingState from '../state.js';
-import { CSS_COLORS, DEPTHS, FONTS } from '../ui/constants.js';
+import { CSS_COLORS, DEPTHS, FONTS, renderScale } from '../ui/constants.js';
 import { ICON_KEYS, iconImage } from '../ui/icons.js';
 import { makeInkButton, makeInkPanel } from '../ui/panels.js';
 
@@ -20,7 +20,8 @@ export default class CelebrationModal {
         this.destroy();
 
         const { width, height } = this.scene.scale;
-        const s = Phaser.Math.Clamp(width / 1200, 0.8, 1.2);
+        const r = renderScale();
+        const s = Phaser.Math.Clamp(width / r / 1200, 0.8, 1.2) * r;
 
         this.celebrationUI = this.scene.add.container(0, 0).setDepth(DEPTHS.CELEBRATION).setScrollFactor(0);
 

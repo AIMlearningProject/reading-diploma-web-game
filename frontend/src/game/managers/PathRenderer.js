@@ -1,4 +1,4 @@
-import { DEPTHS, INK } from '../ui/constants.js';
+import { DEPTHS, INK, px } from '../ui/constants.js';
 import { inkDrawing, strokeDashed } from '../ui/ink.js';
 
 const STEPS = 20;
@@ -50,7 +50,7 @@ export default class PathRenderer {
 
         const curve = routeCurve(pointPositions);
         const cut = routeSample(targetIndex);
-        const weight = Math.max(2, INK.MID * scale);
+        const weight = Math.max(px(2), INK.MID * scale);
 
         const stroke = (g, points, lineWidth, color) => {
             g.strokeStyle = color;

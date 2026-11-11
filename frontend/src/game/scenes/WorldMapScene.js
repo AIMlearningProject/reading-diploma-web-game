@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import ReadingState from '../state.js';
 import { preloadIcons, ICON_KEYS } from '../ui/icons.js';
-import { INK, uiScale as calcUiScale } from '../ui/constants.js';
+import { INK, uiScale as calcUiScale, px, renderScale } from '../ui/constants.js';
 import { makeContinentSign, makeInkBadge, makeInkTooltip } from '../ui/panels.js';
 import { preloadDesk, createDeskBackdrop, fitRect } from '../ui/desk.js';
 import { buddyHeight, buddyKey, preloadBuddy } from '../ui/buddy.js';
@@ -78,7 +78,7 @@ class WorldMapScene extends Phaser.Scene {
             const s = this.mapScale;
             this.routeImage = inkDrawing(this, key, w, h, (g) => {
                 g.strokeStyle = INK.OUTLINE;
-                g.lineWidth = Math.max(2, INK.SMALL * s);
+                g.lineWidth = Math.max(px(2), INK.SMALL * s);
                 g.lineCap = 'round';
                 for (let i = 0; i < CONTINENTS.length - 1; i++) {
                     const ax = mapX(CONTINENTS[i].x);
@@ -162,7 +162,7 @@ class WorldMapScene extends Phaser.Scene {
         // --- 3. Corner badges ---
         const { width: initW } = this.scale;
         const uiS = calcUiScale(initW);
-        const margin = 18;
+        const margin = 18 * renderScale();
 
         const kirjat = makeInkBadge(
             this, margin, margin,

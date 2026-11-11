@@ -1,5 +1,6 @@
 // Drawn by build/maps/draw_desk.py, in the same ink style as the map sheets.
 import woodDeskImg from '../../assets/maps/desk.jpg';
+import { px } from './constants.js';
 
 /**
  * The wooden desk every map sheet is laid on. Maps are fitted whole into the
@@ -121,7 +122,7 @@ export function createDeskBackdrop(scene) {
             scene.textures.remove(mapShadowKey);
         }
         mapShadowKey = key;
-        ensureMapShadowTexture(scene, key, width, height, Math.max(10, Math.min(width, height) * 0.035));
+        ensureMapShadowTexture(scene, key, width, height, Math.max(px(10), Math.min(width, height) * 0.035));
         mapShadow = scene.add.image(mapRect.x + width / 2, mapRect.y + height / 2, key)
             .setDepth(DESK_DEPTHS.MAP_SHADOW).setScrollFactor(0);
     };

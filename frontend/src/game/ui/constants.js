@@ -44,6 +44,24 @@ export const FONTS = {
     BODY:    'Nunito, sans-serif',
 };
 
+// Phaser removed the `resolution` scale option in 3.16, so the game size itself
+// carries the device pixel ratio and the scale manager's zoom divides it back
+// out. Every size in this file is in CSS pixels and is multiplied by this.
+// Capped at 3 so a 4x phone does not ask for a 16x pixel budget.
+export function renderScale() {
+    return Math.min(window.devicePixelRatio || 1, 3);
+}
+
+// A figure written in CSS pixels, as game-space pixels. Every hard minimum,
+// threshold and padding in the canvas UI goes through this, or it would mean
+// half as much on a 2x screen as it does on a 1x one.
+export function px(n) {
+    return n * renderScale();
+}
+
+// `width` is a game-space width, so it is divided back to CSS pixels before the
+// clamp and multiplied again afterwards.
 export function uiScale(width) {
-    return Phaser.Math.Clamp(width / 1200, 0.7, 1.2);
+    const r = renderScale();
+    return Phaser.Math.Clamp(width / r / 1200, 0.7, 1.2) * r;
 }

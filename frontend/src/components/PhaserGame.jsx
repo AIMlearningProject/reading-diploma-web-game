@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Phaser from 'phaser';
 import createGameConfig from '../game/config.js';
+import { renderScale } from '../game/ui/constants.js';
 import ReadingState from '../game/state.js';
 import ReactQuiz from './popups/ReactQuiz';
 import BookListPanel from './popups/BookListPanel';
@@ -117,7 +118,9 @@ export default function PhaserGame() {
       const ro = new ResizeObserver(entries => {
         for (let entry of entries) {
           const { width, height } = entry.contentRect;
-          game.scale.resize(Math.floor(width), Math.floor(height));
+          // contentRect is CSS pixels; the game runs at device pixels.
+          const dpr = renderScale();
+          game.scale.resize(Math.floor(width * dpr), Math.floor(height * dpr));
         }
       });
       ro.observe(parentEl);

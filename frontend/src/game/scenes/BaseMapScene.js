@@ -7,7 +7,7 @@ import VideoPopupModal from '../modals/VideoPopupModal.js';
 import ReadingState from '../state.js';
 import { itemForMap } from '../data/items.js';
 import { sceneForMap } from '../data/puzzleScenes.js';
-import { DEPTHS, INK, uiScale as calcUiScale } from '../ui/constants.js';
+import { DEPTHS, INK, uiScale as calcUiScale, renderScale } from '../ui/constants.js';
 import { ICON_KEYS, iconImage } from '../ui/icons.js';
 import { makeInkBadge } from '../ui/panels.js';
 import { createDeskBackdrop, fitRect } from '../ui/desk.js';
@@ -158,8 +158,10 @@ class BaseMapScene extends Phaser.Scene {
         );
 
         // --- UI: ink badges, same family as the world map ---
-        const isNarrow = width < 600;
-        const margin = isNarrow ? 12 : 20;
+        // Both are CSS pixel figures, so they go through the pixel ratio.
+        const r = renderScale();
+        const isNarrow = width / r < 600;
+        const margin = (isNarrow ? 12 : 20) * r;
 
         if (this.backIconContainer) this.backIconContainer.destroy();
         if (this.bookIconContainer) this.bookIconContainer.destroy();

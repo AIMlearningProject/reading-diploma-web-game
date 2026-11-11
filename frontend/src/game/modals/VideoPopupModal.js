@@ -1,5 +1,4 @@
-import Phaser from 'phaser';
-import { DEPTHS, CSS_COLORS, FONTS } from '../ui/constants.js';
+import { DEPTHS, CSS_COLORS, FONTS, uiScale } from '../ui/constants.js';
 import { ICON_KEYS, INLINE_ICONS, iconImage } from '../ui/icons.js';
 import { makeInkButton, makeInkPanel } from '../ui/panels.js';
 
@@ -17,7 +16,7 @@ export default class VideoPopupModal {
         this.destroy();
 
         const { width, height } = this.scene.scale;
-        const s = Phaser.Math.Clamp(width / 1200, 0.7, 1.2);
+        const s = uiScale(width);
         const depthBase = DEPTHS.VIDEO;
 
         this.popupUI = this.scene.add.group();

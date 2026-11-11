@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { CSS_COLORS, FONTS, INK } from './constants.js';
+import { CSS_COLORS, FONTS, INK, px, renderScale } from './constants.js';
 import { iconImage } from './icons.js';
 import { inkCircle, inkShape } from './ink.js';
 
@@ -9,7 +9,7 @@ import { inkCircle, inkShape } from './ink.js';
  * flat sheet of paper with no line.
  */
 
-const line = (weight, s) => Math.max(2, Math.round(weight * s));
+const line = (weight, s) => Math.max(px(2), Math.round(weight * s));
 
 /**
  * Wire a container up for input.
@@ -149,7 +149,7 @@ export function makeInkButton(scene, x, y, text, options = {}) {
 export function makeInkTooltip(scene, x, y, text, options = {}) {
     const { s = 1, fontSize = 15, depth = 11 } = options;
 
-    const label = bodyText(scene, text, Math.max(11, fontSize * s)).setOrigin(0.5);
+    const label = bodyText(scene, text, Math.max(px(11), fontSize * s)).setOrigin(0.5);
 
     const w = label.width + 26 * s;
     const h = label.height + 14 * s;
@@ -203,26 +203,27 @@ export function makeContinentSign(scene, options) {
 
     // On a phone held upright the map is too small for the plates: they would
     // cover each other, so only the markers stay.
-    if (k < INK.SIGN_MIN_SCALE) return makeCompactMarker(scene, options);
+    // k carries the pixel ratio, so it is divided back out for the comparison.
+    if (k / renderScale() < INK.SIGN_MIN_SCALE) return makeCompactMarker(scene, options);
 
-    const nameText = bodyText(scene, name, Math.max(12, 13.5 * k)).setOrigin(0.5);
-    nameText.setLetterSpacing(Math.max(0.3, 0.4 * k));
+    const nameText = bodyText(scene, name, Math.max(px(12), 13.5 * k)).setOrigin(0.5);
+    nameText.setLetterSpacing(Math.max(px(0.3), 0.4 * k));
 
     const genreText = genre.label
         ? scene.add.text(0, 0, genre.label.toUpperCase(), {
             fontFamily: FONTS.BODY,
-            fontSize: `${Math.max(11, Math.round(11.5 * k))}px`,
+            fontSize: `${Math.max(px(11), Math.round(11.5 * k))}px`,
             color: genre.free ? '#7a6a4a' : '#8a5a12',
             fontStyle: '800',
             align: 'center',
-            wordWrap: { width: Math.max(130, 150 * k) }
+            wordWrap: { width: Math.max(px(130), 150 * k) }
         }).setOrigin(0.5)
         : null;
 
     // Sent back by the teacher: say so on the plate, not only in the colour of
     // the marker, which means nothing on its own.
     const redoText = isResubmittable
-        ? bodyText(scene, 'TEE UUDELLEEN', Math.max(10, 11 * k), '#FDFBF4').setOrigin(0.5)
+        ? bodyText(scene, 'TEE UUDELLEEN', Math.max(px(10), 11 * k), '#FDFBF4').setOrigin(0.5)
         : null;
 
     const gap = 4 * k;
