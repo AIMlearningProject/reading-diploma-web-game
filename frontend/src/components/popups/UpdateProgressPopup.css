@@ -223,3 +223,21 @@
     outline: 3px solid var(--navy-700);
     outline-offset: 3px;
 }
+
+/* Phone: a fit-content sheet capped at 80% left the slider about 50px wide at
+ * 320px. The sheet takes the screen's width and gives the slider the room. */
+@media (max-width: 600px) {
+    .progress-popup-overlay { padding: var(--space-3); }
+
+    .progress-popup {
+        width: 100%;
+        max-width: 440px;
+    }
+
+    .progress-popup-body { padding: 20px 20px 24px; }
+    .progress-popup-close-btn { right: -12px; }
+    .progress-popup-info-btn { left: -8px; }
+
+    .popup-book-title { font-size: 24px; }
+    .progress-popup h2 { font-size: 22px; }
+}

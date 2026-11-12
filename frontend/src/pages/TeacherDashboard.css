@@ -1397,7 +1397,7 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
    global stylesheet. */
 .node-list {
     margin: 0 0 0.6rem;
-    padding: var(--space-2) 0 var(--space-2) 0.65rem;
+    padding: var(--space-2) 0.65rem;
     background: rgba(253, 246, 227, 0.75);
     border: none;
     border-left: var(--border-frame) solid rgba(196, 151, 58, 0.45);
@@ -1709,6 +1709,31 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
     .diploma-books-table td {
         padding-left: var(--space-2);
         padding-right: var(--space-2);
+    }
+}
+
+/* Phone: the table turns into cards (.data-table above), but the column
+   percentages outrank its width: 100%, so each cell kept 18-36% of the card and
+   the labels broke letter by letter. Full width, and label beside value as on
+   the roster. */
+@media (max-width: 600px) {
+    .diploma-books-table th:nth-child(n),
+    .diploma-books-table td:nth-child(n) {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .diploma-books-table td:nth-child(n + 2) {
+        display: flex;
+        align-items: baseline;
+        gap: var(--space-2);
+        padding-top: var(--space-1);
+        padding-bottom: var(--space-1);
+    }
+    /* Wide enough for KIRJOITTAJA, so the three values line up. */
+    .diploma-books-table td:nth-child(n + 2)::before {
+        flex-shrink: 0;
+        min-width: 6rem;
     }
 }
 

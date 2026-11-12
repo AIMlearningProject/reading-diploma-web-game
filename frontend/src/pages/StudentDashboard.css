@@ -186,7 +186,7 @@
 
 .level-card {
     display: grid;
-    grid-template-columns: 40px 1fr auto;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
     align-items: center;
     column-gap: 0.85rem;
     padding: 0.6rem 0;
@@ -211,9 +211,13 @@
 
 .level-incomplete .level-number { color: var(--ink-500); }
 
+/* On a phone "Pohjoisnapa" beside HYVÄKSYTTY is wider than the row: the name
+ * hyphenates (the page is lang="fi") instead of pushing the badge off the sheet. */
 .level-name {
     font-size: 17px;
     font-weight: 900;
+    hyphens: auto;
+    overflow-wrap: break-word;
 }
 
 .level-complete .level-name,
@@ -454,8 +458,21 @@
     margin-bottom: 1.5rem;
 }
 
+/* minmax(0, 1fr): a plain 1fr column never narrows below the 160px sprite, so
+ * on a phone the second card ran off the sheet. The sprite shrinks instead. */
 @media (max-width: 600px) {
-    .char-grid { grid-template-columns: repeat(2, 1fr); }
+    .char-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+    .char-option { padding: 1.25rem 0.5rem 1rem; }
+    .char-option-stage { max-width: 100%; }
+    /* The frame keeps its aspect-ratio (BuddyAvatar.jsx) once it narrows;
+     * !important beats the inline pixel height. */
+    .char-option .buddy-sprite {
+        max-width: 100%;
+        height: auto !important;
+    }
 }
 
 /* Each buddy is a raised ink card, like a backpack slot in the puzzle scene;

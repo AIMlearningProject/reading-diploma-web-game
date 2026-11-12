@@ -455,6 +455,35 @@
     outline-offset: 3px;
 }
 
+/* Phone: the 52vh list plus a header that wraps to four lines is taller than
+ * the screen, and the overlay centres it, so both ends were cut off. The sheet
+ * is held to the overlay and the list takes whatever height is left. */
+@media (max-width: 600px) {
+    .game-overlay { padding: var(--space-2); }
+
+    .booklist-container {
+        display: flex;
+        flex-direction: column;
+        max-height: 100%;
+        padding: 18px 16px 20px;
+    }
+
+    .booklist-header { gap: 10px; margin-bottom: 10px; }
+    .booklist-header-title { font-size: 22px; }
+    .booklist-header-genre { font-size: 15px; }
+    .close-booklist-button { padding: 6px 12px; font-size: 15px; }
+
+    .booklist {
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: none;
+        padding-right: 10px;
+    }
+
+    .book-row { padding: 10px 14px; }
+    .book-row-title { font-size: 17px; }
+}
+
 @media (max-height: 480px) {
     .booklist-container {
         max-height: 92vh;

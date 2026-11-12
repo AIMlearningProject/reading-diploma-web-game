@@ -73,14 +73,20 @@ export function BuddySprite({ buddyId, size = 120 }) {
         )
     }
     const scale = size / FRAME_W
+    // The figure's width is a share of the frame, so a frame that a narrow
+    // container shrinks (the dashboard picker on a phone) scales it as a whole.
     return (
-        <div className="buddy-sprite" style={{ width: size, height: h }}>
+        <div
+            className="buddy-sprite"
+            style={{ width: size, height: h, aspectRatio: `${FRAME_W} / ${FRAME_H}` }}
+        >
             <img
                 className="buddy-sprite__figure"
                 src={figure.src}
                 alt=""
                 width={Math.round(figure.w * scale)}
                 height={Math.round(figure.h * scale)}
+                style={{ width: `${(figure.w / FRAME_W) * 100}%`, height: 'auto' }}
             />
         </div>
     )
