@@ -123,8 +123,10 @@ export function createDeskBackdrop(scene) {
         }
         mapShadowKey = key;
         ensureMapShadowTexture(scene, key, width, height, Math.max(px(10), Math.min(width, height) * 0.035));
+        // The desk stays put while the camera pans a zoomed sheet (mapView.js),
+        // but the shadow lies under the sheet, so it moves with it.
         mapShadow = scene.add.image(mapRect.x + width / 2, mapRect.y + height / 2, key)
-            .setDepth(DESK_DEPTHS.MAP_SHADOW).setScrollFactor(0);
+            .setDepth(DESK_DEPTHS.MAP_SHADOW);
     };
 
     return { desk, shade, vignette, layout };

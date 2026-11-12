@@ -7,10 +7,16 @@ import VideoPopupModal from '../modals/VideoPopupModal.js';
 import ReadingState from '../state.js';
 import { itemForMap } from '../data/items.js';
 import { sceneForMap } from '../data/puzzleScenes.js';
-import { DEPTHS, INK, uiScale as calcUiScale, renderScale } from '../ui/constants.js';
+import { DEPTHS, INK, px, uiScale as calcUiScale, renderScale } from '../ui/constants.js';
 import { ICON_KEYS, iconImage } from '../ui/icons.js';
 import { makeInkBadge } from '../ui/panels.js';
-import { createDeskBackdrop, fitRect } from '../ui/desk.js';
+import { createDeskBackdrop } from '../ui/desk.js';
+import { MapPanner, sheetRect } from '../ui/mapView.js';
+
+// A book node is full size once it is this wide in CSS pixels, a finger's
+// width. WaypointRenderer draws it at 56 logical units across.
+const NODE_TOUCH_SIZE = 44;
+const NODE_LOGICAL_SIZE = 56;
 
 // A continent is a route of this many nodes, one book each. Mirrors
 // NODES_PER_CONTINENT in backend/utils/diplomaConfig.js.
@@ -67,6 +73,7 @@ class BaseMapScene extends Phaser.Scene {
         // world map, fitted whole rather than cropped.
         this.deskBackdrop = createDeskBackdrop(this);
         this.bg = this.add.image(0, 0, this.assetKey).setOrigin(0);
+        this.panner = new MapPanner(this);
 
         // Title, back and book badges are all built in handleResize().
 
@@ -123,10 +130,13 @@ class BaseMapScene extends Phaser.Scene {
     handleResize() {
         const { width, height } = this.scale;
 
-        // The whole sheet is always on screen, so the camera never moves.
-        const rect = fitRect(width, height, this.bg.width, this.bg.height);
+        // On a small screen the sheet is zoomed until the book nodes are full
+        // size, and the pupil drags it (mapView.js).
+        const nodeFullWidth = (this.LOGICAL_WIDTH * px(NODE_TOUCH_SIZE)) / NODE_LOGICAL_SIZE;
+        const rect = sheetRect(width, height, this.bg.width, this.bg.height, nodeFullWidth / this.bg.width);
         this.bg.setScale(rect.scale).setPosition(rect.x, rect.y);
-        this.cameras.main.setBounds(0, 0, width, height).setScroll(0, 0);
+        this.mapWorld = { width: rect.worldW, height: rect.worldH };
+        this.panner.setWorld(rect);
         this.deskBackdrop.layout(width, height, rect);
 
         this.baseScale = rect.width / this.LOGICAL_WIDTH;
@@ -198,12 +208,16 @@ class BaseMapScene extends Phaser.Scene {
         loadingIcon.name = 'loadingIcon';
         this.bookIconContainer.add(loadingIcon);
 
+        // Badges stay on the screen while the map is dragged.
+        this.backIconContainer.setScrollFactor(0, 0, true);
+        this.bookIconContainer.setScrollFactor(0, 0, true);
+
         // Title badge, tucked under the corner badges on narrow screens
         const titleY = isNarrow ? margin + back.height + 8 : margin;
         const title = makeInkBadge(this, width / 2, titleY, this.title, {
             s: uiS, anchor: 'center', fontSize: 24, depth: DEPTHS.UI
         });
-        this.titleBadge = title.container;
+        this.titleBadge = title.container.setScrollFactor(0, 0, true);
 
         this.renderPuzzleMarker(width, height, uiS, margin);
 
@@ -222,7 +236,7 @@ class BaseMapScene extends Phaser.Scene {
                     onClick: this.needsRedo() ? () => this.showStoryQuiz() : null
                 }
             );
-            this.redoNotice = notice.container;
+            this.redoNotice = notice.container.setScrollFactor(0, 0, true);
         }
 
         // Token
@@ -230,6 +244,10 @@ class BaseMapScene extends Phaser.Scene {
         const curIdx = this.tokenManager.lastPointIndex;
         this.tokenManager.setPosition(this.pointPositions[curIdx].x, this.pointPositions[curIdx].y);
         this.updateTokenPosition(false);
+
+        // The view opens on the buddy, and finds it again after a rotation.
+        const token = this.tokenManager.token;
+        if (token) this.panner.centerOn(token.x, token.y);
     }
 
     /**
@@ -260,7 +278,7 @@ class BaseMapScene extends Phaser.Scene {
         badge.container.y = height - margin - badge.height;
         // Dimmed until the tool is found; still readable, still openable.
         badge.container.setAlpha(isSolved || hasItem ? 1 : 0.62);
-        this.puzzleMarker = badge.container;
+        this.puzzleMarker = badge.container.setScrollFactor(0, 0, true);
     }
 
     openPuzzleScene() {
@@ -448,9 +466,14 @@ class BaseMapScene extends Phaser.Scene {
 
         if (shouldAnimate) {
             const currentIndex = this.tokenManager.lastPointIndex;
+            // The camera walks with the buddy, so it never leaves the screen.
+            if (currentIndex !== targetIndex) this.panner.follow(this.tokenManager.token);
             this.tokenManager.animateAlongPath(
                 this, this.pointPositions, currentIndex, targetIndex, mapKey,
-                (finalIdx) => this.checkCheckpointEvents(finalIdx)
+                (finalIdx) => {
+                    this.panner.unfollow();
+                    this.checkCheckpointEvents(finalIdx);
+                }
             );
         } else {
             this.tokenManager.snapToPoint(this.pointPositions, targetIndex, mapKey);

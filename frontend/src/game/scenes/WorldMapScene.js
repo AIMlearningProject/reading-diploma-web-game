@@ -3,7 +3,8 @@ import ReadingState from '../state.js';
 import { preloadIcons, ICON_KEYS } from '../ui/icons.js';
 import { INK, uiScale as calcUiScale, px, renderScale } from '../ui/constants.js';
 import { makeContinentSign, makeInkBadge, makeInkTooltip } from '../ui/panels.js';
-import { preloadDesk, createDeskBackdrop, fitRect } from '../ui/desk.js';
+import { preloadDesk, createDeskBackdrop } from '../ui/desk.js';
+import { MapPanner, sheetRect } from '../ui/mapView.js';
 import { buddyHeight, buddyKey, preloadBuddy } from '../ui/buddy.js';
 import { inkDrawing, strokeDashed } from '../ui/ink.js';
 import overallMapImg from '../../assets/overallMap.jpg';
@@ -48,18 +49,24 @@ class WorldMapScene extends Phaser.Scene {
         // --- 1. Background: the map lies on a wooden desk ---
         const deskBackdrop = createDeskBackdrop(this);
         const bgMap = this.add.image(0, 0, 'overallMap').setOrigin(0).setDepth(2);
+        this.panner = new MapPanner(this);
 
         const layoutMap = () => {
             if (!bgMap.active) return;
             const { width: w, height: h } = this.scale;
 
-            const rect = fitRect(w, h, MAP_NATIVE_W, MAP_NATIVE_H);
+            // Full size is where the signs show their name plates, which are
+            // what the pupil reads and presses (makeContinentSign).
+            const fullSize = INK.WORLD_SCALE * INK.SIGN_MIN_SCALE * renderScale();
+            const rect = sheetRect(w, h, MAP_NATIVE_W, MAP_NATIVE_H, fullSize);
             bgMap.setScale(rect.scale).setPosition(rect.x, rect.y);
             this.mapScale = rect.scale;
             this.mapOffsetX = rect.x;
             this.mapOffsetY = rect.y;
+            this.mapWorld = { width: rect.worldW, height: rect.worldH };
 
             deskBackdrop.layout(w, h, rect);
+            this.panner.setWorld(rect);
         };
         layoutMap();
 
@@ -71,7 +78,7 @@ class WorldMapScene extends Phaser.Scene {
         this.pointGroup = this.add.group();
 
         const drawRoute = () => {
-            const { width: w, height: h } = this.scale;
+            const { width: w, height: h } = this.mapWorld;
             const key = `world-route-${w}x${h}`;
             if (this.routeImage) this.routeImage.destroy();
 
@@ -125,7 +132,7 @@ class WorldMapScene extends Phaser.Scene {
                     },
                     withMarker: !isCurrent,
                     s,
-                    onClick: () => this.scene.start(pos.mapKey)
+                    onClick: this.panner.tap(() => this.scene.start(pos.mapKey))
                 });
                 sign.setPosition(finalX, finalY).setDepth(6);
                 this.pointGroup.add(sign);
@@ -134,9 +141,11 @@ class WorldMapScene extends Phaser.Scene {
                     const height = buddyHeight(this) * 0.65 * k;
                     this.buddy = this.add.image(finalX, finalY - height / 2 + 14 * k, buddyKey(this)).setDepth(10);
                     this.buddy.setScale(height / this.buddy.height);
-                    this.buddy.setInteractive({ useHandCursor: true })
-                        .on('pointerdown', () => this.scene.start(pos.mapKey));
+                    this.buddy.setInteractive({ useHandCursor: true });
+                    this.panner.onTap(this.buddy, () => this.scene.start(pos.mapKey));
                     this.pointGroup.add(this.buddy);
+                    // The view opens on the continent the pupil is on.
+                    this.panner.centerOn(finalX, finalY);
 
                     const tooltip = makeInkTooltip(
                         this, finalX, finalY - height + 8 * k, 'Klikkaa tutkiaksesi!', { s: k, depth: 11 }
@@ -169,6 +178,8 @@ class WorldMapScene extends Phaser.Scene {
             `Luetut kirjat: ${ReadingState.booksRead}/${ReadingState.targetBooks}`,
             { iconKey: ICON_KEYS.BOOK, s: uiS, anchor: 'left' }
         );
+        // The corner badges stay on the screen while the map is dragged.
+        kirjat.container.setScrollFactor(0, 0, true);
         this.bookCountText = kirjat.container;
         this.bookCountLabel = kirjat.label;
 
@@ -179,6 +190,7 @@ class WorldMapScene extends Phaser.Scene {
                 onClick: () => { if (this.game.handleBackNavigation) this.game.handleBackNavigation(); }
             }
         );
+        poistu.container.setScrollFactor(0, 0, true);
         this.backBtn = poistu.container;
         this.backBtn._badgeWidth = poistu.width;
 

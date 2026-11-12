@@ -43,7 +43,9 @@ export default class PathRenderer {
     }
 
     draw(pointPositions, targetIndex, scale) {
-        const { width, height } = this.scene.scale;
+        // A zoomed sheet is larger than the screen (mapView.js), and the route
+        // runs over all of it.
+        const { width, height } = this.scene.mapWorld ?? this.scene.scale;
         const key = `route-${this.scene.scene.key}-${width}x${height}-${targetIndex}`;
         if (key === this.textureKey) return;
         this.clear();

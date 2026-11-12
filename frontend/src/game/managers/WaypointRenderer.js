@@ -73,7 +73,7 @@ export default class WaypointRenderer {
 
         if (onNodeClick) {
             dot.setInteractive(circleHitArea(radius));
-            dot.on('pointerdown', () => onNodeClick(nodeIndex));
+            this._onTap(dot, () => onNodeClick(nodeIndex));
         }
     }
 
@@ -121,9 +121,16 @@ export default class WaypointRenderer {
         this.dotTexts.push(play);
 
         dot.setInteractive(circleHitArea(radius));
-        dot.on('pointerdown', () => {
+        this._onTap(dot, () => {
             if (onVideoClick) onVideoClick(videoCheckpoints[index], index);
         });
+    }
+
+    // A drag of a zoomed map may start on a stop, so the scene's MapPanner
+    // decides what counts as a tap (mapView.js).
+    _onTap(dot, action) {
+        if (this.scene.panner) this.scene.panner.onTap(dot, action);
+        else dot.on('pointerdown', action);
     }
 
     destroy() {
