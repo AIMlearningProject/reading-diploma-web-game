@@ -6,6 +6,7 @@ import InkIcon from '../components/ink/InkIcon'
 import InkFilter from '../components/ink/InkFilter'
 import homeBG from '../assets/HomeBG1.jpg'
 import siteBoat from '../assets/siteBoat.png'
+import playIcon from '../assets/icons/play.png'
 // Continent tile puzzles (Palkinnot) are switched off for now; the game still records them as rewards, so uncommenting brings them back.
 // import MinigameModal from '../components/minigames/MinigameModal'
 import SceneGameModal from '../components/minigames/SceneGameModal'
@@ -141,13 +142,16 @@ function StudentDashboard() {
                         ? <>matkustaa <strong>{user?.name}</strong> kanssa!</>
                         : <>Tervetuloa, {user?.name}</>
                     }</span>
+                    {/* The ink play icon, not the ▶ character: phones draw that
+                        as a coloured emoji. */}
                     <button
-                        className="play-button ink-shape ink-shape--thin ink-drop"
+                        className="play-button sd-play-button ink-shape ink-shape--thin ink-drop"
                         onClick={hasBuddy ? handlePlay : undefined}
                         disabled={!hasBuddy}
                         title={hasBuddy ? undefined : 'Valitse ensin seikkailukaveri'}
                     >
-                        ▶ Pelaa
+                        <InkIcon src={playIcon} size={20} />
+                        Pelaa
                     </button>
                     <button className="logout-button ink-shape ink-shape--thin ink-drop" onClick={handleLogout}>
                         Kirjaudu ulos

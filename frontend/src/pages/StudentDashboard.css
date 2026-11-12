@@ -100,6 +100,13 @@
     --book-fill: var(--book-sun);
 }
 
+/* The header's Pelaa carries the ink play icon in front of its label. */
+.sd-play-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
 .play-button:not(:disabled):hover {
     --book-fill: var(--book-sun-deep);
 }
@@ -131,7 +138,10 @@
     /* The sheet is in paper.css; on this page it is drawn in ink. */
     --book-fill: var(--book-paper);
     padding: clamp(2rem, 4vw, 2.75rem);
-    animation: cardRise 0.55s cubic-bezier(0.34, 1.3, 0.64, 1) both;
+    /* backwards, not both: a kept end transform holds the card on its own
+     * compositing layer, and iPhone (WebKit) then paints a stray ink square
+     * at its top-left corner over the filtered outline. */
+    animation: cardRise 0.55s cubic-bezier(0.34, 1.3, 0.64, 1) backwards;
 }
 
 /* The panel's drop, as long as the puzzle panel's. */
@@ -151,7 +161,6 @@
     border-radius: 26px;
     box-shadow: none;
 }
-
 .dashboard-section h2 {
     margin: 0 0 0.25rem;
     color: var(--navy-700);
