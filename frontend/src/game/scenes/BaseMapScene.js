@@ -44,11 +44,11 @@ class BaseMapScene extends Phaser.Scene {
         this.videoCheckpoints = {
             5: {
                 title: "Lukuvinkki: Visualisointi",
-                url: "https://www.youtube.com/watch?v=qw3S-S708tE"
+                url: "https://www.youtube.com/watch?v=TZoNz-2rk8c"
             },
             9: {
                 title: "Lukuvinkki: Aktiivinen lukeminen",
-                url: "https://www.youtube.com/watch?v=XjMv7DUtW8o"
+                url: "https://www.youtube.com/watch?v=jDZcdgDgM48"
             }
         };
 

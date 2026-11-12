@@ -82,7 +82,8 @@ export default class VideoPopupModal {
         };
 
         watchBtn.container.on('pointerup', () => {
-            const targetVideoId = String(index) === '7' ? 'jDZcdgDgM48' : 'TZoNz-2rk8c';
+            // Each checkpoint plays the video in its own data entry.
+            const targetVideoId = new URL(videoData.url).searchParams.get('v');
 
             const embedUrl = `https://www.youtube.com/embed/${targetVideoId}?autoplay=1&rel=0&modestbranding=1`;
 
