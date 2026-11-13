@@ -1,7 +1,7 @@
 // G7 DELFIININ REITTI — swim the fish and its rider through the gaps in the seaweed.
 //
 // One endless run at constant difficulty: the speed, the spacing and the gap
-// never change, and there are no rounds. The only number that grows is the
+// size never change, and there are no rounds. The only number that grows is the
 // pupil's own score. See docs/puzzle-scenes-design.md section 4.
 //
 // The id still says dolphin because it is stored in the rewards table; the art
@@ -68,12 +68,19 @@ const HITBOX = [
 ]
 
 // Fixed for the whole run, on purpose.
+// The rider is about 114px tall, so GAP leaves it 116px to move in, and
+// PILLAR_EVERY leaves open water between one pillar and the next.
 const SPEED = 168          // px/s the seaweed scrolls past
-const PILLAR_EVERY = 1.5   // s between pillars
-const GAP = 210            // px of open water between the two tips
-const GAP_DRIFT = 95       // px a gap centre may move from the one before it
-const GAP_MIN = 125
-const GAP_MAX = HEIGHT - 125
+const PILLAR_EVERY = 1.8   // s between pillars
+const GAP = 230            // px of open water between the two tips
+// The gap centres follow a gentle wave rather than jumping up and down at
+// random: each pillar may only bend the path a little, and the path's slope
+// is capped.
+const GAP_BEND = 35        // px a pillar may change the slope by
+const GAP_SLOPE = 55       // px a gap centre may move from the one before it
+const CALM_PILLARS = 2     // the first gaps sit in the middle while the pupil settles in
+const GAP_MIN = GAP / 2 + 20
+const GAP_MAX = HEIGHT - GAP_MIN
 const GRAVITY = 950        // px/s²
 const FLAP = -330          // px/s given by one tail flick
 const MAX_FALL = 430       // px/s the rider never sinks faster than
@@ -161,13 +168,25 @@ function hitCircles(state) {
     }))
 }
 
+/**
+ * The next gap centre: the path keeps its slope, bent a little. Near an edge
+ * it may cover only half the room left, so it eases in and never bounces off
+ * in a sharp V.
+ */
+function nextGap(state) {
+    if (state.pillarCount < CALM_PILLARS) return HEIGHT / 2
+    const bent = state.slope + (Math.random() * 2 - 1) * GAP_BEND
+    state.slope = clamp(bent, -GAP_SLOPE, GAP_SLOPE)
+    state.slope = clamp(state.slope, -(state.gapY - GAP_MIN) / 2, (GAP_MAX - state.gapY) / 2)
+    return state.gapY + state.slope
+}
+
 function addPillar(state) {
-    const previous = state.pillars.at(-1)
-    const from = previous ? previous.gapY : HEIGHT / 2
-    const drift = (Math.random() * 2 - 1) * GAP_DRIFT
+    state.gapY = nextGap(state)
+    state.pillarCount += 1
     state.pillars.push({
         x: WIDTH + PILLAR_REACH,
-        gapY: clamp(from + drift, GAP_MIN, GAP_MAX),
+        gapY: state.gapY,
         top: pick(TOP_WEEDS),
         bottom: pick(BOTTOM_WEEDS),
         passed: false
@@ -192,6 +211,10 @@ const dolphinRoute = {
             awake: false,
             tilt: 0,
             pillars: [],
+            // The gap path: where the last gap sat and how it was heading.
+            gapY: HEIGHT / 2,
+            slope: 0,
+            pillarCount: 0,
             // create() places the first pillar, so the timer starts from zero;
             // seeding it at PILLAR_EVERY stacked a second pillar on the first
             // one and made an impassable wall.
