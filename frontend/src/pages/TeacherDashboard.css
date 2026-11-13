@@ -1320,6 +1320,12 @@ td[data-label="Toiminnot"] .pwd-reset-widget {
     animation: popupFadeIn 180ms ease-out;
 }
 
+/* The teacher side carries no emoji: the warning is said by colour and weight. */
+.account-deletion-warning {
+    color: var(--state-danger);
+    font-weight: 800;
+}
+
 .tr-popup-close {
     position: absolute;
     top: 12px;

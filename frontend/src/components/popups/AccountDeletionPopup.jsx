@@ -47,8 +47,8 @@ function AccountDeletionPopup({ open, onClose, setShowTransferPopup }) {
                     </div>
                 )}
                 <div className="dashboard-section profile-edit-actions" style={{ justifyContent: 'center' }}>
-                    <span>
-                        ⚠️ HUOM! Lue tämä ennen käyttäjän poistamista! ⚠️
+                    <span className="account-deletion-warning">
+                        HUOM! Lue tämä ennen käyttäjän poistamista!
                     </span>
                     <span>
                         <p>Ennen kuin poistat käyttäjäsi, voit valita siirrätkö oppilaitesi käyttäjät toiselle opettajalle. Jos poistat käyttäjäsi siirtämättä oppilaitasi, kaikki lisäämäsi oppilastiedot poistetaan käyttäjätietosi mukana.</p>
