@@ -11,8 +11,23 @@ import BookListPanel from './popups/BookListPanel';
 import UpdateProgressPopup from './popups/UpdateProgressPopup'
 import PuzzleScene from './puzzle/PuzzleScene'
 import ItemFoundCard from './puzzle/ItemFoundCard'
+import GameLoading from './GameLoading'
 import { sceneForMap } from '../game/data/puzzleScenes.js'
 import items from '../game/data/items.js'
+
+// Shows the loading sheet whenever a scene starts and hides it once the scene
+// has loaded its pictures and run create(). A scene whose pictures are cached
+// starts and creates in the same tick, so React never draws the sheet for it.
+function watchSceneLoading(game, setLoading) {
+  game.events.once(Phaser.Core.Events.READY, () => {
+    for (const scene of game.scene.scenes) {
+      scene.sys.events.on(Phaser.Scenes.Events.START, () => setLoading(true));
+      scene.sys.events.on(Phaser.Scenes.Events.CREATE, () => setLoading(false));
+    }
+    // A scene that finished before these listeners were attached.
+    if (game.scene.getScenes(true).length > 0) setLoading(false);
+  });
+}
 
 export default function PhaserGame() {
   const containerRef = useRef(null);
@@ -24,6 +39,8 @@ export default function PhaserGame() {
   const [bookListInfo, setBookListInfo] = useState({ visible: false, mapKey: null, nodeIndex: 1 });
   const [puzzleInfo, setPuzzleInfo] = useState({ visible: false, mapKey: null });
   const [foundItemId, setFoundItemId] = useState(null);
+  // True from the first render, so the backend load is covered too.
+  const [loading, setLoading] = useState(true);
   const [updateProgressInfo, setUpdateProgressInfo] = useState({
     visible: false,
     mapKey: null,
@@ -50,6 +67,7 @@ export default function PhaserGame() {
 
       const config = createGameConfig(parentEl, initW, initH);
       const game = new Phaser.Game(config);
+      watchSceneLoading(game, setLoading);
 
       // Pass userId for backend API calls in Phaser scenes
       game.registry.set('userId', user?.id);
@@ -152,8 +170,10 @@ export default function PhaserGame() {
       <div
         id="game-container"
         ref={containerRef}
-        style={{ width: '100%', height: '100%', backgroundColor: '#000', zIndex: 1 }}
+        style={{ width: '100%', height: '100%', backgroundColor: 'var(--parchment-000)', zIndex: 1 }}
       />
+
+      {loading && <GameLoading />}
 
       {quizInfo.visible && (
         <ReactQuiz

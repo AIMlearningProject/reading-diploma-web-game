@@ -1,0 +1,51 @@
+/* The loading sheet over the game: plain paper and a turning ink ring, drawn
+ * with the same hand-wobbled line as the other ink screens (the filter is in
+ * GameLoading.jsx). Prefixed game-loading because page CSS is global. */
+
+.game-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 2; /* over the game container, under the popups the game opens */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    background: var(--parchment-000);
+}
+
+/* The viewBox is 64 units over 64px, so the stroke is the ink line in px. */
+.game-loading-ring {
+    display: block;
+    width: 64px;
+    height: 64px;
+    overflow: visible;
+    animation: game-loading-turn 1s linear infinite;
+}
+
+.game-loading-arc {
+    fill: none;
+    stroke: var(--book-outline);
+    stroke-width: var(--book-line);
+    stroke-linecap: round;
+}
+
+.game-loading-text {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--ink-900);
+}
+
+@keyframes game-loading-turn {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .game-loading-ring {
+        animation-duration: 3s;
+    }
+}
