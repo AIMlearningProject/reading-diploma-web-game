@@ -74,6 +74,11 @@ const SPLAT_Y = 379
 const SPLAT_SPREAD = 4     // px a stain may sit above or below SPLAT_Y
 const SPLAT_LIFE = 2.6     // s a stain lasts
 const SPLAT_SHRINK = 0.4   // s of that spent shrinking away
+// A fruit does not turn into its stain in one frame: it squashes flat on the
+// grass while the stain spreads out from under it, so it is seen to land.
+const SQUASH_TIME = 0.06   // s a landed fruit takes to squash away
+const SPLAT_GROW = 0.07    // s a new stain takes to spread to its full size
+const SPLAT_START = 0.3    // a new stain's size when it appears, as a share of full
 const SPLAT_COLOURS = { seed1: '#ff1600', seed2: '#ff9a00', seed3: '#9a6add' }
 
 const clamp = (value, low, high) => Math.min(Math.max(value, low), high)
@@ -109,7 +114,10 @@ function makeSplat(fruit) {
 }
 
 function drawSplat(ctx, splat) {
-    const size = clamp((SPLAT_LIFE - splat.age) / SPLAT_SHRINK, 0, 1)
+    const spread = clamp(splat.age / SPLAT_GROW, 0, 1)
+    const growing = SPLAT_START + (1 - SPLAT_START) * (1 - (1 - spread) ** 2)
+    const shrinking = clamp((SPLAT_LIFE - splat.age) / SPLAT_SHRINK, 0, 1)
+    const size = Math.min(growing, shrinking)
     ctx.save()
     ctx.translate(splat.x, splat.y)
     ctx.scale(size, size)
@@ -118,14 +126,31 @@ function drawSplat(ctx, splat) {
     ctx.restore()
 }
 
+const tiltOf = (fruit) => Math.sin(fruit.sway + fruit.y / 40) * 0.25
+
 function drawFruit(ctx, fruit, x) {
     const image = art[fruit.look]
     const w = image.naturalWidth / 2
     const h = image.naturalHeight / 2
     ctx.save()
     ctx.translate(x, fruit.y)
-    ctx.rotate(Math.sin(fruit.sway + fruit.y / 40) * 0.25)
+    ctx.rotate(tiltOf(fruit))
     ctx.drawImage(image, -w / 2, -h / 2, w, h)
+    ctx.restore()
+}
+
+/** A landed fruit squashing flat, pinned at its underside, and fading as it goes. */
+function drawSquash(ctx, fruit) {
+    const image = art[fruit.look]
+    const w = image.naturalWidth / 2
+    const h = image.naturalHeight / 2
+    const done = clamp(fruit.squash / SQUASH_TIME, 0, 1)
+    ctx.save()
+    ctx.globalAlpha = 1 - done
+    ctx.translate(fruit.x, fruit.y + h / 2)
+    ctx.rotate(tiltOf(fruit) * (1 - done))
+    ctx.scale(1 + 0.4 * done, 1 - 0.7 * done)
+    ctx.drawImage(image, -w / 2, -h, w, h)
     ctx.restore()
 }
 
@@ -167,6 +192,7 @@ const seedRain = {
             x: 287,
             fruits: [],
             sinking: [],
+            squashing: [],
             splats: [],
             sinceFruit: 0,
             misses: 0,
@@ -191,8 +217,12 @@ const seedRain = {
         if (input.pointerX !== null) state.x = input.pointerX * WIDTH
         state.x = clamp(state.x, range[0], range[1])
 
+        // After the last miss the fruit in the air holds still while the one that
+        // landed squashes, and the run ends once it has.
+        const isOutOfLives = state.misses >= MISSES_ALLOWED
+
         state.sinceFruit += dt
-        if (state.sinceFruit >= FRUIT_EVERY) {
+        if (!isOutOfLives && state.sinceFruit >= FRUIT_EVERY) {
             state.sinceFruit -= FRUIT_EVERY
             addFruit(state, range)
         }
@@ -200,7 +230,8 @@ const seedRain = {
         const left = state.x - BASKET_W / 2 - CATCH_MARGIN
         const right = state.x + BASKET_W / 2 + CATCH_MARGIN
         const kept = []
-        for (const fruit of state.fruits) {
+        const falling = isOutOfLives ? [] : state.fruits
+        for (const fruit of falling) {
             fruit.y += FALL * dt
             const isAtRim = fruit.y >= RIM_TOP && fruit.y <= RIM_BOTTOM
             if (isAtRim && fruit.x > left && fruit.x < right) {
@@ -210,12 +241,14 @@ const seedRain = {
             }
             if (fruit.y >= LAND_Y) {
                 state.misses += 1
+                fruit.y = LAND_Y
                 state.splats.push(makeSplat(fruit))
+                state.squashing.push({ ...fruit, squash: 0 })
                 continue
             }
             kept.push(fruit)
         }
-        state.fruits = kept
+        if (!isOutOfLives) state.fruits = kept
 
         // A caught fruit keeps falling into the basket and rides along with it.
         for (const fruit of state.sinking) {
@@ -225,10 +258,13 @@ const seedRain = {
         }
         state.sinking = state.sinking.filter((fruit) => fruit.y < BASKET_TOP + SINK_DEPTH)
 
+        for (const fruit of state.squashing) fruit.squash += dt
+        state.squashing = state.squashing.filter((fruit) => fruit.squash < SQUASH_TIME)
+
         for (const splat of state.splats) splat.age += dt
         state.splats = state.splats.filter((splat) => splat.age < SPLAT_LIFE)
 
-        if (state.misses >= MISSES_ALLOWED) state.dead = true
+        if (state.misses >= MISSES_ALLOWED && state.squashing.length === 0) state.dead = true
     },
 
     draw(ctx, state) {
@@ -240,6 +276,7 @@ const seedRain = {
         ctx.drawImage(art.bg, 0, 0, WIDTH, HEIGHT)
 
         for (const splat of state.splats) drawSplat(ctx, splat)
+        for (const fruit of state.squashing) drawSquash(ctx, fruit)
 
         const basketLeft = state.x - BASKET_W / 2
         const basketH = art.basket.naturalHeight / 2
