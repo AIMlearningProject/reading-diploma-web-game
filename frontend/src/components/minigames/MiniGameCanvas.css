@@ -96,7 +96,9 @@
     width: 100%;
     overflow: hidden;
     border-radius: 18px;
-    touch-action: manipulation;
+    /* A drag on the stage steers the game. With any panning allowed, the phone
+     * scrolls the page instead and cancels the pointer mid-drag. */
+    touch-action: none;
     cursor: pointer;
     container-type: inline-size; /* lets the lettering scale with the stage (cqw) */
 }
