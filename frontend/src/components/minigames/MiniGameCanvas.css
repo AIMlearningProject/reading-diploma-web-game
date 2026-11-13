@@ -9,6 +9,12 @@
     gap: var(--space-3);
     width: 100%;
     font-family: var(--font-body);
+    /* A game that is held (a crouch, a steer) must not start a text selection
+     * or the long-press menu on a phone. iOS snaps a selection to the nearest
+     * text, so the whole shell opts out, not just the stage. */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
 }
 
 .mg-bar {

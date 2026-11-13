@@ -237,6 +237,8 @@ export default function MiniGameCanvas({ game, name, buddy, onClose }) {
                     onPointerMove={onPointerMove}
                     onPointerUp={onPointerUp}
                     onPointerCancel={onPointerUp}
+                    // A long press is part of play, not a request for the page's menu.
+                    onContextMenu={(event) => event.preventDefault()}
                 >
                     <canvas ref={canvasRef} className="mg-canvas" />
                     {/* Inline because a CSS url() into src/assets does not resolve. */}

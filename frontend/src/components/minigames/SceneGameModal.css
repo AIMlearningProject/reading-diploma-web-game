@@ -10,6 +10,10 @@
     place-items: center;
     padding: var(--space-4);
     background: var(--scrim-warm);
+    /* Nothing in the game window is for selecting; see .mg-shell. */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
 }
 
 .sg-window {
