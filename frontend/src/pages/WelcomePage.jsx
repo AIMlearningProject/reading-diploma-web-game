@@ -7,6 +7,7 @@ import InkFilter from '../components/ink/InkFilter'
 import './WelcomePage.css'
 import homeBG from '../assets/HomeBG1.jpg'
 import SiteLogo from '../components/SiteLogo'
+import FundingNotice from '../components/FundingNotice'
 
 function WelcomePage() {
     const navigate = useNavigate()
@@ -45,6 +46,8 @@ function WelcomePage() {
                 </p>
                 <p>Tarvitsetko apua? Ota yhteys opettajaasi.</p>
             </div>
+
+            <FundingNotice className="welcome-funding" />
         </div>
     )
 }

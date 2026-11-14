@@ -1,0 +1,17 @@
+/* The game screen: the map fills what the funding strip leaves. dvh, not vh,
+   so on a phone the strip sits above the browser's toolbar instead of under
+   it; browsers without dvh keep the vh line. */
+.game-shell {
+    position: fixed;
+    inset: 0;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-shell > #game-container {
+    flex: 1 1 auto;
+    min-height: 0;
+    background-color: var(--parchment-000);
+}

@@ -12,6 +12,8 @@ import UpdateProgressPopup from './popups/UpdateProgressPopup'
 import PuzzleScene from './puzzle/PuzzleScene'
 import ItemFoundCard from './puzzle/ItemFoundCard'
 import GameLoading from './GameLoading'
+import FundingNotice from './FundingNotice'
+import './PhaserGame.css'
 import { sceneForMap } from '../game/data/puzzleScenes.js'
 import items from '../game/data/items.js'
 
@@ -166,12 +168,10 @@ export default function PhaserGame() {
   }, [navigate, user]);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'fixed', top: 0, left: 0 }}>
-      <div
-        id="game-container"
-        ref={containerRef}
-        style={{ width: '100%', height: '100%', backgroundColor: 'var(--parchment-000)', zIndex: 1 }}
-      />
+    <div className="game-shell">
+      <div id="game-container" ref={containerRef} />
+
+      <FundingNotice strip />
 
       {loading && <GameLoading />}
 

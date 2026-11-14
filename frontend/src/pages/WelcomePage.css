@@ -223,3 +223,21 @@
     from { opacity: 0; transform: translateY(14px) scale(0.97); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+/* ── Funding statement ───────────────────────────────────── */
+/* A band across the foot of the page, edge to edge: the negative margins
+   undo the page padding. Its auto top margin and the logo's share the free
+   height, so the cards stay in the middle and the band sits on the bottom.
+   Scoped under the page so it outweighs FundingNotice.css, which loads later. */
+.welcome-page > .welcome-funding {
+    margin: auto calc(-1 * var(--space-5)) calc(-1 * var(--space-6));
+    width: calc(100% + 2 * var(--space-5));
+}
+
+.welcome-page > .welcome-notes {
+    margin-bottom: var(--space-8);
+}
+
+.welcome-page > .site-logo.welcome-title {
+    margin-top: auto;
+}

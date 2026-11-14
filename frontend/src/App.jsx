@@ -2,7 +2,7 @@ import './tokens.css'
 import './paper.css'
 import './ground.css'
 import './App.css'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import PhaserGame from './components/PhaserGame'
 import WelcomePage from './pages/WelcomePage'
@@ -12,6 +12,7 @@ import StudentSignUpPage from './pages/StudentSignUpPage'
 import TeacherDashboard from './pages/TeacherDashboard'
 import StudentDashboard from './pages/StudentDashboard'
 import PuzzlePreview from './pages/PuzzlePreview'
+import FundingNotice from './components/FundingNotice'
 // Note: I think all the css of all these pages might get mixed with these imports
 // e.g. classes in TeacherDashboard.css have access to elements in StudentDashboard.jsx and vice versa, so we need to avoid using same classnames
 
@@ -33,37 +34,57 @@ function PublicRoute({ children }) {
     return children
 }
 
+// Pages that draw the funding notice themselves: the welcome page carries the
+// full statement and the game keeps its strip under the map. The puzzle bench
+// is development only.
+const OWN_FUNDING_NOTICE = new Set(['/', '/game', '/puzzle-preview'])
+
+// Every other page gets the logo strip at its foot: on a short page it sits on
+// the bottom edge of the screen, on a long one it follows the content.
+function FundingFrame({ children }) {
+    const { pathname } = useLocation()
+    if (OWN_FUNDING_NOTICE.has(pathname)) return children
+    return (
+        <div className="app-frame">
+            {children}
+            <FundingNotice strip />
+        </div>
+    )
+}
+
 function App() {
     return (
         <BrowserRouter>
             <AuthProvider>
-                <Routes>
-                    <Route path="/" element={
-                        <PublicRoute><WelcomePage /></PublicRoute>
-                    } />
-                    <Route path="/login/teacher" element={
-                        <PublicRoute><TeacherLoginPage /></PublicRoute>
-                    } />
-                    <Route path="/login/student" element={
-                        <PublicRoute><StudentLoginPage /></PublicRoute>
-                    } />
-                    <Route path="/sign-up/student" element={
-                        <PublicRoute><StudentSignUpPage /></PublicRoute>
-                    } />
-                    <Route path="/teacher/dashboard" element={
-                        <ProtectedRoute role="teacher"><TeacherDashboard /></ProtectedRoute>
-                    } />
-                    <Route path="/student/dashboard" element={
-                        <ProtectedRoute role="student"><StudentDashboard /></ProtectedRoute>
-                    } />
-                    <Route path="/game" element={
-                        <ProtectedRoute role="student"><PhaserGame /></ProtectedRoute>
-                    } />
-                    {/* Development bench for the puzzle scenes; never in a build. */}
-                    {import.meta.env.DEV && (
-                        <Route path="/puzzle-preview" element={<PuzzlePreview />} />
-                    )}
-                </Routes>
+                <FundingFrame>
+                    <Routes>
+                        <Route path="/" element={
+                            <PublicRoute><WelcomePage /></PublicRoute>
+                        } />
+                        <Route path="/login/teacher" element={
+                            <PublicRoute><TeacherLoginPage /></PublicRoute>
+                        } />
+                        <Route path="/login/student" element={
+                            <PublicRoute><StudentLoginPage /></PublicRoute>
+                        } />
+                        <Route path="/sign-up/student" element={
+                            <PublicRoute><StudentSignUpPage /></PublicRoute>
+                        } />
+                        <Route path="/teacher/dashboard" element={
+                            <ProtectedRoute role="teacher"><TeacherDashboard /></ProtectedRoute>
+                        } />
+                        <Route path="/student/dashboard" element={
+                            <ProtectedRoute role="student"><StudentDashboard /></ProtectedRoute>
+                        } />
+                        <Route path="/game" element={
+                            <ProtectedRoute role="student"><PhaserGame /></ProtectedRoute>
+                        } />
+                        {/* Development bench for the puzzle scenes; never in a build. */}
+                        {import.meta.env.DEV && (
+                            <Route path="/puzzle-preview" element={<PuzzlePreview />} />
+                        )}
+                    </Routes>
+                </FundingFrame>
             </AuthProvider>
         </BrowserRouter>
     )

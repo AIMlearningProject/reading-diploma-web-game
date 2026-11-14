@@ -111,3 +111,18 @@ canvas {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+/* ── Funding frame (App.jsx) ─────────────────────────────── */
+/* A page and the funding strip under it. The page takes the height the strip
+   leaves, so on a short page the strip sits on the screen's bottom edge; the
+   pages' own min-height: 100vh would push it below the fold. */
+.app-frame {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-frame > :first-child {
+  flex: 1 0 auto;
+  min-height: 0;
+}

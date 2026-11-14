@@ -1,0 +1,126 @@
+/* The funding statement (FundingNotice.jsx): a band across the foot of the
+   page. Parchment, so the transparent logos sit on the site's own paper, with
+   a drawn rule along the top edge in place of a box. */
+.funding-notice {
+    width: 100%;
+    box-sizing: border-box;
+    padding: var(--space-5) var(--space-5) var(--space-4);
+    background: var(--parchment-000);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    position: relative;
+    z-index: 1;
+}
+
+.funding-notice::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(var(--book-line) * 0.5);
+    background: var(--book-outline);
+    filter: url('#ink-hand');
+}
+
+.funding-notice-logos {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    column-gap: var(--space-6);
+    row-gap: var(--space-4);
+    max-width: 1100px;
+}
+
+.funding-notice-logo img {
+    display: block;
+    height: var(--logo-h);
+    width: auto;
+}
+
+.funding-notice-text {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--ink-700);
+    font-size: var(--fs-body-xs);
+    line-height: 1.55;
+    text-align: center;
+}
+
+.funding-notice-text a {
+    color: var(--navy-700);
+    font-weight: var(--fw-label-strong);
+}
+
+.funding-notice-text a:focus-visible {
+    outline: 3px solid var(--navy-700);
+    outline-offset: 2px;
+}
+
+/* Narrower screens: a 3 + 3 grid instead of a ragged 4 + 2 wrap, then
+   2 + 2 + 2 on phones. */
+@media (max-width: 960px) {
+    .funding-notice-logos {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        justify-items: center;
+        column-gap: var(--space-7);
+    }
+}
+
+@media (max-width: 520px) {
+    .funding-notice-logos {
+        grid-template-columns: repeat(2, auto);
+        column-gap: var(--space-5);
+    }
+
+    .funding-notice-logo img {
+        height: calc(var(--logo-h) * 0.8);
+    }
+}
+
+/* ── Strip ───────────────────────────────────────────────── */
+/* Logos only, under the game map. The EU emblem keeps 40px, just over the
+   1 cm the EU rules set as its minimum height; the partners shrink, so the
+   flag stays the largest mark. Phones break the row in two. The bottom
+   padding clears an iPhone's home indicator. */
+.funding-notice--strip {
+    flex: none;
+    padding: var(--space-2) var(--space-4) calc(var(--space-2) + env(safe-area-inset-bottom));
+    gap: 0;
+}
+
+.funding-notice--strip .funding-notice-logos {
+    display: flex;
+    max-width: none;
+    column-gap: var(--space-6);
+    row-gap: var(--space-2);
+}
+
+.funding-notice--strip .funding-notice-logo img {
+    height: calc(var(--logo-h) * 0.7);
+}
+
+.funding-notice--strip .funding-notice-logo--eu img {
+    height: 40px;
+}
+
+@media (max-width: 720px) {
+    .funding-notice--strip .funding-notice-logos {
+        column-gap: var(--space-4);
+    }
+
+    .funding-notice--strip .funding-notice-logo img {
+        height: calc(var(--logo-h) * 0.55);
+    }
+
+    .funding-notice--strip .funding-notice-logo--eu img {
+        height: 40px;
+    }
+}
