@@ -5,7 +5,7 @@ import { INK, uiScale as calcUiScale, px, renderScale } from '../ui/constants.js
 import { makeContinentSign, makeInkBadge, makeInkTooltip } from '../ui/panels.js';
 import { preloadDesk, createDeskBackdrop } from '../ui/desk.js';
 import { MapPanner, sheetRect } from '../ui/mapView.js';
-import { buddyHeight, buddyKey, preloadBuddy } from '../ui/buddy.js';
+import { BUDDY_ASPECT, buddyHeight, buddyKey, preloadBuddy } from '../ui/buddy.js';
 import { inkDrawing, strokeDashed } from '../ui/ink.js';
 import overallMapImg from '../../assets/overallMap.jpg';
 
@@ -116,12 +116,10 @@ class WorldMapScene extends Phaser.Scene {
             const k = s / INK.WORLD_SCALE;
             const currentMapKey = ReadingState.getCurrentContinent();
 
-            CONTINENTS.forEach((pos, index) => {
+            const signs = CONTINENTS.map((pos, index) => {
                 const finalX = mapX(pos.x);
                 const finalY = mapY(pos.y);
-                const isCurrent = pos.mapKey === currentMapKey;
 
-                // The buddy stands in for the marker on the continent the player is on.
                 const sign = makeContinentSign(this, {
                     level: index + 1,
                     name: pos.name,
@@ -130,38 +128,55 @@ class WorldMapScene extends Phaser.Scene {
                         isCompleted: ReadingState._continentCompletedFlags?.[pos.mapKey] === true,
                         isResubmittable: ReadingState.isLevelPendingResubmission(pos.mapKey)
                     },
-                    withMarker: !isCurrent,
+                    withMarker: true,
                     s,
                     onClick: this.panner.tap(() => this.scene.start(pos.mapKey))
                 });
                 sign.setPosition(finalX, finalY).setDepth(6);
                 this.pointGroup.add(sign);
+                return { pos, sign, x: finalX, y: finalY };
+            });
 
-                if (isCurrent) {
-                    const height = buddyHeight(this) * 0.65 * k;
-                    this.buddy = this.add.image(finalX, finalY - height / 2 + 14 * k, buddyKey(this)).setDepth(10);
-                    this.buddy.setScale(height / this.buddy.height);
-                    this.buddy.setInteractive({ useHandCursor: true });
-                    this.panner.onTap(this.buddy, () => this.scene.start(pos.mapKey));
-                    this.pointGroup.add(this.buddy);
-                    // The view opens on the continent the pupil is on.
-                    this.panner.centerOn(finalX, finalY);
+            // The buddy stands on the plate beside the numbered marker of the
+            // continent the pupil is on, on whichever side no other sign takes up.
+            const current = signs.find(({ pos }) => pos.mapKey === currentMapKey);
+            if (!current) return;
+            const { pos } = current;
+            const height = buddyHeight(this) * 0.65 * k;
+            const width = height * BUDDY_ASPECT;
+            const markerR = 23 * k;          // the marker's radius in panels.js
+            const feetY = current.y + 14 * k; // just onto the plate, whose top is at 12
+            const reach = markerR + 4 * k + width / 2;
+            const others = signs.filter((o) => o !== current).map((o) => o.sign.getBounds());
+            const fits = (x) => {
+                const r = new Phaser.Geom.Rectangle(x - width / 2, feetY - height, width, height);
+                return others.every((o) => !Phaser.Geom.Intersects.RectangleToRectangle(r, o));
+            };
+            const right = current.x + reach;
+            const left = current.x - reach;
+            const buddyX = fits(right) || !fits(left) ? right : left;
 
-                    const tooltip = makeInkTooltip(
-                        this, finalX, finalY - height + 8 * k, 'Klikkaa tutkiaksesi!', { s: k, depth: 11 }
-                    ).setAlpha(0);
-                    this.pointGroup.add(tooltip);
-                    this.tweens.add({ targets: tooltip, alpha: 1, duration: 600, delay: 400 });
+            this.buddy = this.add.image(buddyX, feetY - height / 2, buddyKey(this)).setDepth(10);
+            this.buddy.setScale(height / this.buddy.height);
+            this.buddy.setInteractive({ useHandCursor: true });
+            this.panner.onTap(this.buddy, () => this.scene.start(pos.mapKey));
+            this.pointGroup.add(this.buddy);
+            // The view opens on the continent the pupil is on.
+            this.panner.centerOn(current.x, current.y);
 
-                    this.buddyFloatTween = this.tweens.add({
-                        targets: this.buddy,
-                        y: this.buddy.y - 7 * k,
-                        duration: 1200,
-                        yoyo: true,
-                        repeat: -1,
-                        ease: 'Sine.easeInOut'
-                    });
-                }
+            const tooltip = makeInkTooltip(
+                this, buddyX, feetY - height - 6 * k, 'Klikkaa tutkiaksesi!', { s: k, depth: 11 }
+            ).setAlpha(0);
+            this.pointGroup.add(tooltip);
+            this.tweens.add({ targets: tooltip, alpha: 1, duration: 600, delay: 400 });
+
+            this.buddyFloatTween = this.tweens.add({
+                targets: this.buddy,
+                y: this.buddy.y - 7 * k,
+                duration: 1200,
+                yoyo: true,
+                repeat: -1,
+                ease: 'Sine.easeInOut'
             });
         };
 

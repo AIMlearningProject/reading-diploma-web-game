@@ -1,8 +1,7 @@
 import { CSS_COLORS, DEPTHS, FONTS, INK, px } from '../ui/constants.js';
 import { ICON_KEYS, iconImage } from '../ui/icons.js';
-import { circleHitArea, inkCircle, inkDrawing } from '../ui/ink.js';
+import { circleHitArea, inkCircle } from '../ui/ink.js';
 
-const RAY_COUNT = 10;
 // On a small map the stops stop shrinking, so a finger can still hit them.
 const MIN_NODE_RADIUS = 15;
 const MIN_VIDEO_RADIUS = 11;
@@ -12,7 +11,7 @@ const MIN_VIDEO_RADIUS = 11;
  *
  * The book nodes are the ones the pupil acts on -- one book each -- so they are
  * large, numbered and clickable. A finished node carries a tick, one with a book
- * is sun, and the one to press next is sun with rays. The other route points are
+ * is sun, and so is the one to press next, where the buddy stands. The other route points are
  * bends: PathRenderer's curve shows them, so only the video stops are drawn.
  */
 export default class WaypointRenderer {
@@ -50,8 +49,6 @@ export default class WaypointRenderer {
         if (isDone) fill = INK.GREEN;
         else if (isStarted || isCurrent) fill = INK.SUN;
 
-        if (isCurrent) this._drawRays(pos, radius, baseScale);
-
         const dot = inkCircle(this.scene, pos.x, pos.y, radius, {
             fill, line: Math.max(px(2.5), INK.BIG * baseScale), drop: 4 * baseScale, seed: 30 + nodeIndex
         }).setDepth(DEPTHS.BOOK_NODE);
@@ -75,38 +72,6 @@ export default class WaypointRenderer {
             dot.setInteractive(circleHitArea(radius));
             this._onTap(dot, () => onNodeClick(nodeIndex));
         }
-    }
-
-    /**
-     * The stop to press next shines: short ink rays around it, turning slowly.
-     * The count divides the turn evenly, so the spin loops without a jump.
-     */
-    _drawRays(pos, radius, baseScale) {
-        const inner = radius * 1.25;
-        const outer = radius * 1.65;
-        const size = Math.ceil(outer * 2 + 8);
-        const key = `node-rays-${size}`;
-
-        const rays = inkDrawing(this.scene, key, size, size, (g) => {
-            g.strokeStyle = INK.OUTLINE;
-            g.lineCap = 'round';
-            g.lineWidth = Math.max(px(2.5), INK.MID * baseScale);
-            for (let i = 0; i < RAY_COUNT; i++) {
-                const a = (i / RAY_COUNT) * Math.PI * 2;
-                g.beginPath();
-                g.moveTo(size / 2 + Math.cos(a) * inner, size / 2 + Math.sin(a) * inner);
-                g.lineTo(size / 2 + Math.cos(a) * outer, size / 2 + Math.sin(a) * outer);
-                g.stroke();
-            }
-        }, { amount: 4, seed: 12 }).setOrigin(0.5).setPosition(pos.x, pos.y).setDepth(DEPTHS.BOOK_NODE - 1);
-
-        this.dotObjects.push(rays);
-        this.scene.tweens.add({
-            targets: rays,
-            angle: 360 / RAY_COUNT,
-            duration: 2600,
-            repeat: -1
-        });
     }
 
     _drawVideoStop(pos, baseScale, index, videoCheckpoints, onVideoClick) {

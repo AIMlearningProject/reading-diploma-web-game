@@ -1,17 +1,22 @@
-import mattiFigure from '../../assets/buddyAvatar/figures/matti.png';
-import pandaFigure from '../../assets/buddyAvatar/figures/panda.png';
-import ppFigure from '../../assets/buddyAvatar/figures/pp.png';
+import mattiFigure from '../../assets/buddyAvatar/map/matti.png';
+import pandaFigure from '../../assets/buddyAvatar/map/panda.png';
+import ppFigure from '../../assets/buddyAvatar/map/pp.png';
 
 /**
- * The buddy the pupil picked on the dashboard. Panda is much shorter than the
- * other two on the sheet, so `height` is how tall each stands on a map at the
- * 1280-wide reference size.
+ * The buddy the pupil picked on the dashboard, as the simple ink figure drawn
+ * for the maps by build/maps/draw_buddies.py. All three share one frame, so
+ * one height scales them alike and Panda stays the shorter one.
  */
 const FIGURES = {
-    buddy_1: { src: pandaFigure, height: 112 },
-    buddy_2: { src: ppFigure, height: 136 },
-    buddy_3: { src: mattiFigure, height: 136 }
+    buddy_1: pandaFigure,
+    buddy_2: ppFigure,
+    buddy_3: mattiFigure
 };
+
+// How tall the shared frame stands on a map at the 1280-wide reference size,
+// and its width over its height; draw_buddies.py prints both.
+const FRAME_HEIGHT = 127;
+export const BUDDY_ASPECT = 262 / 380;
 
 const figureFor = (scene) => {
     const id = scene.game.registry.get('buddyId');
@@ -20,11 +25,11 @@ const figureFor = (scene) => {
 
 export const buddyKey = (scene) => `buddy-${figureFor(scene)}`;
 
-export const buddyHeight = (scene) => FIGURES[figureFor(scene)].height;
+export const buddyHeight = () => FRAME_HEIGHT;
 
 export function preloadBuddy(scene) {
     const key = buddyKey(scene);
     if (!scene.textures.exists(key)) {
-        scene.load.image(key, FIGURES[figureFor(scene)].src);
+        scene.load.image(key, FIGURES[figureFor(scene)]);
     }
 }

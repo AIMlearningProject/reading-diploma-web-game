@@ -31,7 +31,9 @@ export default class TokenManager {
     }
 
     updateScale(baseScale) {
-        this.nodeOffsetY = 40 * baseScale;
+        // The ink buddy stands on top of the node, its feet on the node's rim,
+        // so it is seen whole and marks the stop to press next.
+        this.nodeOffsetY = 85 * baseScale;
         if (this.token) {
             this.token.setScale((this.tokenHeight * baseScale) / this.token.height);
         }

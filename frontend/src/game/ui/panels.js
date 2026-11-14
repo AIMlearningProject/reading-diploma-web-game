@@ -193,8 +193,8 @@ function makeCompactMarker(scene, { level, state, withMarker, onClick }) {
  * A continent's sign on the world map: the round marker and the plate under it
  * are one shape, and the whole of it can be pressed. (0, 0) is the marker's
  * centre. `genre` is the book kind for this pupil's year, `state` is
- * { isCompleted, isResubmittable }, and `withMarker` is false on the continent
- * the buddy stands on, which takes the marker's place.
+ * { isCompleted, isResubmittable }, and `withMarker: false` draws the plate
+ * without its marker (the world map now always passes true).
  */
 export function makeContinentSign(scene, options) {
     const { level, name, genre, state, withMarker, s, onClick } = options;
