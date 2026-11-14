@@ -133,7 +133,7 @@ class BaseMapScene extends Phaser.Scene {
         // On a small screen the sheet is zoomed until the book nodes are full
         // size, and the pupil drags it (mapView.js).
         const nodeFullWidth = (this.LOGICAL_WIDTH * px(NODE_TOUCH_SIZE)) / NODE_LOGICAL_SIZE;
-        const rect = sheetRect(width, height, this.bg.width, this.bg.height, nodeFullWidth / this.bg.width);
+        const rect = sheetRect(width, height, this.bg.width, this.bg.height, nodeFullWidth / this.bg.width, { coverSlivers: true });
         this.bg.setScale(rect.scale).setPosition(rect.x, rect.y);
         this.mapWorld = { width: rect.worldW, height: rect.worldH };
         this.panner.setWorld(rect);

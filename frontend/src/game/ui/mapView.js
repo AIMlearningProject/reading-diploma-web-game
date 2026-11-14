@@ -18,10 +18,25 @@ import { px } from './constants.js';
  * scene works it out, since only it knows how its stops are drawn.
  * A sheet smaller than the view along one axis is centred along it, as the
  * old letterbox fit did.
+ *
+ * With `coverSlivers`, a sheet that misses the view by only a sliver along
+ * one axis is grown to cover it. A few pixels of desk along two edges read as
+ * a stray border of uneven weight, not as the desk the sheet lies on; a real
+ * margin (more than SLIVER of the view on each side) stays. The other axis
+ * then overflows by as little, and the camera's follow of the buddy keeps the
+ * route in view. Only for a sheet with no frame of its own to lose.
  */
-export function sheetRect(viewW, viewH, nativeW, nativeH, minScale) {
+const SLIVER = 0.04;
+
+export function sheetRect(viewW, viewH, nativeW, nativeH, minScale, { coverSlivers = false } = {}) {
     const fit = Math.min(viewW / nativeW, viewH / nativeH);
-    const scale = Math.max(fit, minScale);
+    let scale = Math.max(fit, minScale);
+    if (coverSlivers) {
+        const gapX = (viewW - nativeW * scale) / 2 / viewW;
+        const gapY = (viewH - nativeH * scale) / 2 / viewH;
+        if (gapX > 0 && gapX < SLIVER) scale = viewW / nativeW;
+        if (gapY > 0 && gapY < SLIVER) scale = viewH / nativeH;
+    }
 
     const width = nativeW * scale;
     const height = nativeH * scale;
