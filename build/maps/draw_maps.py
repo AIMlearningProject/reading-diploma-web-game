@@ -117,8 +117,13 @@ class Sheet:
     def ink_land(self, p, width=7):
         self.stroke(p, width)
 
-    def finish(self):
-        """Paper grain: fine scratches and speckle, darkening only."""
+    def finish(self, grain=True):
+        """Paper grain: fine scratches and speckle, darkening only.
+
+        grain=False skips it, for a drawing that is not paper (the desk).
+        """
+        if not grain:
+            return self.img.copy()
         a = np.asarray(self.img, np.float32)
         g = np.random.default_rng(11)
         streak = gaussian_filter(g.standard_normal(a.shape[:2]), (26, 1.1))

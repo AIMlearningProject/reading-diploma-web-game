@@ -73,7 +73,8 @@ def draw(tone, seed):
     for top in PLANK_TOPS[1:-1]:
         seam = s.wobble(np.array([(-30, top), (W + 30, top)], float), 1.5, closed=False)
         s.stroke(seam, SEAM, closed=False)
-    return s.finish()
+    # Wood, not paper: the sheets' paper grain would read as a print on it.
+    return s.finish(grain=False)
 
 
 def main():
