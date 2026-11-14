@@ -364,6 +364,94 @@
     outline-offset: 3px;
 }
 
+/* ── Upright frame ────────────────────────────────────── */
+/* A phone held upright gets a 560x1060
+ * frame (PuzzleScene.jsx picks it): the same shapes in one column, the picture
+ * on top, then the story, the backpack in a row and Käytä across the bottom.
+ * It scales to about 0.67 on a 375px screen, so the small sizes are raised. */
+
+.ps-frame[data-layout='upright'] {
+    width: 560px;
+    height: 1060px;
+}
+
+[data-layout='upright'] .ps-panel {
+    width: 536px;
+    padding: 24px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+}
+
+[data-layout='upright'] .ps-art-box {
+    width: 488px;
+    height: 315px;
+}
+
+/* static, so the close button is placed against the panel, not this column. */
+[data-layout='upright'] .ps-text {
+    position: static;
+    gap: 16px;
+    min-height: 372px;
+}
+
+/* On the picture's corner, so it is a paper disc with its ring always drawn. */
+[data-layout='upright'] .ps-close {
+    --book-fill: var(--book-paper);
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+}
+
+[data-layout='upright'] .ps-close:not(:hover)::before {
+    border-color: var(--book-outline);
+}
+
+[data-layout='upright'] .ps-story,
+[data-layout='upright'] .ps-win {
+    padding-right: 0;
+}
+
+[data-layout='upright'] .ps-question {
+    font-size: 24px;
+}
+
+[data-layout='upright'] .ps-hint-bubble,
+[data-layout='upright'] .ps-note-bubble {
+    font-size: 22px;
+}
+
+[data-layout='upright'] .ps-actions {
+    flex-direction: row;
+}
+
+[data-layout='upright'] .ps-button {
+    flex: 1;
+    height: 66px;
+    font-size: 22px;
+}
+
+[data-layout='upright'] .ps-tray {
+    flex-wrap: wrap;
+    gap: 16px 8px;
+}
+
+[data-layout='upright'] .ps-slot {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+    height: 122px;
+}
+
+[data-layout='upright'] .ps-slot-name {
+    font-size: 17px;
+}
+
+[data-layout='upright'] .ps-use {
+    flex: 1 0 100%;
+    margin-left: 0;
+    height: 88px;
+}
+
 /* ── Solve animation ──────────────────────────────────── */
 /* Every layer is driven by data-state on the illustration root. It plays once
  * on solve and never loops; a static solved render is the end frame. */

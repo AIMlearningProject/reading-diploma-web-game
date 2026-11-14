@@ -221,11 +221,13 @@
 .level-incomplete .level-number { color: var(--ink-500); }
 
 /* On a phone "Pohjoisnapa" beside HYVÄKSYTTY is wider than the row: the name
- * hyphenates (the page is lang="fi") instead of pushing the badge off the sheet. */
+ * breaks at its soft hyphen (LEVELS in StudentDashboard.jsx) instead of pushing
+ * the badge off the sheet. manual, not auto: a browser with no Finnish
+ * hyphenation dictionary (Chrome on Windows) broke it as "Pohjoisna" / "pa". */
 .level-name {
     font-size: 17px;
     font-weight: 900;
-    hyphens: auto;
+    hyphens: manual;
     overflow-wrap: break-word;
 }
 
@@ -470,11 +472,19 @@
 /* minmax(0, 1fr): a plain 1fr column never narrows below the 160px sprite, so
  * on a phone the second card ran off the sheet. The sprite shrinks instead. */
 @media (max-width: 600px) {
+    /* Three across, as on a wide screen: in two columns the third buddy took a
+     * row of its own and pushed Tallenna off the screen. */
     .char-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1rem;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
     }
-    .char-option { padding: 1.25rem 0.5rem 1rem; }
+    .char-option {
+        padding: 0.9rem 0.3rem 0.75rem;
+        gap: 0.5rem;
+        border-radius: 18px;
+    }
+    .char-label { font-size: 16px; }
     .char-option-stage { max-width: 100%; }
     /* The frame keeps its aspect-ratio (BuddyAvatar.jsx) once it narrows;
      * !important beats the inline pixel height. */
@@ -603,6 +613,19 @@
     .student-header .logout-button {
         padding: 7px 12px;
         font-size: 14px;
+    }
+}
+
+/* On a phone the buddy and the two buttons leave the page name about 50px,
+ * which showed "Ma…". The sailboat stands for it; the name stays for a screen
+ * reader. */
+@media (max-width: 480px) {
+    .student-header h1 span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
     }
 }
 
@@ -857,4 +880,59 @@
 .char-option:focus-visible {
     outline: 3px solid var(--navy-700);
     outline-offset: 3px;
+}
+
+/* ── Phone: a tighter page ───────────────────────────────── */
+/* The frame BuddySprite draws is as tall as the tallest buddy, so that the
+ * three stand on one line in the picker. Shown alone, a short buddy stood
+ * under 130px of empty frame; here the frame is the buddy's own height. */
+.buddy-current-showcase .buddy-sprite {
+    height: auto !important;
+    aspect-ratio: auto !important;
+}
+
+@media (max-width: 600px) {
+    .student-content {
+        gap: 1.75rem;
+        padding-top: 1.5rem;
+    }
+
+    .student-dashboard .dashboard-section {
+        padding: 1.4rem 1.25rem 1.5rem;
+    }
+
+    .buddy-current {
+        gap: 0.4rem;
+        margin-top: 0.25rem;
+        padding: 0.5rem 0 0.25rem;
+    }
+
+    .buddy-current-showcase .buddy-sprite {
+        width: 124px !important;
+    }
+
+    /* Two by two: stacked, the four games were a screen and a half of scrolling. */
+    .sd-scene-games-section .rewards-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px 16px;
+    }
+
+    .sd-scene-game {
+        gap: 0.35rem;
+        padding: 16px 6px 14px;
+    }
+
+    .sd-scene-game-disc {
+        width: 52px;
+        height: 52px;
+    }
+
+    .sd-scene-game-name {
+        font-size: 15px;
+        line-height: 1.2;
+    }
+
+    .sd-scene-game-pitch {
+        font-size: 14px;
+    }
 }

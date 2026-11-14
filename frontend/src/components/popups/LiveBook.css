@@ -13,6 +13,18 @@
     height: 100%;
     position: relative;
     transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+}
+
+/* A shut book is only its right half
+ * (unopened) or its left half (finished), so it slides to the middle of the
+ * window, and back out as the cover opens. */
+.openbook--unopened {
+    transform: translateX(-25%);
+}
+
+.openbook--finished {
+    transform: translateX(25%);
 }
 
 .book-cover {

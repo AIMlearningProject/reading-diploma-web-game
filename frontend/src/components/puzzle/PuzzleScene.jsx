@@ -39,11 +39,19 @@ export default function PuzzleScene({
     const pickedItem = inventory.find((item) => item.id === picked) ?? null
     const game = miniGameById(scene.reward.gameId)
 
-    // The 1280x800 frame is scaled to the viewport, never reflowed.
+    // The frame is scaled to the viewport, never reflowed. There are two frames,
+    // the wide 1280x800 one and an upright one for a phone held upright, and the
+    // one that comes out larger is used: on that phone the wide frame scaled to
+    // 0.29 and the story was 8px tall. The sizes are repeated in PuzzleScene.css.
     useLayoutEffect(() => {
         const fit = () => {
-            const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 800, 1)
-            frameRef.current?.style.setProperty('--ps-scale', String(scale))
+            const fitTo = (w, h) => Math.min(window.innerWidth / w, window.innerHeight / h, 1)
+            const wide = fitTo(1280, 800)
+            const upright = fitTo(560, 1060)
+            const frame = frameRef.current
+            if (!frame) return
+            frame.dataset.layout = upright > wide ? 'upright' : 'wide'
+            frame.style.setProperty('--ps-scale', String(Math.max(wide, upright)))
         }
         fit()
         window.addEventListener('resize', fit)

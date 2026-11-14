@@ -20,7 +20,12 @@
     --book-fill: var(--book-paper);
     position: relative;
     box-sizing: border-box;
-    width: min(760px, 100%);
+    /* The third width keeps the stage inside a short screen, a phone on its
+     * side: without it the window was 555px tall on a 375px screen and the
+     * ground was cut off. 190px is everything above and below the stage (the
+     * scrim's padding, the window's, the bar and the gap under it), 56px the
+     * window's own side padding. --sg-ratio is set by SceneGameModal.jsx. */
+    width: min(760px, 100%, calc((100dvh - 190px) * var(--sg-ratio, 1.6) + 56px));
     padding: 26px 28px 30px;
     border-radius: 26px;
 }
@@ -65,4 +70,56 @@
 /* Keep the score readout clear of the close button in the corner. */
 .sg-window .mg-bar {
     padding-right: 56px;
+}
+
+/* A phone on its side: the frame gives its height to the stage. */
+@media (max-height: 520px) {
+    .sg-scrim {
+        padding: var(--space-2);
+    }
+
+    /* As above, with this block's smaller figures: 124px and 32px. */
+    .sg-window {
+        width: min(760px, 100%, calc((100dvh - 124px) * var(--sg-ratio, 1.6) + 32px));
+        padding: 10px 16px 16px;
+    }
+
+    .sg-close {
+        top: 2px;
+        right: 4px;
+    }
+
+    .sg-window .mg-shell {
+        gap: var(--space-2);
+    }
+
+    .sg-window .mg-name {
+        font-size: 20px;
+    }
+
+    .sg-window .mg-score-value {
+        font-size: 24px;
+    }
+}
+
+/* A phone held upright: the window runs
+ * nearly edge to edge, so the stage is as wide as the screen allows. */
+@media (max-width: 600px) and (min-height: 521px) {
+    .sg-scrim {
+        padding: var(--space-2);
+    }
+
+    .sg-window {
+        padding: 16px 12px 18px;
+        border-radius: 22px;
+    }
+
+    .sg-close {
+        top: 6px;
+        right: 4px;
+    }
+
+    .sg-window .mg-bar {
+        padding-right: 48px;
+    }
 }

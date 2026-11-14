@@ -7,7 +7,7 @@ import VideoPopupModal from '../modals/VideoPopupModal.js';
 import ReadingState from '../state.js';
 import { itemForMap } from '../data/items.js';
 import { sceneForMap } from '../data/puzzleScenes.js';
-import { DEPTHS, INK, px, uiScale as calcUiScale, renderScale } from '../ui/constants.js';
+import { DEPTHS, FONTS, INK, px, uiScale as calcUiScale, renderScale } from '../ui/constants.js';
 import { ICON_KEYS, iconImage } from '../ui/icons.js';
 import { makeInkBadge } from '../ui/panels.js';
 import { createDeskBackdrop } from '../ui/desk.js';
@@ -177,6 +177,8 @@ class BaseMapScene extends Phaser.Scene {
         if (this.bookIconContainer) this.bookIconContainer.destroy();
         if (this.titleBadge) this.titleBadge.destroy();
 
+        if (this.titleLettering) { this.titleLettering.destroy(); this.titleLettering = null; }
+
         // Back badge
         const back = makeInkBadge(this, margin, margin, 'TAKAISIN', {
             iconKey: ICON_KEYS.ARROW_LEFT, s: uiS, anchor: 'left', depth: DEPTHS.UI,
@@ -213,11 +215,37 @@ class BaseMapScene extends Phaser.Scene {
         this.bookIconContainer.setScrollFactor(0, 0, true);
 
         // Title badge, tucked under the corner badges on narrow screens
-        const titleY = isNarrow ? margin + back.height + 8 : margin;
-        const title = makeInkBadge(this, width / 2, titleY, this.title, {
-            s: uiS, anchor: 'center', fontSize: 24, depth: DEPTHS.UI
-        });
-        this.titleBadge = title.container.setScrollFactor(0, 0, true);
+        // Title. On a phone it is lettering under the corner badges, with no
+        // plate: outlined, so it reads on the desk and on the map alike, and
+        // with no edge to sit astride where the two meet. A wide screen keeps
+        // the paper plate between the badges.
+        let titleY = margin;
+        let titleHeight;
+        if (isNarrow) {
+            titleY = margin + back.height + px(8);
+            this.titleLettering = this.add.text(width / 2, titleY, this.title, {
+                fontFamily: FONTS.BODY,
+                fontSize: `${Math.round(px(19))}px`,
+                fontStyle: '900',
+                color: INK.PAPER,
+                align: 'center',
+                stroke: INK.OUTLINE,
+                strokeThickness: Math.round(px(5))
+            }).setOrigin(0.5, 0).setScrollFactor(0).setDepth(DEPTHS.UI);
+            // The longest title must not reach the screen's edges.
+            const room = width - margin * 2;
+            if (this.titleLettering.width > room) {
+                this.titleLettering.setScale(room / this.titleLettering.width);
+            }
+            titleHeight = this.titleLettering.displayHeight;
+            this.titleBadge = null;
+        } else {
+            const title = makeInkBadge(this, width / 2, titleY, this.title, {
+                s: uiS, anchor: 'center', fontSize: 24, depth: DEPTHS.UI
+            });
+            this.titleBadge = title.container.setScrollFactor(0, 0, true);
+            titleHeight = title.height;
+        }
 
         this.renderPuzzleMarker(width, height, uiS, margin);
 
@@ -225,7 +253,7 @@ class BaseMapScene extends Phaser.Scene {
         // notice is the way back to the questions.
         if (this.redoNotice) { this.redoNotice.destroy(); this.redoNotice = null; }
         if (ReadingState.isLevelPendingResubmission(mapKey)) {
-            const noticeY = titleY + title.height + 10;
+            const noticeY = titleY + titleHeight + 10;
             const notice = makeInkBadge(
                 this, width / 2, noticeY,
                 this.needsRedo()

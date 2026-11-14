@@ -19,15 +19,17 @@ import {
     updateUserAvatar,
 } from '../services/api'
 
+// ­ is a soft hyphen: where a long name breaks when a phone row is too
+// narrow for it, see .level-name.
 const LEVELS = [
-    { level: 1, name: 'Pohjoisnapa' },
+    { level: 1, name: 'Pohjois­napa' },
     { level: 2, name: 'Eurooppa' },
     { level: 3, name: 'Aasia' },
     { level: 4, name: 'Pohjois-Amerikka' },
     { level: 5, name: 'Etelä-Amerikka' },
     { level: 6, name: 'Afrikka' },
     { level: 7, name: 'Oseania' },
-    { level: 8, name: 'Etelämanner' },
+    { level: 8, name: 'Etelä­manner' },
 ]
 
 function StudentDashboard() {

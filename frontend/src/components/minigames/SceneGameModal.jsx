@@ -15,7 +15,11 @@ export default function SceneGameModal({ game, buddy, onClose }) {
 
     return (
         <div className="sg-scrim" role="dialog" aria-modal="true" aria-label={game.name}>
-            <div className="sg-window ink-shape ink-drop">
+            <div
+                className="sg-window ink-shape ink-drop"
+                // The stage's shape, so the window can fit it to a short screen.
+                style={{ '--sg-ratio': game.module.width / game.module.height }}
+            >
                 <button className="sg-close ink-shape ink-shape--round ink-shape--thin" type="button" aria-label="Sulje peli" onClick={onClose}>
                     <InkIcon src={closeIcon} size={20} />
                 </button>

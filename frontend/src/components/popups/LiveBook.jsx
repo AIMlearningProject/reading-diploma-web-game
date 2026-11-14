@@ -15,7 +15,7 @@ export default function LiveBook({ pct, isReadOnly }) {
 
     return (
         <div className={"openbook-wrapper"} style={{ "--requiredSpace": isReadOnly ? "150px" : "295px" }}>
-            <div className="openbook">
+            <div className={`openbook${isFrontCoverClosed ? " openbook--unopened" : ""}${isBackCoverClosed ? " openbook--finished" : ""}`}>
                 <div className={`book-cover ${isFrontCoverClosed ? "" : "flipped"}`}
                     style={{ zIndex: isFrontCoverClosed ? totalPages + 2 : 1 }}
                 />
