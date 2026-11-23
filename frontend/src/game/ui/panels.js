@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { CSS_COLORS, FONTS, INK, px, renderScale } from './constants.js';
 import { iconImage } from './icons.js';
-import { inkCircle, inkShape } from './ink.js';
+import { SMALL_AMOUNT, inkCircle, inkShape } from './ink.js';
 
 /**
  * Shared surfaces for the Phaser UI, drawn the way ink.css draws the pupil's
@@ -39,12 +39,12 @@ function bodyText(scene, text, size, color = CSS_COLORS.NAVY) {
 }
 
 /**
- * A popup's sheet, placed by its top-left corner. Heavier than any button on
- * it, since it has to hold its own over the map behind it.
+ * A popup's sheet, placed by its top-left corner. Drawn with the same line and
+ * wobble as the buttons on it, so sheet and button read as one hand.
  */
 export function makeInkPanel(scene, x, y, w, h, s = 1) {
     return inkShape(scene, x, y, w, h, {
-        radius: 26 * s, line: INK.PANEL * s, drop: 11 * s, seed: 7
+        radius: 26 * s, line: line(INK.MID, s), drop: 11 * s, seed: 7, amount: SMALL_AMOUNT
     });
 }
 

@@ -17,7 +17,8 @@ const PAD = 10;
 const pad = () => PAD * renderScale();
 const FIELD = 512;
 const PANEL_AMOUNT = 9;
-const SMALL_AMOUNT = 5;
+// The wobble of a button, and of the CSS #ink-hand filter.
+export const SMALL_AMOUNT = 5;
 
 // One shared noise field, read at an offset per seed. Computing the noise per
 // pixel made a full-canvas route take too long to redraw on every progress save.
@@ -132,13 +133,14 @@ function ditherTile() {
  * dithered drop live inside the texture and are hidden by the origin.
  */
 export function inkShape(scene, x, y, width, height, options = {}) {
-    const { radius = 12, fill = INK.PAPER, line = INK.MID, drop = 0, seed = 1 } = options;
+    const { radius = 12, fill = INK.PAPER, line = INK.MID, drop = 0, seed = 1, amount = null } = options;
     const w = Math.round(width);
     const h = Math.round(height);
     const r = Math.round(radius);
     const l = Math.round(line);
     const d = Math.round(drop);
-    const key = `ink-${w}x${h}-${r}-${fill}-${l}-${d}-${seed}`;
+    const wobble = amount ?? (Math.min(w, h) < 80 * renderScale() ? SMALL_AMOUNT : PANEL_AMOUNT);
+    const key = `ink-${w}x${h}-${r}-${fill}-${l}-${d}-${seed}-${wobble}`;
 
     if (!scene.textures.exists(key)) {
         const shape = bake(w, h, (g) => {
@@ -151,7 +153,7 @@ export function inkShape(scene, x, y, width, height, options = {}) {
             g.lineWidth = l;
             g.strokeStyle = INK.OUTLINE;
             g.stroke();
-        }, { seed, amount: Math.min(w, h) < 80 * renderScale() ? SMALL_AMOUNT : PANEL_AMOUNT });
+        }, { seed, amount: wobble });
 
         const canvas = document.createElement('canvas');
         canvas.width = shape.width + d;

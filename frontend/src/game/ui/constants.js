@@ -14,7 +14,6 @@ export const INK = {
     BIG:             6,
     MID:             5,
     SMALL:           4,
-    PANEL:           11,
     DOT:             2,
     // World map sheet scale at the reference size, which the sign sizes assume.
     WORLD_SCALE:     0.74,
