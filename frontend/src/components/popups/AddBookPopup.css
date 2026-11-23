@@ -10,7 +10,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* The panel centres itself with margin: auto, so a panel taller than the
+     * screen (a phone on its side, or with the keyboard open) scrolls from its
+     * top instead of losing its top and bottom past the overlay's edges. */
+    justify-content: flex-start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding: var(--space-4);
     background: var(--scrim-warm);
     pointer-events: auto;
@@ -22,7 +27,9 @@
     --book-fill: var(--book-paper);
     position: relative;
     box-sizing: border-box;
+    flex-shrink: 0;
     width: min(760px, 100%);
+    margin-block: auto;
     padding: 24px 28px 28px;
     border-radius: 26px;
     color: var(--ink-900);

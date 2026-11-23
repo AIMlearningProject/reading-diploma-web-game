@@ -16,7 +16,10 @@ export default class VideoPopupModal {
         this.destroy();
 
         const { width, height } = this.scene.scale;
-        const s = uiScale(width);
+        // uiScale stops at 0.7, where the 450 x 300 box is wider than a small
+        // phone, so the whole popup shrinks further to leave a margin around it
+        // (the ink edge and its drop shadow reach past the box itself).
+        const s = Math.min(uiScale(width), (width * 0.84) / 450, (height * 0.84) / 300);
         const depthBase = DEPTHS.VIDEO;
 
         this.popupUI = this.scene.add.group();
