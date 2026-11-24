@@ -42,8 +42,8 @@ function ReadingCount({ compact = false }) {
                 aria-valuemin={0}
                 aria-valuemax={target}
                 aria-valuenow={read}
+                style={{ '--wmh-read': `${Math.min(100, (100 * read) / target)}%` }}
             >
-                <span className="wmh-track-fill" style={{ width: `${(100 * read) / target}%` }} />
                 {/* One tick per continent. */}
                 <span className="wmh-track-ticks" aria-hidden="true">
                     {ReadingState.mapOrder.map((key) => <i key={key} />)}

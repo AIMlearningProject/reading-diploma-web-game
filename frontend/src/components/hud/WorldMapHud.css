@@ -104,21 +104,20 @@
     margin-right: 6px;
 }
 
+/* The reading fills the track's own inked layer up to --wmh-read (set inline), so
+   the sun wobbles with the outline and never pokes out past it. The track is a
+   small shape: #ink-hand's 5% margin is about a pixel on it and clips the
+   wobble flat, so it takes #ink-hand-small. */
 .wmh-track {
-    --book-fill: var(--book-paper);
+    --wmh-read: 0%;
+    --book-fill: linear-gradient(90deg, var(--book-sun) var(--wmh-read), var(--book-paper) var(--wmh-read));
     height: 24px;
     border-radius: 12px;
     margin-top: 10px;
 }
 
-.wmh-track-fill {
-    position: absolute;
-    left: var(--book-line);
-    top: var(--book-line);
-    bottom: var(--book-line);
-    max-width: calc(100% - 2 * var(--book-line));
-    background: var(--book-sun);
-    border-radius: 6px 0 0 6px;
+.wmh-track::before {
+    filter: url('#ink-hand-small');
 }
 
 .wmh-track-ticks {

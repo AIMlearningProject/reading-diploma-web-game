@@ -14,15 +14,24 @@
     z-index: 1;
 }
 
+/* The rule sits centred on the seam, in a band tall enough for the wobble: on
+   a band only as tall as the line, the filter's margin clips the displaced line
+   into dashes. The line is thicker than the wobble moves it (5px at most), so
+   no sliver of the page or of the band shows on either side of it. */
 .funding-notice::before {
     content: '';
     position: absolute;
-    top: 0;
+    top: -12px;
     left: 0;
     right: 0;
-    height: calc(var(--book-line) * 0.5);
-    background: var(--book-outline);
-    filter: url('#ink-hand');
+    height: 24px;
+    background: linear-gradient(
+        transparent calc(50% - var(--book-line) * 0.45),
+        var(--book-outline) 0 calc(50% + var(--book-line) * 0.45),
+        transparent 0
+    );
+    filter: url('#ink-hand-small');
+    pointer-events: none;
 }
 
 .funding-notice-logos {
