@@ -3,16 +3,15 @@
 // the canvas and the page agree on one set of numbers.
 //
 // On a wide screen the sheet fills the height at the left edge and the HUD is
-// one panel on the desk to its right. Anything narrower keeps the sheet where
+// the backpack on the desk to its right. Anything narrower keeps the sheet where
 // sheetRect() puts it and the HUD shrinks to a corner group over the map.
 
-// CSS pixels. The panel never grows past PANEL_MAX: past that it is centred on
-// the desk to the sheet's right instead. PANEL_DESIGN is the size it was drawn
-// at; WorldMapHud scales its contents by how this one compares.
+// CSS pixels. The panel area never grows past PANEL_MAX: past that it is
+// centred on the desk to the sheet's right instead. WorldMapHud scales the
+// backpack whole to fit inside it.
 export const HUD_MARGIN = 28;
 export const PANEL_MIN = 400;
 export const PANEL_MAX = 640;
-export const PANEL_DESIGN = { width: 502, height: 672 };
 
 /**
  * The wide layout, or null when it does not fit.

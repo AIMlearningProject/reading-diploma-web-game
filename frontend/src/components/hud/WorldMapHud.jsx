@@ -1,10 +1,12 @@
 // The world map's HUD, drawn over the Phaser canvas.
 //
-// On a wide screen it is one panel on the desk beside the map sheet, at the
-// place game/ui/worldMapLayout.js worked out (`panel`, in CSS pixels): the
-// way back, the year's reading, where the pupil is, and the backpack. On a
-// narrow screen there is no room beside the sheet, so only the way back and
-// the reading count stay, as a group in the top left corner over the map.
+// On a wide screen it is the pupil's backpack, lying on the desk beside the map
+// sheet in the area game/ui/worldMapLayout.js worked out (`panel`, in CSS
+// pixels). The way back is the luggage tag on its handle, the year's reading
+// and where the pupil is are written in the notebook tucked under its flap, and
+// the found items stand in its front pocket. On a narrow screen there is no
+// room beside the sheet, so only the way back and the reading count stay, as a
+// group in the bottom left corner over the map.
 //
 // It reads ReadingState when it renders. Nothing on the world map changes the
 // reading, and the scene hands over a new layout every time it starts, so the
@@ -13,8 +15,8 @@
 import ReadingState from '../../game/state.js'
 import items from '../../game/data/items.js'
 import { continentName } from '../../game/scenes/continentRegistry.js'
-import { PANEL_DESIGN } from '../../game/ui/worldMapLayout.js'
 import InkFilter from '../ink/InkFilter.jsx'
+import BackpackArt, { BAG_SIZE, NOTE_TEXT, TAG } from './BackpackArt.jsx'
 import './WorldMapHud.css'
 
 function BackArrow() {
@@ -70,24 +72,39 @@ export default function WorldMapHud({ panel, onBack, onOpenContinent }) {
     const level = ReadingState.mapOrder.indexOf(current) + 1
     const nodes = ReadingState.nodesFor(current)
     const nodesRead = nodes.filter((node) => node.progress >= 100).length
-    // Type and spacing follow the panel's size against the one it was drawn at,
-    // so a short screen fits it all and a big one does not leave it half empty.
-    const k = Math.min(panel.width / PANEL_DESIGN.width, panel.height / PANEL_DESIGN.height)
+    // An item not found yet leaves its pocket empty.
+    const found = items.map((item) => (ReadingState.hasItem(item.id) ? item : null))
+    const foundNames = found.filter(Boolean).map((item) => item.name)
+
+    // The bag is drawn at BAG_SIZE and scaled whole into the area, centred.
+    const k = Math.min(panel.width / BAG_SIZE.width, panel.height / BAG_SIZE.height)
+    const left = panel.x + (panel.width - BAG_SIZE.width * k) / 2
+    const top = panel.y + (panel.height - BAG_SIZE.height * k) / 2
 
     return (
         <aside
-            className="wmh-panel ink-shape ink-drop"
-            style={{ left: panel.x, top: panel.y, width: panel.width, height: panel.height, '--wmh-k': k }}
+            className="wmh-bag"
+            style={{ left, top, width: BAG_SIZE.width, height: BAG_SIZE.height, transform: `scale(${k})` }}
         >
             <InkFilter />
-            <button type="button" className="wmh-back" onClick={onBack}>
-                <span className="wmh-round ink-shape ink-drop"><BackArrow /></span>
-                <span className="wmh-back-label">Matkapäiväkirjaan</span>
+            <BackpackArt items={found} />
+
+            <button
+                type="button" className="wmh-tag" onClick={onBack}
+                style={{
+                    left: TAG.x, top: TAG.y + TAG.top, width: TAG.width, height: TAG.bottom - TAG.top,
+                    transformOrigin: `${TAG.hole.x}px ${TAG.hole.y - TAG.top}px`, transform: `rotate(${TAG.angle}deg)`
+                }}
+            >
+                <BackArrow />
+                Matkapäiväkirjaan
             </button>
 
-            <ReadingCount />
-
-            <section className="wmh-here ink-shape" aria-label="Olet täällä">
+            <section
+                className="wmh-note" aria-label="Muistikirja"
+                style={{ left: NOTE_TEXT.x, top: NOTE_TEXT.y, transform: `rotate(-1.5deg) scale(${NOTE_TEXT.scale})` }}
+            >
+                <ReadingCount />
                 <p className="wmh-here-where">Olet täällä</p>
                 <div className="wmh-here-row">
                     <span className="wmh-marker ink-shape ink-shape--round">{level}</span>
@@ -102,24 +119,9 @@ export default function WorldMapHud({ panel, onBack, onOpenContinent }) {
                 </button>
             </section>
 
-            <section className="wmh-bag" aria-label="Reppu">
-                <h2 className="wmh-bag-title">Reppu</h2>
-                <ul className="wmh-bag-items">
-                    {items.map((item) => (
-                        ReadingState.hasItem(item.id)
-                            ? (
-                                <li key={item.id} className="wmh-item ink-shape" title={item.name}>
-                                    <img src={item.icon[96]} alt={item.name} />
-                                </li>
-                            )
-                            : (
-                                <li key={item.id} className="wmh-item wmh-item--missing ink-shape" aria-label="Ei vielä löydetty">
-                                    <span aria-hidden="true">?</span>
-                                </li>
-                            )
-                    ))}
-                </ul>
-            </section>
+            <p className="wmh-sr-only">
+                Reppu: {foundNames.length > 0 ? foundNames.join(', ') : 'ei vielä tavaroita'}
+            </p>
         </aside>
     )
 }

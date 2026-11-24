@@ -1,17 +1,13 @@
-/* The world map's HUD (WorldMapHud.jsx). Drawn in ink like the pupil's other
-   screens (components/ink/ink.css): one outline weight for every shape, a
-   dithered drop only under what can be pressed.
+/* The world map's HUD (WorldMapHud.jsx). On a wide screen it is the backpack
+   drawn by BackpackArt.jsx, laid out in that drawing's own 502 x 676 units and
+   scaled as one piece; on a narrow screen it is a small group in the corner.
+   Shapes drawn in HTML use the ink classes of components/ink/ink.css. */
 
-   Type, four steps: 18 (small print), 22 (labels), 26-28 (names), 40 (the
-   year's count). The panel scales all of it by --wmh-k, its size against the
-   one it was drawn at (PANEL_DESIGN in game/ui/worldMapLayout.js). */
-
-.wmh-panel,
+.wmh-bag,
 .wmh-corner {
-    --book-line: 7.5px;
+    --book-line: 6px;
     --book-drop: 6px;
     --book-dot: 1.5px;
-    --wmh-k: 1;
     position: absolute;
     z-index: 5;
     font-family: var(--font-body);
@@ -20,120 +16,99 @@
 }
 
 /* ink.css draws a shape on a positioned element. */
-.wmh-panel .ink-shape,
-.wmh-corner .ink-shape {
+:where(.wmh-bag, .wmh-corner) .ink-shape {
     position: relative;
 }
 
-.wmh-panel {
-    --book-fill: var(--book-paper);
-    box-sizing: border-box;
-    border-radius: 22px;
-    padding: calc(30px * var(--wmh-k)) calc(32px * var(--wmh-k)) calc(34px * var(--wmh-k));
-    display: flex;
-    flex-direction: column;
-    /* Room left over on a tall screen spreads evenly between the blocks. */
-    justify-content: space-between;
-    gap: calc(26px * var(--wmh-k));
-}
-
-.wmh-panel::after {
-    --book-drop: 8px;
-}
-
-/* :where() keeps the reset at zero weight, so each block's own margin wins. */
-.wmh-panel :where(p, h2, ul) {
+/* Zero weight, so each block's own margin and size win. */
+:where(.wmh-bag, .wmh-corner) :where(p, h2) {
     margin: 0;
 }
 
-/* Zero weight too, so a button's own font-size is not reset to the panel's. */
-:where(.wmh-panel, .wmh-corner) :where(button) {
+:where(.wmh-bag, .wmh-corner) :where(button) {
     font: inherit;
     color: inherit;
     cursor: pointer;
 }
 
-.wmh-panel button:focus-visible,
-.wmh-corner button:focus-visible {
+:where(.wmh-bag, .wmh-corner) button:focus-visible {
     outline: 3px solid var(--navy-500);
-    outline-offset: 6px;
+    outline-offset: 4px;
 }
 
-/* ── The way back ─────────────────────────────────────────── */
+.wmh-bag {
+    transform-origin: 0 0;
+}
 
-.wmh-back {
+.wmh-bag-art {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.wmh-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* ── The luggage tag: the way back ───────────────────────── */
+
+/* The tag itself is drawn in BackpackArt; this button lies over it. */
+.wmh-tag {
+    position: absolute;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 0;
+    gap: 7px;
+    padding: 0 0 0 40px;
     border: 0;
     background: none;
-    text-align: left;
-    font-size: calc(26px * var(--wmh-k));
+    font-size: 17px;
 }
 
-.wmh-round {
-    --book-fill: var(--book-paper);
+.wmh-tag .wmh-arrow {
+    width: 18px;
+    height: 18px;
     flex: none;
-    width: calc(54px * var(--wmh-k));
-    height: calc(54px * var(--wmh-k));
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    padding: 0;
-    border: 0;
-    background: none;
 }
 
-/* The circle's drop pulls its visual centre down; the label follows it. */
-.wmh-back-label {
-    padding-top: 5px;
+.wmh-tag:hover {
+    color: var(--navy-500);
 }
 
-.wmh-arrow {
-    width: 52%;
-    height: 52%;
-    fill: none;
-    stroke: var(--book-outline);
-    stroke-width: 4.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    filter: url('#ink-hand-small');
-}
+/* ── The notebook ────────────────────────────────────────── */
 
-.wmh-back:hover .wmh-round,
-.wmh-corner .wmh-round:hover {
-    --book-fill: var(--book-chip);
+/* Written on the page's ruled lines: the first falls under the count and they
+   are 34px apart (NOTE_TEXT in BackpackArt.jsx), so every gap below keeps the
+   baselines on them. */
+.wmh-note {
+    position: absolute;
+    width: 390px;
+    transform-origin: 0 0;
 }
-
-.wmh-back:active .wmh-round,
-.wmh-corner .wmh-round:active {
-    transform: translate(calc(var(--book-drop) * 0.9), var(--book-drop));
-}
-
-.wmh-back:active .wmh-round::after,
-.wmh-corner .wmh-round:active::after {
-    display: none;
-}
-
-/* ── The year's reading ──────────────────────────────────── */
 
 .wmh-count-text {
-    font-size: calc(22px * var(--wmh-k));
+    font-size: 21px;
     color: var(--ink-600);
 }
 
 .wmh-count-text strong {
-    font-size: calc(40px * var(--wmh-k));
+    font-size: 38px;
     color: var(--navy-700);
     margin-right: 6px;
 }
 
 .wmh-track {
     --book-fill: var(--book-paper);
-    height: calc(30px * var(--wmh-k));
-    border-radius: 15px;
-    margin-top: calc(14px * var(--wmh-k));
+    height: 24px;
+    border-radius: 12px;
+    margin-top: 10px;
 }
 
 .wmh-track-fill {
@@ -143,7 +118,7 @@
     bottom: var(--book-line);
     max-width: calc(100% - 2 * var(--book-line));
     background: var(--book-sun);
-    border-radius: 9px 0 0 9px;
+    border-radius: 6px 0 0 6px;
 }
 
 .wmh-track-ticks {
@@ -157,17 +132,9 @@
     border-left: 2px solid color-mix(in srgb, var(--book-outline) 25%, transparent);
 }
 
-/* ── Where the pupil is ──────────────────────────────────── */
-
-.wmh-here {
-    --book-fill: var(--book-chip);
-    border-radius: 18px;
-    padding: calc(22px * var(--wmh-k)) calc(24px * var(--wmh-k)) calc(24px * var(--wmh-k));
-}
-
-.wmh-here-where,
-.wmh-here-read {
-    font-size: calc(18px * var(--wmh-k));
+.wmh-here-where {
+    margin-top: 38px;
+    font-size: 17px;
     color: var(--ink-600);
 }
 
@@ -175,47 +142,51 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: calc(10px * var(--wmh-k));
+    margin-top: 6px;
 }
 
 .wmh-marker {
     --book-fill: var(--book-paper);
-    --book-line: 6px;
+    --book-line: 5.5px;
     flex: none;
-    width: calc(52px * var(--wmh-k));
-    height: calc(52px * var(--wmh-k));
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    font-size: calc(24px * var(--wmh-k));
+    font-size: 22px;
 }
 
 .wmh-here-name {
-    font-size: calc(28px * var(--wmh-k));
+    font-size: 27px;
     font-weight: 900;
-    line-height: 1.1;
+    line-height: 1.05;
 }
 
 .wmh-here-genre {
-    font-size: calc(18px * var(--wmh-k));
+    font-size: 17px;
     color: var(--brass-700);
-    margin-top: 3px;
+    margin-top: 11px;
 }
 
 .wmh-here-read {
-    margin-top: calc(14px * var(--wmh-k));
+    font-size: 17px;
+    color: var(--ink-600);
+    margin-top: 11px;
 }
 
 .wmh-go {
     --book-fill: var(--book-sun);
+    --book-line: 7.5px;
     display: block;
     width: 100%;
-    margin-top: calc(16px * var(--wmh-k));
-    height: calc(58px * var(--wmh-k));
+    height: 54px;
+    margin-top: 16px;
+    padding: 0;
     border: 0;
-    border-radius: 29px;
+    border-radius: 27px;
     background: none;
-    font-size: calc(24px * var(--wmh-k));
+    font-size: 23px;
     color: var(--book-outline);
 }
 
@@ -231,59 +202,13 @@
     display: none;
 }
 
-/* ── The backpack ────────────────────────────────────────── */
-
-.wmh-bag-title {
-    font-size: calc(22px * var(--wmh-k));
-    font-weight: 900;
-    margin-bottom: calc(14px * var(--wmh-k));
-}
-
-.wmh-bag-items {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: space-between;
-}
-
-/* Stickers: each found item sits on its own slightly turned card. */
-.wmh-item {
-    --book-fill: color-mix(in srgb, var(--book-sun) 40%, var(--book-paper));
-    width: calc(82px * var(--wmh-k));
-    height: calc(82px * var(--wmh-k));
-    border-radius: 20px;
-    display: grid;
-    place-items: center;
-    transform: rotate(-4deg);
-}
-
-.wmh-item:nth-child(2n) {
-    transform: rotate(3deg);
-}
-
-.wmh-item img {
-    width: 78%;
-}
-
-.wmh-item--missing {
-    --book-fill: transparent;
-}
-
-.wmh-item--missing::before {
-    border-style: dashed;
-    opacity: 0.45;
-}
-
-.wmh-item--missing span {
-    font-size: calc(28px * var(--wmh-k));
-    color: color-mix(in srgb, var(--book-outline) 40%, transparent);
-}
-
 /* ── Narrow screens: a corner group over the map ─────────── */
 
 /* Bottom left: the first continent, where every pupil starts, sits at the top
    of the sheet, and on a phone the thumb is at the bottom anyway. */
 .wmh-corner {
+    --book-line: 5px;
+    --book-drop: 4px;
     bottom: 14px;
     left: 12px;
     display: flex;
@@ -291,14 +216,40 @@
     gap: 12px;
 }
 
-.wmh-corner {
-    --book-line: 5px;
-    --book-drop: 4px;
-}
-
-.wmh-corner .wmh-round {
+.wmh-round {
+    --book-fill: var(--book-paper);
+    flex: none;
     width: 46px;
     height: 46px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: none;
+}
+
+.wmh-round:hover {
+    --book-fill: var(--book-chip);
+}
+
+.wmh-round:active {
+    transform: translate(calc(var(--book-drop) * 0.9), var(--book-drop));
+}
+
+.wmh-round:active::after {
+    display: none;
+}
+
+.wmh-arrow {
+    width: 52%;
+    height: 52%;
+    fill: none;
+    stroke: var(--book-outline);
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: url('#ink-hand-small');
 }
 
 .wmh-corner-count {
@@ -323,8 +274,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .wmh-back:active .wmh-round,
-    .wmh-corner .wmh-round:active,
+    .wmh-round:active,
     .wmh-go:active {
         transform: none;
     }
