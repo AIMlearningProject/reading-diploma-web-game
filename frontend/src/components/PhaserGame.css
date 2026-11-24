@@ -10,8 +10,16 @@
     flex-direction: column;
 }
 
-.game-shell > #game-container {
+/* The canvas and the HUD drawn over it share this box, so the HUD's
+   coordinates are the canvas's and never reach the funding strip. */
+.game-stage {
+    position: relative;
     flex: 1 1 auto;
     min-height: 0;
+}
+
+.game-stage > #game-container {
+    position: absolute;
+    inset: 0;
     background-color: var(--parchment-000);
 }

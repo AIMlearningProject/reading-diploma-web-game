@@ -7,9 +7,12 @@ import africaImg from '../../assets/maps/africa.jpg';
 import oceaniaImg from '../../assets/maps/oceania.jpg';
 import antarcticaImg from '../../assets/maps/antarctica.jpg';
 
+// `name` is the continent's own name, shown on its world map sign (upper-cased)
+// and in the world map's panel; `title` is the heading of its own map.
 const continentRegistry = [
     {
         key: 'ArcticMap',
+        name: 'Pohjoisnapa',
         assetKey: 'arcticMap',
         assetPath: arcticImg,
         title: 'POHJOISNAVAN TUTKIMUSMATKA',
@@ -22,6 +25,7 @@ const continentRegistry = [
     },
     {
         key: 'EuropeMap',
+        name: 'Eurooppa',
         assetKey: 'europeMap',
         assetPath: europeImg,
         title: 'EUROOPAN SEIKKAILU',
@@ -34,6 +38,7 @@ const continentRegistry = [
     },
     {
         key: 'AsiaMap',
+        name: 'Aasia',
         assetKey: 'asiaMap',
         assetPath: asiaImg,
         title: 'AASIAN MATKA',
@@ -46,6 +51,7 @@ const continentRegistry = [
     },
     {
         key: 'NorthAmericaMap',
+        name: 'Pohjois-Amerikka',
         assetKey: 'northAmericaMap',
         assetPath: northamericaImg,
         title: 'POHJOIS-AMERIKAN MATKA',
@@ -58,6 +64,7 @@ const continentRegistry = [
     },
     {
         key: 'SouthAmericaMap',
+        name: 'Etelä-Amerikka',
         assetKey: 'southAmericaMap',
         assetPath: southamericaImg,
         title: 'ETELÄ-AMERIKAN MATKA',
@@ -70,6 +77,7 @@ const continentRegistry = [
     },
     {
         key: 'AfricaMap',
+        name: 'Afrikka',
         assetKey: 'africaMap',
         assetPath: africaImg,
         title: 'AFRIKAN SEIKKAILU',
@@ -82,6 +90,7 @@ const continentRegistry = [
     },
     {
         key: 'OceaniaMap',
+        name: 'Oseania',
         assetKey: 'oceaniaMap',
         assetPath: oceaniaImg,
         title: 'OSEANIAN MATKA',
@@ -94,6 +103,7 @@ const continentRegistry = [
     },
     {
         key: 'AntarcticaMap',
+        name: 'Etelämanner',
         assetKey: 'antarcticaMap',
         assetPath: antarcticaImg,
         title: 'ETELÄMANNER: SUURI JÄÄRETKI',
@@ -105,5 +115,9 @@ const continentRegistry = [
         ]
     }
 ];
+
+export function continentName(mapKey) {
+    return continentRegistry.find((c) => c.key === mapKey)?.name ?? '';
+}
 
 export default continentRegistry;

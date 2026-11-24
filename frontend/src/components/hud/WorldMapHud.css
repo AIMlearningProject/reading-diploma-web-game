@@ -1,0 +1,331 @@
+/* The world map's HUD (WorldMapHud.jsx). Drawn in ink like the pupil's other
+   screens (components/ink/ink.css): one outline weight for every shape, a
+   dithered drop only under what can be pressed.
+
+   Type, four steps: 18 (small print), 22 (labels), 26-28 (names), 40 (the
+   year's count). The panel scales all of it by --wmh-k, its size against the
+   one it was drawn at (PANEL_DESIGN in game/ui/worldMapLayout.js). */
+
+.wmh-panel,
+.wmh-corner {
+    --book-line: 7.5px;
+    --book-drop: 6px;
+    --book-dot: 1.5px;
+    --wmh-k: 1;
+    position: absolute;
+    z-index: 5;
+    font-family: var(--font-body);
+    font-weight: 900;
+    color: var(--navy-700);
+}
+
+/* ink.css draws a shape on a positioned element. */
+.wmh-panel .ink-shape,
+.wmh-corner .ink-shape {
+    position: relative;
+}
+
+.wmh-panel {
+    --book-fill: var(--book-paper);
+    box-sizing: border-box;
+    border-radius: 22px;
+    padding: calc(30px * var(--wmh-k)) calc(32px * var(--wmh-k)) calc(34px * var(--wmh-k));
+    display: flex;
+    flex-direction: column;
+    /* Room left over on a tall screen spreads evenly between the blocks. */
+    justify-content: space-between;
+    gap: calc(26px * var(--wmh-k));
+}
+
+.wmh-panel::after {
+    --book-drop: 8px;
+}
+
+/* :where() keeps the reset at zero weight, so each block's own margin wins. */
+.wmh-panel :where(p, h2, ul) {
+    margin: 0;
+}
+
+/* Zero weight too, so a button's own font-size is not reset to the panel's. */
+:where(.wmh-panel, .wmh-corner) :where(button) {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.wmh-panel button:focus-visible,
+.wmh-corner button:focus-visible {
+    outline: 3px solid var(--navy-500);
+    outline-offset: 6px;
+}
+
+/* ── The way back ─────────────────────────────────────────── */
+
+.wmh-back {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0;
+    border: 0;
+    background: none;
+    text-align: left;
+    font-size: calc(26px * var(--wmh-k));
+}
+
+.wmh-round {
+    --book-fill: var(--book-paper);
+    flex: none;
+    width: calc(54px * var(--wmh-k));
+    height: calc(54px * var(--wmh-k));
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: none;
+}
+
+/* The circle's drop pulls its visual centre down; the label follows it. */
+.wmh-back-label {
+    padding-top: 5px;
+}
+
+.wmh-arrow {
+    width: 52%;
+    height: 52%;
+    fill: none;
+    stroke: var(--book-outline);
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: url('#ink-hand-small');
+}
+
+.wmh-back:hover .wmh-round,
+.wmh-corner .wmh-round:hover {
+    --book-fill: var(--book-chip);
+}
+
+.wmh-back:active .wmh-round,
+.wmh-corner .wmh-round:active {
+    transform: translate(calc(var(--book-drop) * 0.9), var(--book-drop));
+}
+
+.wmh-back:active .wmh-round::after,
+.wmh-corner .wmh-round:active::after {
+    display: none;
+}
+
+/* ── The year's reading ──────────────────────────────────── */
+
+.wmh-count-text {
+    font-size: calc(22px * var(--wmh-k));
+    color: var(--ink-600);
+}
+
+.wmh-count-text strong {
+    font-size: calc(40px * var(--wmh-k));
+    color: var(--navy-700);
+    margin-right: 6px;
+}
+
+.wmh-track {
+    --book-fill: var(--book-paper);
+    height: calc(30px * var(--wmh-k));
+    border-radius: 15px;
+    margin-top: calc(14px * var(--wmh-k));
+}
+
+.wmh-track-fill {
+    position: absolute;
+    left: var(--book-line);
+    top: var(--book-line);
+    bottom: var(--book-line);
+    max-width: calc(100% - 2 * var(--book-line));
+    background: var(--book-sun);
+    border-radius: 9px 0 0 9px;
+}
+
+.wmh-track-ticks {
+    position: absolute;
+    inset: var(--book-line);
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.wmh-track-ticks i + i {
+    border-left: 2px solid color-mix(in srgb, var(--book-outline) 25%, transparent);
+}
+
+/* ── Where the pupil is ──────────────────────────────────── */
+
+.wmh-here {
+    --book-fill: var(--book-chip);
+    border-radius: 18px;
+    padding: calc(22px * var(--wmh-k)) calc(24px * var(--wmh-k)) calc(24px * var(--wmh-k));
+}
+
+.wmh-here-where,
+.wmh-here-read {
+    font-size: calc(18px * var(--wmh-k));
+    color: var(--ink-600);
+}
+
+.wmh-here-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: calc(10px * var(--wmh-k));
+}
+
+.wmh-marker {
+    --book-fill: var(--book-paper);
+    --book-line: 6px;
+    flex: none;
+    width: calc(52px * var(--wmh-k));
+    height: calc(52px * var(--wmh-k));
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: calc(24px * var(--wmh-k));
+}
+
+.wmh-here-name {
+    font-size: calc(28px * var(--wmh-k));
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+.wmh-here-genre {
+    font-size: calc(18px * var(--wmh-k));
+    color: var(--brass-700);
+    margin-top: 3px;
+}
+
+.wmh-here-read {
+    margin-top: calc(14px * var(--wmh-k));
+}
+
+.wmh-go {
+    --book-fill: var(--book-sun);
+    display: block;
+    width: 100%;
+    margin-top: calc(16px * var(--wmh-k));
+    height: calc(58px * var(--wmh-k));
+    border: 0;
+    border-radius: 29px;
+    background: none;
+    font-size: calc(24px * var(--wmh-k));
+    color: var(--book-outline);
+}
+
+.wmh-go:hover {
+    --book-fill: var(--book-sun-deep);
+}
+
+.wmh-go:active {
+    transform: translate(calc(var(--book-drop) * 0.9), var(--book-drop));
+}
+
+.wmh-go:active::after {
+    display: none;
+}
+
+/* ── The backpack ────────────────────────────────────────── */
+
+.wmh-bag-title {
+    font-size: calc(22px * var(--wmh-k));
+    font-weight: 900;
+    margin-bottom: calc(14px * var(--wmh-k));
+}
+
+.wmh-bag-items {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Stickers: each found item sits on its own slightly turned card. */
+.wmh-item {
+    --book-fill: color-mix(in srgb, var(--book-sun) 40%, var(--book-paper));
+    width: calc(82px * var(--wmh-k));
+    height: calc(82px * var(--wmh-k));
+    border-radius: 20px;
+    display: grid;
+    place-items: center;
+    transform: rotate(-4deg);
+}
+
+.wmh-item:nth-child(2n) {
+    transform: rotate(3deg);
+}
+
+.wmh-item img {
+    width: 78%;
+}
+
+.wmh-item--missing {
+    --book-fill: transparent;
+}
+
+.wmh-item--missing::before {
+    border-style: dashed;
+    opacity: 0.45;
+}
+
+.wmh-item--missing span {
+    font-size: calc(28px * var(--wmh-k));
+    color: color-mix(in srgb, var(--book-outline) 40%, transparent);
+}
+
+/* ── Narrow screens: a corner group over the map ─────────── */
+
+/* Bottom left: the first continent, where every pupil starts, sits at the top
+   of the sheet, and on a phone the thumb is at the bottom anyway. */
+.wmh-corner {
+    bottom: 14px;
+    left: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.wmh-corner {
+    --book-line: 5px;
+    --book-drop: 4px;
+}
+
+.wmh-corner .wmh-round {
+    width: 46px;
+    height: 46px;
+}
+
+.wmh-corner-count {
+    --book-fill: var(--book-paper);
+    border-radius: 14px;
+    padding: 6px 14px 9px;
+}
+
+.wmh-count--compact .wmh-count-text {
+    font-size: 14px;
+}
+
+.wmh-count--compact .wmh-count-text strong {
+    font-size: 20px;
+    margin-right: 3px;
+}
+
+.wmh-count--compact .wmh-track {
+    width: 128px;
+    height: 16px;
+    margin-top: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wmh-back:active .wmh-round,
+    .wmh-corner .wmh-round:active,
+    .wmh-go:active {
+        transform: none;
+    }
+}

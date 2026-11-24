@@ -13,6 +13,7 @@ import PuzzleScene from './puzzle/PuzzleScene'
 import ItemFoundCard from './puzzle/ItemFoundCard'
 import GameLoading from './GameLoading'
 import FundingNotice from './FundingNotice'
+import WorldMapHud from './hud/WorldMapHud'
 import './PhaserGame.css'
 import { sceneForMap } from '../game/data/puzzleScenes.js'
 import items from '../game/data/items.js'
@@ -41,6 +42,9 @@ export default function PhaserGame() {
   const [bookListInfo, setBookListInfo] = useState({ visible: false, mapKey: null, nodeIndex: 1 });
   const [puzzleInfo, setPuzzleInfo] = useState({ visible: false, mapKey: null });
   const [foundItemId, setFoundItemId] = useState(null);
+  // Set by WorldMapScene while it runs: { panel } with the panel's place in
+  // CSS pixels, or panel null on a narrow screen. Null on every other scene.
+  const [worldMapHud, setWorldMapHud] = useState(null);
   // True from the first render, so the backend load is covered too.
   const [loading, setLoading] = useState(true);
   const [updateProgressInfo, setUpdateProgressInfo] = useState({
@@ -63,6 +67,8 @@ export default function PhaserGame() {
       // Load progress from backend before Phaser starts
       await ReadingState.loadFromBackend();
       if (isCancelled) return;
+
+      window.setWorldMapHud = setWorldMapHud;
 
       const initW = parentEl.clientWidth;
       const initH = parentEl.clientHeight;
@@ -157,6 +163,7 @@ export default function PhaserGame() {
       window.openReactBookList = null;
       window.openPuzzleScene = null;
       window.showItemFound = null;
+      window.setWorldMapHud = null;
       if (gameRef.current) {
         if (gameRef.current._resizeObserver) {
           gameRef.current._resizeObserver.disconnect();
@@ -169,7 +176,17 @@ export default function PhaserGame() {
 
   return (
     <div className="game-shell">
-      <div id="game-container" ref={containerRef} />
+      <div className="game-stage">
+        <div id="game-container" ref={containerRef} />
+
+        {worldMapHud && (
+          <WorldMapHud
+            panel={worldMapHud.panel}
+            onBack={() => gameRef.current?.handleBackNavigation()}
+            onOpenContinent={(mapKey) => gameRef.current?.scene.getScene('WorldMap').scene.start(mapKey)}
+          />
+        )}
+      </div>
 
       <FundingNotice strip />
 

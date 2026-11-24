@@ -147,7 +147,9 @@ export function makeInkButton(scene, x, y, text, options = {}) {
  * Anchored by its bottom centre, so (x, y) is the tip of the tail.
  */
 export function makeInkTooltip(scene, x, y, text, options = {}) {
-    const { s = 1, fontSize = 15, depth = 11 } = options;
+    // `side` is where the bubble sits from (x, y), which its tail points at:
+    // 'above', or 'right' / 'left' for a speaker too near the top edge.
+    const { s = 1, fontSize = 15, depth = 11, side = 'above' } = options;
 
     const label = bodyText(scene, text, Math.max(px(11), fontSize * s)).setOrigin(0.5);
 
@@ -156,7 +158,11 @@ export function makeInkTooltip(scene, x, y, text, options = {}) {
     const tail = 9 * s;
     const weight = line(INK.SMALL, s);
 
-    const bubble = inkShape(scene, -w / 2, -h - tail, w, h, { radius: 11 * s, line: weight, seed: 6 });
+    // Drawn for 'above' and turned for the sides: the tail's tip stays at (0, 0).
+    const dir = side === 'right' ? 1 : side === 'left' ? -1 : 0;
+    const bubble = dir === 0
+        ? inkShape(scene, -w / 2, -h - tail, w, h, { radius: 11 * s, line: weight, seed: 6 })
+        : inkShape(scene, dir > 0 ? tail : -tail - w, -h / 2, w, h, { radius: 11 * s, line: weight, seed: 6 });
     const tip = scene.add.graphics();
     tip.fillStyle(INK.PAPER_INT, 1).fillTriangle(-tail, -tail - weight, tail, -tail - weight, 0, 0);
     tip.lineStyle(weight, INK.OUTLINE_INT, 1)
@@ -165,8 +171,10 @@ export function makeInkTooltip(scene, x, y, text, options = {}) {
         .lineTo(0, 0)
         .lineTo(tail, -tail - 1)
         .strokePath();
+    if (dir !== 0) tip.setRotation(dir > 0 ? Math.PI / 2 : -Math.PI / 2);
 
-    label.setPosition(0, -h / 2 - tail);
+    if (dir === 0) label.setPosition(0, -h / 2 - tail);
+    else label.setPosition(dir * (tail + w / 2), 0);
 
     return scene.add.container(x, y, [bubble, tip, label]).setDepth(depth);
 }

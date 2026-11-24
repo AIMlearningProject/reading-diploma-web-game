@@ -1,10 +1,12 @@
 import Phaser from 'phaser';
 import ReadingState from '../state.js';
-import { preloadIcons, ICON_KEYS } from '../ui/icons.js';
-import { INK, uiScale as calcUiScale, px, renderScale } from '../ui/constants.js';
-import { makeContinentSign, makeInkBadge, makeInkTooltip } from '../ui/panels.js';
+import { preloadIcons } from '../ui/icons.js';
+import { INK, px, renderScale } from '../ui/constants.js';
+import { makeContinentSign, makeInkTooltip } from '../ui/panels.js';
 import { preloadDesk, createDeskBackdrop } from '../ui/desk.js';
 import { MapPanner, sheetRect } from '../ui/mapView.js';
+import { wideWorldMapLayout } from '../ui/worldMapLayout.js';
+import { continentName } from './continentRegistry.js';
 import { BUDDY_ASPECT, buddyHeight, buddyKey, preloadBuddy } from '../ui/buddy.js';
 import { inkDrawing, strokeDashed } from '../ui/ink.js';
 import overallMapImg from '../../assets/overallMap.jpg';
@@ -15,16 +17,17 @@ const MAP_NATIVE_W = 1323;
 const MAP_NATIVE_H = 1080;
 
 // Ordered to match ReadingState.mapOrder, so the index is the level number - 1.
+// The names come from continentRegistry.js.
 const CONTINENTS = [
-    { x: 545, y: 145, name: 'POHJOISNAPA', mapKey: 'ArcticMap' },
-    { x: 712, y: 300, name: 'EUROOPPA', mapKey: 'EuropeMap' },
-    { x: 1000, y: 280, name: 'AASIA', mapKey: 'AsiaMap' },
-    { x: 215, y: 300, name: 'POHJOIS-AMERIKKA', mapKey: 'NorthAmericaMap' },
-    { x: 345, y: 700, name: 'ETELÄ-AMERIKKA', mapKey: 'SouthAmericaMap' },
-    { x: 672, y: 715, name: 'AFRIKKA', mapKey: 'AfricaMap' },
-    { x: 1082, y: 768, name: 'OSEANIA', mapKey: 'OceaniaMap' },
-    { x: 640, y: 898, name: 'ETELÄMANNER', mapKey: 'AntarcticaMap' }
-];
+    { x: 545, y: 145, mapKey: 'ArcticMap' },
+    { x: 712, y: 300, mapKey: 'EuropeMap' },
+    { x: 1000, y: 280, mapKey: 'AsiaMap' },
+    { x: 215, y: 300, mapKey: 'NorthAmericaMap' },
+    { x: 345, y: 700, mapKey: 'SouthAmericaMap' },
+    { x: 672, y: 715, mapKey: 'AfricaMap' },
+    { x: 1082, y: 768, mapKey: 'OceaniaMap' },
+    { x: 640, y: 898, mapKey: 'AntarcticaMap' }
+].map((c) => ({ ...c, name: continentName(c.mapKey).toUpperCase() }));
 
 class WorldMapScene extends Phaser.Scene {
     constructor() {
@@ -58,15 +61,27 @@ class WorldMapScene extends Phaser.Scene {
             // Full size is where the signs show their name plates, which are
             // what the pupil reads and presses (makeContinentSign).
             const fullSize = INK.WORLD_SCALE * INK.SIGN_MIN_SCALE * renderScale();
-            const rect = sheetRect(w, h, MAP_NATIVE_W, MAP_NATIVE_H, fullSize);
+            const wide = wideWorldMapLayout(w, h, MAP_NATIVE_W, MAP_NATIVE_H, fullSize, renderScale());
+            const rect = wide
+                ? { ...wide.map, worldW: w, worldH: h }
+                : sheetRect(w, h, MAP_NATIVE_W, MAP_NATIVE_H, fullSize);
             bgMap.setScale(rect.scale).setPosition(rect.x, rect.y);
             this.mapScale = rect.scale;
             this.mapOffsetX = rect.x;
             this.mapOffsetY = rect.y;
             this.mapWorld = { width: rect.worldW, height: rect.worldH };
 
-            deskBackdrop.layout(w, h, rect);
+            deskBackdrop.layout(w, h, rect, wide ? { clearFrom: rect.x + rect.width } : {});
             this.panner.setWorld(rect);
+
+            // The HUD is React (components/hud/WorldMapHud.jsx), drawn over
+            // the canvas in CSS pixels.
+            const r = renderScale();
+            const panel = wide && {
+                x: wide.panel.x / r, y: wide.panel.y / r,
+                width: wide.panel.width / r, height: wide.panel.height / r
+            };
+            if (window.setWorldMapHud) window.setWorldMapHud({ panel: panel || null });
         };
         layoutMap();
 
@@ -164,9 +179,22 @@ class WorldMapScene extends Phaser.Scene {
             // The view opens on the continent the pupil is on.
             this.panner.centerOn(current.x, current.y);
 
-            const tooltip = makeInkTooltip(
-                this, buddyX, feetY - height - 6 * k, 'Klikkaa tutkiaksesi!', { s: k, depth: 11 }
-            ).setAlpha(0);
+            // The bubble goes over the buddy's head, unless that runs off the
+            // top of the world (the sheet starts at the top edge, and the
+            // first continent sits near it); then beside the head instead.
+            const tipText = 'Klikkaa tutkiaksesi!';
+            let tooltip = makeInkTooltip(this, buddyX, feetY - height - 6 * k, tipText, { s: k, depth: 11 });
+            if (tooltip.getBounds().top < px(4)) {
+                tooltip.destroy();
+                const headY = feetY - height * 0.62;
+                const sideX = buddyX + width / 2 + 2 * k;
+                tooltip = makeInkTooltip(this, sideX, headY, tipText, { s: k, depth: 11, side: 'right' });
+                if (tooltip.getBounds().right > this.mapWorld.width - px(4)) {
+                    tooltip.destroy();
+                    tooltip = makeInkTooltip(this, buddyX - width / 2 - 2 * k, headY, tipText, { s: k, depth: 11, side: 'left' });
+                }
+            }
+            tooltip.setAlpha(0);
             this.pointGroup.add(tooltip);
             this.tweens.add({ targets: tooltip, alpha: 1, duration: 600, delay: 400 });
 
@@ -183,46 +211,18 @@ class WorldMapScene extends Phaser.Scene {
         drawRoute();
         renderPoints();
 
-        // --- 3. Corner badges ---
-        const { width: initW } = this.scale;
-        const uiS = calcUiScale(initW);
-        const margin = 18 * renderScale();
-
-        const kirjat = makeInkBadge(
-            this, margin, margin,
-            `Luetut kirjat: ${ReadingState.booksRead}/${ReadingState.targetBooks}`,
-            { iconKey: ICON_KEYS.BOOK, s: uiS, anchor: 'left' }
-        );
-        // The corner badges stay on the screen while the map is dragged.
-        kirjat.container.setScrollFactor(0, 0, true);
-        this.bookCountText = kirjat.container;
-        this.bookCountLabel = kirjat.label;
-
-        const poistu = makeInkBadge(
-            this, initW - margin, margin, 'POISTU',
-            {
-                iconKey: ICON_KEYS.DOOR_EXIT, s: uiS, anchor: 'right',
-                onClick: () => { if (this.game.handleBackNavigation) this.game.handleBackNavigation(); }
-            }
-        );
-        poistu.container.setScrollFactor(0, 0, true);
-        this.backBtn = poistu.container;
-        this.backBtn._badgeWidth = poistu.width;
-
-        // --- 4. Resize handling ---
+        // --- 3. Resize handling ---
         const onResize = () => {
             if (!this.scene.isActive() || !bgMap || !bgMap.active) return;
             layoutMap();
             drawRoute();
             renderPoints();
-            if (this.backBtn && this.backBtn.active) {
-                this.backBtn.setX(this.scale.width - margin - this.backBtn._badgeWidth);
-            }
         };
 
         this.scale.on('resize', onResize);
         this.events.on('shutdown', () => {
             this.scale.off('resize', onResize);
+            if (window.setWorldMapHud) window.setWorldMapHud(null);
         });
     }
 }

@@ -8,6 +8,11 @@ import { px } from './constants.js';
  */
 
 export const DESK_TEXTURE_KEY = 'woodDesk';
+
+// Share of desk.jpg's width right of which there is no board joint: the last
+// one ends at x 1630 of 2560 and its nails reach about 1675. Measured from the
+// image, so measure again whenever build/maps/draw_desk.py redraws it.
+const JOINT_FREE_FROM = 1700 / 2560;
 const VIGNETTE_KEY = 'desk-vignette';
 
 // All below 0, so a scene's own layers keep their existing depths.
@@ -97,13 +102,24 @@ export function createDeskBackdrop(scene) {
     let mapShadow = null;
     let mapShadowKey = null;
 
-    const layout = (w, h, mapRect) => {
+    // clearFrom: a canvas x right of which no board joint may show, because
+    // something stands on the desk there (the world map's panel). A joint
+    // running beside a panel's edge reads as a stray border, not as wood.
+    const layout = (w, h, mapRect, { clearFrom = null } = {}) => {
         if (!desk.active) return;
 
         // Desk covers the canvas.
-        const deskScale = Math.max(w / desk.width, h / desk.height);
+        let deskScale = Math.max(w / desk.width, h / desk.height);
+        let deskX = (w - desk.width * deskScale) / 2;
+        if (clearFrom !== null) {
+            // Grow the desk until its joint-free right part spans the area,
+            // and pin it to the right edge.
+            const freeWidth = desk.width * (1 - JOINT_FREE_FROM);
+            deskScale = Math.max(deskScale, (w - clearFrom) / freeWidth);
+            deskX = w - desk.width * deskScale;
+        }
         desk.setScale(deskScale)
-            .setPosition((w - desk.width * deskScale) / 2, (h - desk.height * deskScale) / 2);
+            .setPosition(deskX, (h - desk.height * deskScale) / 2);
 
         // Knock the wood back so it never competes with the map.
         shade.clear();
