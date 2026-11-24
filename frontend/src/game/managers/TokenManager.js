@@ -1,5 +1,5 @@
 import { DEPTHS } from '../ui/constants.js';
-import { buddyHeight, buddyKey } from '../ui/buddy.js';
+import { buddyHeight, buddyKey, startBuddyHop } from '../ui/buddy.js';
 import ReadingState from '../state.js';
 import { routeCurve, routeSample } from './PathRenderer.js';
 
@@ -11,6 +11,10 @@ export default class TokenManager {
         // it: a node carries its number, and being covered is what a pupil
         // would have to click through to open it.
         this.nodeOffsetY = 0;
+        // Where the route puts the buddy, and how far up its hop has it now.
+        this.place = { x: 0, y: 0 };
+        this.hop = { lift: 0 };
+        this.hopHeight = 0;
     }
 
     create(scene, savedIndex) {
@@ -18,14 +22,12 @@ export default class TokenManager {
         this.tokenHeight = buddyHeight(scene);
         this.token.setDepth(DEPTHS.TOKEN);
         this.token.lastPointIndex = savedIndex;
-        // A still figure sways a little, so it reads as standing there alive.
-        scene.tweens.add({
-            targets: this.token,
-            angle: { from: -2.5, to: 2.5 },
-            duration: 1400,
-            yoyo: true,
-            repeat: -1,
-            ease: 'Sine.easeInOut'
+        // The buddy waits by hopping on the spot, as on the world map. The hop
+        // is a share of its height, kept apart from its place on the route so
+        // walking (setPosition) and hopping never fight over token.y.
+        startBuddyHop(scene, (lift) => {
+            this.hop.lift = lift;
+            this.applyPosition();
         });
         return this.token;
     }
@@ -34,13 +36,21 @@ export default class TokenManager {
         // The ink buddy stands on top of the node, its feet on the node's rim,
         // so it is seen whole and marks the stop to press next.
         this.nodeOffsetY = 85 * baseScale;
+        this.hopHeight = 14 * baseScale;
         if (this.token) {
             this.token.setScale((this.tokenHeight * baseScale) / this.token.height);
         }
     }
 
     setPosition(x, y) {
-        if (this.token) this.token.setPosition(x, y - this.nodeOffsetY);
+        this.place = { x, y };
+        this.applyPosition();
+    }
+
+    applyPosition() {
+        if (!this.token || !this.token.active) return;
+        const lift = this.hop.lift * this.hopHeight;
+        this.token.setPosition(this.place.x, this.place.y - this.nodeOffsetY - lift);
     }
 
     get lastPointIndex() {

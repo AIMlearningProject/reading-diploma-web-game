@@ -33,3 +33,31 @@ export function preloadBuddy(scene) {
         scene.load.image(key, FIGURES[figureFor(scene)]);
     }
 }
+
+/**
+ * The buddy waits on a map by hopping on the spot, in an uneven rhythm so it
+ * looks alive: one full hop, a pause, then two quicker, lower hops, a pause,
+ * and round again. `onLift(lift)` gets the height of the hop as a share of a
+ * full one (0 on the ground, 1 at the top) on every frame; the caller turns it
+ * into pixels. Returns the tween chain, so the caller can stop it.
+ */
+export function startBuddyHop(scene, onLift) {
+    const hop = { lift: 0 };
+    const jump = (height, duration, pause) => ({
+        targets: hop,
+        lift: height,
+        duration,
+        yoyo: true,
+        ease: 'Quad.easeOut',
+        completeDelay: pause,
+        onUpdate: () => onLift(hop.lift)
+    });
+    return scene.tweens.chain({
+        loop: -1,
+        tweens: [
+            jump(1, 220, 650),
+            jump(0.65, 140, 60),
+            jump(0.65, 140, 700)
+        ]
+    });
+}

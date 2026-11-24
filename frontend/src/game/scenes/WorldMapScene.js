@@ -7,7 +7,7 @@ import { preloadDesk, createDeskBackdrop } from '../ui/desk.js';
 import { MapPanner, sheetRect } from '../ui/mapView.js';
 import { wideWorldMapLayout } from '../ui/worldMapLayout.js';
 import { continentName } from './continentRegistry.js';
-import { BUDDY_ASPECT, buddyHeight, buddyKey, preloadBuddy } from '../ui/buddy.js';
+import { BUDDY_ASPECT, buddyHeight, buddyKey, preloadBuddy, startBuddyHop } from '../ui/buddy.js';
 import { inkDrawing, strokeDashed } from '../ui/ink.js';
 import overallMapImg from '../../assets/overallMap.jpg';
 
@@ -124,7 +124,7 @@ class WorldMapScene extends Phaser.Scene {
             if (!this.pointGroup || !this.pointGroup.scene || !this.pointGroup.active) return;
 
             this.pointGroup.clear(true, true);
-            if (this.buddyFloatTween) { this.buddyFloatTween.remove(); this.buddyFloatTween = null; }
+            if (this.buddyFloatTween) { this.buddyFloatTween.stop(); this.buddyFloatTween = null; }
             this.buddy = null;
 
             const s = this.mapScale;
@@ -198,13 +198,10 @@ class WorldMapScene extends Phaser.Scene {
             this.pointGroup.add(tooltip);
             this.tweens.add({ targets: tooltip, alpha: 1, duration: 600, delay: 400 });
 
-            this.buddyFloatTween = this.tweens.add({
-                targets: this.buddy,
-                y: this.buddy.y - 7 * k,
-                duration: 1200,
-                yoyo: true,
-                repeat: -1,
-                ease: 'Sine.easeInOut'
+            const groundY = this.buddy.y;
+            const buddy = this.buddy;
+            this.buddyFloatTween = startBuddyHop(this, (lift) => {
+                if (buddy.active) buddy.y = groundY - lift * 12 * k;
             });
         };
 
