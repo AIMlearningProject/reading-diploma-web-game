@@ -8,7 +8,7 @@ import { MapPanner, sheetRect } from '../ui/mapView.js';
 import { wideWorldMapLayout } from '../ui/worldMapLayout.js';
 import { continentName } from './continentRegistry.js';
 import { BUDDY_ASPECT, buddyHeight, buddyKey, preloadBuddy, startBuddyHop } from '../ui/buddy.js';
-import { inkDrawing, strokeDashed } from '../ui/ink.js';
+import { inkDrawing, inkSheet, strokeDashed } from '../ui/ink.js';
 import overallMapImg from '../../assets/overallMap.jpg';
 
 // Native pixel size of overallMap.jpg. Every continent position below is
@@ -51,7 +51,9 @@ class WorldMapScene extends Phaser.Scene {
     create() {
         // --- 1. Background: the map lies on a wooden desk ---
         const deskBackdrop = createDeskBackdrop(this);
-        const bgMap = this.add.image(0, 0, 'overallMap').setOrigin(0).setDepth(2);
+        // The map is laid out on this image, which is never shown: what the pupil
+        // sees is the ink-edged sheet baked from it in layoutMap().
+        const bgMap = this.add.image(0, 0, 'overallMap').setOrigin(0).setVisible(false);
         this.panner = new MapPanner(this);
 
         const layoutMap = () => {
@@ -71,7 +73,19 @@ class WorldMapScene extends Phaser.Scene {
             this.mapOffsetY = rect.y;
             this.mapWorld = { width: rect.worldW, height: rect.worldH };
 
-            deskBackdrop.layout(w, h, rect, wide ? { clearFrom: rect.x + rect.width } : {});
+            // No soft shadow: the sheet is drawn in ink, with its own dithered drop.
+            deskBackdrop.layout(w, h, null, wide ? { clearFrom: rect.x + rect.width } : {});
+            const sheetKey = `world-sheet-${rect.worldW}x${rect.worldH}-${Math.round(rect.x)}-${Math.round(rect.y)}`;
+            if (this.sheetImage) {
+                const oldKey = this.sheetImage.texture.key;
+                this.sheetImage.destroy();
+                if (oldKey !== sheetKey && this.textures.exists(oldKey)) this.textures.remove(oldKey);
+            }
+            this.sheetImage = inkSheet(
+                this, sheetKey, this.textures.get('overallMap').getSourceImage(),
+                { x: rect.x, y: rect.y, width: MAP_NATIVE_W * rect.scale, height: MAP_NATIVE_H * rect.scale },
+                rect.worldW, rect.worldH
+            ).setDepth(2);
             this.panner.setWorld(rect);
 
             // The HUD is React (components/hud/WorldMapHud.jsx), drawn over

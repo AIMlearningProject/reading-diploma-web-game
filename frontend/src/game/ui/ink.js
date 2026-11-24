@@ -232,3 +232,66 @@ export function strokeDashed(g, points, dash, gap) {
     }
     g.stroke();
 }
+
+/**
+ * A picture laid down as an ink-drawn sheet: its edge wobbles like every other
+ * ink shape, an ink line runs along it, and a dithered drop lies under it.
+ * `rect` is where the picture goes in a world `width` x `height`. An edge that
+ * reaches the world's border runs on past it, so no half line or sliver of
+ * desk shows there. Placed like inkDrawing(), at the world's (0, 0).
+ */
+export function inkSheet(scene, key, source, rect, width, height, options = {}) {
+    const { line = INK.MID * renderScale(), drop = 6 * renderScale(), seed = 31 } = options;
+    if (!scene.textures.exists(key)) {
+        const over = line * 3;
+        const left = rect.x <= 0 ? -over : rect.x;
+        const top = rect.y <= 0 ? -over : rect.y;
+        const right = rect.x + rect.width >= width - 1 ? width + over : rect.x + rect.width;
+        const bottom = rect.y + rect.height >= height - 1 ? height + over : rect.y + rect.height;
+        const edge = (g) => g.rect(left + line / 2, top + line / 2, right - left - line, bottom - top - line);
+
+        // The same seed displaces both bakes alike, so the line sits on the edge.
+        const shape = bake(width, height, (g) => {
+            g.beginPath();
+            edge(g);
+            g.fillStyle = '#fff';
+            g.fill();
+        }, { amount: 6, seed });
+        const outline = bake(width, height, (g) => {
+            g.beginPath();
+            edge(g);
+            g.lineWidth = line;
+            g.strokeStyle = INK.OUTLINE;
+            g.stroke();
+        }, { amount: 6, seed });
+
+        const p = pad();
+        const sheet = document.createElement('canvas');
+        sheet.width = shape.width;
+        sheet.height = shape.height;
+        const s = sheet.getContext('2d');
+        s.drawImage(shape, 0, 0);
+        s.globalCompositeOperation = 'source-in';
+        s.drawImage(source, p + rect.x, p + rect.y, rect.width, rect.height);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = shape.width;
+        canvas.height = shape.height;
+        const ctx = canvas.getContext('2d');
+        // The drop: the sheet's own outline, filled with the dither, offset.
+        const dots = document.createElement('canvas');
+        dots.width = shape.width;
+        dots.height = shape.height;
+        const d = dots.getContext('2d');
+        d.drawImage(shape, 0, 0);
+        d.globalCompositeOperation = 'source-in';
+        d.fillStyle = d.createPattern(ditherTile(), 'repeat');
+        d.fillRect(0, 0, dots.width, dots.height);
+        ctx.drawImage(dots, Math.round(drop * 0.9), Math.round(drop));
+        ctx.drawImage(sheet, 0, 0);
+        ctx.drawImage(outline, 0, 0);
+        addTexture(scene, key, canvas);
+    }
+    const image = scene.add.image(0, 0, key);
+    return image.setOrigin(pad() / image.width, pad() / image.height);
+}

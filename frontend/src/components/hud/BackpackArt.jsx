@@ -23,7 +23,8 @@ const ART = {
     tan: '#e3a465',
     brass: '#e0bc64',
     rule: '#b6c4cb',
-    margin: '#dba69a'
+    margin: '#dba69a',
+    hatch: '#142846'
 }
 
 const BODY = 'M40 636 V214 C40 100 128 52 251 52 C374 52 462 100 462 214 V636 Q462 664 434 664 H68 Q40 664 40 636 Z'
@@ -36,6 +37,18 @@ const TAG_SHAPE = `M26 ${TAG.top} H${TAG.width} V${TAG.bottom} H26 L6 39 Z`
 
 // Where each item stands in the front pocket, in items.js order.
 const POCKET_SLOTS = [{ x: 105, tilt: -8 }, { x: 202, tilt: 5 }, { x: 300, tilt: -4 }, { x: 397, tilt: 9 }]
+
+// The canvas's weave: a light diagonal hatch on every blue part, none on the
+// leather or the paper. Its strength, as the opacity of the hatch lines.
+export const HATCH_STRENGTH = 0.24
+
+// The ink filter cuts alpha to on or off, so the hatch is an opaque colour
+// mixed in advance over each blue it lies on.
+function mix(base, over, amount) {
+    const ch = (hex, i) => Number.parseInt(hex.slice(1 + i * 2, 3 + i * 2), 16)
+    return '#' + [0, 1, 2].map((i) => Math.round(ch(base, i) * (1 - amount) + ch(over, i) * amount)
+        .toString(16).padStart(2, '0')).join('')
+}
 
 const INK = 'url(#wmh-ink)'
 const DROP = 'url(#wmh-dots)'
@@ -60,6 +73,19 @@ function Line({ d, color = ART.ink, width = 4, dashed = false, ...rest }) {
 }
 
 const Stitch = ({ d }) => <Line d={d} color={ART.tan} width={3} dashed />
+// A canvas part: the fill, the hatch clipped to it, then the outline on top,
+// so the hatch never covers half of the line.
+function Fabric({ id, d, fill }) {
+    return (
+        <>
+            <clipPath id={`wmh-clip-${id}`}><path d={d} /></clipPath>
+            <path d={d} fill={fill} filter={INK} />
+            <path d={d} fill={`url(#wmh-hatch-${fill === ART.fabric ? 'fabric' : 'fabricDark'})`} clipPath={`url(#wmh-clip-${id})`} filter={INK} />
+            <Outlined d={d} />
+        </>
+    )
+}
+
 const Drop = ({ d, dx = 6, dy = 7 }) => <path d={d} fill={DROP} transform={`translate(${dx} ${dy})`} filter={INK} />
 
 export default function BackpackArt({ items }) {
@@ -85,12 +111,17 @@ export default function BackpackArt({ items }) {
                     <rect x="1.5" y="1.5" width="1.5" height="1.5" fill={ART.ink} />
                 </pattern>
                 <clipPath id="wmh-body-clip"><path d={BODY} /></clipPath>
+                {[['fabric', ART.fabric], ['fabricDark', ART.fabricDark]].map(([name, base]) => (
+                    <pattern key={name} id={`wmh-hatch-${name}`} width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+                        <line x1="0" y1="0" x2="0" y2="9" stroke={mix(base, ART.hatch, HATCH_STRENGTH)} strokeWidth="2.6" />
+                    </pattern>
+                ))}
             </defs>
 
             {/* Shoulder straps, behind the body. */}
             <Drop d={STRAP_R} />
-            <Outlined d={STRAP_L} fill={ART.fabricDark} />
-            <Outlined d={STRAP_R} fill={ART.fabricDark} />
+            <Fabric id="strap-l" d={STRAP_L} fill={ART.fabricDark} />
+            <Fabric id="strap-r" d={STRAP_R} fill={ART.fabricDark} />
 
             {/* The tag's string rings the handle: back half behind it, front half over it. */}
             <Line d="M270 1 A7 16 0 0 0 270 33" transform="rotate(20 270 17)" />
@@ -102,6 +133,7 @@ export default function BackpackArt({ items }) {
             <path d={BODY} fill={ART.fabric} filter={INK} />
             <g filter={INK}>
                 <g clipPath="url(#wmh-body-clip)">
+                    <rect x="0" y="0" width={BAG_SIZE.width} height={BAG_SIZE.height} fill="url(#wmh-hatch-fabric)" />
                     <path d="M30 622 C140 614 362 614 472 622 V680 H30 Z" fill={ART.leather} />
                 </g>
             </g>
@@ -111,9 +143,9 @@ export default function BackpackArt({ items }) {
             <Outlined d={BODY} />
 
             {/* Side pockets. */}
-            <Outlined d="M42 432 C14 436 8 480 12 566 C14 612 26 630 44 632 Z" fill={ART.fabricDark} />
+            <Fabric id="side-l" d="M42 432 C14 436 8 480 12 566 C14 612 26 630 44 632 Z" fill={ART.fabricDark} />
             <Stitch d="M30 448 C24 450 20 456 20 466" />
-            <Outlined d="M460 432 C488 436 494 480 490 566 C488 612 476 630 458 632 Z" fill={ART.fabricDark} />
+            <Fabric id="side-r" d="M460 432 C488 436 494 480 490 566 C488 612 476 630 458 632 Z" fill={ART.fabricDark} />
             <Stitch d="M472 448 C478 450 482 456 482 466" />
 
             {/* The notebook, slid in under the flap and into the front pocket. Its
@@ -133,7 +165,7 @@ export default function BackpackArt({ items }) {
             {/* The flap, closed over the top, with piping and a buckled tab that
                 holds the notebook in. */}
             <Drop d={FLAP} dx={5} dy={6} />
-            <Outlined d={FLAP} fill={ART.fabricDark} />
+            <Fabric id="flap" d={FLAP} fill={ART.fabricDark} />
             <Line d="M62 186 C62 199 72 204 88 204 H414 C430 204 440 199 440 186" color={ART.tan} width={6} />
             <Stitch d="M90 174 C90 124 150 94 251 90 C352 94 412 124 412 174" />
             <Outlined d="M230 168 H272 V226 Q272 242 251 242 Q230 242 230 226 Z" fill={ART.leather} width={6} />
@@ -150,6 +182,8 @@ export default function BackpackArt({ items }) {
             ))}
             <Drop d={POCKET} />
             <path d={POCKET} fill={ART.fabric} filter={INK} />
+            <clipPath id="wmh-clip-pocket"><path d={POCKET} /></clipPath>
+            <path d={POCKET} fill="url(#wmh-hatch-fabric)" clipPath="url(#wmh-clip-pocket)" filter={INK} />
             <Line d="M62 568 Q62 566 70 566 H432 Q440 566 440 568" color={ART.tan} width={9} />
             <Stitch d="M72 584 H430" />
             <Line d="M153 570 V604 M251 570 V604 M349 570 V604" width={4.5} />
