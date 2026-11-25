@@ -233,6 +233,19 @@ function buddyFrame(state) {
     return { pose, image, box: { x: b.x - w / 2, y: b.y - h, w, h } }
 }
 
+/**
+ * What the buddy is doing, for the line under the scene: 'stroll', 'sea' and
+ * 'read' by day, 'fire' and 'fireRead' in the evening, 'bed' at bed time.
+ */
+export function activityOf(state) {
+    if (state.phase === 'bed') return 'bed'
+    const pose = state.buddy.pose
+    if (state.phase === 'evening') return pose === 'read' ? 'fireRead' : 'fire'
+    if (pose === 'read') return 'read'
+    if (pose === 'sit') return 'sea'
+    return 'stroll'
+}
+
 /** A click or tap at stage (x, y): a buddy that is hit hops and looks out, surprised. */
 export function tap(state, x, y) {
     if (!hitsBuddy(state, x, y)) return false

@@ -8,6 +8,7 @@ import CampScene from '../components/camp/CampScene'
 import homeBG from '../assets/HomeBG1.jpg'
 import siteBoat from '../assets/siteBoat.png'
 import playIcon from '../assets/icons/play.png'
+import swapIcon from '../assets/icons/swap_pair.png'
 // Continent tile puzzles (Palkinnot) are switched off for now; the game still records them as rewards, so uncommenting brings them back.
 // import MinigameModal from '../components/minigames/MinigameModal'
 import SceneGameModal from '../components/minigames/SceneGameModal'
@@ -168,7 +169,8 @@ function StudentDashboard() {
                 ) : (
                     <>
                         <section className={`dashboard-section ink-shape ink-drop buddy-selection-section${hasBuddy ? '' : ' buddy-selection-section--prominent'}`}>
-                            <h2>Seikkailukaveri</h2>
+                            {/* With a buddy, the camp's own sign is the section's title. */}
+                            {showPicker && <h2>Seikkailukaveri</h2>}
                             {showPicker ? (
                                 <div className="buddy-picker">
                                     <div className="char-grid">
@@ -205,19 +207,22 @@ function StudentDashboard() {
                                 </div>
                             ) : (
                                 <div className="buddy-current">
-                                    <CampScene buddy={user.avatar} />
-                                    <p className="buddy-current-name">
-                                        {BUDDIES.find(b => b.id === user.avatar)?.name ?? user.avatar}
-                                    </p>
-                                    <button
-                                        className="change-avatar-button ink-shape ink-shape--thin ink-drop"
-                                        onClick={() => {
-                                            setSelectedBuddy(user.avatar)
-                                            setBuddySelecting(true)
-                                        }}
+                                    <CampScene
+                                        buddy={user.avatar}
+                                        buddyName={BUDDIES.find(b => b.id === user.avatar)?.name ?? user.avatar}
+                                        playerName={user.name}
                                     >
-                                        Vaihda kaveria
-                                    </button>
+                                        <button
+                                            className="change-avatar-button ink-shape ink-shape--thin ink-drop"
+                                            onClick={() => {
+                                                setSelectedBuddy(user.avatar)
+                                                setBuddySelecting(true)
+                                            }}
+                                        >
+                                            <InkIcon src={swapIcon} size={20} />
+                                            Kutsu toinen kaveri
+                                        </button>
+                                    </CampScene>
                                 </div>
                             )}
                         </section>

@@ -1,10 +1,21 @@
+/* The buddy's camp: the scene in an ink frame, the camp's sign nailed over
+ * the frame's top-left edge as the section's title, and under the scene a line
+ * saying what the buddy is doing beside the invite button. */
+
 .camp-scene {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     max-width: 900px;
 }
 
-.camp-scene-stage {
+/* Room above the frame for the part of the sign that stands over its edge. */
+.camp-scene-frame {
     position: relative;
+    width: 100%;
+    margin-top: 3.4rem;
+    line-height: 0;
 }
 
 .camp-scene-canvas {
@@ -14,18 +25,137 @@
     touch-action: manipulation;
 }
 
-/* The good-night note sits on the night sky, left of the moon. */
-.camp-scene-note {
+/* The frame's ink line lies ON the picture's edge, centred on it, and is drawn
+ * after the picture. The ink filter moves an edge up to 2.5px either way; drawn
+ * behind the canvas with its inner edge on the canvas edge, every outward wobble
+ * opened a gap of parchment between line and picture. Centred and on top, half
+ * the line (3.5px) always covers the picture's edge. */
+.camp-scene-frame-line {
     position: absolute;
-    top: 7%;
-    left: 5%;
-    max-width: 52%;
+    inset: calc(var(--book-line) / -2);
+    border: var(--book-line) solid var(--book-outline);
+    filter: url('#ink-hand');
+    pointer-events: none;
+}
+
+.camp-scene-sign {
+    position: absolute;
+    top: 0;
+    left: 1.5rem;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    transform: translateY(-58%);
+    text-align: center;
+}
+
+/* A light wooden plank. Its grain is part of the fill, so the ink filter
+ * wobbles it with the outline. No drop: the sign is nailed flat to the frame.
+ * Light wood is mixed from the brass and parchment tokens; the grain uses the
+ * dark wood token.
+ * The plank rules sit under .camp-scene-sign: the title plank is the section's
+ * h2, and `.dashboard-section h2` (class + element) outranks a lone class, so
+ * it set the title back to Nunito at its own size. */
+.camp-scene-sign .camp-scene-plank {
+    position: relative;
     margin: 0;
-    padding: 0.7rem 1rem;
-    --book-fill: var(--parchment-000);
-    font-family: var(--font-body);
-    font-size: clamp(14px, 2vw, 19px);
-    font-weight: 800;
-    line-height: 1.35;
+    /* Hand lettering, as if painted on the boards; loaded in index.html.
+     * Patrick Hand has one weight; the bold is the browser's, as on the
+     * approved sample. */
+    font-family: 'Patrick Hand', var(--font-body);
+    font-weight: 700;
+    line-height: 1.15;
+    /* Grain: short strokes of the dark wood token at 45%, kept near the
+     * plank's top and bottom edges so none runs through the lettering. */
+    --book-fill:
+        linear-gradient(color-mix(in srgb, var(--wood-light) 45%, transparent) 0 0) 16% 12% / 30% 2px no-repeat,
+        linear-gradient(color-mix(in srgb, var(--wood-light) 45%, transparent) 0 0) 84% 16% / 20% 2px no-repeat,
+        linear-gradient(color-mix(in srgb, var(--wood-light) 45%, transparent) 0 0) 62% 90% / 36% 2px no-repeat,
+        linear-gradient(color-mix(in srgb, var(--wood-light) 45%, transparent) 0 0) 8% 86% / 14% 2px no-repeat,
+        color-mix(in srgb, var(--brass-200) 55%, var(--parchment-000));
+}
+
+.camp-scene-sign .camp-scene-plank--title {
+    padding: 0.3rem 2.1rem 0.25rem;
+    font-size: clamp(30px, 4.2vw, 34px);
+    color: var(--navy-700);
+}
+
+/* Two boards of one width, edge to edge, the lower one carrying the names. */
+.camp-scene-sign .camp-scene-plank--names {
+    margin-top: -0.1rem;
+    padding: 0.3rem 2.1rem 0.3rem;
+    font-size: 17px;
     color: var(--ink-900);
+}
+
+/* A nail at each end of each plank. */
+.camp-scene-nail {
+    position: absolute;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    margin-top: -3.5px;
+    border-radius: 50%;
+    background: var(--ink-900);
+}
+
+.camp-scene-nail--left { left: 0.75rem; }
+.camp-scene-nail--right { right: 0.75rem; }
+
+.camp-scene-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem 1.25rem;
+    margin-top: 1.1rem;
+}
+
+/* What the buddy is doing, written in the sky between the sign and the moon.
+ * It stays quiet: the words alone, with no ground, line or drop, in the
+ * sign's hand lettering at its plain weight, so the sign stays the one loud
+ * thing in the camp. A soft halo of the sky's own light behind the letters
+ * keeps them readable over a cloud or the night. */
+.camp-scene-bubble {
+    position: absolute;
+    top: 23%;
+    left: 42%;
+    z-index: 1;
+    width: max-content;
+    max-width: 40%;
+    margin: 0;
+    transform: translate(-50%, -50%);
+    font-family: 'Patrick Hand', var(--font-body);
+    font-size: clamp(17px, 2.5vw, 22px);
+    font-weight: 400;
+    line-height: 1.25;
+    text-align: center;
+    pointer-events: none;
+}
+
+.camp-scene-bubble--day {
+    color: var(--navy-700);
+    text-shadow:
+        0 0 3px color-mix(in srgb, var(--book-paper) 95%, transparent),
+        0 0 10px color-mix(in srgb, var(--book-paper) 80%, transparent);
+}
+
+.camp-scene-bubble--night {
+    color: var(--book-paper);
+    text-shadow:
+        0 0 3px color-mix(in srgb, var(--navy-900) 90%, transparent),
+        0 0 10px color-mix(in srgb, var(--navy-900) 70%, transparent);
+}
+
+/* On a narrow screen the sign covers more of the sky's top left, so the
+ * words sit lower and wider, under it. */
+@media (max-width: 600px) {
+    .camp-scene-bubble {
+        top: 38%;
+        left: 39%;
+        max-width: 50%;
+        font-size: 15px;
+    }
 }

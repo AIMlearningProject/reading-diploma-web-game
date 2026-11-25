@@ -100,11 +100,17 @@
     --book-fill: var(--book-sun);
 }
 
-/* The header's Pelaa carries the ink play icon in front of its label. */
-.sd-play-button {
+/* The header's Pelaa carries the ink play icon in front of its label, and the
+   camp's invite button the swap arrows. */
+.sd-play-button,
+.change-avatar-button {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+}
+
+.change-avatar-button {
+    gap: 9px;
 }
 
 .play-button:not(:disabled):hover {
@@ -422,16 +428,7 @@
     flex-direction: column;
     align-items: center;
     gap: 0.6rem;
-    margin-top: 1rem;
-    padding: 1.5rem 1rem 1.25rem;
-}
-
-.buddy-current-name {
-    font-family: var(--font-body);
-    font-size: 24px;
-    font-weight: 900;
-    color: var(--navy-700);
-    margin: 0.25rem 0 0;
+    padding: 0 0.5rem 0.5rem;
 }
 
 .change-avatar-button {
@@ -876,8 +873,7 @@
 
     .buddy-current {
         gap: 0.4rem;
-        margin-top: 0.25rem;
-        padding: 0.5rem 0 0.25rem;
+        padding: 0 0 0.25rem;
     }
 
     /* Two by two: stacked, the four games were a screen and a half of scrolling. */
