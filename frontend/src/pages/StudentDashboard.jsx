@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { BUDDIES, BuddySprite, BuddyIcon } from '../components/BuddyAvatar'
 import InkIcon from '../components/ink/InkIcon'
 import InkFilter from '../components/ink/InkFilter'
+import CampScene from '../components/camp/CampScene'
 import homeBG from '../assets/HomeBG1.jpg'
 import siteBoat from '../assets/siteBoat.png'
 import playIcon from '../assets/icons/play.png'
@@ -204,10 +205,7 @@ function StudentDashboard() {
                                 </div>
                             ) : (
                                 <div className="buddy-current">
-                                    <div className="buddy-current-showcase">
-                                        <div className="buddy-current-glow" />
-                                        <BuddySprite buddyId={user.avatar} size={150} />
-                                    </div>
+                                    <CampScene buddy={user.avatar} />
                                     <p className="buddy-current-name">
                                         {BUDDIES.find(b => b.id === user.avatar)?.name ?? user.avatar}
                                     </p>

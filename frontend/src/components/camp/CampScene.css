@@ -1,0 +1,31 @@
+.camp-scene {
+    width: 100%;
+    max-width: 900px;
+}
+
+.camp-scene-stage {
+    position: relative;
+}
+
+.camp-scene-canvas {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1038 / 700;
+    touch-action: manipulation;
+}
+
+/* The good-night note sits on the night sky, left of the moon. */
+.camp-scene-note {
+    position: absolute;
+    top: 7%;
+    left: 5%;
+    max-width: 52%;
+    margin: 0;
+    padding: 0.7rem 1rem;
+    --book-fill: var(--parchment-000);
+    font-family: var(--font-body);
+    font-size: clamp(14px, 2vw, 19px);
+    font-weight: 800;
+    line-height: 1.35;
+    color: var(--ink-900);
+}

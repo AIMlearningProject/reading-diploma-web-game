@@ -426,25 +426,6 @@
     padding: 1.5rem 1rem 1.25rem;
 }
 
-.buddy-current-showcase {
-    position: relative;
-    display: flex;
-    justify-content: center;
-}
-
-/* Warm radial glow behind the character */
-.buddy-current-glow {
-    position: absolute;
-    bottom: 5%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 130%;
-    height: 55%;
-    background: radial-gradient(ellipse at center, rgba(196, 151, 58, 0.14) 0%, rgba(196, 151, 58, 0.05) 50%, transparent 75%);
-    border-radius: 50%;
-    pointer-events: none;
-}
-
 .buddy-current-name {
     font-family: var(--font-body);
     font-size: 24px;
@@ -883,14 +864,6 @@
 }
 
 /* ── Phone: a tighter page ───────────────────────────────── */
-/* The frame BuddySprite draws is as tall as the tallest buddy, so that the
- * three stand on one line in the picker. Shown alone, a short buddy stood
- * under 130px of empty frame; here the frame is the buddy's own height. */
-.buddy-current-showcase .buddy-sprite {
-    height: auto !important;
-    aspect-ratio: auto !important;
-}
-
 @media (max-width: 600px) {
     .student-content {
         gap: 1.75rem;
@@ -905,10 +878,6 @@
         gap: 0.4rem;
         margin-top: 0.25rem;
         padding: 0.5rem 0 0.25rem;
-    }
-
-    .buddy-current-showcase .buddy-sprite {
-        width: 124px !important;
     }
 
     /* Two by two: stacked, the four games were a screen and a half of scrolling. */
