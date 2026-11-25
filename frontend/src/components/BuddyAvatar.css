@@ -1,16 +1,20 @@
 /* ── Buddy Icon (nav bar) ────────────────────────────────── */
 .buddy-icon {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
     border-radius: 50%;
-    object-fit: cover;
     flex-shrink: 0;
     background-color: rgba(216, 178, 90, 0.12);
     border: 2px solid rgba(196, 151, 58, 0.5);
     box-shadow: 0 2px 8px rgba(22, 45, 78, 0.2);
 }
 
-.buddy-icon--sprite {
-    background-repeat: no-repeat;
-    object-fit: none;
+/* The map figure, scaled and moved so its face fills the circle. */
+.buddy-icon img {
+    position: absolute;
+    max-width: none;
+    height: auto;
 }
 
 /* ── Buddy Sprite (full body) ────────────────────────────── */

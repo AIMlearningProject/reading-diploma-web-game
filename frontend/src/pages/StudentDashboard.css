@@ -584,7 +584,8 @@
         gap: 0.5rem;
         flex-shrink: 0;
     }
-    .header-right span {
+    /* The greeting gives way on a phone; the buddy's face (a span too) stays. */
+    .header-right span:not(.buddy-icon) {
         display: none;
     }
     .student-header .play-button,

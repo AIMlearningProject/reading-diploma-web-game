@@ -1,7 +1,9 @@
 import mattiFigure from '../assets/buddyAvatar/figures/matti.png'
 import pandaFigure from '../assets/buddyAvatar/figures/panda.png'
 import ppFigure from '../assets/buddyAvatar/figures/pp.png'
-import pandaIcon from '../assets/buddyAvatar/panda/panda_icon.png'
+import mattiMap from '../assets/buddyAvatar/map/matti.png'
+import pandaMap from '../assets/buddyAvatar/map/panda.png'
+import ppMap from '../assets/buddyAvatar/map/pp.png'
 import './BuddyAvatar.css'
 
 // Listed in the order they stand on the sprite sheet; the ids stay as saved in users.avatar
@@ -11,8 +13,15 @@ export const BUDDIES = [
     { id: 'buddy_2', name: 'P.P.' },
 ]
 
-const BUDDY_ICONS = {
-    buddy_1: pandaIcon,
+// The icon is the buddy's face as it walks the maps: a square cut from its map
+// figure (build/maps/draw_buddies.py), so the header and the maps show one
+// face. All three figures share one 262 x 380 frame; x, y and size are the
+// square in that frame's pixels.
+const MAP_FRAME_W = 262
+const BUDDY_FACES = {
+    buddy_1: { src: pandaMap, x: 0, y: 62, size: 262 },
+    buddy_2: { src: ppMap, x: 8, y: 14, size: 244 },
+    buddy_3: { src: mattiMap, x: 9, y: -6, size: 242 },
 }
 
 // One PNG per figure, cut out of diploma_buddies-Sheet.png (1440×1080) along
@@ -31,31 +40,22 @@ const FRAME_H = Math.max(...Object.values(BUDDY_FIGURES).map(f => f.h))
 const FRAME_ASPECT = FRAME_H / FRAME_W
 
 export function BuddyIcon({ buddyId, size = 36 }) {
-    const icon = BUDDY_ICONS[buddyId]
-    if (icon) {
-        return (
-            <img
-                className="buddy-icon"
-                src={icon}
-                alt={BUDDIES.find(b => b.id === buddyId)?.name ?? ''}
-                style={{ width: size, height: size }}
-            />
-        )
-    }
-    // Fallback: the top square of the figure (its head) for buddies without a dedicated icon
-    const figure = BUDDY_FIGURES[buddyId]
-    if (figure == null) return null
+    const face = BUDDY_FACES[buddyId]
+    if (face == null) return null
+    const scale = size / face.size
     return (
-        <div
-            className="buddy-icon buddy-icon--sprite"
-            style={{
-                width: size,
-                height: size,
-                backgroundImage: `url(${figure.src})`,
-                backgroundSize: '100% auto',
-                backgroundPosition: '0 0',
-            }}
-        />
+        <span
+            className="buddy-icon"
+            role="img"
+            aria-label={BUDDIES.find(b => b.id === buddyId)?.name ?? ''}
+            style={{ width: size, height: size }}
+        >
+            <img
+                src={face.src}
+                alt=""
+                style={{ width: MAP_FRAME_W * scale, left: -face.x * scale, top: -face.y * scale }}
+            />
+        </span>
     )
 }
 
