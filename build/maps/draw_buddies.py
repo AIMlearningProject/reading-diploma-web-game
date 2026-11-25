@@ -89,11 +89,11 @@ BUDDIES = {
          'fill': 'p_fur'},
         {'d': 'M5.2 29C7 23.5 12.5 19.5 20 19.5C27.5 19.5 33 23.5 34.8 29C27 26.5 13 26.5 5.2 29Z', 'fill': 'p_cap'},
     ] + [{'d': ell(cx, 33.5, 1.1, 1.1), 'fill': 'ink', 'wobble': False} for cx in (15, 25)],
-    # P.P. Straight-cut bangs over one half of the forehead, hair ends flicking
-    # outward at the jaw, one button.
+    # P.P. Blunt bangs cut straight across the whole forehead, just above the
+    # eyes, hair ends flicking outward at the jaw, one button.
     'pp': figure('pp_legs', 'pp_coat', 'skin', coat='M11 45.5C11 37 14 32.5 20 32.5C26 32.5 29 37 29 45.5Z', extra_front=[
         {'d': 'M4.5 28.5C6.5 27.5 7 26 6.8 23C6 13 11 6.5 20 6.5C29 6.5 34 13 33.2 23C33 26 33.5 27.5 35.5 28.5'
-              'C32.5 30 30 28.5 29.8 25.5L29.8 18H23.5C20.5 16 18 13.5 16 12C12 13 10.2 16 10.2 20L10.2 25.5'
+              'C32.5 30 30 28.5 29.8 25.5L29.8 18.5H10.2L10.2 25.5'
               'C10 28.5 7.5 30 4.5 28.5Z',
          'fill': 'pp_hair'},
         {'d': ell(20, 38.5, 1.5, 1.5), 'fill': 'sun', 'line': False, 'wobble': False},
