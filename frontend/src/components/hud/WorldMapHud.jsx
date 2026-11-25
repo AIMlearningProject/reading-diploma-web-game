@@ -59,7 +59,7 @@ export default function WorldMapHud({ panel, onBack, onOpenContinent }) {
         return (
             <div className="wmh-corner">
                 <InkFilter />
-                <button type="button" className="wmh-round ink-shape ink-drop" onClick={onBack} aria-label="Takaisin matkapäiväkirjaan">
+                <button type="button" className="wmh-round ink-shape ink-drop" onClick={onBack} aria-label="Takaisin leiriin">
                     <BackArrow />
                 </button>
                 <div className="wmh-corner-count ink-shape">
@@ -98,7 +98,7 @@ export default function WorldMapHud({ panel, onBack, onOpenContinent }) {
                 }}
             >
                 <BackArrow />
-                Matkapäiväkirjaan
+                Takaisin leiriin
             </button>
 
             <section
