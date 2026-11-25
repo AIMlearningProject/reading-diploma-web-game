@@ -278,3 +278,62 @@
         transform: none;
     }
 }
+
+/* ── The items in the front pocket ───────────────────────── */
+/* An item's hover area covers the part that shows above the pocket. Pointing at
+   it, or focusing it, opens a paper note above it, drawn like the pupil's other
+   notes (the ink note of InfoButton.css): the item's name, then what it does. */
+
+.wmh-item {
+    position: absolute;
+    z-index: 3;
+    border-radius: 12px;
+}
+
+.wmh-item:focus-visible {
+    outline: 3px solid var(--navy-500);
+    outline-offset: 2px;
+}
+
+.wmh-item-note {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    width: 232px;
+    padding: 10px 16px 12px;
+    border-radius: 12px;
+    --book-fill: var(--book-paper);
+    transform: translateX(-50%);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--ink-900);
+    text-align: left;
+    /* Shown and hidden at once, with no fade. */
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.wmh-item--first .wmh-item-note {
+    left: 0;
+    transform: none;
+}
+
+.wmh-item--last .wmh-item-note {
+    left: auto;
+    right: 0;
+    transform: none;
+}
+
+.wmh-item:hover .wmh-item-note,
+.wmh-item:focus-visible .wmh-item-note {
+    visibility: visible;
+}
+
+.wmh-item-name {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 19px;
+    font-weight: 900;
+    color: var(--navy-700);
+}

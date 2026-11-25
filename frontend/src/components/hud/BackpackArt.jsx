@@ -11,6 +11,14 @@ export const BAG_SIZE = { width: 502, height: 676 }
 export const NOTE = { x: 70, y: 200, width: 362, height: 390, tilt: -1.5 }
 export const NOTE_TEXT = { x: 96, y: 236, scale: 0.82, firstRule: 38, step: 34 }
 
+// Each item's hover area: its own compartment of the front pocket (the pocket's
+// edges and the three seams drawn on it below), from the item's top down to the
+// pocket's bottom, so pointing at the pocket under an item counts too.
+const POCKET_SEAMS = [56, 153, 251, 349, 446]
+export const ITEM_AREAS = POCKET_SEAMS.slice(0, -1).map((left, i) => ({
+    left, width: POCKET_SEAMS[i + 1] - left, top: 500, height: 106
+}))
+
 // Where the tag hangs, for the button laid over it.
 export const TAG = { x: 264, y: 27, angle: 22, hole: { x: 26, y: 39 }, width: 229, top: 12, bottom: 66 }
 
@@ -186,7 +194,7 @@ export default function BackpackArt({ items }) {
             <path d={POCKET} fill="url(#wmh-hatch-fabric)" clipPath="url(#wmh-clip-pocket)" filter={INK} />
             <Line d="M62 568 Q62 566 70 566 H432 Q440 566 440 568" color={ART.tan} width={9} />
             <Stitch d="M72 584 H430" />
-            <Line d="M153 570 V604 M251 570 V604 M349 570 V604" width={4.5} />
+            <Line d={POCKET_SEAMS.slice(1, -1).map((x) => `M${x} 570 V604`).join(' ')} width={4.5} />
             <Outlined d={POCKET} />
 
             {/* The tag, hanging from the handle by its string. */}

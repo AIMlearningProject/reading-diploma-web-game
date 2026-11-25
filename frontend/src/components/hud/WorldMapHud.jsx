@@ -4,7 +4,8 @@
 // sheet in the area game/ui/worldMapLayout.js worked out (`panel`, in CSS
 // pixels). The way back is the luggage tag on its handle, the year's reading
 // and where the pupil is are written in the notebook tucked under its flap, and
-// the found items stand in its front pocket. On a narrow screen there is no
+// the found items stand in its front pocket; pointing at one, or focusing it,
+// shows a note with its name and what it does. On a narrow screen there is no
 // room beside the sheet, so only the way back and the reading count stay, as a
 // group in the bottom left corner over the map.
 //
@@ -16,7 +17,7 @@ import ReadingState from '../../game/state.js'
 import items from '../../game/data/items.js'
 import { continentName } from '../../game/scenes/continentRegistry.js'
 import InkFilter from '../ink/InkFilter.jsx'
-import BackpackArt, { BAG_SIZE, NOTE_TEXT, TAG } from './BackpackArt.jsx'
+import BackpackArt, { BAG_SIZE, ITEM_AREAS, NOTE_TEXT, TAG } from './BackpackArt.jsx'
 import './WorldMapHud.css'
 
 function BackArrow() {
@@ -118,6 +119,26 @@ export default function WorldMapHud({ panel, onBack, onOpenContinent }) {
                     Jatka matkaa
                 </button>
             </section>
+
+            {/* Each found item's compartment of the pocket, item included, with the
+                note it shows. Laid after the
+                notebook, so a note opens over the page. The two outer items open
+                theirs inwards, so no note runs off the bag. */}
+            {found.map((item, i) => item && (
+                <div
+                    key={item.id}
+                    className={`wmh-item${i === 0 ? ' wmh-item--first' : ''}${i === found.length - 1 ? ' wmh-item--last' : ''}`}
+                    tabIndex={0}
+                    aria-label={item.name}
+                    aria-describedby={`wmh-item-note-${item.id}`}
+                    style={ITEM_AREAS[i]}
+                >
+                    <span id={`wmh-item-note-${item.id}`} className="wmh-item-note ink-shape ink-shape--thin" role="tooltip">
+                        <strong className="wmh-item-name">{item.name}</strong>
+                        {item.desc}
+                    </span>
+                </div>
+            ))}
 
             <p className="wmh-sr-only">
                 Reppu: {foundNames.length > 0 ? foundNames.join(', ') : 'ei vielä tavaroita'}
