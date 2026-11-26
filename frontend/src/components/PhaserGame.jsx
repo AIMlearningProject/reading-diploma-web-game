@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import Phaser from 'phaser';
 import createGameConfig from '../game/config.js';
 import { renderScale } from '../game/ui/constants.js';
+import { fundingStrip } from '../game/ui/fundingStrip.js';
 import ReadingState from '../game/state.js';
 import ReactQuiz from './popups/ReactQuiz';
 import BookListPanel from './popups/BookListPanel';
@@ -35,6 +36,8 @@ function watchSceneLoading(game, setLoading) {
 export default function PhaserGame() {
   const containerRef = useRef(null);
   const gameRef = useRef(null);
+  const liftRef = useRef(null);
+  const stripRef = useRef(null);
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -54,6 +57,28 @@ export default function PhaserGame() {
     currentPct: null,
     readOnly: false
   });
+
+  // The funders' strip lies under the game; a map dragged past its bottom edge
+  // lifts the game to show it (game/ui/fundingStrip.js). The lift moves the
+  // canvas, so Phaser re-reads where it is, or presses would land off target.
+  useEffect(() => {
+    const strip = stripRef.current;
+    const lift = liftRef.current;
+    if (!strip || !lift) return;
+    const measure = () => { fundingStrip.height = strip.offsetHeight; };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(strip);
+    fundingStrip.onReveal = (cssPx) => {
+      lift.style.transform = cssPx ? `translateY(${-cssPx}px)` : '';
+      gameRef.current?.scale.updateBounds();
+    };
+    return () => {
+      ro.disconnect();
+      fundingStrip.onReveal = null;
+      fundingStrip.shown = 0;
+    };
+  }, []);
 
   useEffect(() => {
     if (gameRef.current) return;
@@ -176,6 +201,7 @@ export default function PhaserGame() {
 
   return (
     <div className="game-shell">
+      <div className="game-lift" ref={liftRef}>
       <div className="game-stage">
         <div id="game-container" ref={containerRef} />
 
@@ -188,7 +214,10 @@ export default function PhaserGame() {
         )}
       </div>
 
-      <FundingNotice strip />
+      <div ref={stripRef}>
+        <FundingNotice strip />
+      </div>
+      </div>
 
       {loading && <GameLoading />}
 

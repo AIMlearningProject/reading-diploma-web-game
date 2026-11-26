@@ -1,21 +1,26 @@
-/* The game screen: the map fills what the funding strip leaves. dvh, not vh,
-   so on a phone the strip sits above the browser's toolbar instead of under
-   it; browsers without dvh keep the vh line. */
+/* The game screen: the map fills the screen, and the funding strip lies just
+   below it, out of view. dvh, not vh, so on a phone the game ends above the
+   browser's toolbar instead of under it; browsers without dvh keep the vh line. */
 .game-shell {
     position: fixed;
     inset: 0;
     height: 100vh;
     height: 100dvh;
-    display: flex;
-    flex-direction: column;
+    overflow: hidden;
+}
+
+/* The game and the strip under it. A map dragged past its bottom edge lifts
+   this box (game/ui/fundingStrip.js, transform set inline), so the canvas, the
+   HUD and the strip move as one. */
+.game-lift {
+    height: 100%;
 }
 
 /* The canvas and the HUD drawn over it share this box, so the HUD's
-   coordinates are the canvas's and never reach the funding strip. */
+   coordinates are the canvas's. */
 .game-stage {
     position: relative;
-    flex: 1 1 auto;
-    min-height: 0;
+    height: 100%;
 }
 
 .game-stage > #game-container {

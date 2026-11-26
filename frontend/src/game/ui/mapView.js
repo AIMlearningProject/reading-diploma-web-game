@@ -1,4 +1,5 @@
-import { px } from './constants.js';
+import { px, renderScale } from './constants.js';
+import { fundingStrip } from './fundingStrip.js';
 
 /**
  * How a map sheet sits on a small screen. Fitting the whole sheet, as the
@@ -55,6 +56,12 @@ export function sheetRect(viewW, viewH, nativeW, nativeH, minScale, { coverSlive
  * One finger drags the camera over the sheet. A press that moves less than
  * DRAG_SLOP is still a tap, so the stops on the map stay pressable; they run
  * their action through tap(), which drops it when the press was a drag.
+ *
+ * A drag that goes on past the world's bottom edge lifts the whole game and
+ * shows the funders' strip under it (fundingStrip.js). The drag runs along one
+ * line, camera scroll first and then the lift, so dragging back lowers the game
+ * before it moves the map. The lift moves the canvas under the finger, so the
+ * finger's travel is measured with it taken back out.
  */
 const DRAG_SLOP = 8;
 
@@ -64,31 +71,47 @@ export class MapPanner {
         this.camera = scene.cameras.main;
         this.start = null;
         this.dragged = false;
+        this.worldH = 0;
+        // How far the game is lifted, in canvas pixels. A new map starts lowered.
+        this.lift = 0;
+        fundingStrip.reveal(0);
 
         // The flag is cleared on the next press, not on release: a stop's own
         // pointerup handler runs before the scene's, and must still see it.
         scene.input.on('pointerdown', (pointer) => {
             this.dragged = false;
             this.start = {
-                x: pointer.x, y: pointer.y,
-                scrollX: this.camera.scrollX, scrollY: this.camera.scrollY
+                x: pointer.x, y: pointer.y - this.lift,
+                scrollX: this.camera.scrollX, along: this.camera.scrollY + this.lift
             };
         });
         scene.input.on('pointermove', (pointer) => {
             if (!this.start || !pointer.isDown) return;
             const dx = pointer.x - this.start.x;
-            const dy = pointer.y - this.start.y;
+            const dy = (pointer.y - this.lift) - this.start.y;
             if (!this.dragged && Math.hypot(dx, dy) < px(DRAG_SLOP)) return;
             this.dragged = true;
             this.camera.stopFollow();
-            this.camera.setScroll(this.start.scrollX - dx, this.start.scrollY - dy);
+            const along = this.start.along - dy;
+            const maxScroll = Math.max(0, this.worldH - this.camera.height);
+            this.camera.setScroll(this.start.scrollX - dx, Math.min(along, maxScroll));
+            this.setLift(along - maxScroll);
         });
         scene.input.on('pointerup', () => { this.start = null; });
     }
 
+    setLift(canvasPx) {
+        const r = renderScale();
+        fundingStrip.reveal(canvasPx / r);
+        this.lift = fundingStrip.shown * r;
+    }
+
     /** Lay the world out after a resize; the camera stays inside it. */
     setWorld(rect) {
+        this.worldH = rect.worldH;
         this.camera.setBounds(0, 0, rect.worldW, rect.worldH);
+        // The strip may have changed height with the screen's width.
+        this.setLift(this.lift);
     }
 
     /** Run `action` only if the press that triggered it was not a drag. */
