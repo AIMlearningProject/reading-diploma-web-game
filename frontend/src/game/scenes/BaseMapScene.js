@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import PathRenderer from '../managers/PathRenderer.js';
 import TokenManager from '../managers/TokenManager.js';
-import WaypointRenderer from '../managers/WaypointRenderer.js';
+import WaypointRenderer, { STAMP_MS, videoStopRadius } from '../managers/WaypointRenderer.js';
 import CelebrationModal from '../modals/CelebrationModal.js';
 import VideoPopupModal from '../modals/VideoPopupModal.js';
 import ReadingState from '../state.js';
@@ -45,6 +45,10 @@ class BaseMapScene extends Phaser.Scene {
         this.LOGICAL_WIDTH = 1280;
 
         this.isDoingQuiz = false;
+        // Set between a redraw and the walk that follows it (walkSoon).
+        this.walkPending = false;
+        // The node just finished, whose tick the next redraw presses on.
+        this.stampNodeIndex = null;
 
         // On bends between the book nodes, so a video never sits on top of one.
         this.videoCheckpoints = {
@@ -90,13 +94,10 @@ class BaseMapScene extends Phaser.Scene {
 
         // Scene resume listener
         this.events.on('resume', () => {
-            this.time.delayedCall(100, () => {
-                this.updateTokenPosition(true);
-            });
             // Reload the continent background texture.
             if (this.bg) this.bg.destroy();
             this.bg = this.add.image(0, 0, this.assetKey).setOrigin(0);
-            this.handleResize();
+            this.walkSoon(100);
         });
 
         // Init layout
@@ -163,9 +164,12 @@ class BaseMapScene extends Phaser.Scene {
                 nodeWaypoints: this.nodeWaypoints,
                 nodes: ReadingState.nodesFor(this.scene.key),
                 currentNodeIndex: ReadingState.currentNodeIndex(this.scene.key),
-                onNodeClick: (nodeIndex) => this.openNode(nodeIndex)
+                onNodeClick: (nodeIndex) => this.openNode(nodeIndex),
+                stampNodeIndex: this.stampNodeIndex
             }
         );
+        // The stamp plays once; a later redraw (a resize) shows the node at rest.
+        this.stampNodeIndex = null;
 
         // --- UI: ink badges, same family as the world map ---
         // Both are CSS pixel figures, so they go through the pixel ratio.
@@ -271,11 +275,39 @@ class BaseMapScene extends Phaser.Scene {
         this.tokenManager.updateScale(this.baseScale);
         const curIdx = this.tokenManager.lastPointIndex;
         this.tokenManager.setPosition(this.pointPositions[curIdx].x, this.pointPositions[curIdx].y);
-        this.updateTokenPosition(false);
+        // A walk about to start (walkSoon) would find the buddy already at its
+        // goal if the redraw snapped it there, so it then stays where it stands.
+        if (!this.walkPending) this.updateTokenPosition(false);
 
         // The view opens on the buddy, and finds it again after a rotation.
         const token = this.tokenManager.token;
         if (token) this.panner.centerOn(token.x, token.y);
+
+        if (import.meta.env.DEV) this.reportStopsUnderBuddy();
+    }
+
+    /**
+     * Development check on the route data: the stops are drawn above the buddy,
+     * so a video stop where the buddy stands at a book node would sit on its
+     * face. Move that bend in continentRegistry.js.
+     */
+    reportStopsUnderBuddy() {
+        const token = this.tokenManager.token;
+        if (!token) return;
+        const halfW = token.displayWidth / 2;
+        const halfH = token.displayHeight / 2;
+        const r = videoStopRadius(this.baseScale);
+        this.nodeWaypoints.forEach((nodeIndex, i) => {
+            const node = this.pointPositions[nodeIndex];
+            const centreY = node.y - this.tokenManager.nodeOffsetY;
+            Object.keys(this.videoCheckpoints).forEach((key) => {
+                const stop = this.pointPositions[Number(key)];
+                if (!stop) return;
+                if (Math.abs(stop.x - node.x) < halfW + r && Math.abs(stop.y - centreY) < halfH + r) {
+                    console.error(`${this.scene.key}: video stop ${key} is under the buddy at book node ${i + 1}`);
+                }
+            });
+        });
     }
 
     /**
@@ -450,20 +482,29 @@ class BaseMapScene extends Phaser.Scene {
     handleManualProgressSave(pct, config, book, readOnly, nodeIndex = this.activeNodeIndex) {
         if (readOnly) return;
 
+        const wasDone = (ReadingState.nodeAt(this.scene.key, nodeIndex)?.progress ?? 0) >= 100;
         ReadingState.saveNodeProgress(this.scene.key, nodeIndex, pct);
+        const isStamped = !wasDone && pct >= 100;
+        if (isStamped) this.stampNodeIndex = nodeIndex;
 
         if (ReadingState.isLevelPendingResubmission(this.scene.key)
             && ReadingState.continentProgress(this.scene.key) >= 100) {
             ReadingState.levelsCompletedResubmission[this.scene.key] = true;
         }
 
-        // Redraw the route so the node shows its new state.
-        this.handleResize();
-
+        // Redraw the route so the node shows its new state, then walk on.
         // Manual scene resume, since scene was never paused
         // Pausing the scene caused the handleResize to not work,
         // if portrait/landscape mode on mobile was changed while the UpdateProgressPopup was open
-        this.time.delayedCall(100, () => {
+        this.walkSoon(100 + (isStamped ? STAMP_MS : 0));
+    }
+
+    // Redraws the map now and walks the buddy to where its progress puts it after `delay` ms.
+    walkSoon(delay) {
+        this.walkPending = true;
+        this.handleResize();
+        this.time.delayedCall(delay, () => {
+            this.walkPending = false;
             this.updateTokenPosition(true);
         });
     }

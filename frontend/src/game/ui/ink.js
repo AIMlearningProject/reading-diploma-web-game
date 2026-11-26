@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { INK, renderScale } from './constants.js';
+import { INK, px, renderScale } from './constants.js';
 
 /**
  * The hand-drawn edge of ink.css, for the canvas. The canvas cannot use the
@@ -16,6 +16,9 @@ const PAD = 10;
 // The padding holds the displaced edge, so it grows with the pixel ratio.
 const pad = () => PAD * renderScale();
 const FIELD = 512;
+// Keys of shapes already reported for a thin line, so each is reported once.
+const warnedThin = new Set();
+
 const PANEL_AMOUNT = 9;
 // The wobble of a button, and of the CSS #ink-hand filter.
 export const SMALL_AMOUNT = 5;
@@ -141,6 +144,13 @@ export function inkShape(scene, x, y, width, height, options = {}) {
     const d = Math.round(drop);
     const wobble = amount ?? (Math.min(w, h) < 80 * renderScale() ? SMALL_AMOUNT : PANEL_AMOUNT);
     const key = `ink-${w}x${h}-${r}-${fill}-${l}-${d}-${seed}-${wobble}`;
+
+    // An ink line under 2 CSS pixels reads as a grey hairline next to the
+    // map's art. Say so in development; a bare device-pixel number is the usual cause.
+    if (import.meta.env.DEV && line && line < px(2) && !warnedThin.has(key)) {
+        warnedThin.add(key);
+        console.error(`inkShape: line ${line} device px is under px(2) = ${px(2)}; pass Math.max(px(2), ...)`, new Error('thin ink line').stack);
+    }
 
     if (!scene.textures.exists(key)) {
         const shape = bake(w, h, (g) => {

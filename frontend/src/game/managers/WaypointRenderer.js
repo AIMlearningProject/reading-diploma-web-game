@@ -1,10 +1,17 @@
 import { CSS_COLORS, DEPTHS, FONTS, INK, px } from '../ui/constants.js';
 import { ICON_KEYS, iconImage } from '../ui/icons.js';
 import { circleHitArea, inkCircle } from '../ui/ink.js';
+import { isMotionReduced } from '../ui/motion.js';
 
 // On a small map the stops stop shrinking, so a finger can still hit them.
 const MIN_NODE_RADIUS = 15;
 const MIN_VIDEO_RADIUS = 11;
+
+/** The radius of a video stop on a map drawn at `baseScale`. */
+export const videoStopRadius = (baseScale) => Math.max(px(MIN_VIDEO_RADIUS), 19 * baseScale);
+
+// How long the tick takes to land, so the scene can let the buddy set off after it.
+export const STAMP_MS = 420;
 
 /**
  * Draws a continent's stops.
@@ -19,12 +26,15 @@ export default class WaypointRenderer {
         this.scene = scene;
         this.dotObjects = [];
         this.dotTexts = [];
+        // The node whose tick is pressed on in this render, if any.
+        this.stampNodeIndex = null;
     }
 
     render(pointPositions, baseScale, videoCheckpoints, onVideoClick, route = {}) {
         this.destroy();
 
-        const { nodeWaypoints = [], nodes = [], currentNodeIndex = 1, onNodeClick } = route;
+        const { nodeWaypoints = [], nodes = [], currentNodeIndex = 1, onNodeClick, stampNodeIndex = null } = route;
+        this.stampNodeIndex = stampNodeIndex;
         const nodeOfWaypoint = new Map(nodeWaypoints.map((wp, i) => [wp, i + 1]));
 
         pointPositions.forEach((pos, index) => {
@@ -58,6 +68,7 @@ export default class WaypointRenderer {
             const tick = iconImage(this.scene, pos.x, pos.y, ICON_KEYS.CHECKMARK, radius * 1.15)
                 .setDepth(DEPTHS.BOOK_NODE_TEXT);
             this.dotTexts.push(tick);
+            if (nodeIndex === this.stampNodeIndex) this._stamp(dot, tick, pos, radius, baseScale);
         } else {
             const label = this.scene.add.text(pos.x, pos.y, String(nodeIndex), {
                 fontFamily: FONTS.BODY,
@@ -74,8 +85,70 @@ export default class WaypointRenderer {
         }
     }
 
+    /**
+     * The node the pupil just finished gets its tick pressed on like a rubber
+     * stamp: it comes down from above, the node gives under it, and a few
+     * drops of the stamp's ink fly off its rim.
+     */
+    _stamp(dot, tick, pos, radius, baseScale) {
+        if (isMotionReduced()) return;
+        const scene = this.scene;
+        const rest = tick.scale;
+        const press = STAMP_MS * 0.55;
+
+        // At full strength the whole way: a half-clear tick is a grey ghost of the ink.
+        tick.setScale(rest * 1.6);
+        scene.tweens.chain({
+            targets: tick,
+            tweens: [
+                { scale: rest * 0.9, duration: press, ease: 'Quad.easeIn' },
+                { scale: rest, duration: STAMP_MS - press, ease: 'Quad.easeOut' }
+            ]
+        });
+        const dotRest = dot.scale;
+        scene.tweens.add({
+            targets: dot,
+            scale: dotRest * 0.9,
+            delay: press,
+            duration: 90,
+            yoyo: true,
+            ease: 'Quad.easeOut'
+        });
+
+        scene.time.delayedCall(press, () => {
+            const drops = 7;
+            for (let i = 0; i < drops; i++) {
+                const angle = (i / drops) * Math.PI * 2 + 0.4;
+                // Solid ink blobs, wider than the route's own line (INK.MID). They
+                // shrink away rather than fade: half-clear ink over the map reads as dirt.
+                const size = Math.max(px(3), (i % 2 ? 4.5 : 6.5) * baseScale);
+                const drop = inkCircle(scene, pos.x + Math.cos(angle) * radius, pos.y + Math.sin(angle) * radius, size, {
+                    fill: INK.OUTLINE, line: Math.max(px(2.5), INK.SMALL * baseScale), seed: 90 + i
+                // Under the buddy and the node, so they fly out from under the rim
+                // and never land on the buddy as a stain.
+                }).setDepth(DEPTHS.TOKEN - 1);
+                this.dotTexts.push(drop);
+                scene.tweens.add({
+                    targets: drop,
+                    x: drop.x + Math.cos(angle) * radius * 0.6,
+                    y: drop.y + Math.sin(angle) * radius * 0.6,
+                    duration: 260,
+                    ease: 'Quad.easeOut'
+                });
+                scene.tweens.add({
+                    targets: drop,
+                    scale: 0,
+                    delay: 200,
+                    duration: 220,
+                    ease: 'Quad.easeIn',
+                    onComplete: () => drop.setVisible(false)
+                });
+            }
+        });
+    }
+
     _drawVideoStop(pos, baseScale, index, videoCheckpoints, onVideoClick) {
-        const radius = Math.max(px(MIN_VIDEO_RADIUS), 19 * baseScale);
+        const radius = videoStopRadius(baseScale);
         const dot = inkCircle(this.scene, pos.x, pos.y, radius, {
             line: Math.max(px(2.5), INK.MID * baseScale), seed: 50 + index
         }).setDepth(DEPTHS.BOOK_NODE);
@@ -103,7 +176,10 @@ export default class WaypointRenderer {
             this.scene.tweens.killTweensOf(d);
             d.destroy();
         });
-        this.dotTexts.forEach(t => t.destroy());
+        this.dotTexts.forEach(t => {
+            this.scene.tweens.killTweensOf(t);
+            t.destroy();
+        });
         this.dotObjects = [];
         this.dotTexts = [];
     }

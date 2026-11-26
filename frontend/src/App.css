@@ -126,3 +126,15 @@ canvas {
   flex: 1 0 auto;
   min-height: 0;
 }
+
+/* The pupil's "reduce motion" setting: every CSS animation and transition ends
+   at once. The game canvas reads the same setting in game/ui/motion.js. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

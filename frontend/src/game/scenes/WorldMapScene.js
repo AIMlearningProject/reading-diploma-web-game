@@ -10,6 +10,7 @@ import { continentName } from './continentRegistry.js';
 import { BUDDY_ASPECT, buddyHeight, buddyKey, preloadBuddy, startBuddyHop } from '../ui/buddy.js';
 import { inkDrawing, inkSheet, strokeDashed } from '../ui/ink.js';
 import overallMapImg from '../../assets/overallMap.jpg';
+import { isMotionReduced } from '../ui/motion.js';
 
 // Native pixel size of overallMap.jpg. Every continent position below is
 // expressed in these coordinates and scaled to whatever the canvas is.
@@ -214,9 +215,11 @@ class WorldMapScene extends Phaser.Scene {
 
             const groundY = this.buddy.y;
             const buddy = this.buddy;
-            this.buddyFloatTween = startBuddyHop(this, (lift) => {
-                if (buddy.active) buddy.y = groundY - lift * 12 * k;
-            });
+            if (!isMotionReduced()) {
+                this.buddyFloatTween = startBuddyHop(this, (lift) => {
+                    if (buddy.active) buddy.y = groundY - lift * 12 * k;
+                });
+            }
         };
 
         drawRoute();
