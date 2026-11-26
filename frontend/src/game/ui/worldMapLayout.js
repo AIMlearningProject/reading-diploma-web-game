@@ -4,13 +4,25 @@
 //
 // On a wide screen the sheet fills the height at the left edge and the HUD is
 // the backpack on the desk to its right. Anything narrower keeps the sheet where
-// sheetRect() puts it and the HUD shrinks to a corner group over the map.
+// sheetRect() puts it, above the top of the backpack peeking in at the bottom
+// edge (BAG_PEEK), which the pupil opens over the map.
+
+// The backpack drawing's own box (BackpackArt.jsx draws in it). The bag is never
+// drawn smaller than BAG_MIN_SCALE: below it its ink lines and the writing on it
+// come out thinner than the rest of the page.
+export const BAG_SIZE = { width: 502, height: 676 };
+export const BAG_MIN_SCALE = 1;
+export const BAG_MAX_SCALE = 1.25;
+
+// CSS pixels. How much of the bag shows at the bottom edge on a narrow screen:
+// its handle and the top of its flap.
+export const BAG_PEEK = 92;
 
 // CSS pixels. The panel area never grows past PANEL_MAX: past that it is
 // centred on the desk to the sheet's right instead. WorldMapHud scales the
-// backpack whole to fit inside it.
+// backpack whole to fit inside it, so the panel has room for it at BAG_MIN_SCALE.
 export const HUD_MARGIN = 28;
-export const PANEL_MIN = 400;
+export const PANEL_MIN = BAG_SIZE.width * BAG_MIN_SCALE;
 export const PANEL_MAX = 640;
 
 /**
@@ -20,7 +32,8 @@ export const PANEL_MAX = 640;
  * is the canvas pixels per CSS pixel (renderScale()). minScale is the sheet
  * scale at which its signs are full size: the wide layout is only used when
  * the sheet, fitted to the height, is at least that large, because otherwise
- * the pupil would have to drag it.
+ * the pupil would have to drag it, and when the panel beside it holds the
+ * whole bag at BAG_MIN_SCALE.
  */
 export function wideWorldMapLayout(viewW, viewH, sheetW, sheetH, minScale, unit) {
     const scale = viewH / sheetH;
@@ -32,6 +45,7 @@ export function wideWorldMapLayout(viewW, viewH, sheetW, sheetH, minScale, unit)
     if (room - 2 * margin < PANEL_MIN * unit) return null;
 
     const panelW = Math.min(PANEL_MAX * unit, room - 2 * margin);
+    if (viewH - 2 * margin < BAG_SIZE.height * BAG_MIN_SCALE * unit) return null;
     return {
         map: { scale, x: 0, y: 0, width: mapW, height: viewH },
         panel: {

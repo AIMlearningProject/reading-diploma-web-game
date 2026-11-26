@@ -1,10 +1,12 @@
-/* The world map's HUD (WorldMapHud.jsx). On a wide screen it is the backpack
-   drawn by BackpackArt.jsx, laid out in that drawing's own 502 x 676 units and
-   scaled as one piece; on a narrow screen it is a small group in the corner.
+/* The world map's HUD (WorldMapHud.jsx). The backpack (Backpack.jsx) is laid
+   out in its drawing's own 502 x 676 units and scaled as one piece: beside the
+   map on a wide screen, peeking in at the bottom edge on a narrow one
+   (BackpackDrawer.jsx), where the way back is a round button in the corner.
    Shapes drawn in HTML use the ink classes of components/ink/ink.css. */
 
 .wmh-bag,
-.wmh-corner {
+.wmh-corner,
+.wmh-drawer {
     --book-line: 6px;
     --book-drop: 6px;
     --book-dot: 1.5px;
@@ -16,22 +18,22 @@
 }
 
 /* ink.css draws a shape on a positioned element. */
-:where(.wmh-bag, .wmh-corner) .ink-shape {
+:where(.wmh-bag, .wmh-corner, .wmh-drawer) .ink-shape {
     position: relative;
 }
 
 /* Zero weight, so each block's own margin and size win. */
-:where(.wmh-bag, .wmh-corner) :where(p, h2) {
+:where(.wmh-bag, .wmh-corner, .wmh-drawer) :where(p, h2) {
     margin: 0;
 }
 
-:where(.wmh-bag, .wmh-corner) :where(button) {
+:where(.wmh-bag, .wmh-corner, .wmh-drawer) :where(button) {
     font: inherit;
     color: inherit;
     cursor: pointer;
 }
 
-:where(.wmh-bag, .wmh-corner) button:focus-visible {
+:where(.wmh-bag, .wmh-corner, .wmh-drawer) button:focus-visible {
     outline: 3px solid var(--navy-500);
     outline-offset: 4px;
 }
@@ -201,10 +203,8 @@
     display: none;
 }
 
-/* ── Narrow screens: a corner group over the map ─────────── */
+/* ── Narrow screens: the way back, in the corner ─────────── */
 
-/* Bottom left: the first continent, where every pupil starts, sits at the top
-   of the sheet, and on a phone the thumb is at the bottom anyway. */
 .wmh-corner {
     --book-line: 5px;
     --book-drop: 4px;
@@ -249,27 +249,6 @@
     stroke-linecap: round;
     stroke-linejoin: round;
     filter: url('#ink-hand-small');
-}
-
-.wmh-corner-count {
-    --book-fill: var(--book-paper);
-    border-radius: 14px;
-    padding: 6px 14px 9px;
-}
-
-.wmh-count--compact .wmh-count-text {
-    font-size: 14px;
-}
-
-.wmh-count--compact .wmh-count-text strong {
-    font-size: 20px;
-    margin-right: 3px;
-}
-
-.wmh-count--compact .wmh-track {
-    width: 128px;
-    height: 16px;
-    margin-top: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -336,4 +315,75 @@
     font-size: 19px;
     font-weight: 900;
     color: var(--navy-700);
+}
+
+/* ── Narrow screens: the backpack at the bottom edge ─────── */
+/* BackpackDrawer.jsx. The box covers the canvas; only the bag, its hint and,
+   while it is open, the shade take presses, so the map stays draggable. */
+
+.wmh-drawer {
+    inset: 0;
+    pointer-events: none;
+}
+
+/* Open, the bag and its shade lie over the corner's way back too. */
+.wmh-drawer.is-open {
+    z-index: 6;
+}
+
+/* Clips the closed bag at the canvas's bottom edge; scrolls the open bag on a
+   screen too short for it. */
+.wmh-drawer-scroll {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.wmh-drawer.is-open .wmh-drawer-scroll {
+    overflow: hidden auto;
+    pointer-events: auto;
+    background: color-mix(in srgb, var(--ink-900) 55%, transparent);
+}
+
+.wmh-drawer-room {
+    position: relative;
+}
+
+/* The bag rises the whole way at once, the one movement on this screen.
+   Isolated, so the bag's own z-index (shared with the wide layout) stays
+   inside it and never lifts the bag over the close button. */
+.wmh-drawer-lift {
+    position: absolute;
+    isolation: isolate;
+    pointer-events: auto;
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wmh-drawer-peek {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+}
+
+/* The speech bubble beside the handle (PeekHint), drawn in the bag's units:
+   it lies over the bag, scaled like it, and lets presses through to the peek. */
+.wmh-drawer-hint {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 6;
+    overflow: visible;
+    transform-origin: 0 0;
+    pointer-events: none;
+}
+
+.wmh-drawer-close {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    pointer-events: auto;
 }

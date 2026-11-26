@@ -5,7 +5,9 @@
 // The colours are the drawing's own, like the map art's: the bag is not part of
 // the token set. ART.paper and ART.ink match --book-paper and --ink-900.
 
-export const BAG_SIZE = { width: 502, height: 676 }
+import { BAG_SIZE } from '../../game/ui/worldMapLayout.js'
+
+export { BAG_SIZE }
 
 // The notebook page: where it sits, and the grid its writing and ruled lines share.
 export const NOTE = { x: 70, y: 200, width: 362, height: 390, tilt: -1.5 }
@@ -96,7 +98,7 @@ function Fabric({ id, d, fill }) {
 
 const Drop = ({ d, dx = 6, dy = 7 }) => <path d={d} fill={DROP} transform={`translate(${dx} ${dy})`} filter={INK} />
 
-export default function BackpackArt({ items }) {
+export default function BackpackArt({ items, withTag = true }) {
     const rules = []
     for (let n = -1; n < 10; n++) {
         const y = NOTE_TEXT.y + (NOTE_TEXT.firstRule + NOTE_TEXT.step * n) * NOTE_TEXT.scale
@@ -132,9 +134,9 @@ export default function BackpackArt({ items }) {
             <Fabric id="strap-r" d={STRAP_R} fill={ART.fabricDark} />
 
             {/* The tag's string rings the handle: back half behind it, front half over it. */}
-            <Line d="M270 1 A7 16 0 0 0 270 33" transform="rotate(20 270 17)" />
+            {withTag && <Line d="M270 1 A7 16 0 0 0 270 33" transform="rotate(20 270 17)" />}
             <Outlined d={HANDLE} fill={ART.leather} width={6} />
-            <Line d="M270 1 A7 16 0 0 1 270 33" transform="rotate(20 270 17)" />
+            {withTag && <Line d="M270 1 A7 16 0 0 1 270 33" transform="rotate(20 270 17)" />}
 
             {/* Body: the fabric, the leather base, then the outline over both. */}
             <Drop d={BODY} dx={7} dy={8} />
@@ -197,13 +199,18 @@ export default function BackpackArt({ items }) {
             <Line d={POCKET_SEAMS.slice(1, -1).map((x) => `M${x} 570 V604`).join(' ')} width={4.5} />
             <Outlined d={POCKET} />
 
-            {/* The tag, hanging from the handle by its string. */}
-            <Line d="M265 32 C268 46 278 60 290 66" />
-            <g transform={`translate(${TAG.x} ${TAG.y}) rotate(${TAG.angle} ${TAG.hole.x} ${TAG.hole.y})`}>
-                <path d={TAG_SHAPE} fill={DROP} transform="translate(4 5)" filter={INK} />
-                <Outlined d={TAG_SHAPE} fill={ART.paper} width={6} />
-                <circle cx={TAG.hole.x} cy={TAG.hole.y} r="6" fill="none" stroke={ART.ink} strokeWidth="4" filter={INK} />
-            </g>
+            {/* The tag, hanging from the handle by its string. A narrow screen
+                has no room for it beside the bag, so the bag comes without it. */}
+            {withTag && (
+                <>
+                    <Line d="M265 32 C268 46 278 60 290 66" />
+                    <g transform={`translate(${TAG.x} ${TAG.y}) rotate(${TAG.angle} ${TAG.hole.x} ${TAG.hole.y})`}>
+                        <path d={TAG_SHAPE} fill={DROP} transform="translate(4 5)" filter={INK} />
+                        <Outlined d={TAG_SHAPE} fill={ART.paper} width={6} />
+                        <circle cx={TAG.hole.x} cy={TAG.hole.y} r="6" fill="none" stroke={ART.ink} strokeWidth="4" filter={INK} />
+                    </g>
+                </>
+            )}
         </svg>
     )
 }

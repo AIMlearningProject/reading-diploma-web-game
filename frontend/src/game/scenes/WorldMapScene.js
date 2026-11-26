@@ -5,7 +5,7 @@ import { INK, px, renderScale } from '../ui/constants.js';
 import { makeContinentSign, makeInkTooltip } from '../ui/panels.js';
 import { preloadDesk, createDeskBackdrop } from '../ui/desk.js';
 import { MapPanner, sheetRect } from '../ui/mapView.js';
-import { wideWorldMapLayout } from '../ui/worldMapLayout.js';
+import { BAG_PEEK, wideWorldMapLayout } from '../ui/worldMapLayout.js';
 import { continentName } from './continentRegistry.js';
 import { BUDDY_ASPECT, buddyHeight, buddyKey, preloadBuddy, startBuddyHop } from '../ui/buddy.js';
 import { inkDrawing, inkSheet, strokeDashed } from '../ui/ink.js';
@@ -65,9 +65,18 @@ class WorldMapScene extends Phaser.Scene {
             // what the pupil reads and presses (makeContinentSign).
             const fullSize = INK.WORLD_SCALE * INK.SIGN_MIN_SCALE * renderScale();
             const wide = wideWorldMapLayout(w, h, MAP_NATIVE_W, MAP_NATIVE_H, fullSize, renderScale());
-            const rect = wide
-                ? { ...wide.map, worldW: w, worldH: h }
-                : sheetRect(w, h, MAP_NATIVE_W, MAP_NATIVE_H, fullSize);
+            let rect;
+            if (wide) {
+                rect = { ...wide.map, worldW: w, worldH: h };
+            } else {
+                // The top of the backpack shows along the bottom edge (BAG_PEEK in
+                // worldMapLayout.js). The sheet is laid out in the room above it,
+                // and the world reaches down past it, so a dragged map can always
+                // bring its bottom out from behind the bag.
+                const peek = BAG_PEEK * renderScale();
+                const above = sheetRect(w, h - peek, MAP_NATIVE_W, MAP_NATIVE_H, fullSize);
+                rect = { ...above, worldH: above.worldH + peek };
+            }
             bgMap.setScale(rect.scale).setPosition(rect.x, rect.y);
             this.mapScale = rect.scale;
             this.mapOffsetX = rect.x;
