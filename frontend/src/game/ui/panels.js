@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { CSS_COLORS, FONTS, INK, px, renderScale } from './constants.js';
+import { CSS_COLORS, FONTS, INK, px } from './constants.js';
 import { iconImage } from './icons.js';
 import { SMALL_AMOUNT, inkCircle, inkShape } from './ink.js';
 
@@ -184,19 +184,6 @@ const markerFill = ({ isCompleted, isResubmittable }) => {
     return isCompleted ? INK.GREEN : INK.PAPER;
 };
 
-function makeCompactMarker(scene, { level, state, withMarker, onClick }) {
-    const container = scene.add.container(0, 0);
-    if (!withMarker) return container;
-
-    const r = 15;
-    container.add([
-        inkCircle(scene, 0, 0, r, { fill: markerFill(state), line: 3, seed: 20 + level }),
-        bodyText(scene, String(level), 14).setOrigin(0.5)
-    ]);
-    wireInteraction(container, new Phaser.Geom.Circle(0, 0, r), Phaser.Geom.Circle.Contains, onClick, 1.12);
-    return container;
-}
-
 /**
  * A continent's sign on the world map: the round marker and the plate under it
  * are one shape, and the whole of it can be pressed. (0, 0) is the marker's
@@ -209,10 +196,8 @@ export function makeContinentSign(scene, options) {
     const { isResubmittable } = state;
     const k = s / INK.WORLD_SCALE;
 
-    // On a phone held upright the map is too small for the plates: they would
-    // cover each other, so only the markers stay.
-    // k carries the pixel ratio, so it is divided back out for the comparison.
-    if (k / renderScale() < INK.SIGN_MIN_SCALE) return makeCompactMarker(scene, options);
+    // The world map never shrinks the sheet below INK.SIGN_MIN_SCALE (it pans
+    // instead), so a sign is always drawn with its plate.
 
     const nameText = bodyText(scene, name, Math.max(px(12), 13.5 * k)).setOrigin(0.5);
     nameText.setLetterSpacing(Math.max(px(0.3), 0.4 * k));
