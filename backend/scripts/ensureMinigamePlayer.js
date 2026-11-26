@@ -22,12 +22,6 @@ const SALT_ROUNDS = 12
 // A pupil with no buddy is shown the buddy picker first; this one starts on the real dashboard.
 const AVATAR = 'buddy_1'
 
-// reward_type 'minigame', name = the continent's mapKey, as CelebrationModal writes it
-// (mirrors ReadingState.mapOrder in frontend/src/game/state.js).
-const CONTINENT_GAMES = [
-    'ArcticMap', 'EuropeMap', 'AsiaMap', 'NorthAmericaMap',
-    'SouthAmericaMap', 'AfricaMap', 'OceaniaMap', 'AntarcticaMap'
-]
 // reward_type 'scene-game', name = the game id in frontend/src/game/data/miniGames.js
 const SCENE_GAMES = ['koskimelonta', 'siemensade', 'delfiinin-reitti', 'jaaretki']
 // reward_type 'item', name = the item id in frontend/src/game/data/items.js
@@ -95,7 +89,6 @@ async function main() {
 
         await trx('rewards').where({ owner: student.id }).del()
         await trx('rewards').insert([
-            ...CONTINENT_GAMES.map((name) => ({ owner: student.id, reward_type: 'minigame', name })),
             ...SCENE_GAMES.map((name) => ({ owner: student.id, reward_type: 'scene-game', name })),
             ...ITEMS.map((name) => ({ owner: student.id, reward_type: 'item', name }))
         ])

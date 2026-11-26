@@ -85,10 +85,6 @@ export default class CelebrationModal {
             targets: panel,
             scaleX: 1, scaleY: 1, duration: 400, ease: 'Back.easeOut'
         });
-
-        // Add completion reward to backend (fire-and-forget)
-        const userId = this.scene.game.registry.get('userId');
-        ReadingState.addCompletionReward(userId, 'minigame', mapKey);
     }
 
     destroy() {

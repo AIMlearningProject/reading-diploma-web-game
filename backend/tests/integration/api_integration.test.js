@@ -664,18 +664,18 @@ describe('Reward endpoints', () => {
 
         await api
             .post('/api/rewards/add-reward')
-            .send({ owner: STUDENT.id, reward_type: 'minigame', name: 'ArcticMap' })
+            .send({ owner: STUDENT.id, reward_type: 'item', name: 'kaukoputki' })
             .expect(201)
 
         const response = await api.get('/api/rewards').expect(200)
         expect(response.body).toHaveLength(1)
-        expect(response.body[0].reward_type).toBe('minigame')
-        expect(response.body[0].name).toBe('ArcticMap')
+        expect(response.body[0].reward_type).toBe('item')
+        expect(response.body[0].name).toBe('kaukoputki')
     })
 
     test('the same reward cannot be granted twice', async () => {
         loginAs(STUDENT)
-        const body = { owner: STUDENT.id, reward_type: 'minigame', name: 'ArcticMap' }
+        const body = { owner: STUDENT.id, reward_type: 'item', name: 'kaukoputki' }
 
         await api.post('/api/rewards/add-reward').send(body).expect(201)
         await api.post('/api/rewards/add-reward').send(body).expect(400)
@@ -686,7 +686,7 @@ describe('Reward endpoints', () => {
 
         await api
             .post('/api/rewards/add-reward')
-            .send({ owner: STUDENT.id, reward_type: 'minigame' })
+            .send({ owner: STUDENT.id, reward_type: 'item' })
             .expect(400)
     })
 
@@ -694,7 +694,7 @@ describe('Reward endpoints', () => {
         loginAs(STUDENT)
         await api
             .post('/api/rewards/add-reward')
-            .send({ owner: STUDENT.id, reward_type: 'minigame', name: 'ArcticMap' })
+            .send({ owner: STUDENT.id, reward_type: 'item', name: 'kaukoputki' })
             .expect(201)
 
         loginAs(CLASSMATE)
@@ -720,7 +720,7 @@ describe('public test account reset', () => {
         await db('users').where({ id: aino.id }).update({ name: 'Vierailija', avatar: 'panda', grade: 2, email: 'visitor@example.com' })
         await addBook(aino.id, { title: 'Kavijan oma kirja' })
         await db('progress').where({ user: aino.id, level: 3 }).update({ current_progress: 100, level_status: 'complete' })
-        await db('rewards').insert({ owner: aino.id, reward_type: 'minigame', name: 'AsiaMap' })
+        await db('rewards').insert({ owner: aino.id, reward_type: 'item', name: 'mela' })
     }
 
     const expectSeededAino = async () => {
@@ -734,8 +734,8 @@ describe('public test account reset', () => {
         expect(levelThree.current_progress).toBe(40)
         expect(levelThree.level_status).toBe('incomplete')
 
-        const rewards = await db('rewards').where({ owner: aino.id }).orderBy('name').pluck('name')
-        expect(rewards).toStrictEqual(['ArcticMap', 'EuropeMap'])
+        // Aino has no seeded rewards, so the visitor's item must be gone.
+        expect(await db('rewards').where({ owner: aino.id })).toHaveLength(0)
         expect(await db('submissions').where({ user: aino.id })).toHaveLength(2)
 
         const ownBooks = await db('books').where({ added_by: aino.id }).pluck('title')
@@ -869,7 +869,9 @@ describe('visitor test teacher', () => {
         expect(await db('books').where({ added_by: teacher.id })).toHaveLength(TEACHER_BOOKS.length)
         const aino = students.find((student) => student.name === 'Aino')
         expect(await db('books').where({ added_by: aino.id })).toHaveLength(2)
-        expect(await db('rewards').where({ owner: aino.id })).toHaveLength(2)
+        const onni = students.find((student) => student.name === 'Onni')
+        const seededOnni = STUDENTS.find((student) => student.name === 'Onni')
+        expect(await db('rewards').where({ owner: onni.id })).toHaveLength(seededOnni.rewards.length)
     })
 
     test('gives two visitors two different teachers', async () => {

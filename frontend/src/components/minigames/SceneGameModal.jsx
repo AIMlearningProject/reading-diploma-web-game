@@ -1,9 +1,7 @@
 // Plays a mini-game granted by a puzzle scene, on the student dashboard.
 //
-// A separate window from MinigameModal, which still runs the continent tile
-// puzzles: these games own their own loop and their own score, so the shared
-// stopwatch in that modal does not apply. The window is drawn in ink like the
-// puzzle scene (ink.css); MiniGameCanvas mounts the filter it needs.
+// Each game owns its own loop and its own score. The window is drawn in ink
+// like the puzzle scene (ink.css); MiniGameCanvas mounts the filter it needs.
 
 import closeIcon from '../../assets/icons/close_20.png'
 import InkIcon from '../ink/InkIcon.jsx'

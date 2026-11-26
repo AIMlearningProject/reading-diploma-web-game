@@ -157,7 +157,6 @@
 
 .buddy-selection-section { animation-delay: 0s; }
 .voyage-log { animation-delay: 0.08s; }
-.rewards-section { animation-delay: 0.22s; }
 
 /* paper.css lays the parchment sheet; here the ink outline and the dithered
  * drop are the sheet's edge instead, so the wash and the desk shadow give way.
@@ -283,109 +282,6 @@
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
     margin-top: 1rem;
-}
-
-.reward-card {
-    border: 1.5px solid #C4973A;
-    border-radius: 6px;
-    padding: 1rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    background:
-        radial-gradient(ellipse 80% 60% at 20% 20%, rgba(255, 248, 200, 0.5) 0%, transparent 65%),
-        #FDF6E3;
-    box-shadow: 0 3px 12px rgba(196, 151, 58, 0.15);
-}
-
-.reward-card-game {
-    border: 1.5px solid #C4973A;
-    border-radius: 6px;
-    padding: 1rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 0.3rem;
-    background:
-        radial-gradient(ellipse 80% 60% at 20% 20%, rgba(255, 248, 200, 0.5) 0%, transparent 65%),
-        #FDF6E3;
-    box-shadow: 0 3px 12px rgba(196, 151, 58, 0.15);
-    cursor: pointer;
-}
-
-.reward-card-game:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(125, 176, 133, 0.3);
-}
-
-.reward-card-game:active {
-    background: rgba(196, 151, 58, 0.1);
-    transform: translateY(0);
-    box-shadow: none;
-}
-
-.reward-type {
-    text-align: center;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: #9E7A2A;
-    font-weight: 700;
-}
-
-.reward-name {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #1e3a5f;
-}
-
-/* ── Minigame popup ────────────────────────────────────────── */
-.minigame-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    min-height: 0;
-    max-height: 84vh;
-}
-
-.minigame-header {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.minigame-icon {
-    justify-content: center;
-    align-items: center;
-    margin: -10px 20px 0 20px;
-}
-
-.minigame-time {
-    display: flex;
-    width: 100%;
-    height: fit-content;
-    justify-content: flex-start;
-    align-items: center;
-    
-    font-family: 'Nunito', sans-serif;
-    font-size: 30px;
-    color: #9E7A2A;
-}
-
-@media (max-width: 768px) {
-    .minigame-time { font-size: 20px; }
-    .minigame-icon {  margin: -10px 7px 0 7px; }
-}
-
-@media (max-height: 600px) {
-    .minigame {
-        width: min(100%, min(92dvh, 92vw, 420px));
-        max-height: min(72dvh, 92vw, 420px);
-    }
-    .minigame-time { font-size: 20px; }
 }
 
 /* ── States ──────────────────────────────────────────────── */

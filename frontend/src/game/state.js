@@ -535,17 +535,6 @@ const ReadingState = {
             console.warn('Failed to submit quiz:', err);
             return err; // Return error for handling in ReactQuiz (To avoid marking level complete if submission fails)
         }
-    },
-
-    /**
-     * Add completion reward to backend.
-     */
-    async addCompletionReward(userId, rewardType, reward) {
-        try {
-            await addReward(userId, rewardType, reward);
-        } catch (err) {
-            console.warn('Failed to add reward:', err);
-        }
     }
 };
 

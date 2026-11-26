@@ -6,17 +6,6 @@ const LEVEL_COUNT = 8
 // NODES_PER_CONTINENT in utils/diplomaConfig.js.
 const NODE_COUNT = 4
 
-// Level number -> continent, mirrors mapOrder in frontend/src/game/state.js
-const MAP_ORDER = [
-    'ArcticMap',
-    'EuropeMap',
-    'AsiaMap',
-    'NorthAmericaMap',
-    'SouthAmericaMap',
-    'AfricaMap',
-    'OceaniaMap',
-    'AntarcticaMap'
-]
 
 const QUESTIONS = [
     'Mikä oli kirjan mieleenpainuvin hetki?',
@@ -70,7 +59,7 @@ const STUDENT_BOOKS = [
  * Students of the main test teacher, each covering one state the UI has to
  * handle. `levels` only lists the entries that differ from the default
  * (incomplete, 0 %, no book). `book` is an index into TEACHER_BOOKS.
- * `extraRewards` lists rewards that do not come from a level, as { type, name }.
+ * `rewards` lists the student's rewards as { type, name }.
  * `publicTestAccount` marks the ones offered on the student login page during the
  * public test period, which TestAccountService puts back to this state.
  */
@@ -93,8 +82,8 @@ export const STUDENTS = [
         email: 'aino@lukudiplomi.test',
         // Two levels done, third one halfway through.
         levels: [
-            { level: 1, status: 'reviewed', progress: 100, book: 0, submission: true, reward: true },
-            { level: 2, status: 'complete', progress: 100, book: 3, submission: true, reward: true },
+            { level: 1, status: 'reviewed', progress: 100, book: 0, submission: true },
+            { level: 2, status: 'complete', progress: 100, book: 3, submission: true },
             { level: 3, status: 'incomplete', progress: 40, book: 16 }
         ],
         readingBook: 16
@@ -106,7 +95,7 @@ export const STUDENTS = [
         email: null,
         // Level 1 submitted and waiting for the teacher to accept it.
         levels: [
-            { level: 1, status: 'complete', progress: 100, book: 12, submission: true, reward: true },
+            { level: 1, status: 'complete', progress: 100, book: 12, submission: true },
             { level: 2, status: 'incomplete', progress: 15, book: 20 }
         ],
         readingBook: 20
@@ -129,28 +118,27 @@ export const STUDENTS = [
         publicTestAccount: true,
         grade: 9,
         email: 'onni@lukudiplomi.test',
-        // Whole diploma finished: every level reviewed, every continent puzzle, scene
-        // game and backpack item unlocked, so a visitor can open the games at once.
-        extraRewards: [
+        // Whole diploma finished: every level reviewed, every scene game and
+        // backpack item unlocked, so a visitor can open the games at once.
+        rewards: [
             ...['koskimelonta', 'siemensade', 'delfiinin-reitti', 'jaaretki']
                 .map((name) => ({ type: 'scene-game', name })),
             ...['kaukoputki', 'siemenpussi', 'korallihuilu', 'mela']
                 .map((name) => ({ type: 'item', name }))
         ],
-        levels: MAP_ORDER.map((_, i) => ({
+        levels: Array.from({ length: LEVEL_COUNT }, (_, i) => ({
             level: i + 1,
             status: 'reviewed',
             progress: 100,
             book: i,
-            submission: true,
-            reward: true
+            submission: true
         }))
     }
 ]
 
 /**
- * Writes a student's progress, nodes, submissions and rewards from its `levels`
- * list. The seed calls it on a new student and TestAccountService on an existing
+ * Writes a student's progress, nodes and submissions from its `levels` list, and
+ * its rewards from `rewards`. The seed calls it on a new student and TestAccountService on an existing
  * one, so a progress row that already exists is updated in place: a browser left
  * open keeps sending that row's id with its submission.
  *
@@ -234,22 +222,12 @@ export async function writeStudentState(knex, { studentId, student, books }) {
         }))
     if (submissions.length > 0) await knex('submissions').insert(submissions)
 
-    // CelebrationModal awards reward_type 'minigame' with the mapKey as name.
-    const rewards = student.levels
-        .filter((entry) => entry.reward)
-        .map((entry) => ({
-            owner: studentId,
-            reward_type: 'minigame',
-            name: MAP_ORDER[entry.level - 1]
-        }))
-    const extraRewards = (student.extraRewards ?? []).map(({ type, name }) => ({
+    const rewards = (student.rewards ?? []).map(({ type, name }) => ({
         owner: studentId,
         reward_type: type,
         name
     }))
-    if (rewards.length + extraRewards.length > 0) {
-        await knex('rewards').insert([...rewards, ...extraRewards])
-    }
+    if (rewards.length > 0) await knex('rewards').insert(rewards)
 }
 
 /**

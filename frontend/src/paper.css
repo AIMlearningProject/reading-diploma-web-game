@@ -17,8 +17,6 @@
  * else means load order decides what a card looks like.
  *
  * Not included, on purpose:
- *   .reward-card / .reward-card-game -- tiles that sit ON a sheet. Flattened,
- *       they would dissolve into it; they need an edge of their own.
  *   .progress-popup -- floats over the game canvas, where an edge is what
  *       separates it from the artwork behind it.
  */

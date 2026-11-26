@@ -27,7 +27,6 @@ const GRADE = 5
 
 // Afrikka is level 6 (ReadingState.mapOrder in frontend/src/game/state.js).
 const DEMO_LEVEL = 6
-const DEMO_MAP_KEY = 'AfricaMap'
 // The four books read on Afrikka, by catalogue external_key so a reseed that
 // renumbers the books does not break this. `title` is what the pupil says they read.
 const DEMO_BOOKS = [
@@ -125,11 +124,8 @@ async function main() {
             answer3: 'Opin, että erilaisuus ei ole huono asia.'
         })
 
-        // Finishing a continent earns its tile puzzle (reward_type 'minigame', name =
-        // mapKey, as CelebrationModal writes it).
         await trx('rewards').where({ owner: student.id }).del()
         await trx('rewards').insert([
-            { owner: student.id, reward_type: 'minigame', name: DEMO_MAP_KEY },
             ...ITEMS.map((name) => ({ owner: student.id, reward_type: 'item', name })),
             ...SCENE_GAMES.map((name) => ({ owner: student.id, reward_type: 'scene-game', name }))
         ])
