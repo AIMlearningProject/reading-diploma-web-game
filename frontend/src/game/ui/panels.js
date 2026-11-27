@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { CSS_COLORS, FONTS, INK, px } from './constants.js';
 import { iconImage } from './icons.js';
 import { SMALL_AMOUNT, inkCircle, inkShape } from './ink.js';
+import { isPressOnCanvas } from './canvasPress.js';
 
 /**
  * Shared surfaces for the Phaser UI, drawn the way ink.css draws the pupil's
@@ -22,11 +23,28 @@ const line = (weight, s) => Math.max(px(2), Math.round(weight * s));
  */
 function wireInteraction(container, hitArea, contains, onClick, hoverScale) {
     container.setInteractive(hitArea, contains);
+    wirePress(container, onClick, hoverScale, hoverScale * 0.9);
+}
+
+/**
+ * Hover and press feedback, and the action. It acts only on a release that
+ * follows a press made on the canvas on the same object (canvasPress.js).
+ */
+function wirePress(container, onClick, hoverScale, pressScale) {
+    let isPressed = false;
     container.input.cursor = 'pointer';
     container.on('pointerover', () => container.setScale(hoverScale));
-    container.on('pointerout', () => container.setScale(1));
-    container.on('pointerdown', () => container.setScale(hoverScale * 0.9));
-    container.on('pointerup', () => { container.setScale(1); onClick(); });
+    container.on('pointerout', () => { container.setScale(1); isPressed = false; });
+    container.on('pointerdown', (pointer) => {
+        if (!isPressOnCanvas(container.scene, pointer)) return;
+        container.setScale(pressScale);
+        isPressed = true;
+    });
+    container.on('pointerup', () => {
+        container.setScale(1);
+        if (isPressed && onClick) onClick();
+        isPressed = false;
+    });
 }
 
 function bodyText(scene, text, size, color = CSS_COLORS.NAVY) {
@@ -133,11 +151,7 @@ export function makeInkButton(scene, x, y, text, options = {}) {
         .setDepth(depth);
     // Content is centred on the container's origin, so the hit area is too.
     container.setInteractive(new Phaser.Geom.Rectangle(-w / 2, -h / 2, w, h), Phaser.Geom.Rectangle.Contains);
-    container.input.cursor = 'pointer';
-    container.on('pointerover', () => container.setScale(1.03));
-    container.on('pointerout', () => container.setScale(1));
-    container.on('pointerdown', () => container.setScale(0.96));
-    container.on('pointerup', () => { container.setScale(1); if (onClick) onClick(); });
+    wirePress(container, onClick, 1.03, 0.96);
 
     return { container, label, width: w, height: h };
 }

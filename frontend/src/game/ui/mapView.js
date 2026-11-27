@@ -1,5 +1,6 @@
 import { px, renderScale } from './constants.js';
 import { fundingStrip } from './fundingStrip.js';
+import { isPressOnCanvas } from './canvasPress.js';
 
 /**
  * How a map sheet sits on a small screen. Fitting the whole sheet, as the
@@ -80,6 +81,8 @@ export class MapPanner {
         // pointerup handler runs before the scene's, and must still see it.
         scene.input.on('pointerdown', (pointer) => {
             this.dragged = false;
+            // A press on the page over the canvas (the backpack) drags nothing.
+            if (!isPressOnCanvas(scene, pointer)) { this.start = null; return; }
             this.start = {
                 x: pointer.x, y: pointer.y - this.lift,
                 scrollX: this.camera.scrollX, along: this.camera.scrollY + this.lift
@@ -128,7 +131,7 @@ export class MapPanner {
      */
     onTap(object, action) {
         let isPressed = false;
-        object.on('pointerdown', () => { isPressed = true; });
+        object.on('pointerdown', (pointer) => { isPressed = isPressOnCanvas(this.scene, pointer); });
         object.on('pointerout', () => { isPressed = false; });
         object.on('pointerup', () => {
             if (isPressed && !this.dragged) action();
