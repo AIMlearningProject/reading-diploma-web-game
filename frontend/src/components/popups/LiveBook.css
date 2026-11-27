@@ -27,24 +27,24 @@
     transform: translateX(25%);
 }
 
+/* Drawn like the book the buddy reads at the camp (build/camp/draw_book.py):
+ * flat fills, a red cover darker along the spine, paper with tan lines of
+ * text, no gradients or soft shadows. The outline is the page's own ink line
+ * (.ink-shape, ink.css), thicker on the cover than on the pages. The fills are
+ * that drawing's own colours, as the backpack's are (BackpackArt.jsx), not
+ * tokens: #d0533f cover, #aa3c30 spine, #fdfbf4 paper, #b0a084 text. */
 .book-cover {
     position: absolute;
     top: 0;
     right: 0;
+    box-sizing: border-box;
     transform-origin: left center;
     width: 50%;
     height: 100%;
-    background: linear-gradient(to bottom right,
-        #d8b46a 0%,
-        #c49a4a 40%,
-        #b88a3c 100%
-    );
-    box-shadow:
-        inset 8px 0 6px rgba(0, 0, 0, 0.4),   /* main spine shadow */
-        inset 12px 0 4px rgba(255, 255, 255, 0.15), /* highlight ridge */
-        inset -2px 0 4px rgba(0, 0, 0, 0.25), /* outer edge shadow */
-        inset 0 0 6px rgba(0, 0, 0, 0.25),    /* general depth */
-        0 2px 6px rgba(0, 0, 0, 0.2);         /* outer drop shadow */
+    border-radius: 3px;
+    --book-line: 7px;
+    /* The spine side is the darker red, a fifth of the cover wide. */
+    --book-fill: linear-gradient(to right, #aa3c30 0 18%, #d0533f 18% 100%);
     transition: transform 0.6s ease;
     backface-visibility: visible;
     z-index: 100;
@@ -62,17 +62,35 @@
 
 .page {
     position: absolute;
-    top: 4px;
-    width: calc(100% - 4px);
-    height: calc(100% - 8px);
-    background: center / cover no-repeat;
+    top: 6px;
+    box-sizing: border-box;
+    width: calc(100% - 6px);
+    height: calc(100% - 12px);
+    --book-line: 5px;
+    /* Lines of text: short tan bars, a margin each side. */
+    --book-fill:
+        repeating-linear-gradient(to bottom,
+            transparent 0 14%, #b0a084 14% 19%, transparent 19% 24%) 16% 50% / 68% 80% no-repeat,
+        #fdfbf4;
     transform-origin: left center;
-    box-shadow: 2px 2px 3px -2px rgba(0, 0, 0, 0.15);
     transition: transform 0.6s ease;
     backface-visibility: visible;
 }
 
 .book-cover.flipped, .page.flipped { transform: rotateY(-180deg); }
+
+/* Over the seam between the two halves, in front of every page. */
+.book-spine {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: calc(50% - 5px);
+    width: 10px;
+    --book-line: 5px;
+    --book-fill: #fdfbf4;
+    transform: translateZ(2px);
+    z-index: 200;
+}
 
 @media (max-height: 600px) {
     .openbook-wrapper {

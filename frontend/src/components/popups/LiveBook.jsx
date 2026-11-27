@@ -1,4 +1,3 @@
-import pageImg from "../../assets/bookPage.jpg"
 import "./LiveBook.css";
 
 export default function LiveBook({ pct, isReadOnly }) {
@@ -16,20 +15,23 @@ export default function LiveBook({ pct, isReadOnly }) {
     return (
         <div className={"openbook-wrapper"} style={{ "--requiredSpace": isReadOnly ? "150px" : "295px" }}>
             <div className={`openbook${isFrontCoverClosed ? " openbook--unopened" : ""}${isBackCoverClosed ? " openbook--finished" : ""}`}>
-                <div className={`book-cover ${isFrontCoverClosed ? "" : "flipped"}`}
+                <div className={`book-cover ink-shape ${isFrontCoverClosed ? "" : "flipped"}`}
                     style={{ zIndex: isFrontCoverClosed ? totalPages + 2 : 1 }}
                 />
 
-                <div className={`book-cover ${isBackCoverClosed ? "flipped" : ""}`}
+                <div className={`book-cover ink-shape ${isBackCoverClosed ? "flipped" : ""}`}
                     style={{ zIndex: isBackCoverClosed ? totalPages + 2 : 1 }}
                 />
 
+                {/* The spine: the two halves' own outlines wobble apart there, so one
+                    line drawn over the seam closes the gap. Only while the book is open. */}
+                {!isFrontCoverClosed && !isBackCoverClosed && <div className="book-spine ink-shape" />}
+
                 <div className="pages-stack">
                     {pages.map((p) => (
-                        <img
+                        <div
                             key={p.id}
-                            src={pageImg}
-                            className={`page ${p.isFlipped ? "flipped" : ""}`}
+                            className={`page ink-shape ${p.isFlipped ? "flipped" : ""}`}
                             style={{ zIndex: totalPages - p.id }}
                         />
                     ))}
