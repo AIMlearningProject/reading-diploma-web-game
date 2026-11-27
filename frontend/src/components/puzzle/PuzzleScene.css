@@ -55,6 +55,12 @@
     color: var(--ink-900);
 }
 
+/* The panel's outline is as heavy as the picture frame inside it (.ps-art-box):
+ * at the default line the outer edge read thinner than the inner one. */
+.ps-panel::before {
+    border-width: calc(var(--book-line) * 1.5);
+}
+
 .ps-panel::after {
     transform: translate(calc(var(--book-drop) * 1.5), calc(var(--book-drop) * 1.75));
 }
