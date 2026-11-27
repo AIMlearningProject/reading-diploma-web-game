@@ -1,12 +1,13 @@
 // The buddy's camp, shown on the student dashboard once a buddy is chosen.
 // The scene itself lives in game/camp/campScene.js; this hosts its canvas,
-// runs its loop and passes clicks on. Around it: the camp's sign, two light
-// planks nailed over the frame's top edge as the section's title, a quiet
+// runs its loop and passes clicks on. Around it: the camp's frame and sign
+// (CampFrame, shared with the buddy picker), a quiet
 // bubble in the sky saying what the buddy is doing, and under the scene the
 // actions passed in as children.
 
 import { useEffect, useRef, useState } from 'react'
 import * as camp from '../../game/camp/campScene.js'
+import CampFrame from './CampFrame.jsx'
 import { phaseAt } from '../../game/camp/schedule.js'
 import './CampScene.css'
 
@@ -87,14 +88,13 @@ export default function CampScene({ buddy, buddyName, playerName, children }) {
 
     return (
         <div className="camp-scene">
-            <div className="camp-scene-frame">
+            <CampFrame names={`${buddyName} ja ${playerName} leireilevät`}>
                 <canvas
                     ref={canvasRef}
                     className="camp-scene-canvas"
                     onPointerDown={onPointerDown}
                     onPointerMove={onPointerMove}
                 />
-                <span className="camp-scene-frame-line" aria-hidden="true" />
                 {DOING[activity] && (
                     <p
                         className={`camp-scene-bubble camp-scene-bubble--${AT_NIGHT.has(activity) ? 'night' : 'day'}`}
@@ -103,19 +103,7 @@ export default function CampScene({ buddy, buddyName, playerName, children }) {
                         {DOING[activity](buddyName)}
                     </p>
                 )}
-                <div className="camp-scene-sign">
-                    <h2 className="camp-scene-plank camp-scene-plank--title ink-shape ink-shape--thin">
-                        <span className="camp-scene-nail camp-scene-nail--left" />
-                        Seikkailuleiri
-                        <span className="camp-scene-nail camp-scene-nail--right" />
-                    </h2>
-                    <p className="camp-scene-plank camp-scene-plank--names ink-shape ink-shape--thin">
-                        <span className="camp-scene-nail camp-scene-nail--left" />
-                        {buddyName} ja {playerName} leireilevät
-                        <span className="camp-scene-nail camp-scene-nail--right" />
-                    </p>
-                </div>
-            </div>
+            </CampFrame>
             <div className="camp-scene-footer">
                 {children}
             </div>

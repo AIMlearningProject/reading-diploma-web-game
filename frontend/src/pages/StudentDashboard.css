@@ -332,122 +332,8 @@
 }
 
 /* ── Buddy Picker ────────────────────────────────────────── */
-.buddy-picker {
-    margin-top: 1rem;
-}
-
-.char-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
-    margin-bottom: 1.5rem;
-}
-
-/* minmax(0, 1fr): a plain 1fr column never narrows below the 160px sprite, so
- * on a phone the second card ran off the sheet. The sprite shrinks instead. */
-@media (max-width: 600px) {
-    /* Three across, as on a wide screen: in two columns the third buddy took a
-     * row of its own and pushed Tallenna off the screen. */
-    .char-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 0.75rem;
-        margin-bottom: 1.25rem;
-    }
-    .char-option {
-        padding: 0.9rem 0.3rem 0.75rem;
-        gap: 0.5rem;
-        border-radius: 18px;
-    }
-    .char-label { font-size: 16px; }
-    .char-option-stage { max-width: 100%; }
-    /* The frame keeps its aspect-ratio (BuddyAvatar.jsx) once it narrows;
-     * !important beats the inline pixel height. */
-    .char-option .buddy-sprite {
-        max-width: 100%;
-        height: auto !important;
-    }
-}
-
-/* Each buddy is a raised ink card, like a backpack slot in the puzzle scene;
- * the chosen one turns navy and is pressed down. */
-.char-option {
-    --book-fill: var(--book-paper);
-    --book-drop: 8px;
-    position: relative;
-    padding: 1.5rem 0.75rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    border: 0;
-    border-radius: 22px;
-    background: transparent;
-    font-family: var(--font-body);
-    cursor: pointer;
-}
-
-.char-option:hover {
-    --book-fill: var(--book-chip);
-}
-
-/* Bounce the sprite on hover */
-.char-option:hover .buddy-sprite {
-    animation: buddyBounce 0.45s cubic-bezier(0.34, 1.6, 0.64, 1);
-}
-
-@keyframes buddyBounce {
-    0%   { transform: translateY(0); }
-    40%  { transform: translateY(-8px); }
-    70%  { transform: translateY(2px); }
-    100% { transform: translateY(0); }
-}
-
-.char-option--selected,
-.char-option--selected:hover {
-    --book-fill: var(--navy-700);
-}
-
-.char-option-stage {
-    position: relative;
-    display: inline-flex;
-}
-
-.char-check {
-    position: absolute;
-    bottom: 2px;
-    right: -6px;
-    width: 28px;
-    height: 28px;
-    background: var(--book-sun);
-    color: var(--navy-700);
-    border-radius: 50%;
-    font-size: 14px;
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2.5px solid var(--book-outline);
-    z-index: 1;
-}
-
-.char-label {
-    font-family: var(--font-body);
-    font-size: 19px;
-    font-weight: 900;
-    color: var(--navy-700);
-}
-
-.char-option--selected .char-label {
-    color: var(--parchment-000);
-}
-
-.avatar-picker-actions {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
+/* The picker itself is components/camp/BuddyPicker (the camp's beach in the
+ * camp's frame); only its save error is styled here. */
 .avatar-error {
     color: #8B1A1A;
     font-size: 0.9rem;
@@ -727,14 +613,12 @@
 
 /* ── Pressed ─────────────────────────────────────────────── */
 /* As in the puzzle scene: a pressed shape drops onto its shadow, and the
- * shadow goes. A disabled Pelaa and the chosen buddy stay down. */
+ * shadow goes. A disabled Pelaa stays down. */
 .play-button:not(:disabled):active,
 .student-dashboard .logout-button:active,
 .change-avatar-button:active,
 .sd-scene-game:not(:disabled):active,
-.char-option:active,
-.play-button:disabled,
-.char-option--selected {
+.play-button:disabled {
     transform: translate(calc(var(--book-drop) * 0.65), calc(var(--book-drop) * 0.75));
 }
 
@@ -742,17 +626,14 @@
 .student-dashboard .logout-button:active::after,
 .change-avatar-button:active::after,
 .sd-scene-game:not(:disabled):active::after,
-.char-option:active::after,
-.play-button:disabled::after,
-.char-option--selected::after {
+.play-button:disabled::after {
     display: none;
 }
 
 .play-button:focus-visible,
 .student-dashboard .logout-button:focus-visible,
 .change-avatar-button:focus-visible,
-.sd-scene-game:focus-visible,
-.char-option:focus-visible {
+.sd-scene-game:focus-visible {
     outline: 3px solid var(--navy-700);
     outline-offset: 3px;
 }

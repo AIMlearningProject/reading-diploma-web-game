@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { BUDDIES, BuddySprite, BuddyIcon } from '../components/BuddyAvatar'
+import { BUDDIES, BuddyIcon } from '../components/BuddyAvatar'
 import InkIcon from '../components/ink/InkIcon'
 import InkFilter from '../components/ink/InkFilter'
 import CampScene from '../components/camp/CampScene'
+import BuddyPicker from '../components/camp/BuddyPicker'
 import homeBG from '../assets/HomeBG1.jpg'
 import siteBoat from '../assets/siteBoat.png'
 import playIcon from '../assets/icons/play.png'
@@ -152,28 +153,12 @@ function StudentDashboard() {
                 ) : (
                     <>
                         <section className={`dashboard-section ink-shape ink-drop buddy-selection-section${hasBuddy ? '' : ' buddy-selection-section--prominent'}`}>
-                            {/* With a buddy, the camp's own sign is the section's title. */}
-                            {showPicker && <h2>Seikkailukaveri</h2>}
+                            {/* The camp's sign is the section's title, before a buddy is
+                                picked (BuddyPicker) and after (CampScene), in the same place. */}
                             {showPicker ? (
-                                <div className="buddy-picker">
-                                    <div className="char-grid">
-                                        {BUDDIES.map(({ id, name }) => (
-                                            <button
-                                                key={id}
-                                                type="button"
-                                                className={`char-option ink-shape ink-shape--thin ink-drop${selectedBuddy === id ? ' char-option--selected' : ''}`}
-                                                onClick={() => setSelectedBuddy(id)}
-                                            >
-                                                <div className="char-option-stage">
-                                                    <BuddySprite buddyId={id} size={160} />
-                                                    {selectedBuddy === id && <span className="char-check">✓</span>}
-                                                </div>
-                                                <span className="char-label">{name}</span>
-                                            </button>
-                                        ))}
-                                    </div>
-                                    {buddyError && <p className="avatar-error">{buddyError}</p>}
-                                    <div className="avatar-picker-actions">
+                                <div className="buddy-current">
+                                    <BuddyPicker selected={selectedBuddy} onSelect={setSelectedBuddy}>
+                                        {buddyError && <p className="avatar-error">{buddyError}</p>}
                                         <button
                                             className="play-button ink-shape ink-shape--thin ink-drop"
                                             onClick={handleBuddySave}
@@ -186,7 +171,7 @@ function StudentDashboard() {
                                                 Peruuta
                                             </button>
                                         )}
-                                    </div>
+                                    </BuddyPicker>
                                 </div>
                             ) : (
                                 <div className="buddy-current">

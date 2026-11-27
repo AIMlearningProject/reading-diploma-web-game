@@ -1,0 +1,143 @@
+/* The buddy picker (BuddyPicker.jsx): the camp's beach in the camp's frame.
+ * Everything is placed in the scene's stage units, 1038 across the stage's
+ * own width (100cqw), so the picture scales whole. */
+
+.bp-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1038 / 700;
+    overflow: hidden;
+    container-type: inline-size;
+    line-height: normal;
+}
+
+.bp-layer {
+    position: absolute;
+    z-index: 1;
+    display: block;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* The whole portrait is the button. */
+.bp-buddy {
+    position: absolute;
+    z-index: 1;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+.bp-buddy img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom;
+    pointer-events: none;
+}
+
+/* Idle motion, small: a breath (a slight stretch from the feet) and now and
+ * then a sway. Each buddy's periods, phases and sway side are drawn at random
+ * and set as inline animations (BuddyPicker.jsx); the keyframes are here. Three layers, so the breath, the sway and
+ * the hover hop never overwrite one another's transform. */
+.bp-idle,
+.bp-sway {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 100%;
+}
+
+@keyframes bp-breathe {
+    0%, 100% { transform: scale(1, 1); }
+    50%      { transform: scale(1.008, 1.016); }
+}
+
+/* Still most of the time; a lean one way and back within a fifth of the period. */
+@keyframes bp-sway-left {
+    0%, 78%, 100% { transform: rotate(0deg); }
+    84%           { transform: rotate(-1.5deg); }
+    92%           { transform: rotate(0.6deg); }
+}
+
+@keyframes bp-sway-right {
+    0%, 78%, 100% { transform: rotate(0deg); }
+    84%           { transform: rotate(1.5deg); }
+    92%           { transform: rotate(-0.6deg); }
+}
+
+/* The hop on hover, as on the old picker's cards. */
+.bp-buddy:hover img {
+    animation: bp-hop 0.45s cubic-bezier(0.34, 1.6, 0.64, 1);
+}
+
+@keyframes bp-hop {
+    0%   { transform: translateY(0); }
+    40%  { transform: translateY(-8%); }
+    70%  { transform: translateY(2%); }
+    100% { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bp-buddy:hover img,
+    .bp-idle,
+    .bp-sway { animation: none !important; }
+}
+
+.bp-buddy:focus-visible {
+    outline: 3px solid var(--navy-500);
+    outline-offset: 4px;
+    border-radius: 12px;
+}
+
+/* The name, said in a bubble over the buddy's head, as the map's own bubble
+ * says «Klikkaa tutkiaksesi!» (panels.js makeInkTooltip): paper in a thin ink
+ * line, rounded, its tail pointing down at the head, the name in navy in the
+ * camp sign's hand lettering.
+ * Positioned by its tail's tip, so it stands just over the head. */
+.bp-bubble {
+    position: absolute;
+    z-index: 2;
+    transform: translate(-50%, calc(-100% - 100cqw * 12 / 1038));
+    padding: calc(100cqw * 4 / 1038) calc(100cqw * 22 / 1038) calc(100cqw * 2 / 1038);
+    border-radius: calc(100cqw * 18 / 1038);
+    /* The camp sign's hand lettering (loaded in index.html). */
+    font-family: 'Patrick Hand', var(--font-body);
+    font-weight: 700;
+    /* Never under 13px: on a phone the stage is about 340px across. */
+    font-size: max(13px, calc(100cqw * 34 / 1038));
+    line-height: 1.2;
+    color: var(--navy-700);
+    white-space: nowrap;
+    --book-fill: var(--book-paper);
+    pointer-events: none;
+}
+
+.bp-bubble--picked {
+    --book-fill: var(--book-sun);
+}
+
+.bp-bubble-tail {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: calc(100cqw * 24 / 1038);
+    height: calc(100cqw * 18 / 1038);
+    transform: translate(-50%, calc(-1 * var(--book-line) * 0.75 + 1px));
+    overflow: visible;
+    filter: url('#ink-hand');
+}
+
+.bp-bubble-tail-fill {
+    fill: var(--book-fill);
+}
+
+.bp-bubble-tail-line {
+    fill: none;
+    stroke: var(--book-outline);
+    stroke-width: calc(var(--book-line) * 0.75);
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
