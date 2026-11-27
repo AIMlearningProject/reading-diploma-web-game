@@ -20,6 +20,11 @@ export default class TokenManager {
         this.baseScale = 1;
         // While walking, the walk sets the lift and the waiting hop keeps quiet.
         this.walking = false;
+        // After a walk the buddy stays on the ground until the waiting hop, which
+        // ran on unseen meanwhile, comes down too. Taking the hop up mid-air sent
+        // the buddy straight back up as it landed, so the landing dust looked as
+        // if it burst out before the landing.
+        this.groundedUntilHopLands = false;
     }
 
     create(scene, savedIndex) {
@@ -33,6 +38,10 @@ export default class TokenManager {
         if (!isMotionReduced()) {
             startBuddyHop(scene, (lift) => {
                 if (this.walking) return;
+                if (this.groundedUntilHopLands) {
+                    if (lift > 0.05) return;
+                    this.groundedUntilHopLands = false;
+                }
                 this.hop.lift = lift;
                 this.applyPosition();
             });
@@ -110,6 +119,7 @@ export default class TokenManager {
             },
             onComplete: () => {
                 this.walking = false;
+                this.groundedUntilHopLands = true;
                 this.hop.lift = 0;
                 this.applyPosition();
                 this.puffDust(scene);
