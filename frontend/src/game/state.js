@@ -50,8 +50,14 @@ const ReadingState = {
     mapNodes: {},
 
     // Books actually finished, and how many the whole diploma comes to:
-    // one per node, across every continent.
-    booksRead: 0,
+    // one per node, across every continent. Counted from the nodes whenever
+    // it is read, so a book saved as finished counts at once (the backpack
+    // showed the count from the last page load before).
+    get booksRead() {
+        return this.mapOrder.reduce((count, key) => (
+            count + this.nodesFor(key).filter((node) => node.progress >= 100).length
+        ), 0);
+    },
     targetBooks: NODES_PER_CONTINENT * 8,
 
     // What the pupil carries and what they have unlocked. Both live in the
@@ -338,11 +344,6 @@ const ReadingState = {
                 // If the backend returns no data at all, skip directly and keep the current frontend state
                 if (progressEntries.length === 0) return;
 
-                // One book per finished node, not one per finished continent.
-                this.booksRead = progressEntries.reduce((count, entry) => (
-                    count + (entry.nodes ?? []).filter((node) => node.current_progress >= 100).length
-                ), 0);
-
                 // Normalize Level indexing
                 const progressByLevel = {};
                 for (const entry of progressEntries) {
@@ -497,10 +498,6 @@ const ReadingState = {
 
         try {
             await completeLevel(level, userId);
-            // Mark the bound book as completed when a level is completed
-            this.booksRead = this.mapOrder.reduce((count, key) => (
-                count + this.nodesFor(key).filter((node) => node.progress >= 100).length
-            ), 0);
         } catch (err) {
             console.warn('Failed to save level completion:', err);
         }
