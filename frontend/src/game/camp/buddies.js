@@ -59,17 +59,17 @@ export const BUDDY_LOOKS = {
     buddy_1: {
         walk: walk('pandaWalk', [{ x: 127, y: 129, w: 12, h: 11 }]),
         sit: sit('pandaSit', [{ x: 94, y: 92, w: 11, h: 12 }]),
-        book: { x: 70, y: 202 }
+        book: { x: 111, y: 175 }
     },
     buddy_2: {
         walk: walk('ppWalk', [{ x: 130, y: 73, w: 12, h: 11 }]),
         sit: sit('ppSit', [{ x: 86, y: 68, w: 12, h: 11 }]),
-        book: { x: 74, y: 166 }
+        book: { x: 95, y: 155 }
     },
     buddy_3: {
         walk: walk('mattiWalk', [{ x: 144, y: 87, w: 12, h: 12 }]),
         sit: sit('mattiSit', [{ x: 85, y: 80, w: 12, h: 13 }]),
-        book: { x: 70, y: 176 }
+        book: { x: 94, y: 170 }
     }
 }
 
