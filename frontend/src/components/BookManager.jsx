@@ -174,12 +174,15 @@ ${studentNames}`)) return
                     ? <DiplomaBookList grades={gradeOptions} defaultGrade={defaultGrade} />
                     : <p className="empty-message">Ladataan kirjalistaa...</p>
             ) : (
-                <OwnBooks />
+                renderOwnBooks()
             )}
         </div>
     )
 
-    function OwnBooks() {
+    // Called, not rendered as <OwnBooks />: a component declared in here is a new
+    // type on every render, so React rebuilt the whole tab on each keystroke and
+    // the add-book fields lost focus after every character.
+    function renderOwnBooks() {
         return (
             <>
             <p className="diploma-books-intro">
