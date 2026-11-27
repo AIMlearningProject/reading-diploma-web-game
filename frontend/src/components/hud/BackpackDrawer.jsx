@@ -1,4 +1,4 @@
-// The backpack on a screen with no room beside the map (WorldMapHud.jsx). It
+// The backpack on a screen with no room beside the map (MapHud.jsx). It
 // lies below the bottom edge with its handle and the top of its flap showing
 // (BAG_PEEK); pressing that lifts it up over the darkened map, at the same
 // scale, so its lines and writing match the rest of the page. It is never drawn
@@ -10,7 +10,7 @@
 // screen too short for the open bag scrolls it.
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { BAG_MAX_SCALE, BAG_MIN_SCALE, BAG_PEEK, BAG_SIZE } from '../../game/ui/worldMapLayout.js'
+import { BAG_MAX_SCALE, BAG_MIN_SCALE, BAG_PEEK, BAG_SIZE } from '../../game/ui/mapLayout.js'
 import Backpack from './Backpack.jsx'
 import { NOTE } from './BackpackArt.jsx'
 
@@ -102,7 +102,8 @@ function useBoxSize(ref) {
     return size
 }
 
-export default function BackpackDrawer({ onOpenContinent }) {
+// `here` and `action` are what the bag shows (Backpack.jsx); it has no tag here.
+export default function BackpackDrawer({ here, action }) {
     const boxRef = useRef(null)
     const peekRef = useRef(null)
     const closeRef = useRef(null)
@@ -168,7 +169,8 @@ export default function BackpackDrawer({ onOpenContinent }) {
                                 id="wmh-drawer-bag"
                                 scale={bag.scale}
                                 style={{ left: 0, top: 0, transform: `scale(${bag.scale})` }}
-                                onOpenContinent={onOpenContinent}
+                                here={here}
+                                action={action}
                                 role={open ? 'dialog' : undefined}
                                 aria-modal={open ? 'true' : undefined}
                                 aria-label="Reppu"

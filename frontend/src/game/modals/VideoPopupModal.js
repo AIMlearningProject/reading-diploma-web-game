@@ -19,7 +19,12 @@ export default class VideoPopupModal {
         // uiScale stops at 0.7, where the 450 x 300 box is wider than a small
         // phone, so the whole popup shrinks further to leave a margin around it
         // (the ink edge and its drop shadow reach past the box itself).
-        const s = Math.min(uiScale(width), (width * 0.84) / 450, (height * 0.84) / 300);
+        // Centred on the map sheet, which on a wide screen leaves the screen's
+        // right side to the backpack: the bag is page, drawn over the canvas,
+        // so a popup reaching under it would be cut off (BaseMapScene.popupArea).
+        const area = this.scene.popupArea ?? { x: width / 2, width };
+        const cx = area.x;
+        const s = Math.min(uiScale(width), (area.width * 0.84) / 450, (height * 0.84) / 300);
         const depthBase = DEPTHS.VIDEO;
 
         this.popupUI = this.scene.add.group();
@@ -28,17 +33,19 @@ export default class VideoPopupModal {
         const overlay = this.scene.add.rectangle(0, 0, width, height, 0x3a2a10, 0.4)
             .setOrigin(0).setScrollFactor(0).setDepth(depthBase).setInteractive();
         this.popupUI.add(overlay);
+        // The backpack is page, not canvas: the scene shades it to match.
+        this.scene.shadeHud?.(true);
 
         // Box
         const boxW = 450 * s;
         const boxH = 300 * s;
 
-        const plate = makeInkPanel(this.scene, width / 2 - boxW / 2, height / 2 - boxH / 2, boxW, boxH, s)
+        const plate = makeInkPanel(this.scene, cx - boxW / 2, height / 2 - boxH / 2, boxW, boxH, s)
             .setScrollFactor(0).setDepth(depthBase + 1);
         this.popupUI.add(plate);
 
         // Title with lightbulb icon
-        const title = this.scene.add.text(width / 2 + (10 * s), height / 2 - (100 * s), 'LUKUVINKKI AVATTU', {
+        const title = this.scene.add.text(cx + (10 * s), height / 2 - (100 * s), 'LUKUVINKKI AVATTU', {
             fontFamily: FONTS.BODY,
             fontSize: (26 * s) + 'px',
             color: CSS_COLORS.NAVY,
@@ -52,7 +59,7 @@ export default class VideoPopupModal {
         this.popupUI.add(bulbIcon);
 
         // Subtitle
-        const subTitle = this.scene.add.text(width / 2, height / 2 - (40 * s), videoData.title, {
+        const subTitle = this.scene.add.text(cx, height / 2 - (40 * s), videoData.title, {
             fontFamily: FONTS.BODY,
             fontSize: (18 * s) + 'px',
             color: CSS_COLORS.INK,
@@ -63,13 +70,13 @@ export default class VideoPopupModal {
         this.popupUI.add(subTitle);
 
         // Watch button
-        const watchBtn = makeInkButton(this.scene, width / 2, height / 2 + (50 * s), 'KATSO TÄSSÄ', {
+        const watchBtn = makeInkButton(this.scene, cx, height / 2 + (50 * s), 'KATSO TÄSSÄ', {
             s, fontSize: 20, minWidth: 260 * s, depth: depthBase + 2
         });
         this.popupUI.add(watchBtn.container);
 
         // Close button
-        const closeBtn = this.scene.add.text(width / 2, height / 2 + (120 * s), '[ Sulje ]', {
+        const closeBtn = this.scene.add.text(cx, height / 2 + (120 * s), '[ Sulje ]', {
             fontFamily: FONTS.BODY,
             fontSize: (18 * s) + 'px',
             color: CSS_COLORS.NAVY,
@@ -149,6 +156,7 @@ export default class VideoPopupModal {
     }
 
     destroy() {
+        this.scene.shadeHud?.(false);
         if (this._resizeHandler) {
             this.scene.scale.off('resize', this._resizeHandler);
             this._resizeHandler = null;

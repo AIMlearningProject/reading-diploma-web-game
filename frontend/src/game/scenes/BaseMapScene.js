@@ -8,15 +8,21 @@ import ReadingState from '../state.js';
 import { itemForMap } from '../data/items.js';
 import { sceneForMap } from '../data/puzzleScenes.js';
 import { DEPTHS, FONTS, INK, px, uiScale as calcUiScale, renderScale } from '../ui/constants.js';
-import { ICON_KEYS, iconImage } from '../ui/icons.js';
+import { ICON_KEYS } from '../ui/icons.js';
 import { makeInkBadge } from '../ui/panels.js';
 import { createDeskBackdrop } from '../ui/desk.js';
 import { MapPanner, sheetRect } from '../ui/mapView.js';
+import { BAG_PEEK, wideMapLayout } from '../ui/mapLayout.js';
+import { goToScene } from '../ui/sceneChange.js';
 
 // A book node is full size once it is this wide in CSS pixels, a finger's
 // width. WaypointRenderer draws it at 56 logical units across.
 const NODE_TOUCH_SIZE = 44;
 const NODE_LOGICAL_SIZE = 56;
+// With the backpack beside the sheet (a wide screen, so a mouse), a node may
+// be this small: a continent sheet is wide, and the bag takes the room it
+// would otherwise fill.
+const NODE_POINTER_SIZE = 36;
 
 // A continent is a route of this many nodes, one book each. Mirrors
 // NODES_PER_CONTINENT in backend/utils/diplomaConfig.js.
@@ -79,7 +85,8 @@ class BaseMapScene extends Phaser.Scene {
         this.bg = this.add.image(0, 0, this.assetKey).setOrigin(0);
         this.panner = new MapPanner(this);
 
-        // Title, back and book badges are all built in handleResize().
+        // The title is built in handleResize(); the way back and the book are
+        // on the backpack (components/hud/MapHud.jsx, handed over by pushHud()).
 
         // Token
         const savedIndex = ReadingState.tokenPositions?.[this.scene.key] ?? 0;
@@ -111,6 +118,7 @@ class BaseMapScene extends Phaser.Scene {
             this.pathRenderer.clear();
             this.videoPopupModal.destroy();
             this.celebrationModal.destroy();
+            if (window.setMapHud) window.setMapHud(null);
 
             // Release the continent background texture after leaving the scene.
             try {
@@ -131,14 +139,39 @@ class BaseMapScene extends Phaser.Scene {
     handleResize() {
         const { width, height } = this.scale;
 
-        // On a small screen the sheet is zoomed until the book nodes are full
-        // size, and the pupil drags it (mapView.js).
-        const nodeFullWidth = (this.LOGICAL_WIDTH * px(NODE_TOUCH_SIZE)) / NODE_LOGICAL_SIZE;
-        const rect = sheetRect(width, height, this.bg.width, this.bg.height, nodeFullWidth / this.bg.width, { coverSlivers: true });
+        // The same layout as the world map (mapLayout.js): on a wide screen
+        // the sheet stands at the left edge with the backpack beside it.
+        // Anywhere else the sheet is zoomed until the book nodes are full size,
+        // and the pupil drags it (mapView.js), in the room above the backpack
+        // peeking in at the bottom edge; the world reaches down past the bag,
+        // so a dragged map can always bring its bottom out from behind it.
+        const r = renderScale();
+        const sheetWidthFor = (nodeCss) => (this.LOGICAL_WIDTH * px(nodeCss)) / NODE_LOGICAL_SIZE;
+        const wide = wideMapLayout(width, height, this.bg.width, this.bg.height,
+            sheetWidthFor(NODE_POINTER_SIZE) / this.bg.width, r);
+        let rect;
+        if (wide) {
+            rect = { ...wide.map, worldW: width, worldH: height };
+        } else {
+            const peek = BAG_PEEK * r;
+            const above = sheetRect(width, height - peek, this.bg.width, this.bg.height,
+                sheetWidthFor(NODE_TOUCH_SIZE) / this.bg.width, { coverSlivers: true });
+            rect = { ...above, worldH: above.worldH + peek };
+        }
         this.bg.setScale(rect.scale).setPosition(rect.x, rect.y);
         this.mapWorld = { width: rect.worldW, height: rect.worldH };
         this.panner.setWorld(rect);
-        this.deskBackdrop.layout(width, height, rect);
+        this.deskBackdrop.layout(width, height, rect, wide ? { clearFrom: rect.x + rect.width } : {});
+        // Badges on the map centre on the sheet, and keep clear of the bag's top.
+        const sheetMidX = wide ? rect.x + rect.width / 2 : width / 2;
+        // Where the canvas popups centre and how wide they may grow (VideoPopupModal, CelebrationModal).
+        this.popupArea = { x: sheetMidX, width: wide ? rect.width : width };
+        const bottomClear = wide ? 0 : BAG_PEEK * r;
+        this.hudPanel = wide ? {
+            x: wide.panel.x / r, y: wide.panel.y / r,
+            width: wide.panel.width / r, height: wide.panel.height / r
+        } : null;
+        this.pushHud();
 
         this.baseScale = rect.width / this.LOGICAL_WIDTH;
         const uiS = calcUiScale(width);
@@ -173,60 +206,22 @@ class BaseMapScene extends Phaser.Scene {
 
         // --- UI: ink badges, same family as the world map ---
         // Both are CSS pixel figures, so they go through the pixel ratio.
-        const r = renderScale();
         const isNarrow = width / r < 600;
         const margin = (isNarrow ? 12 : 20) * r;
 
-        if (this.backIconContainer) this.backIconContainer.destroy();
-        if (this.bookIconContainer) this.bookIconContainer.destroy();
         if (this.titleBadge) this.titleBadge.destroy();
 
         if (this.titleLettering) { this.titleLettering.destroy(); this.titleLettering = null; }
 
-        // Back badge
-        const back = makeInkBadge(this, margin, margin, 'TAKAISIN', {
-            iconKey: ICON_KEYS.ARROW_LEFT, s: uiS, anchor: 'left', depth: DEPTHS.UI,
-            onClick: () => {
-                if (this.mapBgm) this.mapBgm.stop();
-                this.scene.start('WorldMap');
-            }
-        });
-        this.backIconContainer = back.container;
-
-        // Book badge, with the done/loading icons stacked in the same slot
-        const book = makeInkBadge(this, width - margin, margin, 'AVAA KIRJA', {
-            iconKey: ICON_KEYS.BOOK, s: uiS, anchor: 'right', fill: INK.SUN, depth: DEPTHS.UI,
-            onClick: () => this._handleBookBtnClick()
-        });
-        this.bookIconContainer = book.container;
-        if (book.icon) book.icon.name = 'bookGraphic';
-
         const mapKey = this.scene.key;
-        const isContinentCompleted = ReadingState._continentCompletedFlags?.[mapKey];
 
-        const readBookImg = iconImage(this, book.iconX, book.iconY, ICON_KEYS.CHECK, book.iconSize)
-            .setVisible(!!isContinentCompleted);
-        readBookImg.name = 'readBookIcon';
-        this.bookIconContainer.add(readBookImg);
-
-        const loadingIcon = iconImage(this, book.iconX, book.iconY, ICON_KEYS.HOURGLASS, book.iconSize)
-            .setVisible(false);
-        loadingIcon.name = 'loadingIcon';
-        this.bookIconContainer.add(loadingIcon);
-
-        // Badges stay on the screen while the map is dragged.
-        this.backIconContainer.setScrollFactor(0, 0, true);
-        this.bookIconContainer.setScrollFactor(0, 0, true);
-
-        // Title badge, tucked under the corner badges on narrow screens
-        // Title. On a phone it is lettering under the corner badges, with no
-        // plate: outlined, so it reads on the desk and on the map alike, and
-        // with no edge to sit astride where the two meet. A wide screen keeps
-        // the paper plate between the badges.
+        // Title. On a phone it is lettering with no plate: outlined, so it
+        // reads on the desk and on the map alike, and with no edge to sit
+        // astride where the two meet. A wider screen gives it a paper plate,
+        // centred on the sheet.
         let titleY = margin;
         let titleHeight;
         if (isNarrow) {
-            titleY = margin + back.height + px(8);
             this.titleLettering = this.add.text(width / 2, titleY, this.title, {
                 fontFamily: FONTS.BODY,
                 fontSize: `${Math.round(px(19))}px`,
@@ -244,14 +239,14 @@ class BaseMapScene extends Phaser.Scene {
             titleHeight = this.titleLettering.displayHeight;
             this.titleBadge = null;
         } else {
-            const title = makeInkBadge(this, width / 2, titleY, this.title, {
+            const title = makeInkBadge(this, sheetMidX, titleY, this.title, {
                 s: uiS, anchor: 'center', fontSize: 24, depth: DEPTHS.UI
             });
             this.titleBadge = title.container.setScrollFactor(0, 0, true);
             titleHeight = title.height;
         }
 
-        this.renderPuzzleMarker(width, height, uiS, margin);
+        this.renderPuzzleMarker(sheetMidX, height - bottomClear, uiS, margin);
 
         // A continent the teacher sent back says so, under the title, and the
         // notice is the way back to the questions.
@@ -259,7 +254,7 @@ class BaseMapScene extends Phaser.Scene {
         if (ReadingState.isLevelPendingResubmission(mapKey)) {
             const noticeY = titleY + titleHeight + 10;
             const notice = makeInkBadge(
-                this, width / 2, noticeY,
+                this, sheetMidX, noticeY,
                 this.needsRedo()
                     ? 'OPETTAJA PYYTÄÄ VASTAAMAAN UUDELLEEN — KLIKKAA TÄSTÄ'
                     : 'OPETTAJA PYYTÄÄ TEKEMÄÄN TÄMÄN MANTEREEN UUDELLEEN',
@@ -318,7 +313,8 @@ class BaseMapScene extends Phaser.Scene {
      * well not be in the backpack yet. That is not a wall: the badge is dimmed,
      * the scene still opens, and the pupil reads the story and goes looking.
      */
-    renderPuzzleMarker(width, height, uiS, margin) {
+    /** The puzzle badge, centred on `x` and standing `margin` above `bottom`. */
+    renderPuzzleMarker(x, bottom, uiS, margin) {
         if (this.puzzleMarker) { this.puzzleMarker.destroy(); this.puzzleMarker = null; }
 
         const mapKey = this.scene.key;
@@ -330,12 +326,12 @@ class BaseMapScene extends Phaser.Scene {
         const hasItem = ReadingState.hasItem(scene.correctItem);
         const label = isSolved ? `${scene.title.toUpperCase()} — RATKAISTU` : scene.title.toUpperCase();
 
-        const badge = makeInkBadge(this, width / 2, 0, label, {
+        const badge = makeInkBadge(this, x, 0, label, {
             iconKey: isSolved ? ICON_KEYS.CHECK : ICON_KEYS.LIGHTBULB,
             s: uiS, anchor: 'center', fontSize: 18, depth: DEPTHS.UI,
             onClick: () => this.openPuzzleScene()
         });
-        badge.container.y = height - margin - badge.height;
+        badge.container.y = bottom - margin - badge.height;
         // Dimmed until the tool is found; still readable, still openable.
         badge.container.setAlpha(isSolved || hasItem ? 1 : 0.62);
         this.puzzleMarker = badge.container.setScrollFactor(0, 0, true);
@@ -359,6 +355,41 @@ class BaseMapScene extends Phaser.Scene {
         const userId = this.game.registry.get('userId');
         const granted = await ReadingState.grantItem(userId, item.id);
         if (granted && window.showItemFound) window.showItemFound(item.id);
+    }
+
+    /**
+     * Hand the backpack (components/hud/MapHud.jsx) what it shows on this
+     * continent: the tag back to the world map and the book button, ticked
+     * once every book here is read. Called on every layout, which every
+     * change to the reading here goes through.
+     */
+    /** A canvas popup is open (or closed): shade the backpack as the popup shades the map. */
+    shadeHud(on) {
+        if (!!this.hudShade === on) return;
+        this.hudShade = on;
+        if (this.sys.isActive()) this.pushHud();
+    }
+
+    pushHud() {
+        if (!window.setMapHud) return;
+        const mapKey = this.scene.key;
+        window.setMapHud({
+            panel: this.hudPanel,
+            shade: !!this.hudShade,
+            here: mapKey,
+            tag: {
+                label: 'Takaisin',
+                onPress: () => {
+                    if (this.mapBgm) this.mapBgm.stop();
+                    goToScene(this, 'WorldMap');
+                }
+            },
+            action: {
+                label: 'Avaa kirja',
+                onPress: () => this._handleBookBtnClick(),
+                done: ReadingState._continentCompletedFlags?.[mapKey] === true
+            }
+        });
     }
 
     _handleBookBtnClick() {
@@ -565,8 +596,6 @@ class BaseMapScene extends Phaser.Scene {
             if (!ReadingState._continentCompletedFlags[mapKey]
                 && !this.isDoingQuiz
                 && !!ReadingState.isLevelPendingResubmission(mapKey) === !!ReadingState.levelsCompletedResubmission[mapKey]) {
-                const readBookG = this.bookIconContainer?.getByName('readBookIcon');
-                readBookG.setVisible(true);
                 this.showStoryQuiz();
             }
         }

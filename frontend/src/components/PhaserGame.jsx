@@ -1,6 +1,7 @@
 // src/components/PhaserGame.jsx
 import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { flushSync } from 'react-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Phaser from 'phaser';
 import createGameConfig from '../game/config.js';
@@ -14,7 +15,7 @@ import PuzzleScene from './puzzle/PuzzleScene'
 import ItemFoundCard from './puzzle/ItemFoundCard'
 import GameLoading from './GameLoading'
 import FundingNotice from './FundingNotice'
-import WorldMapHud from './hud/WorldMapHud'
+import MapHud from './hud/MapHud'
 import './PhaserGame.css'
 import { sceneForMap } from '../game/data/puzzleScenes.js'
 import items from '../game/data/items.js'
@@ -45,9 +46,9 @@ export default function PhaserGame() {
   const [bookListInfo, setBookListInfo] = useState({ visible: false, mapKey: null, nodeIndex: 1 });
   const [puzzleInfo, setPuzzleInfo] = useState({ visible: false, mapKey: null });
   const [foundItemId, setFoundItemId] = useState(null);
-  // Set by WorldMapScene while it runs: { panel } with the panel's place in
-  // CSS pixels, or panel null on a narrow screen. Null on every other scene.
-  const [worldMapHud, setWorldMapHud] = useState(null);
+  // Set by the map scenes while they run (MapHud.jsx says what it holds); null
+  // while no map is on screen.
+  const [mapHud, setMapHud] = useState(null);
   // True from the first render, so the backend load is covered too.
   const [loading, setLoading] = useState(true);
   const [updateProgressInfo, setUpdateProgressInfo] = useState({
@@ -93,7 +94,7 @@ export default function PhaserGame() {
       await ReadingState.loadFromBackend();
       if (isCancelled) return;
 
-      window.setWorldMapHud = setWorldMapHud;
+      window.setMapHud = setMapHud;
 
       const initW = parentEl.clientWidth;
       const initH = parentEl.clientHeight;
@@ -105,6 +106,18 @@ export default function PhaserGame() {
       // Pass userId for backend API calls in Phaser scenes
       game.registry.set('userId', user?.id);
       game.registry.set('buddyId', user?.avatar || 'buddy_1');
+
+      // Every scene change goes through game/ui/sceneChange.js, which calls
+      // this first: the loading sheet goes up and the backpack away, and the
+      // scene starts once React has painted that, so the canvas is never seen
+      // blank with the old backpack on it.
+      game.beforeSceneChange = (start) => {
+        flushSync(() => {
+          setLoading(true);
+          setMapHud(null);
+        });
+        requestAnimationFrame(() => requestAnimationFrame(start));
+      };
 
       // Return navigation logic
       game.handleBackNavigation = () => {
@@ -188,7 +201,7 @@ export default function PhaserGame() {
       window.openReactBookList = null;
       window.openPuzzleScene = null;
       window.showItemFound = null;
-      window.setWorldMapHud = null;
+      window.setMapHud = null;
       if (gameRef.current) {
         if (gameRef.current._resizeObserver) {
           gameRef.current._resizeObserver.disconnect();
@@ -205,13 +218,7 @@ export default function PhaserGame() {
       <div className="game-stage">
         <div id="game-container" ref={containerRef} />
 
-        {worldMapHud && (
-          <WorldMapHud
-            panel={worldMapHud.panel}
-            onBack={() => gameRef.current?.handleBackNavigation()}
-            onOpenContinent={(mapKey) => gameRef.current?.scene.getScene('WorldMap').scene.start(mapKey)}
-          />
-        )}
+        {mapHud && <MapHud {...mapHud} />}
       </div>
 
       <div ref={stripRef}>

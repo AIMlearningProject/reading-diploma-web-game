@@ -1,4 +1,4 @@
-/* The world map's HUD (WorldMapHud.jsx). The backpack (Backpack.jsx) is laid
+/* The maps' HUD (MapHud.jsx). The backpack (Backpack.jsx) is laid
    out in its drawing's own 502 x 676 units and scaled as one piece: beside the
    map on a wide screen, peeking in at the bottom edge on a narrow one
    (BackpackDrawer.jsx), where the way back is a round button in the corner.
@@ -386,4 +386,16 @@
     top: 12px;
     left: 12px;
     pointer-events: auto;
+}
+
+/* The HUD's wrapper adds no box of its own. While a popup drawn on the canvas
+   is open (MapHud `shade`), the bag is darkened as the canvas popups' shade
+   darkens the map (#3a2a10 at 40%), and takes no presses. */
+.wmh-hud {
+    display: contents;
+}
+
+.wmh-hud.is-shaded :is(.wmh-bag, .wmh-drawer, .wmh-corner) {
+    filter: brightness(0.6) sepia(0.15);
+    pointer-events: none;
 }

@@ -5,7 +5,8 @@ import { INK, px, renderScale } from '../ui/constants.js';
 import { makeContinentSign, makeInkTooltip } from '../ui/panels.js';
 import { preloadDesk, createDeskBackdrop } from '../ui/desk.js';
 import { MapPanner, sheetRect } from '../ui/mapView.js';
-import { BAG_PEEK, wideWorldMapLayout } from '../ui/worldMapLayout.js';
+import { BAG_PEEK, wideMapLayout } from '../ui/mapLayout.js';
+import { goToScene } from '../ui/sceneChange.js';
 import { continentName } from './continentRegistry.js';
 import { BUDDY_ASPECT, buddyHeight, buddyKey, preloadBuddy, startBuddyHop } from '../ui/buddy.js';
 import { inkDrawing, inkSheet, strokeDashed } from '../ui/ink.js';
@@ -64,13 +65,16 @@ class WorldMapScene extends Phaser.Scene {
             // Full size is where the signs show their name plates, which are
             // what the pupil reads and presses (makeContinentSign).
             const fullSize = INK.WORLD_SCALE * INK.SIGN_MIN_SCALE * renderScale();
-            const wide = wideWorldMapLayout(w, h, MAP_NATIVE_W, MAP_NATIVE_H, fullSize, renderScale());
+            // The world sheet goes wide only when it fills the height, flush with
+            // the left, top and bottom edges (the layout chosen as E2); smaller,
+            // the bag peeks in instead, as on the continents at that size.
+            const wide = wideMapLayout(w, h, MAP_NATIVE_W, MAP_NATIVE_H, Math.max(fullSize, h / MAP_NATIVE_H), renderScale());
             let rect;
             if (wide) {
                 rect = { ...wide.map, worldW: w, worldH: h };
             } else {
                 // The top of the backpack shows along the bottom edge (BAG_PEEK in
-                // worldMapLayout.js). The sheet is laid out in the room above it,
+                // mapLayout.js). The sheet is laid out in the room above it,
                 // and the world reaches down past it, so a dragged map can always
                 // bring its bottom out from behind the bag.
                 const peek = BAG_PEEK * renderScale();
@@ -98,14 +102,21 @@ class WorldMapScene extends Phaser.Scene {
             ).setDepth(2);
             this.panner.setWorld(rect);
 
-            // The HUD is React (components/hud/WorldMapHud.jsx), drawn over
-            // the canvas in CSS pixels.
+            // The HUD is React (components/hud/MapHud.jsx), drawn over
+            // the canvas in CSS pixels. Nothing on the world map changes the
+            // reading, so it is handed over only here.
             const r = renderScale();
             const panel = wide && {
                 x: wide.panel.x / r, y: wide.panel.y / r,
                 width: wide.panel.width / r, height: wide.panel.height / r
             };
-            if (window.setWorldMapHud) window.setWorldMapHud({ panel: panel || null });
+            const here = ReadingState.getCurrentContinent();
+            if (window.setMapHud) window.setMapHud({
+                panel: panel || null,
+                here,
+                tag: { label: 'Takaisin leiriin', onPress: () => this.game.handleBackNavigation?.() },
+                action: { label: 'Jatka matkaa', onPress: () => goToScene(this, here) }
+            });
         };
         layoutMap();
 
@@ -169,7 +180,7 @@ class WorldMapScene extends Phaser.Scene {
                     },
                     withMarker: true,
                     s,
-                    onClick: this.panner.tap(() => this.scene.start(pos.mapKey))
+                    onClick: this.panner.tap(() => goToScene(this, pos.mapKey))
                 });
                 sign.setPosition(finalX, finalY).setDepth(6);
                 this.pointGroup.add(sign);
@@ -198,7 +209,7 @@ class WorldMapScene extends Phaser.Scene {
             this.buddy = this.add.image(buddyX, feetY - height / 2, buddyKey(this)).setDepth(10);
             this.buddy.setScale(height / this.buddy.height);
             this.buddy.setInteractive({ useHandCursor: true });
-            this.panner.onTap(this.buddy, () => this.scene.start(pos.mapKey));
+            this.panner.onTap(this.buddy, () => goToScene(this, pos.mapKey));
             this.pointGroup.add(this.buddy);
             // The view opens on the continent the pupil is on.
             this.panner.centerOn(current.x, current.y);
@@ -245,7 +256,7 @@ class WorldMapScene extends Phaser.Scene {
         this.scale.on('resize', onResize);
         this.events.on('shutdown', () => {
             this.scale.off('resize', onResize);
-            if (window.setWorldMapHud) window.setWorldMapHud(null);
+            if (window.setMapHud) window.setMapHud(null);
         });
     }
 }

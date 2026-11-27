@@ -1,11 +1,11 @@
-// The backpack drawn behind the world map's HUD (WorldMapHud.jsx), in a 502 x 676
+// The backpack drawn behind the maps' HUD (MapHud.jsx), in a 502 x 676
 // box. Every shape goes through the one ink filter below, and an outline is drawn
 // after whatever lies inside it, so no fill or piping covers half of the line.
 //
 // The colours are the drawing's own, like the map art's: the bag is not part of
 // the token set. ART.paper and ART.ink match --book-paper and --ink-900.
 
-import { BAG_SIZE } from '../../game/ui/worldMapLayout.js'
+import { BAG_SIZE } from '../../game/ui/mapLayout.js'
 
 export { BAG_SIZE }
 

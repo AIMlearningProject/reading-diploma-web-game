@@ -36,13 +36,17 @@ export default class CelebrationModal {
         const overlay = this.scene.add.rectangle(0, 0, width, height, 0x3a2a10, 0.4)
             .setOrigin(0).setInteractive().setScrollFactor(0);
         this.celebrationUI.add(overlay);
+        // The backpack is page, not canvas: the scene shades it to match.
+        this.scene.shadeHud?.(true);
 
-        const boxW = Math.min(width * 0.85, 500 * s);
+        // Centred on the map sheet, clear of the backpack (BaseMapScene.popupArea).
+        const area = this.scene.popupArea ?? { x: width / 2, width };
+        const boxW = Math.min(area.width * 0.85, 500 * s);
         const boxH = 300 * s;
 
         // Everything below lives in one container so the entry tween can scale
         // the whole panel at once.
-        const panel = this.scene.add.container(width / 2, height / 2).setScrollFactor(0);
+        const panel = this.scene.add.container(area.x, height / 2).setScrollFactor(0);
         this.celebrationUI.add(panel);
 
         panel.add(makeInkPanel(this.scene, -boxW / 2, -boxH / 2, boxW, boxH, s));
@@ -88,6 +92,7 @@ export default class CelebrationModal {
     }
 
     destroy() {
+        this.scene.shadeHud?.(false);
         if (this._resizeHandler) {
             this.scene.scale.off('resize', this._resizeHandler, this.scene);
             this._resizeHandler = null;
